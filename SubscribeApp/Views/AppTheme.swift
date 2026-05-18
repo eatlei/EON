@@ -1,22 +1,22 @@
 import SwiftUI
 
 enum AppTheme {
-    // Surfaces — 纸感暖白，无渐变
-    static let canvas = Color(red: 0.984, green: 0.980, blue: 0.973)   // #FBFAF8
-    static let surface = Color.white
-    static let hairline = Color(red: 0.90, green: 0.89, blue: 0.87)
+    // Surfaces — 冷调深色，无暖味
+    static let canvas = Color(red: 0.055, green: 0.063, blue: 0.078)   // #0E1014
+    static let surface = Color(red: 0.102, green: 0.114, blue: 0.141)  // #1A1D24 (非玻璃处的深色基)
+    static let hairline = Color.white.opacity(0.08)
 
     // Text
-    static let ink = Color(red: 0.102, green: 0.102, blue: 0.110)      // #1A1A1C
-    static let secondary = Color(red: 0.52, green: 0.52, blue: 0.55)
-    static let tertiary = Color(red: 0.70, green: 0.70, blue: 0.72)
+    static let ink = Color(red: 0.949, green: 0.957, blue: 0.973)      // #F2F4F8
+    static let secondary = Color(red: 0.608, green: 0.627, blue: 0.671) // #9BA0AB
+    static let tertiary = Color(red: 0.369, green: 0.388, blue: 0.431)  // #5E636E
 
-    // 单一克制强调色
-    static let accent = Color(red: 0.18, green: 0.45, blue: 0.42)
+    // 单一高饱和强调（冷调电蓝）
+    static let accent = Color(red: 0.239, green: 0.612, blue: 1.0)      // #3D9CFF
 
-    // 圆角
-    static let radius: CGFloat = 12
-    static let radiusSmall: CGFloat = 8
+    // 圆角（更大）
+    static let radius: CGFloat = 16
+    static let radiusSmall: CGFloat = 12
 
     /// Bottom clearance for screens that sit under ContentView's dock (tab pill + floating add button).
     static let dockClearance: CGFloat = 112
@@ -40,7 +40,7 @@ extension Font {
     static func amountSmall() -> Font { .system(size: 14, weight: .bold, design: .rounded) }
 }
 
-/// 全屏滚动容器：纯色画布，无渐变
+/// 全屏滚动容器：冷调深色画布
 struct AppScreen<Content: View>: View {
     var bottomPadding: CGFloat = AppTheme.dockClearance
     @ViewBuilder var content: Content
@@ -59,7 +59,7 @@ struct AppScreen<Content: View>: View {
     }
 }
 
-/// 极淡边界的面板：白底 + 统一圆角 + 0.5pt 发丝线，无重阴影
+/// Liquid Glass 面板：玻璃材质 + 统一大圆角 + 极淡边界
 struct Panel<Content: View>: View {
     var title: String? = nil
     @ViewBuilder var content: Content
@@ -78,7 +78,7 @@ struct Panel<Content: View>: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(AppTheme.Space.l)
-        .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: AppTheme.radius))
+        .glassEffect(.regular, in: RoundedRectangle(cornerRadius: AppTheme.radius))
         .overlay(
             RoundedRectangle(cornerRadius: AppTheme.radius)
                 .stroke(AppTheme.hairline, lineWidth: 0.5)
@@ -111,7 +111,7 @@ struct CategoryGlyph: View {
             .font(.system(size: size * 0.42, weight: .heavy, design: .rounded))
             .foregroundStyle(subscription.category.color)
             .frame(width: size, height: size)
-            .background(subscription.category.color.opacity(0.14),
+            .background(subscription.category.color.opacity(0.22),
                         in: RoundedRectangle(cornerRadius: AppTheme.radiusSmall))
     }
 }
