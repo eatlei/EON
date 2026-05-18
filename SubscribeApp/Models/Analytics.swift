@@ -39,36 +39,8 @@ struct CategorySpend: Identifiable {
     let share: Double
 }
 
-struct CurrencyExposure: Identifiable {
-    var id: CurrencyCode { currency }
-    let currency: CurrencyCode
-    let amount: Double
-    let share: Double
-}
-
-struct CycleSpend: Identifiable {
-    var id: BillingCycle { cycle }
-    let cycle: BillingCycle
-    let amount: Double
-    let count: Int
-}
-
 struct ForecastMonth: Identifiable {
     var id: Date { month }
     let month: Date
     let amount: Double
-}
-
-struct RenewalWindow: Identifiable {
-    let id: String
-    let title: String
-    let count: Int
-    let amount: Double
-    let tint: Color
-}
-
-struct StatusCount: Identifiable {
-    var id: RenewalStatus { status }
-    let status: RenewalStatus
-    let count: Int
 }

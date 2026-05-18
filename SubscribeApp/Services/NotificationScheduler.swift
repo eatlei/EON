@@ -54,6 +54,10 @@ enum NotificationScheduler {
         }
     }
 
+    static func cancelAll() {
+        UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
+    }
+
     private static func notificationIdentifier(for id: UUID) -> String {
         "subscription-renewal-\(id.uuidString)"
     }

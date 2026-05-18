@@ -6,7 +6,7 @@ final class SubscriptionStore: ObservableObject {
     @Published var subscriptions: [Subscription] {
         didSet {
             save()
-            NotificationScheduler.rescheduleAll(subscriptions)
+            syncReminders()
         }
     }
 
@@ -15,7 +15,10 @@ final class SubscriptionStore: ObservableObject {
     }
 
     @Published var remindersEnabled: Bool {
-        didSet { saveSettings() }
+        didSet {
+            saveSettings()
+            syncReminders()
+        }
     }
 
     @Published var iCloudSyncEnabled: Bool {
@@ -84,21 +87,6 @@ final class SubscriptionStore: ObservableObject {
             .reduce(0) { $0 + $1.monthlyCost(in: baseCurrency, converter: converter) }
     }
 
-    var averageMonthlyCost: Double {
-        guard !activeSubscriptions.isEmpty else { return 0 }
-        return monthlyTotal / Double(activeSubscriptions.count)
-    }
-
-    var averageUsageScore: Double {
-        guard !activeSubscriptions.isEmpty else { return 0 }
-        return Double(activeSubscriptions.reduce(0) { $0 + $1.usageScore }) / Double(activeSubscriptions.count)
-    }
-
-    var averageImportanceScore: Double {
-        guard !activeSubscriptions.isEmpty else { return 0 }
-        return Double(activeSubscriptions.reduce(0) { $0 + $1.importanceScore }) / Double(activeSubscriptions.count)
-    }
-
     var categorySpend: [CategorySpend] {
         SubscriptionCategory.allCases.compactMap { category in
             let amount = total(for: category)
@@ -106,68 +94,6 @@ final class SubscriptionStore: ObservableObject {
             return CategorySpend(category: category, amount: amount, share: monthlyTotal == 0 ? 0 : amount / monthlyTotal)
         }
         .sorted { $0.amount > $1.amount }
-    }
-
-    var currencyExposure: [CurrencyExposure] {
-        CurrencyCode.allCases.compactMap { currency in
-            let amount = activeSubscriptions
-                .filter { $0.currency == currency }
-                .reduce(0) { $0 + $1.monthlyCost(in: baseCurrency, converter: converter) }
-            guard amount > 0 else { return nil }
-            return CurrencyExposure(currency: currency, amount: amount, share: monthlyTotal == 0 ? 0 : amount / monthlyTotal)
-        }
-        .sorted { $0.amount > $1.amount }
-    }
-
-    var cycleSpend: [CycleSpend] {
-        BillingCycle.allCases.compactMap { cycle in
-            let subscriptions = activeSubscriptions.filter { $0.billingCycle == cycle }
-            let amount = subscriptions.reduce(0) {
-                $0 + $1.monthlyCost(in: baseCurrency, converter: converter)
-            }
-            guard !subscriptions.isEmpty else { return nil }
-            return CycleSpend(cycle: cycle, amount: amount, count: subscriptions.count)
-        }
-        .sorted { $0.amount > $1.amount }
-    }
-
-    var topSubscriptions: [Subscription] {
-        activeSubscriptions
-            .sorted {
-                $0.monthlyCost(in: baseCurrency, converter: converter) >
-                    $1.monthlyCost(in: baseCurrency, converter: converter)
-            }
-            .prefix(5)
-            .map { $0 }
-    }
-
-    var statusCounts: [StatusCount] {
-        RenewalStatus.allCases.compactMap { status in
-            let count = subscriptions.filter { $0.status == status }.count
-            return count == 0 ? nil : StatusCount(status: status, count: count)
-        }
-    }
-
-    var forecast: [ForecastMonth] {
-        let calendar = Calendar.current
-        let start = calendar.dateInterval(of: .month, for: .now)?.start ?? .now
-
-        return (0..<6).map { offset in
-            let month = calendar.date(byAdding: .month, value: offset, to: start) ?? start
-            let nextMonth = calendar.date(byAdding: .month, value: 1, to: month) ?? month
-            let amount = activeSubscriptions.reduce(0) { partial, subscription in
-                partial + projectedCharge(for: subscription, from: month, to: nextMonth)
-            }
-            return ForecastMonth(month: month, amount: amount)
-        }
-    }
-
-    var renewalWindows: [RenewalWindow] {
-        [
-            renewalWindow(id: "7", title: "7 天内", days: 7, tint: .red),
-            renewalWindow(id: "30", title: "30 天内", days: 30, tint: .orange),
-            renewalWindow(id: "90", title: "90 天内", days: 90, tint: .blue)
-        ]
     }
 
     func interval(for period: SpendPeriod) -> DateInterval {
@@ -219,12 +145,6 @@ final class SubscriptionStore: ObservableObject {
         }
     }
 
-    func delete(at offsets: IndexSet) {
-        let sorted = subscriptions.sorted { $0.nextBillingDate < $1.nextBillingDate }
-        let ids = offsets.map { sorted[$0].id }
-        delete(ids: ids)
-    }
-
     func delete(ids: [UUID]) {
         subscriptions.removeAll { ids.contains($0.id) }
     }
@@ -252,21 +172,6 @@ final class SubscriptionStore: ObservableObject {
         }
 
         subscriptions = decoded
-    }
-
-    private func renewalWindow(id: String, title: String, days: Int, tint: Color) -> RenewalWindow {
-        let endDate = Calendar.current.date(byAdding: .day, value: days, to: .now) ?? .now
-        let filtered = activeSubscriptions.filter {
-            $0.nextBillingDate >= .now && $0.nextBillingDate <= endDate
-        }
-        let amount = filtered.reduce(0) {
-            $0 + converter.convert($1.price, from: $1.currency, to: baseCurrency)
-        }
-        return RenewalWindow(id: id, title: title, count: filtered.count, amount: amount, tint: tint)
-    }
-
-    private func projectedCharge(for subscription: Subscription, from start: Date, to end: Date) -> Double {
-        projectedCharges(for: subscription, from: start, to: end).reduce(0) { $0 + $1.amount }
     }
 
     private func projectedCharges(for subscription: Subscription, from start: Date, to end: Date) -> [RenewalCharge] {
@@ -308,6 +213,14 @@ final class SubscriptionStore: ObservableObject {
         )
         if let data = try? JSONEncoder().encode(settings) {
             UserDefaults.standard.set(data, forKey: settingsKey)
+        }
+    }
+
+    private func syncReminders() {
+        if remindersEnabled {
+            NotificationScheduler.rescheduleAll(subscriptions)
+        } else {
+            NotificationScheduler.cancelAll()
         }
     }
 }
