@@ -18,6 +18,9 @@ enum AppTheme {
     static let radius: CGFloat = 12
     static let radiusSmall: CGFloat = 8
 
+    /// Bottom clearance for screens that sit under ContentView's dock (tab pill + floating add button).
+    static let dockClearance: CGFloat = 112
+
     // 间距阶
     enum Space {
         static let xs: CGFloat = 4
@@ -39,10 +42,10 @@ extension Font {
 
 /// 全屏滚动容器：纯色画布，无渐变
 struct AppScreen<Content: View>: View {
+    var bottomPadding: CGFloat = AppTheme.dockClearance
     @ViewBuilder var content: Content
-    /// Clearance for the bottom dock (tab pill + floating add button) in ContentView.
-    static var bottomClearance: CGFloat { 112 }
-    init(@ViewBuilder content: () -> Content) {
+    init(bottomPadding: CGFloat = AppTheme.dockClearance, @ViewBuilder content: () -> Content) {
+        self.bottomPadding = bottomPadding
         self.content = content()
     }
     var body: some View {
@@ -50,7 +53,7 @@ struct AppScreen<Content: View>: View {
             content
                 .padding(.horizontal, AppTheme.Space.xl)
                 .padding(.top, AppTheme.Space.m)
-                .padding(.bottom, AppScreen.bottomClearance)
+                .padding(.bottom, bottomPadding)
         }
         .background(AppTheme.canvas.ignoresSafeArea())
     }

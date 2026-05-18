@@ -27,7 +27,7 @@ struct SubscriptionEditorView: View {
 
     var body: some View {
         NavigationStack {
-            AppScreen {
+            AppScreen(bottomPadding: AppTheme.Space.l) {
                 VStack(spacing: AppTheme.Space.l) {
                     Panel(title: "基础") {
                         FieldRow("名称") { TextField("如 ChatGPT", text: $draft.name).multilineTextAlignment(.trailing) }
@@ -75,6 +75,7 @@ struct SubscriptionEditorView: View {
                         FieldRow("下次扣费") {
                             DatePicker("", selection: $draft.nextBillingDate, displayedComponents: .date)
                                 .labelsHidden()
+                                .tint(AppTheme.ink)
                         }
                         Hairline()
                         FieldRow("提前提醒") {
