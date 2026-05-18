@@ -38,7 +38,7 @@ extension Font {
 }
 
 /// 全屏滚动容器：纯色画布，无渐变
-struct AppCanvas<Content: View>: View {
+struct AppScreen<Content: View>: View {
     @ViewBuilder var content: Content
     var body: some View {
         ScrollView {
@@ -104,7 +104,7 @@ struct CategoryGlyph: View {
     }
 }
 
-struct ThemeRevealModifier: ViewModifier {
+struct RevealModifier: ViewModifier {
     let index: Int
     @State private var shown = false
     func body(content: Content) -> some View {
@@ -117,5 +117,5 @@ struct ThemeRevealModifier: ViewModifier {
 }
 
 extension View {
-    func themeReveal(_ index: Int) -> some View { modifier(ThemeRevealModifier(index: index)) }
+    func reveal(_ index: Int) -> some View { modifier(RevealModifier(index: index)) }
 }
