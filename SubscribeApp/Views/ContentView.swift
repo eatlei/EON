@@ -22,53 +22,34 @@ struct ContentView: View {
     @State private var showEditor = false
 
     var body: some View {
-        ZStack(alignment: .bottom) {
-            ZStack {
-                DashboardView()
-                    .opacity(tab == .dashboard ? 1 : 0)
-                    .allowsHitTesting(tab == .dashboard)
-                SubscriptionsView()
-                    .opacity(tab == .subscriptions ? 1 : 0)
-                    .allowsHitTesting(tab == .subscriptions)
-                SettingsView()
-                    .opacity(tab == .settings ? 1 : 0)
-                    .allowsHitTesting(tab == .settings)
+        ZStack(alignment: .bottomTrailing) {
+            TabView(selection: $tab) {
+                Tab(AppTab.dashboard.title, systemImage: AppTab.dashboard.icon, value: AppTab.dashboard) {
+                    DashboardView()
+                }
+                Tab(AppTab.subscriptions.title, systemImage: AppTab.subscriptions.icon, value: AppTab.subscriptions) {
+                    SubscriptionsView()
+                }
+                Tab(AppTab.settings.title, systemImage: AppTab.settings.icon, value: AppTab.settings) {
+                    SettingsView()
+                }
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .tint(AppTheme.accent)
 
-            HStack(spacing: 0) {
-                ForEach(AppTab.allCases) { t in
-                    Button { tab = t } label: {
-                        VStack(spacing: 3) {
-                            Image(systemName: t.icon).font(.system(size: 17, weight: .semibold))
-                            Text(t.title).font(.caption2.weight(.semibold))
-                        }
-                        .foregroundStyle(tab == t ? AppTheme.accent : AppTheme.secondary)
-                        .frame(maxWidth: .infinity)
-                        .contentShape(Rectangle())
-                    }
-                    .buttonStyle(.plain)
-                }
-                Rectangle()
-                    .fill(AppTheme.hairline)
-                    .frame(width: 1, height: 26)
-                Button { showEditor = true } label: {
-                    Image(systemName: "plus")
-                        .font(.system(size: 20, weight: .bold))
-                        .foregroundStyle(AppTheme.accent)
-                        .frame(maxWidth: .infinity)
-                        .contentShape(Rectangle())
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel("新增订阅")
+            Button {
+                showEditor = true
+            } label: {
+                Image(systemName: "plus")
+                    .font(.system(size: 20, weight: .bold))
+                    .foregroundStyle(AppTheme.accent)
+                    .frame(width: 58, height: 58)
+                    .glassEffect(.regular.interactive(), in: Circle())
             }
-            .frame(height: 58)
-            .background(AppTheme.surface, in: Capsule())
-            .overlay(Capsule().stroke(AppTheme.hairline, lineWidth: 1))
-            .padding(.horizontal, AppTheme.Space.l)
-            .padding(.bottom, AppTheme.Space.s)
+            .buttonStyle(.plain)
+            .padding(.trailing, AppTheme.Space.l)
+            .padding(.bottom, 20)
+            .accessibilityLabel("新增订阅")
         }
-        .ignoresSafeArea(.keyboard, edges: .bottom)
         .sheet(isPresented: $showEditor) { SubscriptionEditorView(subscription: nil) }
     }
 }

@@ -53,8 +53,8 @@ enum AppTheme {
     static let radius: CGFloat = 18
     static let radiusSmall: CGFloat = 12
 
-    /// 内容底部留白，避开自绘单行 bar
-    static let dockClearance: CGFloat = 96
+    /// 原生 TabView 已为系统 tab bar 自动内缩内容，这里只留一点呼吸位
+    static let dockClearance: CGFloat = 8
 
     enum Space {
         static let xs: CGFloat = 4
