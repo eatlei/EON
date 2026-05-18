@@ -1,56 +1,41 @@
 import SwiftUI
 
-private enum AppTab: String, CaseIterable, Identifiable {
-    case dashboard, subscriptions, settings
-    var id: String { rawValue }
-    var title: String {
-        switch self {
-        case .dashboard: "总览"; case .subscriptions: "订阅"; case .settings: "设置"
-        }
-    }
-    var icon: String {
-        switch self {
-        case .dashboard: "chart.pie.fill"
-        case .subscriptions: "rectangle.stack.fill"
-        case .settings: "gearshape.fill"
-        }
-    }
+private enum AppTab: Hashable {
+    case dashboard, subscriptions, settings, add
 }
 
 struct ContentView: View {
     @State private var tab: AppTab = .dashboard
+    @State private var lastContentTab: AppTab = .dashboard
     @State private var showEditor = false
 
     var body: some View {
-        ZStack(alignment: .bottomTrailing) {
-            TabView(selection: $tab) {
-                Tab(AppTab.dashboard.title, systemImage: AppTab.dashboard.icon, value: AppTab.dashboard) {
-                    DashboardView()
-                }
-                Tab(AppTab.subscriptions.title, systemImage: AppTab.subscriptions.icon, value: AppTab.subscriptions) {
-                    SubscriptionsView()
-                }
-                Tab(AppTab.settings.title, systemImage: AppTab.settings.icon, value: AppTab.settings) {
-                    SettingsView()
-                }
+        TabView(selection: $tab) {
+            Tab("总览", systemImage: "chart.pie", value: AppTab.dashboard) {
+                DashboardView()
             }
-            .tint(AppTheme.accent)
-
-            Button {
-                showEditor = true
-            } label: {
-                Image(systemName: "plus")
-                    .font(.system(size: 20, weight: .bold))
-                    .foregroundStyle(AppTheme.accent)
-                    .frame(width: 58, height: 58)
-                    .glassEffect(.regular.interactive(), in: Circle())
+            Tab("订阅", systemImage: "rectangle.stack", value: AppTab.subscriptions) {
+                SubscriptionsView()
             }
-            .buttonStyle(.plain)
-            .padding(.trailing, AppTheme.Space.l)
-            .padding(.bottom, 20)
-            .accessibilityLabel("新增订阅")
+            Tab("设置", systemImage: "gearshape", value: AppTab.settings) {
+                SettingsView()
+            }
+            Tab("新增", systemImage: "plus", value: AppTab.add, role: .search) {
+                Color.clear
+            }
         }
-        .sheet(isPresented: $showEditor) { SubscriptionEditorView(subscription: nil) }
+        .tint(AppTheme.accent)
+        .onChange(of: tab) { _, newValue in
+            if newValue == .add {
+                showEditor = true
+                tab = lastContentTab
+            } else {
+                lastContentTab = newValue
+            }
+        }
+        .sheet(isPresented: $showEditor) {
+            SubscriptionEditorView(subscription: nil)
+        }
     }
 }
 
