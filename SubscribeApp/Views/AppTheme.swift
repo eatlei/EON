@@ -1,25 +1,25 @@
 import SwiftUI
 
 enum AppTheme {
-    // Surfaces — 冷调深色，无暖味
-    static let canvas = Color(red: 0.055, green: 0.063, blue: 0.078)   // #0E1014
-    static let surface = Color(red: 0.102, green: 0.114, blue: 0.141)  // #1A1D24 (非玻璃处的深色基)
+    // Surfaces — 近黑底 + 深色实心卡片（参考 Subo）
+    static let canvas = Color(red: 0.039, green: 0.039, blue: 0.047)   // #0A0A0C
+    static let surface = Color(red: 0.090, green: 0.094, blue: 0.110)  // #17181C 深色实心卡
     static let hairline = Color.white.opacity(0.08)
 
     // Text
-    static let ink = Color(red: 0.949, green: 0.957, blue: 0.973)      // #F2F4F8
-    static let secondary = Color(red: 0.608, green: 0.627, blue: 0.671) // #9BA0AB
-    static let tertiary = Color(red: 0.369, green: 0.388, blue: 0.431)  // #5E636E
+    static let ink = Color(red: 0.957, green: 0.961, blue: 0.969)      // #F4F5F7
+    static let secondary = Color(red: 0.545, green: 0.557, blue: 0.592) // #8B8E97
+    static let tertiary = Color(red: 0.333, green: 0.345, blue: 0.388)  // #555863
 
-    // 单一高饱和强调（冷调电蓝）
+    // 单一高饱和强调（电蓝）
     static let accent = Color(red: 0.239, green: 0.612, blue: 1.0)      // #3D9CFF
 
-    // 圆角（更大）
-    static let radius: CGFloat = 16
+    // 圆角
+    static let radius: CGFloat = 18
     static let radiusSmall: CGFloat = 12
 
-    /// Extra bottom breathing room; native TabView already insets content for its Liquid Glass tab bar.
-    static let dockClearance: CGFloat = 16
+    /// 内容底部留白，避开自绘单行 bar
+    static let dockClearance: CGFloat = 96
 
     // 间距阶
     enum Space {
@@ -40,7 +40,7 @@ extension Font {
     static func amountSmall() -> Font { .system(size: 14, weight: .bold, design: .rounded) }
 }
 
-/// 全屏滚动容器：冷调深色画布
+/// 全屏滚动容器：近黑画布
 struct AppScreen<Content: View>: View {
     var bottomPadding: CGFloat = AppTheme.dockClearance
     @ViewBuilder var content: Content
@@ -59,7 +59,7 @@ struct AppScreen<Content: View>: View {
     }
 }
 
-/// Liquid Glass 面板：玻璃材质 + 统一大圆角 + 极淡边界
+/// 深色实心卡片：surface + 1px 细边，干净利落（参考 Subo，不用玻璃）
 struct Panel<Content: View>: View {
     var title: String? = nil
     @ViewBuilder var content: Content
@@ -78,29 +78,10 @@ struct Panel<Content: View>: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(AppTheme.Space.l)
-        .glassEffect(.regular, in: RoundedRectangle(cornerRadius: AppTheme.radius))
+        .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: AppTheme.radius))
         .overlay(
             RoundedRectangle(cornerRadius: AppTheme.radius)
-                .fill(
-                    LinearGradient(
-                        colors: [Color.white.opacity(0.10), Color.white.opacity(0.0)],
-                        startPoint: .top,
-                        endPoint: .center
-                    )
-                )
-                .allowsHitTesting(false)
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: AppTheme.radius)
-                .stroke(
-                    LinearGradient(
-                        colors: [Color.white.opacity(0.22), AppTheme.hairline],
-                        startPoint: .top,
-                        endPoint: .bottom
-                    ),
-                    lineWidth: 0.5
-                )
-                .allowsHitTesting(false)
+                .stroke(AppTheme.hairline, lineWidth: 1)
         )
     }
 }
@@ -117,21 +98,21 @@ struct SectionLabel: View {
 
 struct Hairline: View {
     var body: some View {
-        Rectangle().fill(AppTheme.hairline).frame(height: 0.5)
+        Rectangle().fill(AppTheme.hairline).frame(height: 1)
     }
 }
 
-/// 分类字母头像（颜色只在这种小圆点上出现）
+/// 分类图标块：实心品牌色 + 白色首字母（像 App 图标，参考 Subo）
 struct CategoryGlyph: View {
     let subscription: Subscription
     var size: CGFloat = 38
     var body: some View {
         Text(String(subscription.name.prefix(1)).uppercased())
-            .font(.system(size: size * 0.42, weight: .heavy, design: .rounded))
-            .foregroundStyle(subscription.category.color)
+            .font(.system(size: size * 0.44, weight: .heavy, design: .rounded))
+            .foregroundStyle(.white)
             .frame(width: size, height: size)
-            .background(subscription.category.color.opacity(0.22),
-                        in: RoundedRectangle(cornerRadius: AppTheme.radiusSmall))
+            .background(subscription.category.color,
+                        in: RoundedRectangle(cornerRadius: size * 0.28))
     }
 }
 
