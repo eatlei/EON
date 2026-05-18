@@ -170,7 +170,10 @@ private struct CalendarPanel: View {
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 6), count: 7)
     private let symbols = Calendar.current.veryShortStandaloneWeekdaySymbols
     var body: some View {
-        Panel(title: "本月扣费日") {
+        let byDay = Dictionary(grouping: store.charges(in: .month)) {
+            Calendar.current.component(.day, from: $0.date)
+        }
+        return Panel(title: "本月扣费日") {
             VStack(spacing: AppTheme.Space.m) {
                 HStack {
                     ForEach(symbols, id: \.self) { s in
@@ -181,7 +184,7 @@ private struct CalendarPanel: View {
                 LazyVGrid(columns: columns, spacing: 6) {
                     ForEach(Array(cells.enumerated()), id: \.offset) { _, day in
                         if let day {
-                            let cs = charges(on: day)
+                            let cs = byDay[day] ?? []
                             VStack(spacing: 3) {
                                 Text("\(day)")
                                     .font(.caption.monospacedDigit().weight(cs.isEmpty ? .regular : .bold))
@@ -212,9 +215,6 @@ private struct CalendarPanel: View {
         let offset = lead >= 0 ? lead : lead + 7
         return Array(repeating: nil, count: offset) + range.map { Optional($0) }
     }
-    private func charges(on day: Int) -> [RenewalCharge] {
-        store.charges(in: .month).filter { Calendar.current.component(.day, from: $0.date) == day }
-    }
 }
 
 private struct YearPanel: View {
@@ -224,7 +224,10 @@ private struct YearPanel: View {
             Chart(store.monthTotalsForCurrentYear()) { p in
                 BarMark(x: .value("月", p.month, unit: .month),
                         y: .value("金额", p.amount))
-                    .foregroundStyle(p.month < Date.now ? AppTheme.hairline : AppTheme.accent)
+                    .foregroundStyle(
+                        Calendar.current.compare(p.month, to: .now, toGranularity: .month) == .orderedAscending
+                            ? AppTheme.hairline : AppTheme.accent
+                    )
                     .cornerRadius(4)
             }
             .chartXAxis { AxisMarks(values: .stride(by: .month)) { _ in
