@@ -115,6 +115,47 @@ final class SubscriptionStore: ObservableObject {
         .sorted { $0.date < $1.date }
     }
 
+    /// 任意月份的扣费日（含倒推过去月份）；仅供扣费日历使用，不影响 Hero/分类/年图。
+    func charges(inMonthContaining date: Date) -> [RenewalCharge] {
+        let calendar = Calendar.current
+        guard let interval = calendar.dateInterval(of: .month, for: date) else { return [] }
+        return activeSubscriptions
+            .flatMap { projectedChargesBidirectional(for: $0, from: interval.start, to: interval.end) }
+            .sorted { $0.date < $1.date }
+    }
+
+    /// 双向推算：从 nextBillingDate 按周期向前/向后走，覆盖任意 [start,end) 窗口（过去月份也能得到"本该扣费"的日子）。
+    private func projectedChargesBidirectional(for subscription: Subscription, from start: Date, to end: Date) -> [RenewalCharge] {
+        let calendar = Calendar.current
+        var chargeDate = subscription.nextBillingDate
+        let cycleDays = subscription.billingCycle.days(customDays: subscription.customCycleDays)
+        var charges: [RenewalCharge] = []
+
+        // 下次扣费在窗口之后（看过去月份）→ 按周期向回倒推到窗口前/内
+        while chargeDate >= end {
+            guard let prev = calendar.date(byAdding: .day, value: -cycleDays, to: chargeDate) else { break }
+            chargeDate = prev
+        }
+        // 仍早于窗口起点 → 按周期前进
+        while chargeDate < start {
+            guard let next = calendar.date(byAdding: .day, value: cycleDays, to: chargeDate) else { break }
+            chargeDate = next
+        }
+        // 收集 [start, end)
+        while chargeDate < end {
+            if chargeDate >= start {
+                charges.append(RenewalCharge(
+                    subscription: subscription,
+                    date: chargeDate,
+                    amount: converter.convert(subscription.price, from: subscription.currency, to: baseCurrency)
+                ))
+            }
+            guard let next = calendar.date(byAdding: .day, value: cycleDays, to: chargeDate) else { break }
+            chargeDate = next
+        }
+        return charges
+    }
+
     func dueAmount(in period: SpendPeriod) -> Double {
         charges(in: period).reduce(0) { $0 + $1.amount }
     }

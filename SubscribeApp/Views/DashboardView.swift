@@ -167,14 +167,83 @@ private struct CategoryPanel: View {
 
 private struct CalendarPanel: View {
     @EnvironmentObject private var store: SubscriptionStore
+    @State private var monthAnchor: Date = Calendar.current.dateInterval(of: .month, for: .now)?.start ?? .now
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 6), count: 7)
     private let symbols = Calendar.current.veryShortStandaloneWeekdaySymbols
+
+    private var currentMonthStart: Date {
+        Calendar.current.dateInterval(of: .month, for: .now)?.start ?? .now
+    }
+    private var isCurrentMonth: Bool {
+        Calendar.current.isDate(monthAnchor, equalTo: currentMonthStart, toGranularity: .month)
+    }
+    private func monthLabel(_ d: Date) -> String {
+        d.formatted(.dateTime.year().month(.wide))
+    }
+    private func step(_ delta: Int) {
+        if let d = Calendar.current.date(byAdding: .month, value: delta, to: monthAnchor),
+           let s = Calendar.current.dateInterval(of: .month, for: d)?.start {
+            monthAnchor = s
+        }
+    }
+
     var body: some View {
-        let byDay = Dictionary(grouping: store.charges(in: .month)) {
+        let byDay = Dictionary(grouping: store.charges(inMonthContaining: monthAnchor)) {
             Calendar.current.component(.day, from: $0.date)
         }
-        return Panel(title: "本月扣费日") {
+        return Panel {
             VStack(spacing: AppTheme.Space.m) {
+                HStack(spacing: AppTheme.Space.s) {
+                    Button { step(-1) } label: {
+                        Image(systemName: "chevron.left")
+                            .font(.subheadline.weight(.bold))
+                            .foregroundStyle(AppTheme.secondary)
+                            .frame(width: 30, height: 30)
+                            .contentShape(Rectangle())
+                    }.buttonStyle(.plain)
+
+                    Spacer()
+
+                    Menu {
+                        ForEach((-24...24), id: \.self) { off in
+                            if let d = Calendar.current.date(byAdding: .month, value: off, to: currentMonthStart) {
+                                Button(monthLabel(d)) {
+                                    if let s = Calendar.current.dateInterval(of: .month, for: d)?.start {
+                                        monthAnchor = s
+                                    }
+                                }
+                            }
+                        }
+                    } label: {
+                        HStack(spacing: 5) {
+                            Text(monthLabel(monthAnchor))
+                                .font(.subheadline.weight(.semibold))
+                                .foregroundStyle(AppTheme.ink)
+                            Image(systemName: "chevron.down")
+                                .font(.caption2.weight(.bold))
+                                .foregroundStyle(AppTheme.secondary)
+                        }
+                    }
+
+                    if !isCurrentMonth {
+                        Button { monthAnchor = currentMonthStart } label: {
+                            Text("本月")
+                                .font(.caption2.weight(.bold))
+                                .foregroundStyle(AppTheme.accent)
+                        }.buttonStyle(.plain)
+                    }
+
+                    Spacer()
+
+                    Button { step(1) } label: {
+                        Image(systemName: "chevron.right")
+                            .font(.subheadline.weight(.bold))
+                            .foregroundStyle(AppTheme.secondary)
+                            .frame(width: 30, height: 30)
+                            .contentShape(Rectangle())
+                    }.buttonStyle(.plain)
+                }
+
                 HStack {
                     ForEach(symbols, id: \.self) { s in
                         Text(s).font(.caption2.weight(.semibold))
@@ -204,12 +273,14 @@ private struct CalendarPanel: View {
                     }
                 }
             }
+            .animation(AppTheme.spring, value: monthAnchor)
         }
     }
+
     private var cells: [Int?] {
         let cal = Calendar.current
-        guard let interval = cal.dateInterval(of: .month, for: .now),
-              let range = cal.range(of: .day, in: .month, for: .now) else { return [] }
+        guard let interval = cal.dateInterval(of: .month, for: monthAnchor),
+              let range = cal.range(of: .day, in: .month, for: monthAnchor) else { return [] }
         let firstWeekday = cal.component(.weekday, from: interval.start)
         let lead = firstWeekday - cal.firstWeekday
         let offset = lead >= 0 ? lead : lead + 7
