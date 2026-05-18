@@ -58,6 +58,7 @@ final class SubscriptionStore: ObservableObject {
         if iCloudSyncEnabled {
             syncFromICloud()
         }
+        syncReminders()
     }
 
     var activeSubscriptions: [Subscription] {
@@ -216,11 +217,10 @@ final class SubscriptionStore: ObservableObject {
         }
     }
 
-    private func syncReminders() {
+    func syncReminders() {
+        NotificationScheduler.cancelAll()
         if remindersEnabled {
             NotificationScheduler.rescheduleAll(subscriptions)
-        } else {
-            NotificationScheduler.cancelAll()
         }
     }
 }
