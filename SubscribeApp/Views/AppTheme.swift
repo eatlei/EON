@@ -18,8 +18,8 @@ enum AppTheme {
     static let radius: CGFloat = 16
     static let radiusSmall: CGFloat = 12
 
-    /// Bottom clearance for screens that sit under ContentView's dock (tab pill + floating add button).
-    static let dockClearance: CGFloat = 112
+    /// Extra bottom breathing room; native TabView already insets content for its Liquid Glass tab bar.
+    static let dockClearance: CGFloat = 16
 
     // 间距阶
     enum Space {
