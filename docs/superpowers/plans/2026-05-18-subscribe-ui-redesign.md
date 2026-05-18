@@ -1016,7 +1016,7 @@ struct SettingsView: View {
                         Button {
                             Task {
                                 if await NotificationScheduler.requestAuthorization() {
-                                    NotificationScheduler.rescheduleAll(store.subscriptions)
+                                    store.syncReminders()
                                 }
                                 await loadStatus()
                             }
