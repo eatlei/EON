@@ -3,34 +3,25 @@ import SwiftUI
 
 struct DashboardView: View {
     @EnvironmentObject private var store: SubscriptionStore
-    @State private var selectedPeriod: SpendPeriod = .month
+    @State private var period: SpendPeriod = .month
 
     var body: some View {
         NavigationStack {
             AppScreen {
-                VStack(spacing: 14) {
-                    HStack(spacing: 12) {
-                        PeriodSwitch(selection: $selectedPeriod)
-                        CurrencyMenu(selection: $store.baseCurrency)
+                if store.activeSubscriptions.isEmpty {
+                    EmptyDashboard()
+                } else {
+                    VStack(spacing: AppTheme.Space.xl) {
+                        DashboardHeader(period: $period).reveal(0)
+                        HeroTotal(period: period).reveal(1)
+                        UpcomingPanel(period: period).reveal(2)
+                        CategoryPanel().reveal(3)
+                        if period == .month {
+                            CalendarPanel().reveal(4)
+                        } else {
+                            YearPanel().reveal(4)
+                        }
                     }
-                    .reveal(0)
-
-                    SummaryCard(period: selectedPeriod)
-                        .reveal(1)
-
-                    if selectedPeriod == .month {
-                        MonthCalendarCard()
-                            .reveal(2)
-                    } else {
-                        YearSpendCard()
-                            .reveal(2)
-                    }
-
-                    CategoryBreakdownCard()
-                        .reveal(3)
-
-                    RenewalReceiptCard(period: selectedPeriod)
-                        .reveal(4)
                 }
             }
             .toolbar(.hidden, for: .navigationBar)
@@ -38,477 +29,226 @@ struct DashboardView: View {
     }
 }
 
-private struct PeriodSwitch: View {
-    @Binding var selection: SpendPeriod
-
-    var body: some View {
-        HStack(spacing: 4) {
-            ForEach(SpendPeriod.allCases) { period in
-                Button {
-                    withAnimation(AppDesign.spring) {
-                        selection = period
-                    }
-                } label: {
-                    Text(period.title)
-                        .font(.headline.weight(.black))
-                        .foregroundStyle(selection == period ? .white : AppDesign.ink)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 12)
-                        .background(selection == period ? AppDesign.ink : .clear, in: RoundedRectangle(cornerRadius: 8))
-                }
-                .buttonStyle(.plain)
-            }
-        }
-        .padding(4)
-        .background(AppDesign.surface, in: RoundedRectangle(cornerRadius: 8))
-        .overlay(
-            RoundedRectangle(cornerRadius: 8)
-                .stroke(AppDesign.line.opacity(0.78), lineWidth: 1)
-        )
-    }
-}
-
-private struct SummaryCard: View {
+private struct DashboardHeader: View {
     @EnvironmentObject private var store: SubscriptionStore
-    let period: SpendPeriod
-
-    private var amount: Double {
-        store.dueAmount(in: period)
-    }
-
-    private var count: Int {
-        store.dueCount(in: period)
-    }
-
-    private var nextCharge: RenewalCharge? {
-        store.nextCharge(in: period)
-    }
-
+    @Binding var period: SpendPeriod
     var body: some View {
-        VStack(alignment: .leading, spacing: 18) {
-            HStack(alignment: .top) {
-                Label(periodLabel, systemImage: "calendar.badge.clock")
-                    .font(.subheadline.weight(.bold))
-                    .foregroundStyle(AppDesign.muted)
-
-                Spacer()
-
-                Text("\(store.activeSubscriptions.count) active")
-                    .font(.caption.monospacedDigit().weight(.bold))
-                    .foregroundStyle(AppDesign.ink)
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 6)
-                    .background(AppDesign.line.opacity(0.25), in: RoundedRectangle(cornerRadius: 8))
-            }
-
-            VStack(alignment: .leading, spacing: 4) {
-                Text(store.converter.format(amount, currency: store.baseCurrency))
-                    .font(.system(size: 50, weight: .black, design: .rounded))
-                    .foregroundStyle(AppDesign.ink)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.48)
-                    .contentTransition(.numericText())
-
-                Text("\(count) 笔将在\(period.unitText)扣费")
-                    .font(.headline.weight(.semibold))
-                    .foregroundStyle(AppDesign.muted)
-            }
-
-            Divider()
-                .overlay(AppDesign.line)
-
-            if let nextCharge {
-                RenewalInlineRow(charge: nextCharge, showsCheckmark: false)
-            } else {
-                Text("这个周期没有待扣费订阅")
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(AppDesign.muted)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.vertical, 10)
-            }
-        }
-        .padding(18)
-        .background(AppDesign.surface, in: RoundedRectangle(cornerRadius: 8))
-        .overlay(
-            RoundedRectangle(cornerRadius: 8)
-                .stroke(AppDesign.line.opacity(0.75), lineWidth: 1)
-        )
-        .shadow(color: AppDesign.ink.opacity(0.055), radius: 24, y: 12)
-        .animation(AppDesign.spring, value: period)
-        .animation(AppDesign.spring, value: amount)
-    }
-
-    private var periodLabel: String {
-        switch period {
-        case .month:
-            Date.now.formatted(.dateTime.month(.wide))
-        case .year:
-            Date.now.formatted(.dateTime.year())
-        }
-    }
-}
-
-private struct MonthCalendarCard: View {
-    @EnvironmentObject private var store: SubscriptionStore
-
-    private let columns = Array(repeating: GridItem(.flexible(), spacing: 8), count: 7)
-    private let weekdaySymbols = Calendar.current.veryShortStandaloneWeekdaySymbols
-
-    var body: some View {
-        InsightPanel(title: "本月扣费日") {
-            VStack(spacing: 12) {
-                HStack {
-                    ForEach(weekdaySymbols, id: \.self) { symbol in
-                        Text(symbol)
-                            .font(.caption2.weight(.bold))
-                            .foregroundStyle(AppDesign.muted)
-                            .frame(maxWidth: .infinity)
-                    }
-                }
-
-                LazyVGrid(columns: columns, spacing: 8) {
-                    ForEach(calendarCells, id: \.self) { day in
-                        if let day {
-                            CalendarDayCell(
-                                day: day,
-                                charges: charges(on: day)
-                            )
-                        } else {
-                            Color.clear
-                                .frame(height: 36)
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private var calendarCells: [Int?] {
-        let calendar = Calendar.current
-        guard let interval = calendar.dateInterval(of: .month, for: .now),
-              let range = calendar.range(of: .day, in: .month, for: .now) else {
-            return []
-        }
-
-        let firstWeekday = calendar.component(.weekday, from: interval.start)
-        let leadingEmpty = firstWeekday - calendar.firstWeekday
-        let offset = leadingEmpty >= 0 ? leadingEmpty : leadingEmpty + 7
-        return Array(repeating: nil, count: offset) + range.map { Optional($0) }
-    }
-
-    private func charges(on day: Int) -> [RenewalCharge] {
-        store.charges(in: .month).filter {
-            Calendar.current.component(.day, from: $0.date) == day
-        }
-    }
-}
-
-private struct CalendarDayCell: View {
-    let day: Int
-    let charges: [RenewalCharge]
-
-    var body: some View {
-        VStack(spacing: 3) {
-            Text("\(day)")
-                .font(.caption.monospacedDigit().weight(charges.isEmpty ? .medium : .black))
-                .foregroundStyle(charges.isEmpty ? AppDesign.muted : AppDesign.ink)
-
+        HStack(spacing: AppTheme.Space.m) {
             HStack(spacing: 2) {
-                ForEach(charges.prefix(3)) { charge in
-                    Circle()
-                        .fill(charge.subscription.category.color)
-                        .frame(width: 4, height: 4)
+                ForEach(SpendPeriod.allCases) { p in
+                    Button {
+                        withAnimation(AppTheme.spring) { period = p }
+                    } label: {
+                        Text(p.title)
+                            .font(.subheadline.weight(.bold))
+                            .foregroundStyle(period == p ? AppTheme.surface : AppTheme.secondary)
+                            .frame(maxWidth: .infinity).padding(.vertical, 8)
+                            .background(period == p ? AppTheme.ink : .clear,
+                                        in: RoundedRectangle(cornerRadius: AppTheme.radiusSmall))
+                    }.buttonStyle(.plain)
                 }
             }
-            .frame(height: 5)
-        }
-        .frame(height: 36)
-        .frame(maxWidth: .infinity)
-        .background(charges.isEmpty ? AppDesign.line.opacity(0.18) : Color.blue.opacity(0.12), in: Circle())
-    }
-}
-
-private struct YearSpendCard: View {
-    @EnvironmentObject private var store: SubscriptionStore
-
-    var body: some View {
-        InsightPanel(title: "全年扣费分布") {
-            Chart(store.monthTotalsForCurrentYear()) { point in
-                BarMark(
-                    x: .value("月份", point.month, unit: .month),
-                    y: .value("金额", point.amount)
-                )
-                .foregroundStyle(point.month < Date.now ? AppDesign.line : Color.blue)
-                .cornerRadius(5)
-            }
-            .chartXAxis {
-                AxisMarks(values: .stride(by: .month)) { _ in
-                    AxisValueLabel(format: .dateTime.month(.narrow))
-                }
-            }
-            .chartYAxis(.hidden)
-            .frame(height: 132)
-        }
-    }
-}
-
-private struct RenewalReceiptCard: View {
-    @EnvironmentObject private var store: SubscriptionStore
-    let period: SpendPeriod
-
-    private var charges: [RenewalCharge] {
-        Array(store.charges(in: period).prefix(8))
-    }
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            HStack {
-                VStack(alignment: .leading, spacing: 3) {
-                    Text(period == .month ? "MONTHLY RECEIPT" : "YEAR RECEIPT")
-                        .font(.caption.monospaced().weight(.black))
-                        .foregroundStyle(AppDesign.muted)
-                    Text(period == .month ? "本月明细" : "近期明细")
-                        .font(.headline.weight(.black))
-                        .foregroundStyle(AppDesign.ink)
-                }
-
-                Spacer()
-
-                Text(Date.now.formatted(.dateTime.year().month().day()))
-                    .font(.caption2.monospacedDigit().weight(.bold))
-                    .foregroundStyle(AppDesign.muted)
-            }
-
-            DashedDivider()
-
-            if charges.isEmpty {
-                ContentUnavailableView("暂无扣费", systemImage: "calendar.badge.checkmark")
-                    .frame(height: 138)
-            } else {
-                VStack(spacing: 0) {
-                    ForEach(charges) { charge in
-                        ReceiptRow(charge: charge)
-                    }
-                }
-
-                DashedDivider()
-
-                HStack {
-                    Text("TOTAL")
-                        .font(.caption.monospaced().weight(.black))
-                        .foregroundStyle(AppDesign.muted)
-                    Spacer()
-                    Text(store.converter.format(total, currency: store.baseCurrency))
-                        .font(.title3.monospacedDigit().weight(.black))
-                        .foregroundStyle(AppDesign.ink)
-                }
-            }
-        }
-        .padding(16)
-        .background(
-            RoundedRectangle(cornerRadius: 8)
-                .fill(AppDesign.surface.opacity(0.95))
-                .stroke(AppDesign.line.opacity(0.72), lineWidth: 1)
-        )
-        .overlay(alignment: .top) {
-            ReceiptTeeth()
-                .fill(AppDesign.background.opacity(0.9))
-                .frame(height: 10)
-                .offset(y: -1)
-        }
-        .overlay(alignment: .bottom) {
-            ReceiptTeeth()
-                .fill(AppDesign.background.opacity(0.9))
-                .rotationEffect(.degrees(180))
-                .frame(height: 10)
-                .offset(y: 1)
-        }
-        .shadow(color: AppDesign.ink.opacity(0.05), radius: 22, y: 12)
-    }
-
-    private var total: Double {
-        charges.reduce(0) { $0 + $1.amount }
-    }
-}
-
-private struct CategoryBreakdownCard: View {
-    @EnvironmentObject private var store: SubscriptionStore
-
-    var body: some View {
-        InsightPanel(title: "支出分类") {
-            HStack(spacing: 16) {
-                Chart(store.categorySpend) { item in
-                    SectorMark(
-                        angle: .value("金额", item.amount),
-                        innerRadius: .ratio(0.62),
-                        angularInset: 2
-                    )
-                    .foregroundStyle(item.category.color)
-                    .cornerRadius(4)
-                }
-                .frame(width: 142, height: 142)
-
-                VStack(spacing: 9) {
-                    ForEach(store.categorySpend.prefix(5)) { item in
-                        HStack(spacing: 8) {
-                            Circle()
-                                .fill(item.category.color)
-                                .frame(width: 8, height: 8)
-
-                            Text(item.category.rawValue)
-                                .font(.caption.weight(.bold))
-                                .foregroundStyle(AppDesign.ink)
-
-                            Spacer()
-
-                            Text("\(Int((item.share * 100).rounded()))%")
-                                .font(.caption.monospacedDigit().weight(.black))
-                                .foregroundStyle(AppDesign.muted)
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-private struct ReceiptRow: View {
-    @EnvironmentObject private var store: SubscriptionStore
-    let charge: RenewalCharge
-
-    var body: some View {
-        HStack(alignment: .firstTextBaseline, spacing: 10) {
-            Text(charge.date.formatted(.dateTime.day(.twoDigits)))
-                .font(.caption.monospacedDigit().weight(.black))
-                .foregroundStyle(AppDesign.muted)
-                .frame(width: 24, alignment: .leading)
-
-            VStack(alignment: .leading, spacing: 2) {
-                Text(charge.subscription.name)
-                    .font(.subheadline.weight(.bold))
-                    .foregroundStyle(AppDesign.ink)
-                    .lineLimit(1)
-
-                Text(charge.subscription.plan)
-                    .font(.caption2)
-                    .foregroundStyle(AppDesign.muted)
-                    .lineLimit(1)
-            }
-
-            Spacer(minLength: 8)
-
-            Text(store.converter.format(charge.amount, currency: store.baseCurrency))
-                .font(.subheadline.monospacedDigit().weight(.black))
-                .foregroundStyle(AppDesign.ink)
-        }
-        .padding(.vertical, 8)
-    }
-}
-
-private struct DashedDivider: View {
-    var body: some View {
-        Rectangle()
-            .stroke(style: StrokeStyle(lineWidth: 1, dash: [5, 5]))
-            .foregroundStyle(AppDesign.line)
-            .frame(height: 1)
-    }
-}
-
-private struct ReceiptTeeth: Shape {
-    func path(in rect: CGRect) -> Path {
-        var path = Path()
-        path.move(to: CGPoint(x: rect.minX, y: rect.minY))
-
-        let toothWidth: CGFloat = 12
-        var x = rect.minX
-        while x <= rect.maxX {
-            path.addLine(to: CGPoint(x: min(x + toothWidth / 2, rect.maxX), y: rect.maxY))
-            path.addLine(to: CGPoint(x: min(x + toothWidth, rect.maxX), y: rect.minY))
-            x += toothWidth
-        }
-
-        path.addLine(to: CGPoint(x: rect.maxX, y: rect.minY))
-        path.closeSubpath()
-        return path
-    }
-}
-
-private struct RenewalInlineRow: View {
-    @EnvironmentObject private var store: SubscriptionStore
-    let charge: RenewalCharge
-    let showsCheckmark: Bool
-
-    var body: some View {
-        HStack(spacing: 12) {
-            SubscriptionGlyph(subscription: charge.subscription)
-
-            VStack(alignment: .leading, spacing: 3) {
-                Text(charge.subscription.name)
-                    .font(.subheadline.weight(.bold))
-                    .foregroundStyle(AppDesign.ink)
-                    .lineLimit(1)
-
-                Text(charge.date.formatted(.dateTime.month(.abbreviated).day()) + " · " + charge.subscription.plan)
-                    .font(.caption)
-                    .foregroundStyle(AppDesign.muted)
-                    .lineLimit(1)
-            }
+            .padding(3)
+            .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: AppTheme.radius))
+            .overlay(RoundedRectangle(cornerRadius: AppTheme.radius).stroke(AppTheme.hairline, lineWidth: 0.5))
+            .frame(width: 132)
 
             Spacer()
 
-            Text(store.converter.format(charge.amount, currency: store.baseCurrency))
-                .font(.headline.monospacedDigit().weight(.black))
-                .foregroundStyle(AppDesign.ink)
-                .lineLimit(1)
-                .minimumScaleFactor(0.75)
-
-            if showsCheckmark {
-                Image(systemName: "checkmark.circle.fill")
-                    .foregroundStyle(.green)
+            Menu {
+                Picker("", selection: $store.baseCurrency) {
+                    ForEach(CurrencyCode.allCases) { Text("\($0.rawValue) · \($0.title)").tag($0) }
+                }
+            } label: {
+                HStack(spacing: 6) {
+                    Image(systemName: "globe").font(.caption.weight(.bold))
+                    Text(store.baseCurrency.rawValue).font(.subheadline.weight(.bold))
+                }
+                .foregroundStyle(AppTheme.ink)
+                .padding(.horizontal, AppTheme.Space.m).padding(.vertical, AppTheme.Space.s)
+                .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: AppTheme.radiusSmall))
+                .overlay(RoundedRectangle(cornerRadius: AppTheme.radiusSmall).stroke(AppTheme.hairline, lineWidth: 0.5))
             }
         }
-        .padding(.vertical, 11)
     }
 }
 
-private struct SubscriptionGlyph: View {
-    let subscription: Subscription
-
+private struct HeroTotal: View {
+    @EnvironmentObject private var store: SubscriptionStore
+    let period: SpendPeriod
     var body: some View {
-        ZStack {
-            Circle()
-                .fill(subscription.category.color.opacity(0.16))
-            Circle()
-                .stroke(subscription.category.color.opacity(0.45), lineWidth: 2)
-            Text(String(subscription.name.prefix(1)).uppercased())
-                .font(.caption.weight(.black))
-                .foregroundStyle(subscription.category.color)
+        VStack(alignment: .leading, spacing: AppTheme.Space.s) {
+            SectionLabel(text: period == .month ? "本月待扣费" : "今年待扣费")
+            Text(store.converter.format(store.dueAmount(in: period), currency: store.baseCurrency))
+                .font(.amountHero())
+                .foregroundStyle(AppTheme.ink)
+                .lineLimit(1).minimumScaleFactor(0.5)
+                .contentTransition(.numericText())
+            Text(subtitle)
+                .font(.subheadline.weight(.medium))
+                .foregroundStyle(AppTheme.secondary)
         }
-        .frame(width: 38, height: 38)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.vertical, AppTheme.Space.s)
+        .animation(AppTheme.spring, value: period)
+    }
+    private var subtitle: String {
+        let n = store.dueCount(in: period)
+        if let next = store.nextCharge(in: period) {
+            return "\(n) 笔 · 下一笔 \(next.subscription.name) \(next.date.formatted(.dateTime.month().day()))"
+        }
+        return "\(store.activeSubscriptions.count) 个订阅 · 本期无待扣费"
     }
 }
 
-struct CurrencyMenu: View {
-    @Binding var selection: CurrencyCode
-
+private struct UpcomingPanel: View {
+    @EnvironmentObject private var store: SubscriptionStore
+    let period: SpendPeriod
+    private var charges: [RenewalCharge] { Array(store.charges(in: period).prefix(6)) }
     var body: some View {
-        Menu {
-            Picker("统一币种", selection: $selection) {
-                ForEach(CurrencyCode.allCases) { currency in
-                    Text("\(currency.rawValue) · \(currency.title)").tag(currency)
+        Panel(title: "即将扣费") {
+            if charges.isEmpty {
+                Text("本期没有待扣费订阅")
+                    .font(.subheadline).foregroundStyle(AppTheme.secondary)
+                    .frame(maxWidth: .infinity, alignment: .leading).padding(.vertical, AppTheme.Space.s)
+            } else {
+                VStack(spacing: 0) {
+                    ForEach(Array(charges.enumerated()), id: \.element.id) { i, c in
+                        if i > 0 { Hairline() }
+                        HStack(spacing: AppTheme.Space.m) {
+                            CategoryGlyph(subscription: c.subscription)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(c.subscription.name).font(.subheadline.weight(.semibold))
+                                    .foregroundStyle(AppTheme.ink)
+                                Text("\(c.date.formatted(.dateTime.month().day())) · \(c.subscription.plan)")
+                                    .font(.caption).foregroundStyle(AppTheme.secondary)
+                            }
+                            Spacer()
+                            Text(store.converter.format(c.amount, currency: store.baseCurrency))
+                                .font(.amount()).foregroundStyle(AppTheme.ink)
+                        }
+                        .padding(.vertical, AppTheme.Space.m)
+                    }
                 }
             }
-        } label: {
-            Label(selection.rawValue, systemImage: "globe.asia.australia.fill")
-                .font(.caption.weight(.black))
-                .foregroundStyle(AppDesign.ink)
-                .padding(.horizontal, 10)
-                .padding(.vertical, 12)
-                .background(AppDesign.surface, in: RoundedRectangle(cornerRadius: 8))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(AppDesign.line.opacity(0.78), lineWidth: 1)
-                )
         }
     }
+}
+
+private struct CategoryPanel: View {
+    @EnvironmentObject private var store: SubscriptionStore
+    var body: some View {
+        Panel(title: "支出分类") {
+            HStack(spacing: AppTheme.Space.xl) {
+                Chart(store.categorySpend) { item in
+                    SectorMark(angle: .value("金额", item.amount),
+                               innerRadius: .ratio(0.68), angularInset: 1.5)
+                        .foregroundStyle(item.category.color)
+                }
+                .frame(width: 116, height: 116)
+
+                VStack(spacing: AppTheme.Space.s) {
+                    ForEach(store.categorySpend.prefix(5)) { item in
+                        HStack(spacing: AppTheme.Space.s) {
+                            Circle().fill(item.category.color).frame(width: 7, height: 7)
+                            Text(item.category.rawValue)
+                                .font(.caption.weight(.semibold)).foregroundStyle(AppTheme.ink)
+                            Spacer()
+                            Text("\(Int((item.share * 100).rounded()))%")
+                                .font(.caption.weight(.bold).monospacedDigit())
+                                .foregroundStyle(AppTheme.secondary)
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+private struct CalendarPanel: View {
+    @EnvironmentObject private var store: SubscriptionStore
+    private let columns = Array(repeating: GridItem(.flexible(), spacing: 6), count: 7)
+    private let symbols = Calendar.current.veryShortStandaloneWeekdaySymbols
+    var body: some View {
+        Panel(title: "本月扣费日") {
+            VStack(spacing: AppTheme.Space.m) {
+                HStack {
+                    ForEach(symbols, id: \.self) { s in
+                        Text(s).font(.caption2.weight(.semibold))
+                            .foregroundStyle(AppTheme.tertiary).frame(maxWidth: .infinity)
+                    }
+                }
+                LazyVGrid(columns: columns, spacing: 6) {
+                    ForEach(Array(cells.enumerated()), id: \.offset) { _, day in
+                        if let day {
+                            let cs = charges(on: day)
+                            VStack(spacing: 3) {
+                                Text("\(day)")
+                                    .font(.caption.monospacedDigit().weight(cs.isEmpty ? .regular : .bold))
+                                    .foregroundStyle(cs.isEmpty ? AppTheme.tertiary : AppTheme.ink)
+                                HStack(spacing: 2) {
+                                    ForEach(cs.prefix(3)) { c in
+                                        Circle().fill(c.subscription.category.color).frame(width: 4, height: 4)
+                                    }
+                                }.frame(height: 4)
+                            }
+                            .frame(height: 34).frame(maxWidth: .infinity)
+                            .background(cs.isEmpty ? Color.clear : AppTheme.accent.opacity(0.10),
+                                        in: RoundedRectangle(cornerRadius: AppTheme.radiusSmall))
+                        } else {
+                            Color.clear.frame(height: 34)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    private var cells: [Int?] {
+        let cal = Calendar.current
+        guard let interval = cal.dateInterval(of: .month, for: .now),
+              let range = cal.range(of: .day, in: .month, for: .now) else { return [] }
+        let firstWeekday = cal.component(.weekday, from: interval.start)
+        let lead = firstWeekday - cal.firstWeekday
+        let offset = lead >= 0 ? lead : lead + 7
+        return Array(repeating: nil, count: offset) + range.map { Optional($0) }
+    }
+    private func charges(on day: Int) -> [RenewalCharge] {
+        store.charges(in: .month).filter { Calendar.current.component(.day, from: $0.date) == day }
+    }
+}
+
+private struct YearPanel: View {
+    @EnvironmentObject private var store: SubscriptionStore
+    var body: some View {
+        Panel(title: "全年扣费分布") {
+            Chart(store.monthTotalsForCurrentYear()) { p in
+                BarMark(x: .value("月", p.month, unit: .month),
+                        y: .value("金额", p.amount))
+                    .foregroundStyle(p.month < Date.now ? AppTheme.hairline : AppTheme.accent)
+                    .cornerRadius(4)
+            }
+            .chartXAxis { AxisMarks(values: .stride(by: .month)) { _ in
+                AxisValueLabel(format: .dateTime.month(.narrow)) } }
+            .chartYAxis(.hidden)
+            .frame(height: 128)
+        }
+    }
+}
+
+private struct EmptyDashboard: View {
+    var body: some View {
+        VStack(spacing: AppTheme.Space.m) {
+            Image(systemName: "tray").font(.system(size: 44, weight: .light))
+                .foregroundStyle(AppTheme.tertiary)
+            Text("还没有订阅").font(.title3.weight(.bold)).foregroundStyle(AppTheme.ink)
+            Text("点右下角的 + 添加第一个订阅，\n这里会显示你的支出概览。")
+                .font(.subheadline).foregroundStyle(AppTheme.secondary)
+                .multilineTextAlignment(.center)
+        }
+        .frame(maxWidth: .infinity).padding(.top, 120)
+    }
+}
+
+#Preview {
+    DashboardView().environmentObject(SubscriptionStore())
 }
