@@ -2,244 +2,147 @@ import SwiftUI
 
 struct SubscriptionsView: View {
     @EnvironmentObject private var store: SubscriptionStore
-    @State private var editingSubscription: Subscription?
-    @State private var searchText = ""
-    @State private var sortOption: SubscriptionSortOption = .renewalDate
+    @State private var editing: Subscription?
+    @State private var search = ""
+    @State private var sort: SortOption = .renewalDate
 
-    private var filteredSubscriptions: [Subscription] {
-        let filtered = store.subscriptions
-            .filter { subscription in
-                searchText.isEmpty ||
-                    subscription.name.localizedCaseInsensitiveContains(searchText) ||
-                    subscription.plan.localizedCaseInsensitiveContains(searchText) ||
-                    subscription.category.rawValue.localizedCaseInsensitiveContains(searchText)
-            }
-
-        switch sortOption {
-        case .renewalDate:
-            return filtered.sorted { $0.nextBillingDate < $1.nextBillingDate }
-        case .duration:
-            return filtered.sorted {
-                $0.billingCycle.days(customDays: $0.customCycleDays) > $1.billingCycle.days(customDays: $1.customCycleDays)
-            }
-        case .cost:
-            return filtered.sorted {
-                $0.monthlyCost(in: store.baseCurrency, converter: store.converter) >
-                    $1.monthlyCost(in: store.baseCurrency, converter: store.converter)
-            }
-        case .name:
-            return filtered.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+    private var rows: [Subscription] {
+        let f = store.subscriptions.filter {
+            search.isEmpty
+            || $0.name.localizedCaseInsensitiveContains(search)
+            || $0.plan.localizedCaseInsensitiveContains(search)
+            || $0.category.rawValue.localizedCaseInsensitiveContains(search)
+        }
+        switch sort {
+        case .renewalDate: return f.sorted { $0.nextBillingDate < $1.nextBillingDate }
+        case .duration: return f.sorted {
+            $0.billingCycle.days(customDays: $0.customCycleDays) > $1.billingCycle.days(customDays: $1.customCycleDays) }
+        case .cost: return f.sorted {
+            $0.monthlyCost(in: store.baseCurrency, converter: store.converter)
+            > $1.monthlyCost(in: store.baseCurrency, converter: store.converter) }
+        case .name: return f.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
         }
     }
 
     var body: some View {
         NavigationStack {
             AppScreen {
-                VStack(alignment: .leading, spacing: 16) {
-                    HStack(spacing: 10) {
-                        searchField
-                        sortMenu
-                    }
-                        .reveal(0)
+                VStack(spacing: AppTheme.Space.l) {
+                    HStack(spacing: AppTheme.Space.s) {
+                        HStack(spacing: AppTheme.Space.s) {
+                            Image(systemName: "magnifyingglass").foregroundStyle(AppTheme.tertiary)
+                            TextField("搜索名称、套餐或分类", text: $search)
+                                .textInputAutocapitalization(.never)
+                            if !search.isEmpty {
+                                Button { search = "" } label: {
+                                    Image(systemName: "xmark.circle.fill").foregroundStyle(AppTheme.tertiary)
+                                }.buttonStyle(.plain)
+                            }
+                        }
+                        .padding(AppTheme.Space.m)
+                        .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: AppTheme.radius))
+                        .overlay(RoundedRectangle(cornerRadius: AppTheme.radius).stroke(AppTheme.hairline, lineWidth: 0.5))
 
-                    if filteredSubscriptions.isEmpty {
-                        ContentUnavailableView("暂无订阅", systemImage: "rectangle.stack.badge.plus")
-                            .frame(minHeight: 320)
-                            .reveal(1)
+                        Menu {
+                            Picker("", selection: $sort) {
+                                ForEach(SortOption.allCases) { Label($0.title, systemImage: $0.icon).tag($0) }
+                            }
+                        } label: {
+                            Image(systemName: "arrow.up.arrow.down")
+                                .font(.subheadline.weight(.bold)).foregroundStyle(AppTheme.ink)
+                                .frame(width: 44, height: 44)
+                                .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: AppTheme.radius))
+                                .overlay(RoundedRectangle(cornerRadius: AppTheme.radius).stroke(AppTheme.hairline, lineWidth: 0.5))
+                        }
+                    }
+                    .reveal(0)
+
+                    if rows.isEmpty {
+                        VStack(spacing: AppTheme.Space.m) {
+                            Image(systemName: "rectangle.stack").font(.system(size: 40, weight: .light))
+                                .foregroundStyle(AppTheme.tertiary)
+                            Text(search.isEmpty ? "还没有订阅" : "没有匹配的订阅")
+                                .font(.headline).foregroundStyle(AppTheme.ink)
+                        }.frame(maxWidth: .infinity).padding(.top, 100).reveal(1)
                     } else {
-                        LazyVStack(spacing: 12) {
-                            ForEach(Array(filteredSubscriptions.enumerated()), id: \.element.id) { index, subscription in
-                                Button {
-                                    editingSubscription = subscription
-                                } label: {
-                                    SubscriptionCard(subscription: subscription) {
-                                        store.delete(ids: [subscription.id])
-                                    }
+                        LazyVStack(spacing: AppTheme.Space.m) {
+                            ForEach(Array(rows.enumerated()), id: \.element.id) { i, sub in
+                                Button { editing = sub } label: {
+                                    Row(subscription: sub) { store.delete(ids: [sub.id]) }
                                 }
-                                .buttonStyle(.plain)
-                                .reveal(index + 1)
+                                .buttonStyle(.plain).reveal(i + 1)
                             }
                         }
                     }
                 }
             }
             .toolbar(.hidden, for: .navigationBar)
-            .sheet(item: $editingSubscription) { subscription in
-                SubscriptionEditorView(subscription: subscription)
-            }
+            .sheet(item: $editing) { SubscriptionEditorView(subscription: $0) }
         }
-    }
-
-    private var searchField: some View {
-        HStack(spacing: 10) {
-            Image(systemName: "magnifyingglass")
-                .foregroundStyle(AppDesign.muted)
-
-            TextField("搜索名称、套餐或分类", text: $searchText)
-                .textInputAutocapitalization(.never)
-
-            if !searchText.isEmpty {
-                Button {
-                    searchText = ""
-                } label: {
-                    Image(systemName: "xmark.circle.fill")
-                        .foregroundStyle(AppDesign.muted)
-                }
-                .buttonStyle(.plain)
-            }
-        }
-        .padding(13)
-        .frame(maxWidth: .infinity)
-        .background(AppDesign.surface, in: RoundedRectangle(cornerRadius: 8))
-        .overlay(
-            RoundedRectangle(cornerRadius: 8)
-                .stroke(AppDesign.line.opacity(0.75), lineWidth: 1)
-        )
-    }
-
-    private var sortMenu: some View {
-        Menu {
-            Picker("排序", selection: $sortOption) {
-                ForEach(SubscriptionSortOption.allCases) { option in
-                    Label(option.title, systemImage: option.systemImage)
-                        .tag(option)
-                }
-            }
-        } label: {
-            Image(systemName: "arrow.up.arrow.down")
-                .font(.headline.weight(.black))
-                .foregroundStyle(AppDesign.ink)
-                .frame(width: 48, height: 48)
-                .background(AppDesign.surface, in: RoundedRectangle(cornerRadius: 8))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(AppDesign.line.opacity(0.75), lineWidth: 1)
-                )
-        }
-        .accessibilityLabel("排序")
     }
 }
 
-private enum SubscriptionSortOption: String, CaseIterable, Identifiable {
-    case renewalDate
-    case duration
-    case cost
-    case name
-
+private enum SortOption: String, CaseIterable, Identifiable {
+    case renewalDate, duration, cost, name
     var id: String { rawValue }
-
     var title: String {
         switch self {
-        case .renewalDate: "按时间"
-        case .duration: "按持续时间"
-        case .cost: "按费用"
-        case .name: "按名称"
+        case .renewalDate: "按时间"; case .duration: "按周期长度"
+        case .cost: "按费用"; case .name: "按名称"
         }
     }
-
-    var systemImage: String {
+    var icon: String {
         switch self {
-        case .renewalDate: "calendar"
-        case .duration: "timer"
-        case .cost: "banknote"
-        case .name: "textformat"
+        case .renewalDate: "calendar"; case .duration: "timer"
+        case .cost: "banknote"; case .name: "textformat"
         }
     }
 }
 
-private struct SubscriptionCard: View {
+private struct Row: View {
     @EnvironmentObject private var store: SubscriptionStore
     let subscription: Subscription
     let onDelete: () -> Void
-
     var body: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            HStack(alignment: .top, spacing: 12) {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 8)
-                        .fill(subscription.category.color.opacity(0.14))
-                    Text(String(subscription.name.prefix(1)).uppercased())
-                        .font(.headline.bold())
-                        .foregroundStyle(subscription.category.color)
-                }
-                .frame(width: 46, height: 46)
-
-                VStack(alignment: .leading, spacing: 5) {
-                    HStack(spacing: 7) {
-                        Text(subscription.name)
-                            .font(.headline)
-                            .foregroundStyle(AppDesign.ink)
-
-                        if subscription.status == .trial {
-                            Text("试用")
-                                .font(.caption2.weight(.bold))
-                                .padding(.horizontal, 6)
-                                .padding(.vertical, 3)
-                                .background(AppDesign.amber.opacity(0.14), in: Capsule())
-                                .foregroundStyle(AppDesign.amber)
-                        }
+        HStack(spacing: AppTheme.Space.m) {
+            CategoryGlyph(subscription: subscription, size: 44)
+            VStack(alignment: .leading, spacing: 3) {
+                HStack(spacing: 6) {
+                    Text(subscription.name).font(.subheadline.weight(.semibold))
+                        .foregroundStyle(AppTheme.ink)
+                    if subscription.status == .trial {
+                        Text("试用").font(.caption2.weight(.bold))
+                            .padding(.horizontal, 6).padding(.vertical, 2)
+                            .background(AppTheme.accent.opacity(0.14), in: Capsule())
+                            .foregroundStyle(AppTheme.accent)
                     }
-
-                    Text("\(subscription.plan) · \(subscription.category.rawValue) · \(subscription.billingCycle.rawValue)")
-                        .font(.caption)
-                        .foregroundStyle(AppDesign.muted)
-                        .lineLimit(1)
                 }
-
-                Spacer(minLength: 10)
-
-                Menu {
-                    Button(role: .destructive, action: onDelete) {
-                        Label("删除", systemImage: "trash")
-                    }
-                } label: {
-                    Image(systemName: "ellipsis")
-                        .font(.headline)
-                        .foregroundStyle(AppDesign.muted)
-                        .frame(width: 32, height: 32)
-                }
+                Text("\(subscription.plan) · \(subscription.category.rawValue) · \(subscription.billingCycle.rawValue)")
+                    .font(.caption).foregroundStyle(AppTheme.secondary).lineLimit(1)
             }
-
-            HStack(spacing: 10) {
-                SmallStat(
-                    title: "月成本",
-                    value: store.converter.format(
-                        subscription.monthlyCost(in: store.baseCurrency, converter: store.converter),
-                        currency: store.baseCurrency
-                    )
-                )
-                SmallStat(title: "使用", value: "\(subscription.usageScore)/5")
-                SmallStat(title: "续费", value: subscription.nextBillingDate.formatted(.dateTime.month(.twoDigits).day(.twoDigits)))
+            Spacer(minLength: AppTheme.Space.s)
+            VStack(alignment: .trailing, spacing: 3) {
+                Text(store.converter.format(
+                    subscription.monthlyCost(in: store.baseCurrency, converter: store.converter),
+                    currency: store.baseCurrency))
+                    .font(.amountSmall()).foregroundStyle(AppTheme.ink)
+                Text(subscription.nextBillingDate.formatted(.dateTime.month().day()))
+                    .font(.caption2).foregroundStyle(AppTheme.tertiary)
+            }
+            Menu {
+                Button(role: .destructive, action: onDelete) { Label("删除", systemImage: "trash") }
+            } label: {
+                Image(systemName: "ellipsis").font(.subheadline.weight(.bold))
+                    .foregroundStyle(AppTheme.tertiary).frame(width: 28, height: 36)
             }
         }
-        .padding(15)
-        .background(AppDesign.surface, in: RoundedRectangle(cornerRadius: 8))
-        .overlay(
-            RoundedRectangle(cornerRadius: 8)
-                .stroke(subscription.category.color.opacity(subscription.isActive ? 0.22 : 0.08), lineWidth: 1)
-        )
-        .shadow(color: AppDesign.ink.opacity(0.04), radius: 18, y: 9)
-        .opacity(subscription.isActive ? 1 : 0.58)
+        .padding(AppTheme.Space.l)
+        .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: AppTheme.radius))
+        .overlay(RoundedRectangle(cornerRadius: AppTheme.radius).stroke(AppTheme.hairline, lineWidth: 0.5))
+        .opacity(subscription.isActive ? 1 : 0.5)
     }
 }
 
-private struct SmallStat: View {
-    let title: String
-    let value: String
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 3) {
-            Text(title)
-                .font(.caption2)
-                .foregroundStyle(AppDesign.muted)
-            Text(value)
-                .font(.caption.monospacedDigit().weight(.bold))
-                .foregroundStyle(AppDesign.ink)
-                .lineLimit(1)
-                .minimumScaleFactor(0.72)
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(10)
-        .background(AppDesign.line.opacity(0.22), in: RoundedRectangle(cornerRadius: 8))
-    }
+#Preview {
+    SubscriptionsView().environmentObject(SubscriptionStore())
 }
