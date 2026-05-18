@@ -3,7 +3,6 @@ import SwiftUI
 struct SubscriptionEditorView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var store: SubscriptionStore
-
     @State private var draft: Subscription
 
     init(subscription: Subscription?) {
@@ -18,110 +17,116 @@ struct SubscriptionEditorView: View {
             nextBillingDate: Calendar.current.date(byAdding: .day, value: 7, to: .now) ?? .now,
             reminderDaysBefore: 3,
             status: .active,
-            paymentMethod: "",
-            seats: 1,
-            usageScore: 3,
-            importanceScore: 3,
-            notes: ""
+            paymentMethod: ""
         ))
+    }
+
+    private var canSave: Bool {
+        !draft.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && draft.price >= 0
     }
 
     var body: some View {
         NavigationStack {
-            Form {
-                Section("基础") {
-                    TextField("名称", text: $draft.name)
-                    TextField("套餐", text: $draft.plan)
-
-                    Picker("分类", selection: $draft.category) {
-                        ForEach(SubscriptionCategory.allCases) { category in
-                            Text(category.rawValue).tag(category)
+            AppScreen {
+                VStack(spacing: AppTheme.Space.l) {
+                    Panel(title: "基础") {
+                        FieldRow("名称") { TextField("如 ChatGPT", text: $draft.name).multilineTextAlignment(.trailing) }
+                        Hairline()
+                        FieldRow("套餐") { TextField("如 Plus", text: $draft.plan).multilineTextAlignment(.trailing) }
+                        Hairline()
+                        FieldRow("分类") {
+                            Picker("", selection: $draft.category) {
+                                ForEach(SubscriptionCategory.allCases) { Text($0.rawValue).tag($0) }
+                            }.labelsHidden().tint(AppTheme.ink)
+                        }
+                        Hairline()
+                        FieldRow("状态") {
+                            Picker("", selection: $draft.status) {
+                                ForEach(RenewalStatus.allCases) { Text($0.rawValue).tag($0) }
+                            }.labelsHidden().tint(AppTheme.ink)
                         }
                     }
 
-                    Picker("状态", selection: $draft.status) {
-                        Text(RenewalStatus.active.rawValue).tag(RenewalStatus.active)
-                        Text(RenewalStatus.manual.rawValue).tag(RenewalStatus.manual)
-                        Text(RenewalStatus.trial.rawValue).tag(RenewalStatus.trial)
-                        Text(RenewalStatus.paused.rawValue).tag(RenewalStatus.paused)
-                    }
-                }
-
-                Section("价格与周期") {
-                    TextField("金额", value: $draft.price, format: .number.precision(.fractionLength(2)))
-                        .keyboardType(.decimalPad)
-
-                    Picker("币种", selection: $draft.currency) {
-                        ForEach(CurrencyCode.allCases) { currency in
-                            Text("\(currency.rawValue) · \(currency.title)").tag(currency)
+                    Panel(title: "价格与周期") {
+                        FieldRow("金额") {
+                            TextField("0", value: $draft.price, format: .number.precision(.fractionLength(2)))
+                                .keyboardType(.decimalPad).multilineTextAlignment(.trailing)
+                        }
+                        Hairline()
+                        FieldRow("币种") {
+                            Picker("", selection: $draft.currency) {
+                                ForEach(CurrencyCode.allCases) { Text("\($0.rawValue) · \($0.title)").tag($0) }
+                            }.labelsHidden().tint(AppTheme.ink)
+                        }
+                        Hairline()
+                        FieldRow("扣费周期") {
+                            Picker("", selection: $draft.billingCycle) {
+                                ForEach(BillingCycle.allCases) { Text($0.rawValue).tag($0) }
+                            }.labelsHidden().tint(AppTheme.ink)
+                        }
+                        if draft.billingCycle == .custom {
+                            Hairline()
+                            FieldRow("自定义天数") {
+                                Stepper("\(draft.customCycleDays) 天", value: $draft.customCycleDays, in: 1...730)
+                                    .fixedSize()
+                            }
+                        }
+                        Hairline()
+                        FieldRow("下次扣费") {
+                            DatePicker("", selection: $draft.nextBillingDate, displayedComponents: .date)
+                                .labelsHidden()
+                        }
+                        Hairline()
+                        FieldRow("提前提醒") {
+                            Stepper("\(draft.reminderDaysBefore) 天", value: $draft.reminderDaysBefore, in: 0...30)
+                                .fixedSize()
                         }
                     }
 
-                    Picker("扣费周期", selection: $draft.billingCycle) {
-                        ForEach(BillingCycle.allCases) { cycle in
-                            Text(cycle.rawValue).tag(cycle)
+                    Panel(title: "支付") {
+                        FieldRow("支付方式") {
+                            TextField("如 Visa 0821", text: $draft.paymentMethod).multilineTextAlignment(.trailing)
                         }
                     }
-
-                    if draft.billingCycle == .custom {
-                        Stepper("每 \(draft.customCycleDays) 天扣费", value: $draft.customCycleDays, in: 1...730)
-                    }
-
-                    DatePicker("下次扣费", selection: $draft.nextBillingDate, displayedComponents: .date)
-                    Stepper("提前 \(draft.reminderDaysBefore) 天提醒", value: $draft.reminderDaysBefore, in: 0...30)
-                }
-
-                Section("使用画像") {
-                    Stepper("席位 \(draft.seats)", value: $draft.seats, in: 1...99)
-                    LabeledSlider(title: "使用频率", value: $draft.usageScore)
-                    LabeledSlider(title: "重要程度", value: $draft.importanceScore)
-                    TextField("支付方式", text: $draft.paymentMethod)
-                    TextField("备注", text: $draft.notes, axis: .vertical)
-                        .lineLimit(3...6)
                 }
             }
             .navigationTitle(draft.name.isEmpty ? "新增订阅" : draft.name)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("取消") {
-                        dismiss()
-                    }
+                    Button("取消") { dismiss() }.tint(AppTheme.secondary)
                 }
-
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("保存") {
-                        store.upsert(draft)
-                        dismiss()
-                    }
-                    .disabled(draft.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || draft.price < 0)
+                    Button("保存") { store.upsert(draft); dismiss() }
+                        .tint(AppTheme.accent).disabled(!canSave)
                 }
             }
         }
     }
 }
 
-private struct LabeledSlider: View {
-    let title: String
-    @Binding var value: Int
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Text(title)
-                Spacer()
-                Text("\(value)/5")
-                    .foregroundStyle(.secondary)
-            }
-
-            Slider(
-                value: Binding(
-                    get: { Double(value) },
-                    set: { value = Int($0.rounded()) }
-                ),
-                in: 1...5,
-                step: 1
-            )
-        }
+private struct FieldRow<Trailing: View>: View {
+    let label: String
+    @ViewBuilder var trailing: Trailing
+    init(_ label: String, @ViewBuilder trailing: () -> Trailing) {
+        self.label = label
+        self.trailing = trailing()
     }
+    var body: some View {
+        HStack(spacing: AppTheme.Space.m) {
+            Text(label)
+                .font(.subheadline.weight(.medium))
+                .foregroundStyle(AppTheme.secondary)
+            Spacer(minLength: AppTheme.Space.m)
+            trailing
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(AppTheme.ink)
+        }
+        .padding(.vertical, AppTheme.Space.s)
+    }
+}
+
+#Preview {
+    SubscriptionEditorView(subscription: nil)
+        .environmentObject(SubscriptionStore())
 }
