@@ -196,7 +196,7 @@ private struct CalendarPanel: View {
                                 }.frame(height: 4)
                             }
                             .frame(height: 34).frame(maxWidth: .infinity)
-                            .background(cs.isEmpty ? Color.clear : AppTheme.accent.opacity(0.10),
+                            .background(cs.isEmpty ? Color.clear : AppTheme.accent.opacity(0.22),
                                         in: RoundedRectangle(cornerRadius: AppTheme.radiusSmall))
                         } else {
                             Color.clear.frame(height: 34)
@@ -226,7 +226,7 @@ private struct YearPanel: View {
                         y: .value("金额", p.amount))
                     .foregroundStyle(
                         Calendar.current.compare(p.month, to: .now, toGranularity: .month) == .orderedAscending
-                            ? AppTheme.hairline : AppTheme.accent
+                            ? AppTheme.tertiary : AppTheme.accent
                     )
                     .cornerRadius(4)
             }

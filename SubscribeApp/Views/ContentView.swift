@@ -30,34 +30,37 @@ struct ContentView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
 
-            HStack(spacing: AppTheme.Space.m) {
-                HStack(spacing: 2) {
-                    ForEach(AppTab.allCases) { t in
-                        Button {
-                            withAnimation(AppTheme.spring) { tab = t }
-                        } label: {
-                            VStack(spacing: 4) {
-                                Image(systemName: t.icon).font(.system(size: 17, weight: .semibold))
-                                Text(t.title).font(.caption2.weight(.semibold))
-                            }
-                            .foregroundStyle(tab == t ? AppTheme.surface : AppTheme.secondary)
-                            .frame(maxWidth: .infinity).frame(height: 52)
-                            .background(tab == t ? AppTheme.ink : .clear,
-                                        in: RoundedRectangle(cornerRadius: AppTheme.radiusSmall))
-                        }.buttonStyle(.plain)
+            GlassEffectContainer(spacing: AppTheme.Space.m) {
+                HStack(spacing: AppTheme.Space.m) {
+                    HStack(spacing: 2) {
+                        ForEach(AppTab.allCases) { t in
+                            Button {
+                                withAnimation(AppTheme.spring) { tab = t }
+                            } label: {
+                                VStack(spacing: 4) {
+                                    Image(systemName: t.icon).font(.system(size: 17, weight: .semibold))
+                                    Text(t.title).font(.caption2.weight(.semibold))
+                                }
+                                .foregroundStyle(tab == t ? Color.white : AppTheme.secondary)
+                                .frame(maxWidth: .infinity).frame(height: 52)
+                                .background(tab == t ? AppTheme.accent : .clear,
+                                            in: RoundedRectangle(cornerRadius: AppTheme.radiusSmall))
+                            }.buttonStyle(.plain)
+                        }
                     }
-                }
-                .padding(4)
-                .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: AppTheme.radius))
-                .overlay(RoundedRectangle(cornerRadius: AppTheme.radius).stroke(AppTheme.hairline, lineWidth: 0.5))
+                    .padding(4)
+                    .glassEffect(.regular, in: RoundedRectangle(cornerRadius: AppTheme.radius))
 
-                Button { showEditor = true } label: {
-                    Image(systemName: "plus").font(.title3.weight(.bold))
-                        .foregroundStyle(AppTheme.surface)
-                        .frame(width: 60, height: 60)
-                        .background(AppTheme.ink, in: RoundedRectangle(cornerRadius: AppTheme.radius))
+                    Button { showEditor = true } label: {
+                        Image(systemName: "plus").font(.title3.weight(.bold))
+                            .foregroundStyle(Color.white)
+                            .frame(width: 60, height: 60)
+                            .glassEffect(.regular.tint(AppTheme.accent).interactive(),
+                                         in: RoundedRectangle(cornerRadius: AppTheme.radius))
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("新增订阅")
                 }
-                .accessibilityLabel("新增订阅")
             }
             .padding(.horizontal, AppTheme.Space.l)
             .padding(.bottom, AppTheme.Space.s)
