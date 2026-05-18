@@ -3,110 +3,96 @@ import UserNotifications
 
 struct SettingsView: View {
     @EnvironmentObject private var store: SubscriptionStore
-    @State private var authorizationStatus: UNAuthorizationStatus = .notDetermined
+    @State private var authStatus: UNAuthorizationStatus = .notDetermined
 
     var body: some View {
         NavigationStack {
-            Form {
-                Section("统计") {
-                    Picker("统一查看币种", selection: $store.baseCurrency) {
-                        ForEach(CurrencyCode.allCases) { currency in
-                            Text("\(currency.rawValue) · \(currency.title)").tag(currency)
+            AppScreen {
+                VStack(spacing: AppTheme.Space.l) {
+                    Panel(title: "统计") {
+                        HStack {
+                            Text("统一查看币种").font(.subheadline.weight(.medium))
+                                .foregroundStyle(AppTheme.secondary)
+                            Spacer()
+                            Picker("", selection: $store.baseCurrency) {
+                                ForEach(CurrencyCode.allCases) { Text("\($0.rawValue) · \($0.title)").tag($0) }
+                            }.labelsHidden().tint(AppTheme.ink)
                         }
-                    }
-
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("内置汇率")
-                            .font(.subheadline.weight(.semibold))
-                        ForEach(CurrencyCode.allCases) { currency in
+                        Hairline()
+                        SectionLabel(text: "内置汇率（以 CNY 为基准）")
+                        ForEach(CurrencyCode.allCases) { c in
                             HStack {
-                                Text(currency.rawValue)
+                                Text(c.rawValue).font(.caption.weight(.semibold)).foregroundStyle(AppTheme.ink)
                                 Spacer()
-                                Text("1 \(currency.rawValue) = \(store.converter.cnyRates[currency, default: 1], specifier: "%.3f") CNY")
-                                    .foregroundStyle(.secondary)
+                                Text("1 \(c.rawValue) = \(store.converter.cnyRates[c, default: 1], specifier: "%.3f") CNY")
+                                    .font(.caption.monospacedDigit()).foregroundStyle(AppTheme.secondary)
                             }
-                            .font(.caption)
                         }
                     }
-                    .padding(.vertical, 4)
-                }
 
-                Section("续费提醒") {
-                    Toggle("开启提醒", isOn: $store.remindersEnabled)
-
-                    Button {
-                        Task {
-                            let granted = await NotificationScheduler.requestAuthorization()
-                            if granted {
-                                NotificationScheduler.rescheduleAll(store.subscriptions)
+                    Panel(title: "续费提醒") {
+                        Toggle("开启提醒", isOn: $store.remindersEnabled)
+                            .tint(AppTheme.accent).font(.subheadline.weight(.medium))
+                        Hairline()
+                        Button {
+                            Task {
+                                if await NotificationScheduler.requestAuthorization() {
+                                    store.syncReminders()
+                                }
+                                await loadStatus()
                             }
-                            await loadAuthorizationStatus()
+                        } label: {
+                            Label("授权并同步提醒", systemImage: "bell.badge")
+                                .font(.subheadline.weight(.semibold)).foregroundStyle(AppTheme.accent)
                         }
-                    } label: {
-                        Label("授权并同步提醒", systemImage: "bell.badge.fill")
+                        Text(statusText).font(.caption).foregroundStyle(AppTheme.secondary)
                     }
 
-                    Text(statusText)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-
-                Section("iCloud 同步") {
-                    Toggle("通过 iCloud 同步订阅", isOn: $store.iCloudSyncEnabled)
-
-                    HStack {
-                        Button {
-                            store.syncFromICloud()
-                        } label: {
-                            Label("拉取", systemImage: "icloud.and.arrow.down")
+                    Panel(title: "iCloud 同步") {
+                        Toggle("通过 iCloud 同步订阅", isOn: $store.iCloudSyncEnabled)
+                            .tint(AppTheme.accent).font(.subheadline.weight(.medium))
+                        Hairline()
+                        HStack {
+                            Button { store.syncFromICloud() } label: {
+                                Label("拉取", systemImage: "icloud.and.arrow.down")
+                                    .font(.subheadline.weight(.semibold))
+                            }.disabled(!store.iCloudSyncEnabled).tint(AppTheme.accent)
+                            Spacer()
+                            Button { store.syncToICloud() } label: {
+                                Label("上传", systemImage: "icloud.and.arrow.up")
+                                    .font(.subheadline.weight(.semibold))
+                            }.disabled(!store.iCloudSyncEnabled).tint(AppTheme.accent)
                         }
-                        .disabled(!store.iCloudSyncEnabled)
-
-                        Spacer()
-
-                        Button {
-                            store.syncToICloud()
-                        } label: {
-                            Label("上传", systemImage: "icloud.and.arrow.up")
-                        }
-                        .disabled(!store.iCloudSyncEnabled)
+                        Text("使用 iCloud Key-Value Store 同步当前订阅。真机需 Apple ID 与应用 iCloud 权限可用。")
+                            .font(.caption).foregroundStyle(AppTheme.secondary)
                     }
 
-                    Text("开启后会使用 iCloud Key-Value Store 同步当前订阅数据。真机需要 Apple ID、iCloud Drive 和应用 iCloud 权限可用。")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
-
-                Section("数据") {
-                    Button(role: .destructive) {
-                        store.resetSamples()
-                    } label: {
-                        Label("恢复样例数据", systemImage: "arrow.counterclockwise")
+                    Panel(title: "数据") {
+                        Button(role: .destructive) { store.resetSamples() } label: {
+                            Label("恢复样例数据", systemImage: "arrow.counterclockwise")
+                                .font(.subheadline.weight(.semibold))
+                        }.tint(.red)
                     }
                 }
             }
-            .navigationTitle("设置")
-            .task {
-                await loadAuthorizationStatus()
-            }
+            .toolbar(.hidden, for: .navigationBar)
+            .task { await loadStatus() }
         }
     }
 
     private var statusText: String {
-        switch authorizationStatus {
-        case .authorized, .provisional, .ephemeral:
-            "系统通知已授权，会按每个订阅设置的提前天数提醒。"
-        case .denied:
-            "系统通知未授权，需要在 iOS 设置中允许通知。"
-        case .notDetermined:
-            "尚未请求系统通知权限。"
-        @unknown default:
-            "通知权限状态未知。"
+        switch authStatus {
+        case .authorized, .provisional, .ephemeral: "系统通知已授权，按每个订阅的提前天数提醒。"
+        case .denied: "系统通知未授权，需在 iOS 设置中允许通知。"
+        case .notDetermined: "尚未请求系统通知权限。"
+        @unknown default: "通知权限状态未知。"
         }
     }
-
-    private func loadAuthorizationStatus() async {
-        let settings = await UNUserNotificationCenter.current().notificationSettings()
-        authorizationStatus = settings.authorizationStatus
+    private func loadStatus() async {
+        authStatus = await UNUserNotificationCenter.current().notificationSettings().authorizationStatus
     }
+}
+
+#Preview {
+    SettingsView().environmentObject(SubscriptionStore())
 }
