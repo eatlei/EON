@@ -8,6 +8,7 @@ struct SubscribeApp: App {
         WindowGroup {
             ContentView()
                 .environmentObject(store)
+                .preferredColorScheme(store.appearance.colorScheme)
         }
     }
 }

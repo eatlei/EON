@@ -1,27 +1,61 @@
 import SwiftUI
+import UIKit
+
+enum AppAppearance: String, CaseIterable, Codable, Identifiable {
+    case system, light, dark
+    var id: String { rawValue }
+    var title: String {
+        switch self {
+        case .system: "跟随系统"
+        case .light: "浅色"
+        case .dark: "深色"
+        }
+    }
+    var colorScheme: ColorScheme? {
+        switch self {
+        case .system: nil
+        case .light: .light
+        case .dark: .dark
+        }
+    }
+}
+
+private func dynColor(light: UIColor, dark: UIColor) -> Color {
+    Color(uiColor: UIColor { $0.userInterfaceStyle == .dark ? dark : light })
+}
 
 enum AppTheme {
-    // Surfaces — 近黑底 + 深色实心卡片（参考 Subo）
-    static let canvas = Color(red: 0.039, green: 0.039, blue: 0.047)   // #0A0A0C
-    static let surface = Color(red: 0.090, green: 0.094, blue: 0.110)  // #17181C 深色实心卡
-    static let hairline = Color.white.opacity(0.08)
+    // 动态色：浅色 / 深色（Subo 风深色 + 干净浅色镜像）
+    static let canvas = dynColor(
+        light: UIColor(red: 0.957, green: 0.961, blue: 0.969, alpha: 1),   // #F4F5F7
+        dark:  UIColor(red: 0.039, green: 0.039, blue: 0.047, alpha: 1))    // #0A0A0C
+    static let surface = dynColor(
+        light: UIColor(red: 1.000, green: 1.000, blue: 1.000, alpha: 1),    // #FFFFFF
+        dark:  UIColor(red: 0.090, green: 0.094, blue: 0.110, alpha: 1))    // #17181C
+    static let hairline = dynColor(
+        light: UIColor(white: 0, alpha: 0.10),
+        dark:  UIColor(white: 1, alpha: 0.08))
 
-    // Text
-    static let ink = Color(red: 0.957, green: 0.961, blue: 0.969)      // #F4F5F7
-    static let secondary = Color(red: 0.545, green: 0.557, blue: 0.592) // #8B8E97
-    static let tertiary = Color(red: 0.333, green: 0.345, blue: 0.388)  // #555863
+    static let ink = dynColor(
+        light: UIColor(red: 0.082, green: 0.086, blue: 0.102, alpha: 1),    // #15161A
+        dark:  UIColor(red: 0.957, green: 0.961, blue: 0.969, alpha: 1))    // #F4F5F7
+    static let secondary = dynColor(
+        light: UIColor(red: 0.424, green: 0.435, blue: 0.467, alpha: 1),    // #6C6F77
+        dark:  UIColor(red: 0.545, green: 0.557, blue: 0.592, alpha: 1))    // #8B8E97
+    static let tertiary = dynColor(
+        light: UIColor(red: 0.627, green: 0.639, blue: 0.675, alpha: 1),    // #A0A3AC
+        dark:  UIColor(red: 0.333, green: 0.345, blue: 0.388, alpha: 1))    // #555863
 
-    // 单一高饱和强调（电蓝）
-    static let accent = Color(red: 0.239, green: 0.612, blue: 1.0)      // #3D9CFF
+    static let accent = dynColor(
+        light: UIColor(red: 0.118, green: 0.451, blue: 0.878, alpha: 1),    // #1E73E0
+        dark:  UIColor(red: 0.239, green: 0.612, blue: 1.000, alpha: 1))    // #3D9CFF
 
-    // 圆角
     static let radius: CGFloat = 18
     static let radiusSmall: CGFloat = 12
 
     /// 内容底部留白，避开自绘单行 bar
     static let dockClearance: CGFloat = 96
 
-    // 间距阶
     enum Space {
         static let xs: CGFloat = 4
         static let s: CGFloat = 8
@@ -40,7 +74,6 @@ extension Font {
     static func amountSmall() -> Font { .system(size: 14, weight: .bold, design: .rounded) }
 }
 
-/// 全屏滚动容器：近黑画布
 struct AppScreen<Content: View>: View {
     var bottomPadding: CGFloat = AppTheme.dockClearance
     @ViewBuilder var content: Content
@@ -59,7 +92,6 @@ struct AppScreen<Content: View>: View {
     }
 }
 
-/// 深色实心卡片：surface + 1px 细边，干净利落（参考 Subo，不用玻璃）
 struct Panel<Content: View>: View {
     var title: String? = nil
     @ViewBuilder var content: Content
@@ -102,7 +134,6 @@ struct Hairline: View {
     }
 }
 
-/// 分类图标块：实心品牌色 + 白色首字母（像 App 图标，参考 Subo）
 struct CategoryGlyph: View {
     let subscription: Subscription
     var size: CGFloat = 38

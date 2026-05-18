@@ -9,6 +9,17 @@ struct SettingsView: View {
         NavigationStack {
             AppScreen {
                 VStack(spacing: AppTheme.Space.l) {
+                    Panel(title: "外观") {
+                        HStack {
+                            Text("主题").font(.subheadline.weight(.medium))
+                                .foregroundStyle(AppTheme.secondary)
+                            Spacer()
+                            Picker("", selection: $store.appearance) {
+                                ForEach(AppAppearance.allCases) { Text($0.title).tag($0) }
+                            }.labelsHidden().tint(AppTheme.ink)
+                        }
+                    }
+
                     Panel(title: "统计") {
                         HStack {
                             Text("统一查看币种").font(.subheadline.weight(.medium))

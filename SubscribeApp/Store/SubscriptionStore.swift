@@ -30,6 +30,10 @@ final class SubscriptionStore: ObservableObject {
         }
     }
 
+    @Published var appearance: AppAppearance = .system {
+        didSet { saveSettings() }
+    }
+
     let converter = CurrencyConverter()
 
     private let subscriptionsKey = "subscriptions.v1"
@@ -49,6 +53,7 @@ final class SubscriptionStore: ObservableObject {
             baseCurrency = settings.baseCurrency
             remindersEnabled = settings.remindersEnabled
             iCloudSyncEnabled = settings.iCloudSyncEnabled
+            appearance = settings.appearance
         } else {
             baseCurrency = .cny
             remindersEnabled = true
@@ -210,7 +215,8 @@ final class SubscriptionStore: ObservableObject {
         let settings = Settings(
             baseCurrency: baseCurrency,
             remindersEnabled: remindersEnabled,
-            iCloudSyncEnabled: iCloudSyncEnabled
+            iCloudSyncEnabled: iCloudSyncEnabled,
+            appearance: appearance
         )
         if let data = try? JSONEncoder().encode(settings) {
             UserDefaults.standard.set(data, forKey: settingsKey)
@@ -229,6 +235,22 @@ private struct Settings: Codable {
     var baseCurrency: CurrencyCode
     var remindersEnabled: Bool
     var iCloudSyncEnabled: Bool
+    var appearance: AppAppearance
+
+    init(baseCurrency: CurrencyCode, remindersEnabled: Bool, iCloudSyncEnabled: Bool, appearance: AppAppearance) {
+        self.baseCurrency = baseCurrency
+        self.remindersEnabled = remindersEnabled
+        self.iCloudSyncEnabled = iCloudSyncEnabled
+        self.appearance = appearance
+    }
+
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        baseCurrency = try c.decodeIfPresent(CurrencyCode.self, forKey: .baseCurrency) ?? .cny
+        remindersEnabled = try c.decodeIfPresent(Bool.self, forKey: .remindersEnabled) ?? true
+        iCloudSyncEnabled = try c.decodeIfPresent(Bool.self, forKey: .iCloudSyncEnabled) ?? false
+        appearance = try c.decodeIfPresent(AppAppearance.self, forKey: .appearance) ?? .system
+    }
 }
 
 private extension JSONDecoder {
