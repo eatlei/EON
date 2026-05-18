@@ -212,7 +212,7 @@ cd /Users/bytedance/Desktop/Subscribe && git add -A && git commit -q -m "refacto
 
 **Files:**
 - Create: `SubscribeApp/Views/AppTheme.swift`
-- Delete: `SubscribeApp/Views/AppDesign.swift`（Task 4 起所有视图改引用 AppTheme；本任务先建好，旧文件在 Task 8 末确认无引用后删，过渡期两者共存不冲突——命名不同）
+- Delete: `SubscribeApp/Views/AppDesign.swift`（**已在 Task 3 执行删除**：AppDesign 与 AppTheme 共享 `AppScreen`/`RevealModifier`/`reveal(_:)` 符号名，必须立即删旧文件以消除重定义并让 AppTheme 使用规范名；旧 view 在各自任务重写前会因此更红，符合分阶段非编译中间态设计）
 
 - [ ] **Step 1: 新建 `AppTheme.swift`（完整内容）**
 
@@ -1154,16 +1154,13 @@ struct ContentView: View {
 }
 ```
 
-- [ ] **Step 3: 删除旧 `AppDesign.swift`**
+- [ ] **Step 3: 校验旧 `AppDesign` 已无残留**（文件已在 Task 3 删除，这里只做收尾断言）
 
 Run:
 ```bash
-cd /Users/bytedance/Desktop/Subscribe && grep -rl "AppDesign" SubscribeApp --include="*.swift"
+cd /Users/bytedance/Desktop/Subscribe && test ! -f SubscribeApp/Views/AppDesign.swift && grep -rl "AppDesign" SubscribeApp --include="*.swift"; echo "exit:$?"
 ```
-Expected: 无输出（无文件再引用旧 token）。若有输出，先把这些引用改成 `AppTheme` 对应项再继续。然后：
-```bash
-cd /Users/bytedance/Desktop/Subscribe && rm SubscribeApp/Views/AppDesign.swift && xcodegen generate && echo removed
-```
+Expected: 无任何文件路径输出（`AppDesign.swift` 已不存在且无源码再引用 `AppDesign`）。若仍有文件引用 `AppDesign`，说明某个 view 重写不彻底——回对应任务把引用改成 `AppTheme` 对应项后再继续。
 
 - [ ] **Step 4: 全量编译**
 
