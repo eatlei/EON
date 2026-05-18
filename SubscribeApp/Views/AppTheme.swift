@@ -40,12 +40,17 @@ extension Font {
 /// 全屏滚动容器：纯色画布，无渐变
 struct AppScreen<Content: View>: View {
     @ViewBuilder var content: Content
+    /// Clearance for the bottom dock (tab pill + floating add button) in ContentView.
+    static var bottomClearance: CGFloat { 112 }
+    init(@ViewBuilder content: () -> Content) {
+        self.content = content()
+    }
     var body: some View {
         ScrollView {
             content
                 .padding(.horizontal, AppTheme.Space.xl)
                 .padding(.top, AppTheme.Space.m)
-                .padding(.bottom, 112)
+                .padding(.bottom, AppScreen.bottomClearance)
         }
         .background(AppTheme.canvas.ignoresSafeArea())
     }
@@ -55,6 +60,10 @@ struct AppScreen<Content: View>: View {
 struct Panel<Content: View>: View {
     var title: String? = nil
     @ViewBuilder var content: Content
+    init(title: String? = nil, @ViewBuilder content: () -> Content) {
+        self.title = title
+        self.content = content()
+    }
     var body: some View {
         VStack(alignment: .leading, spacing: AppTheme.Space.m) {
             if let title {
@@ -112,7 +121,7 @@ struct RevealModifier: ViewModifier {
             .opacity(shown ? 1 : 0)
             .offset(y: shown ? 0 : 10)
             .animation(AppTheme.spring.delay(Double(index) * 0.04), value: shown)
-            .onAppear { shown = true }
+            .onAppear { if !shown { shown = true } }
     }
 }
 
