@@ -81,7 +81,26 @@ struct Panel<Content: View>: View {
         .glassEffect(.regular, in: RoundedRectangle(cornerRadius: AppTheme.radius))
         .overlay(
             RoundedRectangle(cornerRadius: AppTheme.radius)
-                .stroke(AppTheme.hairline, lineWidth: 0.5)
+                .fill(
+                    LinearGradient(
+                        colors: [Color.white.opacity(0.10), Color.white.opacity(0.0)],
+                        startPoint: .top,
+                        endPoint: .center
+                    )
+                )
+                .allowsHitTesting(false)
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: AppTheme.radius)
+                .stroke(
+                    LinearGradient(
+                        colors: [Color.white.opacity(0.22), AppTheme.hairline],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    ),
+                    lineWidth: 0.5
+                )
+                .allowsHitTesting(false)
         )
     }
 }
