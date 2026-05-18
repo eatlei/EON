@@ -347,11 +347,7 @@ extension SubscriptionStore {
             nextBillingDate: Calendar.current.date(byAdding: .day, value: 8, to: .now) ?? .now,
             reminderDaysBefore: 3,
             status: .active,
-            paymentMethod: "Visa 0821",
-            seats: 1,
-            usageScore: 5,
-            importanceScore: 5,
-            notes: "高频使用，用于写作、代码和信息整理。"
+            paymentMethod: "Visa 0821"
         ),
         Subscription(
             name: "Netflix",
@@ -364,11 +360,7 @@ extension SubscriptionStore {
             nextBillingDate: Calendar.current.date(byAdding: .day, value: 13, to: .now) ?? .now,
             reminderDaysBefore: 5,
             status: .active,
-            paymentMethod: "Apple Pay",
-            seats: 2,
-            usageScore: 2,
-            importanceScore: 2,
-            notes: "最近使用偏低，主要在周末观看。"
+            paymentMethod: "Apple Pay"
         ),
         Subscription(
             name: "iCloud+",
@@ -381,11 +373,7 @@ extension SubscriptionStore {
             nextBillingDate: Calendar.current.date(byAdding: .day, value: 19, to: .now) ?? .now,
             reminderDaysBefore: 7,
             status: .active,
-            paymentMethod: "支付宝",
-            seats: 5,
-            usageScore: 5,
-            importanceScore: 5,
-            notes: "和家庭照片备份绑定。"
+            paymentMethod: "支付宝"
         ),
         Subscription(
             name: "Notion",
@@ -398,11 +386,7 @@ extension SubscriptionStore {
             nextBillingDate: Calendar.current.date(byAdding: .day, value: 61, to: .now) ?? .now,
             reminderDaysBefore: 14,
             status: .active,
-            paymentMethod: "Mastercard 1106",
-            seats: 1,
-            usageScore: 4,
-            importanceScore: 4,
-            notes: "年付，主要用于项目资料和数据库。"
+            paymentMethod: "Mastercard 1106"
         )
     ]
 }

@@ -112,10 +112,6 @@ struct Subscription: Identifiable, Codable, Hashable {
     var reminderDaysBefore: Int
     var status: RenewalStatus
     var paymentMethod: String
-    var seats: Int
-    var usageScore: Int
-    var importanceScore: Int
-    var notes: String
 
     var isActive: Bool {
         status != .paused
