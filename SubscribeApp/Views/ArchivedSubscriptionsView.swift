@@ -49,6 +49,7 @@ struct ArchivedSubscriptionsView: View {
             RestoreConfirmView(subscription: sub) {
                 store.restore(ids: [sub.id])
             }
+            .environmentObject(store)
         }
     }
 }
