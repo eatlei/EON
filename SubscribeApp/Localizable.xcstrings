@@ -72,31 +72,12 @@
       }
     },
     "0" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "0"
-          }
-        }
-      }
-    },
-    "共 %lld 笔" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld total"
-          }
-        }
-      }
-    },
-    "共 %lld 笔 · 下一笔 %@ %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$lld total · Next: %2$@ on %3$@"
           }
         }
       }
@@ -247,6 +228,7 @@
       }
     },
     "今年总额" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -326,6 +308,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Yearly distribution"
+          }
+        }
+      }
+    },
+    "共 %lld 笔" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld total"
+          }
+        }
+      }
+    },
+    "共 %lld 笔 · 下一笔 %@ %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld total · Next: %2$@ on %3$@"
           }
         }
       }
@@ -548,16 +552,6 @@
         }
       }
     },
-    "已选择，点完成应用" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Selected — tap Done to apply"
-          }
-        }
-      }
-    },
     "已暂停" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -565,6 +559,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Paused"
+          }
+        }
+      }
+    },
+    "已选择，点完成应用" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selected — tap Done to apply"
           }
         }
       }
@@ -945,6 +949,7 @@
       }
     },
     "本月总额" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1508,6 +1513,66 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Default currency"
+          }
+        }
+      }
+    },
+    "支持开发者" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Support the developer"
+          }
+        }
+      }
+    },
+    "打赏暂不可用" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tips unavailable"
+          }
+        }
+      }
+    },
+    "打赏完全自愿，用于支持后续开发，不解锁任何功能。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tips are entirely optional, support ongoing development, and unlock nothing."
+          }
+        }
+      }
+    },
+    "感谢支持！" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thank you!"
+          }
+        }
+      }
+    },
+    "好的" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        }
+      }
+    },
+    "你的支持是持续更新的动力。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your support keeps the updates coming."
           }
         }
       }

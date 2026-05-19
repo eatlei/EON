@@ -1,10 +1,12 @@
 import SwiftUI
+import StoreKit
 import UserNotifications
 
 struct SettingsView: View {
     @EnvironmentObject private var store: SubscriptionStore
     @State private var authStatus: UNAuthorizationStatus = .notDetermined
     @State private var refreshing = false
+    @StateObject private var tips = TipStore()
 
     var body: some View {
         NavigationStack {
@@ -129,6 +131,42 @@ struct SettingsView: View {
                 } footer: {
                     Text("使用 iCloud Key-Value Store 同步当前订阅。真机需 Apple ID 与应用 iCloud 权限可用。")
                 }
+
+                Section {
+                    if !tips.loaded {
+                        HStack {
+                            Label("支持开发者", systemImage: "heart")
+                            Spacer()
+                            ProgressView()
+                        }
+                    } else if tips.products.isEmpty {
+                        Label("打赏暂不可用", systemImage: "heart")
+                            .foregroundStyle(.secondary)
+                    } else {
+                        ForEach(Array(tips.products.enumerated()), id: \.element.id) { idx, product in
+                            Button {
+                                Task { await tips.purchase(product) }
+                            } label: {
+                                HStack {
+                                    Label(product.displayName, systemImage: tipIcon(idx))
+                                    Spacer()
+                                    if tips.purchasingID == product.id {
+                                        ProgressView()
+                                    } else {
+                                        Text(product.displayPrice)
+                                            .foregroundStyle(.secondary)
+                                            .monospacedDigit()
+                                    }
+                                }
+                            }
+                            .disabled(tips.purchasingID != nil)
+                        }
+                    }
+                } header: {
+                    Text("支持开发者")
+                } footer: {
+                    Text("打赏完全自愿，用于支持后续开发，不解锁任何功能。")
+                }
             }
             .listStyle(.insetGrouped)
             .scrollContentBackground(.visible)
@@ -138,6 +176,12 @@ struct SettingsView: View {
             .task {
                 await loadStatus()
                 await store.refreshRatesIfStale()
+                await tips.load()
+            }
+            .alert("感谢支持！", isPresented: $tips.thanksShown) {
+                Button("好的", role: .cancel) { }
+            } message: {
+                Text("你的支持是持续更新的动力。")
             }
         }
     }
@@ -160,6 +204,16 @@ struct SettingsView: View {
     }
     private func loadStatus() async {
         authStatus = await UNUserNotificationCenter.current().notificationSettings().authorizationStatus
+    }
+
+    private func tipIcon(_ index: Int) -> String {
+        ["cup.and.saucer", "takeoutbag.and.cup.and.straw", "fork.knife", "gift"][safe: index] ?? "heart"
+    }
+}
+
+private extension Array {
+    subscript(safe index: Int) -> Element? {
+        indices.contains(index) ? self[index] : nil
     }
 }
 
