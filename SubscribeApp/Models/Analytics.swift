@@ -9,15 +9,15 @@ enum SpendPeriod: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .month: "月"
-        case .year: "年"
+        case .month: String(localized: "月")
+        case .year: String(localized: "年")
         }
     }
 
     var unitText: String {
         switch self {
-        case .month: "本月"
-        case .year: "今年"
+        case .month: String(localized: "本月")
+        case .year: String(localized: "今年")
         }
     }
 }

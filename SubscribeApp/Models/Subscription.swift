@@ -13,12 +13,12 @@ enum CurrencyCode: String, CaseIterable, Codable, Identifiable {
 
     var title: String {
         switch self {
-        case .cny: "人民币"
-        case .usd: "美元"
-        case .eur: "欧元"
-        case .jpy: "日元"
-        case .gbp: "英镑"
-        case .hkd: "港币"
+        case .cny: String(localized: "人民币")
+        case .usd: String(localized: "美元")
+        case .eur: String(localized: "欧元")
+        case .jpy: String(localized: "日元")
+        case .gbp: String(localized: "英镑")
+        case .hkd: String(localized: "港币")
         }
     }
 

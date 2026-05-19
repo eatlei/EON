@@ -12,12 +12,12 @@ enum AppStoreRegion: String, CaseIterable, Identifiable {
     var id: String { rawValue }
     var title: String {
         switch self {
-        case .cn: "中国"
-        case .us: "美国"
-        case .jp: "日本"
-        case .gb: "英国"
-        case .hk: "香港"
-        case .de: "德国"
+        case .cn: String(localized: "中国")
+        case .us: String(localized: "美国")
+        case .jp: String(localized: "日本")
+        case .gb: String(localized: "英国")
+        case .hk: String(localized: "香港")
+        case .de: String(localized: "德国")
         }
     }
 }

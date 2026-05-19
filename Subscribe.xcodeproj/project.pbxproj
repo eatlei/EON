@@ -16,6 +16,7 @@
 		5939321A4C7E3D1ABC5C23C2 /* Subscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5499976ECD845C44C8FBD8CB /* Subscription.swift */; };
 		597F4F5AA13C2526CFC82C1B /* ExchangeRateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F48BEDC374CBD54A7C010158 /* ExchangeRateService.swift */; };
 		669A6F80B5B67437D8692262 /* SubscriptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF2B1A4EE8C71CFEC125E8C6 /* SubscriptionsView.swift */; };
+		6A3529ED5CBF9D52D08375C4 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = FA4B32A05C5F9821174DE793 /* Localizable.xcstrings */; };
 		7E26F5C9A2784A91CFB7CA10 /* IconPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78326829449ABBC508F536A3 /* IconPickerView.swift */; };
 		7EC121F3AC0DE9CB43EF36E1 /* SubscriptionEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A000AE363FDB1ADBCB23F5 /* SubscriptionEditorView.swift */; };
 		97C0DA795C10287CF73F8C15 /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ECFF1B53B3302FE53141D65 /* AppTheme.swift */; };
@@ -47,6 +48,7 @@
 		D9CA153951B96AEB8859C0B8 /* SubscribeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscribeApp.swift; sourceTree = "<group>"; };
 		EF2B1A4EE8C71CFEC125E8C6 /* SubscriptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionsView.swift; sourceTree = "<group>"; };
 		F48BEDC374CBD54A7C010158 /* ExchangeRateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeRateService.swift; sourceTree = "<group>"; };
+		FA4B32A05C5F9821174DE793 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -114,6 +116,7 @@
 			children = (
 				65DED4E03282BB7A1926B1D5 /* Assets.xcassets */,
 				B29BFA91E21DE23CF88DCAC7 /* Info.plist */,
+				FA4B32A05C5F9821174DE793 /* Localizable.xcstrings */,
 				10A3F11D2D1B4CFE31C07A34 /* SubscribeApp.entitlements */,
 				D9CA153951B96AEB8859C0B8 /* SubscribeApp.swift */,
 				5AFCBE2A087A8BB7B5B5CAB1 /* Models */,
@@ -160,11 +163,12 @@
 				};
 			};
 			buildConfigurationList = A319BE77A52B3D03180ED219 /* Build configuration list for PBXProject "Subscribe" */;
-			developmentRegion = en;
+			developmentRegion = "zh-Hans";
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				Base,
 				en,
+				"zh-Hans",
 			);
 			mainGroup = 48338609EB686ADB4FE276B1;
 			minimizedProjectReferenceProxies = 1;
@@ -184,6 +188,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DB7E76AC52762B27F7253673 /* Assets.xcassets in Resources */,
+				6A3529ED5CBF9D52D08375C4 /* Localizable.xcstrings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

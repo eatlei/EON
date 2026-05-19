@@ -95,9 +95,11 @@ private struct HeroTotal: View {
     private var subtitle: String {
         let n = store.dueCount(in: period)
         if let next = store.nextCharge(in: period) {
-            return "\(n) 笔 · 下一笔 \(next.subscription.name) \(next.date.formatted(.dateTime.month().day()))"
+            let date = next.date.formatted(.dateTime.month().day())
+            return String(localized: "\(n) 笔 · 下一笔 \(next.subscription.name) \(date)")
         }
-        return "\(store.activeSubscriptions.count) 个订阅 · 本期无待扣费"
+        let count = store.activeSubscriptions.count
+        return String(localized: "\(count) 个订阅 · 本期无待扣费")
     }
 }
 

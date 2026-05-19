@@ -6,9 +6,9 @@ enum AppAppearance: String, CaseIterable, Codable, Identifiable {
     var id: String { rawValue }
     var title: String {
         switch self {
-        case .system: "跟随系统"
-        case .light: "浅色"
-        case .dark: "深色"
+        case .system: String(localized: "跟随系统")
+        case .light: String(localized: "浅色")
+        case .dark: String(localized: "深色")
         }
     }
     var colorScheme: ColorScheme? {
@@ -93,9 +93,9 @@ struct AppScreen<Content: View>: View {
 }
 
 struct Panel<Content: View>: View {
-    var title: String? = nil
+    var title: LocalizedStringKey? = nil
     @ViewBuilder var content: Content
-    init(title: String? = nil, @ViewBuilder content: () -> Content) {
+    init(title: LocalizedStringKey? = nil, @ViewBuilder content: () -> Content) {
         self.title = title
         self.content = content()
     }
@@ -119,11 +119,12 @@ struct Panel<Content: View>: View {
 }
 
 struct SectionLabel: View {
-    let text: String
+    let text: LocalizedStringKey
     var body: some View {
-        Text(text.uppercased())
+        Text(text)
             .font(.caption2.weight(.bold))
             .tracking(0.8)
+            .textCase(.uppercase)
             .foregroundStyle(AppTheme.tertiary)
     }
 }

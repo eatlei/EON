@@ -135,18 +135,19 @@ struct SettingsView: View {
     }
 
     private var rateUpdatedText: String {
-        guard let d = store.ratesUpdatedAt else { return "（暂用内置汇率）" }
+        guard let d = store.ratesUpdatedAt else { return String(localized: "（暂用内置汇率）") }
         let f = DateFormatter()
         f.dateFormat = "yyyy-MM-dd HH:mm"
-        return "上次更新 \(f.string(from: d))。"
+        let dateStr = f.string(from: d)
+        return String(localized: "上次更新 \(dateStr)。")
     }
 
     private var statusText: String {
         switch authStatus {
-        case .authorized, .provisional, .ephemeral: "系统通知已授权，按每个订阅的提前天数提醒。"
-        case .denied: "系统通知未授权，需在 iOS 设置中允许通知。"
-        case .notDetermined: "尚未请求系统通知权限。"
-        @unknown default: "通知权限状态未知。"
+        case .authorized, .provisional, .ephemeral: String(localized: "系统通知已授权，按每个订阅的提前天数提醒。")
+        case .denied: String(localized: "系统通知未授权，需在 iOS 设置中允许通知。")
+        case .notDetermined: String(localized: "尚未请求系统通知权限。")
+        @unknown default: String(localized: "通知权限状态未知。")
         }
     }
     private func loadStatus() async {

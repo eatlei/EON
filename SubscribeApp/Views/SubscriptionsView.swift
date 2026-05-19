@@ -87,8 +87,8 @@ private enum SortOption: String, CaseIterable, Identifiable {
     var id: String { rawValue }
     var title: String {
         switch self {
-        case .renewalDate: "按时间"; case .duration: "按周期长度"
-        case .cost: "按费用"; case .name: "按名称"
+        case .renewalDate: String(localized: "按时间"); case .duration: String(localized: "按周期长度")
+        case .cost: String(localized: "按费用"); case .name: String(localized: "按名称")
         }
     }
     var icon: String {
