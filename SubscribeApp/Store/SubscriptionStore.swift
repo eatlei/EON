@@ -34,11 +34,14 @@ final class SubscriptionStore: ObservableObject {
         didSet { saveSettings() }
     }
 
-    let converter = CurrencyConverter()
+    @Published private(set) var cnyRates: [CurrencyCode: Double] = CurrencyConverter.builtin
+    @Published private(set) var ratesUpdatedAt: Date?
+    var converter: CurrencyConverter { CurrencyConverter(cnyRates: cnyRates) }
 
     private let subscriptionsKey = "subscriptions.v1"
     private let settingsKey = "settings.v1"
     private let iCloudSubscriptionsKey = "icloud.subscriptions.v1"
+    private let ratesKey = "rates.v1"
 
     init() {
         if let data = UserDefaults.standard.data(forKey: subscriptionsKey),
@@ -63,7 +66,20 @@ final class SubscriptionStore: ObservableObject {
         if iCloudSyncEnabled {
             syncFromICloud()
         }
+        if let data = UserDefaults.standard.data(forKey: ratesKey),
+           let cached = try? JSONDecoder().decode(CachedRates.self, from: data) {
+            var loaded: [CurrencyCode: Double] = [:]
+            for (k, v) in cached.rates {
+                if let code = CurrencyCode(rawValue: k) { loaded[code] = v }
+            }
+            if !loaded.isEmpty {
+                loaded[.cny] = 1.0
+                cnyRates = loaded
+                ratesUpdatedAt = cached.updatedAt
+            }
+        }
         syncReminders()
+        Task { await refreshRatesIfStale() }
     }
 
     var activeSubscriptions: [Subscription] {
@@ -273,6 +289,30 @@ final class SubscriptionStore: ObservableObject {
             NotificationScheduler.rescheduleAll(subscriptions)
         }
     }
+
+    /// 距上次更新超过 24 小时（或从未更新）则后台刷新一次。
+    func refreshRatesIfStale() async {
+        if let last = ratesUpdatedAt, Date().timeIntervalSince(last) < 24 * 3600 { return }
+        await refreshRates()
+    }
+
+    /// 立即拉取最新汇率；失败则保留当前（缓存或内置）值，不报错打断。
+    func refreshRates() async {
+        guard let fresh = try? await ExchangeRateService.fetchCNYRates() else { return }
+        cnyRates = fresh
+        let now = Date()
+        ratesUpdatedAt = now
+        let payload = CachedRates(rates: Dictionary(uniqueKeysWithValues: fresh.map { ($0.key.rawValue, $0.value) }),
+                                  updatedAt: now)
+        if let data = try? JSONEncoder().encode(payload) {
+            UserDefaults.standard.set(data, forKey: ratesKey)
+        }
+    }
+}
+
+private struct CachedRates: Codable {
+    var rates: [String: Double]
+    var updatedAt: Date
 }
 
 private struct Settings: Codable {

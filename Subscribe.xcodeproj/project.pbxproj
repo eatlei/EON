@@ -14,6 +14,7 @@
 		2B249D94308F325B4A5D1D10 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BFDBF0EB309BC18707263B5 /* DashboardView.swift */; };
 		3EEDDC6F9C5830300F761A24 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93B5C073856DE1A2860C1956 /* ContentView.swift */; };
 		5939321A4C7E3D1ABC5C23C2 /* Subscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5499976ECD845C44C8FBD8CB /* Subscription.swift */; };
+		597F4F5AA13C2526CFC82C1B /* ExchangeRateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F48BEDC374CBD54A7C010158 /* ExchangeRateService.swift */; };
 		669A6F80B5B67437D8692262 /* SubscriptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF2B1A4EE8C71CFEC125E8C6 /* SubscriptionsView.swift */; };
 		7E26F5C9A2784A91CFB7CA10 /* IconPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78326829449ABBC508F536A3 /* IconPickerView.swift */; };
 		7EC121F3AC0DE9CB43EF36E1 /* SubscriptionEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A000AE363FDB1ADBCB23F5 /* SubscriptionEditorView.swift */; };
@@ -45,6 +46,7 @@
 		B29BFA91E21DE23CF88DCAC7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		D9CA153951B96AEB8859C0B8 /* SubscribeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscribeApp.swift; sourceTree = "<group>"; };
 		EF2B1A4EE8C71CFEC125E8C6 /* SubscriptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionsView.swift; sourceTree = "<group>"; };
+		F48BEDC374CBD54A7C010158 /* ExchangeRateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeRateService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -100,6 +102,7 @@
 			children = (
 				74E278F7CFCB689EC870BCC0 /* AppStoreIconService.swift */,
 				92E53482784299831342EB90 /* CurrencyConverter.swift */,
+				F48BEDC374CBD54A7C010158 /* ExchangeRateService.swift */,
 				6E64A9893062485E4E3DD9FD /* IconStore.swift */,
 				55C474BE951C367D83194A7B /* NotificationScheduler.swift */,
 			);
@@ -197,6 +200,7 @@
 				3EEDDC6F9C5830300F761A24 /* ContentView.swift in Sources */,
 				074CC1EEA56829295A038A34 /* CurrencyConverter.swift in Sources */,
 				2B249D94308F325B4A5D1D10 /* DashboardView.swift in Sources */,
+				597F4F5AA13C2526CFC82C1B /* ExchangeRateService.swift in Sources */,
 				7E26F5C9A2784A91CFB7CA10 /* IconPickerView.swift in Sources */,
 				9E33482B494895D9981618F5 /* IconStore.swift in Sources */,
 				C82EC5D3AA16B65ABBFE635D /* NotificationScheduler.swift in Sources */,
