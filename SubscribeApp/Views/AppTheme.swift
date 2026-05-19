@@ -24,6 +24,18 @@ private func dynColor(light: UIColor, dark: UIColor) -> Color {
     Color(uiColor: UIColor { $0.userInterfaceStyle == .dark ? dark : light })
 }
 
+extension Color {
+    init(hexString: String) {
+        let s = hexString.trimmingCharacters(in: CharacterSet(charactersIn: "# "))
+        var v: UInt64 = 0
+        Scanner(string: s).scanHexInt64(&v)
+        let r = Double((v >> 16) & 0xFF) / 255.0
+        let g = Double((v >> 8) & 0xFF) / 255.0
+        let b = Double(v & 0xFF) / 255.0
+        self = Color(red: r, green: g, blue: b)
+    }
+}
+
 enum AppTheme {
     // 动态色：浅色 / 深色（Subo 风深色 + 干净浅色镜像）
     static let canvas = dynColor(
@@ -66,6 +78,11 @@ enum AppTheme {
     }
 
     static let spring = Animation.spring(response: 0.42, dampingFraction: 0.86)
+
+    static let monogramColors: [String] = [
+        "#3D9CFF", "#5856D6", "#FF375F", "#FF8A00",
+        "#34C759", "#00C2C7", "#AF52DE", "#8E8E93"
+    ]
 }
 
 extension Font {
@@ -146,7 +163,7 @@ struct CategoryGlyph: View {
                 if let ui = IconStore.loadUIImage(id) {
                     Image(uiImage: ui).resizable().scaledToFill()
                 } else {
-                    letterTile
+                    letterTile(subscription.category.color)
                 }
             case .symbol(let name):
                 Image(systemName: name)
@@ -154,20 +171,22 @@ struct CategoryGlyph: View {
                     .foregroundStyle(.white)
                     .frame(width: size, height: size)
                     .background(subscription.category.color)
+            case .monogram(let hex):
+                letterTile(Color(hexString: hex))
             case .category:
-                letterTile
+                letterTile(subscription.category.color)
             }
         }
         .frame(width: size, height: size)
         .clipShape(RoundedRectangle(cornerRadius: size * 0.28))
     }
 
-    private var letterTile: some View {
+    private func letterTile(_ bg: Color) -> some View {
         Text(String(subscription.name.prefix(1)).uppercased())
             .font(.system(size: size * 0.44, weight: .heavy, design: .rounded))
             .foregroundStyle(.white)
             .frame(width: size, height: size)
-            .background(subscription.category.color)
+            .background(bg)
     }
 }
 

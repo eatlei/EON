@@ -163,6 +163,7 @@ enum SubscriptionIcon: Codable, Hashable {
     case category
     case symbol(String)
     case image(String)
+    case monogram(String)   // 首字母 + 选定颜色（hex，如 "#3D9CFF"）
 }
 
 extension Subscription {

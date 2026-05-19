@@ -66,6 +66,25 @@ struct IconPickerView: View {
 
     private var librarySection: some View {
         VStack(spacing: AppTheme.Space.m) {
+            VStack(alignment: .leading, spacing: AppTheme.Space.s) {
+                Text("首字母颜色")
+                    .font(.subheadline.weight(.medium))
+                    .foregroundStyle(AppTheme.secondary)
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 48), spacing: AppTheme.Space.m)], spacing: AppTheme.Space.m) {
+                    ForEach(AppTheme.monogramColors, id: \.self) { hex in
+                        Button {
+                            icon = .monogram(hex); dismiss()
+                        } label: {
+                            Circle()
+                                .fill(Color(hexString: hex))
+                                .frame(width: 44, height: 44)
+                                .overlay(Circle().stroke(AppTheme.hairline, lineWidth: 1))
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
+            }
+            Divider()
             searchField("搜索图标", text: $symbolQuery)
             LazyVGrid(columns: grid, spacing: AppTheme.Space.m) {
                 ForEach(filteredSymbols, id: \.self) { s in
