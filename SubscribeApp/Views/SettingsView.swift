@@ -115,22 +115,10 @@ struct SettingsView: View {
                     Toggle(isOn: $store.iCloudSyncEnabled) {
                         Label("通过 iCloud 同步订阅", systemImage: "icloud")
                     }
-                    Button {
-                        store.syncFromICloud()
-                    } label: {
-                        Label("从 iCloud 拉取", systemImage: "icloud.and.arrow.down")
-                    }
-                    .disabled(!store.iCloudSyncEnabled)
-                    Button {
-                        store.syncToICloud()
-                    } label: {
-                        Label("上传到 iCloud", systemImage: "icloud.and.arrow.up")
-                    }
-                    .disabled(!store.iCloudSyncEnabled)
                 } header: {
                     Text("数据与同步")
                 } footer: {
-                    Text("使用 iCloud Key-Value Store 同步当前订阅。真机需 Apple ID 与应用 iCloud 权限可用。")
+                    Text("开启后自动同步：本机更改即时上传，其他设备的更改自动合并。真机需 Apple ID 与应用 iCloud 权限。")
                 }
 
                 Section {

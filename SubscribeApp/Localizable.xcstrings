@@ -256,16 +256,6 @@
         }
       }
     },
-    "加载中…" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Loading…"
-          }
-        }
-      }
-    },
     "价格与周期" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -303,6 +293,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Syncs subscriptions via iCloud Key-Value Store. Requires Apple ID and iCloud entitlement on device."
+          }
+        }
+      }
+    },
+    "开启后自动同步：本机更改即时上传，其他设备的更改自动合并。真机需 Apple ID 与应用 iCloud 权限。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auto-syncs when on: local changes upload instantly, other devices' changes merge automatically. Requires an Apple ID and the app's iCloud permission on device."
           }
         }
       }
@@ -391,6 +391,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Delete"
+          }
+        }
+      }
+    },
+    "加载中…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading…"
           }
         }
       }
@@ -734,7 +744,6 @@
       }
     },
     "打赏暂不可用" : {
-      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -899,6 +908,7 @@
       }
     },
     "支持开发者" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {

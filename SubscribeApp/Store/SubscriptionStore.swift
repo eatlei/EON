@@ -1,5 +1,6 @@
 import Foundation
 import SwiftUI
+import UIKit
 
 @MainActor
 final class SubscriptionStore: ObservableObject {
@@ -25,7 +26,7 @@ final class SubscriptionStore: ObservableObject {
         didSet {
             saveSettings()
             if iCloudSyncEnabled {
-                syncToICloud()
+                syncFromICloud()
             }
         }
     }
@@ -41,6 +42,10 @@ final class SubscriptionStore: ObservableObject {
     @Published private(set) var cnyRates: [CurrencyCode: Double] = CurrencyConverter.builtin
     @Published private(set) var ratesUpdatedAt: Date?
     var converter: CurrencyConverter { CurrencyConverter(cnyRates: cnyRates) }
+
+    private var isApplyingRemote = false
+    private var kvsObserver: NSObjectProtocol?
+    private var foregroundObserver: NSObjectProtocol?
 
     private let subscriptionsKey = "subscriptions.v1"
     private let settingsKey = "settings.v1"
@@ -85,6 +90,7 @@ final class SubscriptionStore: ObservableObject {
         }
         syncReminders()
         Task { await refreshRatesIfStale() }
+        startSyncObservers()
     }
 
     var activeSubscriptions: [Subscription] {
@@ -245,7 +251,7 @@ final class SubscriptionStore: ObservableObject {
     }
 
     func syncToICloud() {
-        guard iCloudSyncEnabled,
+        guard iCloudSyncEnabled, !isApplyingRemote,
               let data = try? JSONEncoder.subscriptionEncoder.encode(subscriptions) else { return }
 
         NSUbiquitousKeyValueStore.default.set(data, forKey: iCloudSubscriptionsKey)
@@ -261,8 +267,27 @@ final class SubscriptionStore: ObservableObject {
             syncToICloud()
             return
         }
-
+        guard decoded != subscriptions else { return }
+        isApplyingRemote = true
         subscriptions = decoded
+        isApplyingRemote = false
+    }
+
+    private func startSyncObservers() {
+        kvsObserver = NotificationCenter.default.addObserver(
+            forName: NSUbiquitousKeyValueStore.didChangeExternallyNotification,
+            object: NSUbiquitousKeyValueStore.default,
+            queue: .main
+        ) { [weak self] _ in
+            Task { @MainActor in self?.syncFromICloud() }
+        }
+        foregroundObserver = NotificationCenter.default.addObserver(
+            forName: UIApplication.didBecomeActiveNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            Task { @MainActor in self?.syncFromICloud() }
+        }
     }
 
     private func projectedCharges(for subscription: Subscription, from start: Date, to end: Date) -> [RenewalCharge] {
