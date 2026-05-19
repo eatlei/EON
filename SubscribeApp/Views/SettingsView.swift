@@ -4,6 +4,7 @@ import UserNotifications
 struct SettingsView: View {
     @EnvironmentObject private var store: SubscriptionStore
     @State private var authStatus: UNAuthorizationStatus = .notDetermined
+    @State private var showRates = false
 
     var body: some View {
         NavigationStack {
@@ -30,15 +31,31 @@ struct SettingsView: View {
                             }.labelsHidden().tint(AppTheme.ink)
                         }
                         Hairline()
-                        SectionLabel(text: "内置汇率（以 CNY 为基准）")
-                        ForEach(CurrencyCode.allCases) { c in
-                            HStack {
-                                Text(c.rawValue).font(.caption.weight(.semibold)).foregroundStyle(AppTheme.ink)
-                                Spacer()
-                                Text("1 \(c.rawValue) = \(store.converter.cnyRates[c, default: 1], specifier: "%.3f") CNY")
-                                    .font(.caption.monospacedDigit()).foregroundStyle(AppTheme.secondary)
+                        DisclosureGroup(isExpanded: $showRates) {
+                            VStack(spacing: AppTheme.Space.s) {
+                                Text("内置静态汇率，仅随应用更新调整，不会每日自动刷新。")
+                                    .font(.caption)
+                                    .foregroundStyle(AppTheme.tertiary)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .padding(.top, AppTheme.Space.xs)
+                                ForEach(CurrencyCode.allCases) { c in
+                                    HStack {
+                                        Text(c.rawValue).font(.caption.weight(.semibold))
+                                            .foregroundStyle(AppTheme.ink)
+                                        Spacer()
+                                        Text("1 \(c.rawValue) = \(store.converter.cnyRates[c, default: 1], specifier: "%.3f") CNY")
+                                            .font(.caption.monospacedDigit())
+                                            .foregroundStyle(AppTheme.secondary)
+                                    }
+                                }
                             }
+                            .padding(.top, AppTheme.Space.s)
+                        } label: {
+                            Text("内置汇率（以 CNY 为基准）")
+                                .font(.subheadline.weight(.medium))
+                                .foregroundStyle(AppTheme.secondary)
                         }
+                        .tint(AppTheme.secondary)
                     }
 
                     Panel(title: "续费提醒") {
@@ -56,7 +73,7 @@ struct SettingsView: View {
                             Label("授权并同步提醒", systemImage: "bell.badge")
                                 .font(.subheadline.weight(.semibold)).foregroundStyle(AppTheme.accent)
                         }
-                        Text(statusText).font(.caption).foregroundStyle(AppTheme.secondary)
+                        Text(statusText).font(.caption).foregroundStyle(AppTheme.tertiary)
                     }
 
                     Panel(title: "iCloud 同步") {
@@ -75,7 +92,7 @@ struct SettingsView: View {
                             }.disabled(!store.iCloudSyncEnabled).tint(AppTheme.accent)
                         }
                         Text("使用 iCloud Key-Value Store 同步当前订阅。真机需 Apple ID 与应用 iCloud 权限可用。")
-                            .font(.caption).foregroundStyle(AppTheme.secondary)
+                            .font(.caption).foregroundStyle(AppTheme.tertiary)
                     }
 
                     Panel(title: "数据") {
@@ -84,11 +101,23 @@ struct SettingsView: View {
                                 .font(.subheadline.weight(.semibold))
                         }.tint(.red)
                     }
+
+                    Text(appVersion)
+                        .font(.caption2.weight(.medium))
+                        .foregroundStyle(AppTheme.tertiary)
+                        .frame(maxWidth: .infinity)
+                        .padding(.top, AppTheme.Space.s)
                 }
             }
             .toolbar(.hidden, for: .navigationBar)
             .task { await loadStatus() }
         }
+    }
+
+    private var appVersion: String {
+        let v = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
+        let b = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "1"
+        return "Subscribe v\(v) (\(b))"
     }
 
     private var statusText: String {
