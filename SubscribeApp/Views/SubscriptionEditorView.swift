@@ -26,6 +26,13 @@ struct SubscriptionEditorView: View {
         !draft.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && draft.price >= 0
     }
 
+    private var paymentOptions: [String] {
+        var opts = store.paymentMethods
+        let cur = draft.paymentMethod.trimmingCharacters(in: .whitespacesAndNewlines)
+        if !cur.isEmpty && !opts.contains(cur) { opts.insert(cur, at: 0) }
+        return opts
+    }
+
     var body: some View {
         NavigationStack {
             AppScreen(bottomPadding: AppTheme.Space.l) {
@@ -103,7 +110,12 @@ struct SubscriptionEditorView: View {
 
                     Panel(title: "支付") {
                         FieldRow("支付方式") {
-                            TextField("如 Visa 0821", text: $draft.paymentMethod).multilineTextAlignment(.trailing)
+                            Picker("", selection: $draft.paymentMethod) {
+                                Text("无").tag("")
+                                ForEach(paymentOptions, id: \.self) { Text($0).tag($0) }
+                            }
+                            .labelsHidden()
+                            .tint(AppTheme.ink)
                         }
                     }
                 }

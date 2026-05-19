@@ -34,6 +34,10 @@ final class SubscriptionStore: ObservableObject {
         didSet { saveSettings() }
     }
 
+    @Published var paymentMethods: [String] = Settings.defaultPaymentMethods {
+        didSet { saveSettings() }
+    }
+
     @Published private(set) var cnyRates: [CurrencyCode: Double] = CurrencyConverter.builtin
     @Published private(set) var ratesUpdatedAt: Date?
     var converter: CurrencyConverter { CurrencyConverter(cnyRates: cnyRates) }
@@ -57,6 +61,7 @@ final class SubscriptionStore: ObservableObject {
             remindersEnabled = settings.remindersEnabled
             iCloudSyncEnabled = settings.iCloudSyncEnabled
             appearance = settings.appearance
+            paymentMethods = settings.paymentMethods
         } else {
             baseCurrency = .cny
             remindersEnabled = true
@@ -219,6 +224,16 @@ final class SubscriptionStore: ObservableObject {
         subscriptions = Self.samples
     }
 
+    func addPaymentMethod(_ raw: String) {
+        let name = raw.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !name.isEmpty, !paymentMethods.contains(name) else { return }
+        paymentMethods.append(name)
+    }
+
+    func removePaymentMethods(at offsets: IndexSet) {
+        paymentMethods.remove(atOffsets: offsets)
+    }
+
     func syncToICloud() {
         guard iCloudSyncEnabled,
               let data = try? JSONEncoder.subscriptionEncoder.encode(subscriptions) else { return }
@@ -276,7 +291,8 @@ final class SubscriptionStore: ObservableObject {
             baseCurrency: baseCurrency,
             remindersEnabled: remindersEnabled,
             iCloudSyncEnabled: iCloudSyncEnabled,
-            appearance: appearance
+            appearance: appearance,
+            paymentMethods: paymentMethods
         )
         if let data = try? JSONEncoder().encode(settings) {
             UserDefaults.standard.set(data, forKey: settingsKey)
@@ -320,12 +336,17 @@ private struct Settings: Codable {
     var remindersEnabled: Bool
     var iCloudSyncEnabled: Bool
     var appearance: AppAppearance
+    var paymentMethods: [String]
 
-    init(baseCurrency: CurrencyCode, remindersEnabled: Bool, iCloudSyncEnabled: Bool, appearance: AppAppearance) {
+    static let defaultPaymentMethods = ["支付宝", "微信支付", "Apple Pay", "Visa", "Mastercard", "银联", "PayPal"]
+
+    init(baseCurrency: CurrencyCode, remindersEnabled: Bool, iCloudSyncEnabled: Bool,
+         appearance: AppAppearance, paymentMethods: [String]) {
         self.baseCurrency = baseCurrency
         self.remindersEnabled = remindersEnabled
         self.iCloudSyncEnabled = iCloudSyncEnabled
         self.appearance = appearance
+        self.paymentMethods = paymentMethods
     }
 
     init(from decoder: Decoder) throws {
@@ -334,6 +355,8 @@ private struct Settings: Codable {
         remindersEnabled = try c.decodeIfPresent(Bool.self, forKey: .remindersEnabled) ?? true
         iCloudSyncEnabled = try c.decodeIfPresent(Bool.self, forKey: .iCloudSyncEnabled) ?? false
         appearance = try c.decodeIfPresent(AppAppearance.self, forKey: .appearance) ?? .system
+        let pm = try c.decodeIfPresent([String].self, forKey: .paymentMethods) ?? Settings.defaultPaymentMethods
+        paymentMethods = pm.isEmpty ? Settings.defaultPaymentMethods : pm
     }
 }
 
