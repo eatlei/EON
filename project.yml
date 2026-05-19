@@ -36,6 +36,8 @@ targets:
           - UIInterfaceOrientationLandscapeRight
         UIApplicationSceneManifest:
           UIApplicationSupportsMultipleScenes: false
+    scheme:
+      storeKitConfiguration: Products.storekit
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.codex.SubscribeApp

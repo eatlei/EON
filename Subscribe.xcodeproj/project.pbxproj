@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		036A8D8F12A0B163D0E5DAE6 /* Analytics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AE6FA193D4BB0398F41AF83 /* Analytics.swift */; };
 		074CC1EEA56829295A038A34 /* CurrencyConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92E53482784299831342EB90 /* CurrencyConverter.swift */; };
+		0A324C0CCAE7EBF5319717F7 /* TipStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88F2D7AAABDDA23FC8EB7E22 /* TipStore.swift */; };
 		0CF5EC4B2B674B91FF1A13C2 /* AppStoreIconService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E278F7CFCB689EC870BCC0 /* AppStoreIconService.swift */; };
 		1140D25072B7C49C22068519 /* SubscriptionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 278E1A85DA8D02D3694C43DD /* SubscriptionStore.swift */; };
 		2B249D94308F325B4A5D1D10 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BFDBF0EB309BC18707263B5 /* DashboardView.swift */; };
@@ -41,6 +42,7 @@
 		74E278F7CFCB689EC870BCC0 /* AppStoreIconService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStoreIconService.swift; sourceTree = "<group>"; };
 		78326829449ABBC508F536A3 /* IconPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconPickerView.swift; sourceTree = "<group>"; };
 		7ECFF1B53B3302FE53141D65 /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
+		88F2D7AAABDDA23FC8EB7E22 /* TipStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipStore.swift; sourceTree = "<group>"; };
 		8AE6FA193D4BB0398F41AF83 /* Analytics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Analytics.swift; sourceTree = "<group>"; };
 		92E53482784299831342EB90 /* CurrencyConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyConverter.swift; sourceTree = "<group>"; };
 		93B5C073856DE1A2860C1956 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -110,6 +112,7 @@
 				F48BEDC374CBD54A7C010158 /* ExchangeRateService.swift */,
 				6E64A9893062485E4E3DD9FD /* IconStore.swift */,
 				55C474BE951C367D83194A7B /* NotificationScheduler.swift */,
+				88F2D7AAABDDA23FC8EB7E22 /* TipStore.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -219,6 +222,7 @@
 				7EC121F3AC0DE9CB43EF36E1 /* SubscriptionEditorView.swift in Sources */,
 				1140D25072B7C49C22068519 /* SubscriptionStore.swift in Sources */,
 				669A6F80B5B67437D8692262 /* SubscriptionsView.swift in Sources */,
+				0A324C0CCAE7EBF5319717F7 /* TipStore.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
