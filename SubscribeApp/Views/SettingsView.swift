@@ -48,6 +48,38 @@ struct SettingsView: View {
                     }
                     .pickerStyle(.menu)
 
+                    VStack(alignment: .leading, spacing: AppTheme.Space.m) {
+                        Label("主题色", systemImage: "paintpalette")
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: AppTheme.Space.m) {
+                                ForEach(AccentTheme.allCases) { theme in
+                                    Button {
+                                        store.accentTheme = theme
+                                    } label: {
+                                        Circle()
+                                            .fill(theme.color)
+                                            .frame(width: 30, height: 30)
+                                            .overlay(
+                                                Image(systemName: "checkmark")
+                                                    .font(.caption2.weight(.black))
+                                                    .foregroundStyle(.white)
+                                                    .opacity(store.accentTheme == theme ? 1 : 0)
+                                            )
+                                            .overlay(
+                                                Circle()
+                                                    .stroke(Color.primary.opacity(store.accentTheme == theme ? 0.85 : 0), lineWidth: 2)
+                                                    .padding(-3)
+                                            )
+                                    }
+                                    .buttonStyle(.plain)
+                                    .accessibilityLabel(Text(theme.title))
+                                }
+                            }
+                            .padding(.vertical, 4)
+                            .padding(.horizontal, 2)
+                        }
+                    }
+
                     NavigationLink {
                         PaymentMethodsView()
                     } label: {

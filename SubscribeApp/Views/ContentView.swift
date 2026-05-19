@@ -5,6 +5,7 @@ private enum AppTab: Hashable {
 }
 
 struct ContentView: View {
+    @EnvironmentObject private var store: SubscriptionStore
     @State private var tab: AppTab = .dashboard
     @State private var lastContentTab: AppTab = .dashboard
     @State private var showEditor = false
@@ -24,7 +25,7 @@ struct ContentView: View {
                 Color.clear
             }
         }
-        .tint(AppTheme.accent)
+        .tint(store.accentTheme.color)
         .onChange(of: tab) { _, newValue in
             if newValue == .add {
                 showEditor = true

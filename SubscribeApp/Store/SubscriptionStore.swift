@@ -35,6 +35,10 @@ final class SubscriptionStore: ObservableObject {
         didSet { saveSettings() }
     }
 
+    @Published var accentTheme: AccentTheme = .blue {
+        didSet { AppTheme.accentTheme = accentTheme; saveSettings() }
+    }
+
     @Published var paymentMethods: [String] = Settings.defaultPaymentMethods {
         didSet { saveSettings() }
     }
@@ -67,11 +71,14 @@ final class SubscriptionStore: ObservableObject {
             iCloudSyncEnabled = settings.iCloudSyncEnabled
             appearance = settings.appearance
             paymentMethods = settings.paymentMethods
+            accentTheme = settings.accentTheme
         } else {
             baseCurrency = .cny
             remindersEnabled = true
             iCloudSyncEnabled = false
         }
+
+        AppTheme.accentTheme = accentTheme
 
         if iCloudSyncEnabled {
             syncFromICloud()
@@ -344,7 +351,8 @@ final class SubscriptionStore: ObservableObject {
             remindersEnabled: remindersEnabled,
             iCloudSyncEnabled: iCloudSyncEnabled,
             appearance: appearance,
-            paymentMethods: paymentMethods
+            paymentMethods: paymentMethods,
+            accentTheme: accentTheme
         )
         if let data = try? JSONEncoder().encode(settings) {
             UserDefaults.standard.set(data, forKey: settingsKey)
@@ -389,16 +397,18 @@ private struct Settings: Codable {
     var iCloudSyncEnabled: Bool
     var appearance: AppAppearance
     var paymentMethods: [String]
+    var accentTheme: AccentTheme
 
     static let defaultPaymentMethods = ["支付宝", "微信支付", "Apple Pay", "Visa", "Mastercard", "银联", "PayPal"]
 
     init(baseCurrency: CurrencyCode, remindersEnabled: Bool, iCloudSyncEnabled: Bool,
-         appearance: AppAppearance, paymentMethods: [String]) {
+         appearance: AppAppearance, paymentMethods: [String], accentTheme: AccentTheme) {
         self.baseCurrency = baseCurrency
         self.remindersEnabled = remindersEnabled
         self.iCloudSyncEnabled = iCloudSyncEnabled
         self.appearance = appearance
         self.paymentMethods = paymentMethods
+        self.accentTheme = accentTheme
     }
 
     init(from decoder: Decoder) throws {
@@ -409,6 +419,7 @@ private struct Settings: Codable {
         appearance = try c.decodeIfPresent(AppAppearance.self, forKey: .appearance) ?? .system
         let pm = try c.decodeIfPresent([String].self, forKey: .paymentMethods) ?? Settings.defaultPaymentMethods
         paymentMethods = pm.isEmpty ? Settings.defaultPaymentMethods : pm
+        accentTheme = try c.decodeIfPresent(AccentTheme.self, forKey: .accentTheme) ?? .blue
     }
 }
 

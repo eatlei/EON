@@ -24,6 +24,44 @@ private func dynColor(light: UIColor, dark: UIColor) -> Color {
     Color(uiColor: UIColor { $0.userInterfaceStyle == .dark ? dark : light })
 }
 
+private func dynRGB(_ light: UInt32, _ dark: UInt32) -> Color {
+    func ui(_ v: UInt32) -> UIColor {
+        UIColor(red: CGFloat((v >> 16) & 0xFF) / 255.0,
+                green: CGFloat((v >> 8) & 0xFF) / 255.0,
+                blue: CGFloat(v & 0xFF) / 255.0, alpha: 1)
+    }
+    return dynColor(light: ui(light), dark: ui(dark))
+}
+
+enum AccentTheme: String, CaseIterable, Codable, Identifiable {
+    case blue, indigo, purple, pink, red, orange, green, teal
+    var id: String { rawValue }
+    var title: String {
+        switch self {
+        case .blue:   String(localized: "蓝")
+        case .indigo: String(localized: "靛蓝")
+        case .purple: String(localized: "紫")
+        case .pink:   String(localized: "粉")
+        case .red:    String(localized: "红")
+        case .orange: String(localized: "橙")
+        case .green:  String(localized: "绿")
+        case .teal:   String(localized: "青")
+        }
+    }
+    var color: Color {
+        switch self {
+        case .blue:   dynRGB(0x1E73E0, 0x3D9CFF)   // == current default accent (unchanged look)
+        case .indigo: dynRGB(0x4B45C6, 0x6E6BE8)
+        case .purple: dynRGB(0x8A38D6, 0xB266F0)
+        case .pink:   dynRGB(0xE0327A, 0xFF5C9A)
+        case .red:    dynRGB(0xD83A3A, 0xFF5C5C)
+        case .orange: dynRGB(0xE07A12, 0xFF9F2E)
+        case .green:  dynRGB(0x1F9D4D, 0x34C759)
+        case .teal:   dynRGB(0x0E9AA0, 0x2BC8CE)
+        }
+    }
+}
+
 extension Color {
     init(hexString: String) {
         let s = hexString.trimmingCharacters(in: CharacterSet(charactersIn: "# "))
@@ -58,9 +96,9 @@ enum AppTheme {
         light: UIColor(red: 0.627, green: 0.639, blue: 0.675, alpha: 1),    // #A0A3AC
         dark:  UIColor(red: 0.333, green: 0.345, blue: 0.388, alpha: 1))    // #555863
 
-    static let accent = dynColor(
-        light: UIColor(red: 0.118, green: 0.451, blue: 0.878, alpha: 1),    // #1E73E0
-        dark:  UIColor(red: 0.239, green: 0.612, blue: 1.000, alpha: 1))    // #3D9CFF
+    /// 用户可选主题色（全部读写均在主线程/UI 上下文，故 nonisolated(unsafe) 安全）
+    nonisolated(unsafe) static var accentTheme: AccentTheme = .blue
+    static var accent: Color { accentTheme.color }
 
     static let radius: CGFloat = 18
     static let radiusSmall: CGFloat = 12

@@ -143,6 +143,7 @@ private struct Row: View {
                 Button(role: .destructive, action: onDelete) {
                     Label("删除", systemImage: "trash")
                 }
+                .tint(.red)
             } label: {
                 Image(systemName: "ellipsis").font(.subheadline.weight(.bold))
                     .foregroundStyle(AppTheme.tertiary).frame(width: 28, height: 36)
