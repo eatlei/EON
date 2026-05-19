@@ -1494,6 +1494,16 @@
         }
       }
     },
+    "点这里新增订阅" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap here to add a subscription"
+          }
+        }
+      }
+    },
     "还没有订阅" : {
       "localizations" : {
         "en" : {
