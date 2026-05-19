@@ -4,120 +4,141 @@ import UserNotifications
 struct SettingsView: View {
     @EnvironmentObject private var store: SubscriptionStore
     @State private var authStatus: UNAuthorizationStatus = .notDetermined
-    @State private var showRates = false
+    @State private var showAbout = false
+    @State private var refreshing = false
 
     var body: some View {
         NavigationStack {
-            AppScreen {
-                VStack(spacing: AppTheme.Space.l) {
-                    Panel(title: "外观") {
-                        HStack {
-                            Text("主题").font(.subheadline.weight(.medium))
-                                .foregroundStyle(AppTheme.secondary)
-                            Spacer()
-                            Picker("", selection: $store.appearance) {
-                                ForEach(AppAppearance.allCases) { Text($0.title).tag($0) }
-                            }.labelsHidden().tint(AppTheme.ink)
-                        }
+            List {
+                Section {
+                    Picker(selection: $store.baseCurrency) {
+                        ForEach(CurrencyCode.allCases) { Text("\($0.rawValue) · \($0.title)").tag($0) }
+                    } label: {
+                        Label("默认币种", systemImage: "dollarsign.circle")
                     }
+                    .pickerStyle(.menu)
 
-                    Panel(title: "统计") {
-                        HStack {
-                            Text("统一查看币种").font(.subheadline.weight(.medium))
-                                .foregroundStyle(AppTheme.secondary)
-                            Spacer()
-                            Picker("", selection: $store.baseCurrency) {
-                                ForEach(CurrencyCode.allCases) { Text("\($0.rawValue) · \($0.title)").tag($0) }
-                            }.labelsHidden().tint(AppTheme.ink)
-                        }
-                        Hairline()
-                        DisclosureGroup(isExpanded: $showRates) {
-                            VStack(spacing: AppTheme.Space.s) {
-                                Text("内置静态汇率，仅随应用更新调整，不会每日自动刷新。")
-                                    .font(.caption)
-                                    .foregroundStyle(AppTheme.tertiary)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .padding(.top, AppTheme.Space.xs)
-                                ForEach(CurrencyCode.allCases) { c in
-                                    HStack {
-                                        Text(c.rawValue).font(.caption.weight(.semibold))
-                                            .foregroundStyle(AppTheme.ink)
-                                        Spacer()
-                                        Text("1 \(c.rawValue) = \(store.converter.cnyRates[c, default: 1], specifier: "%.3f") CNY")
-                                            .font(.caption.monospacedDigit())
-                                            .foregroundStyle(AppTheme.secondary)
-                                    }
-                                }
+                    Picker(selection: $store.appearance) {
+                        ForEach(AppAppearance.allCases) { Text($0.title).tag($0) }
+                    } label: {
+                        Label("外观", systemImage: "circle.lefthalf.filled")
+                    }
+                    .pickerStyle(.menu)
+                } header: {
+                    Text("通用")
+                }
+
+                Section {
+                    DisclosureGroup {
+                        ForEach(CurrencyCode.allCases) { c in
+                            HStack {
+                                Text(c.rawValue)
+                                Spacer()
+                                Text("1 \(c.rawValue) = \(store.cnyRates[c, default: 1], specifier: "%.4f") CNY")
+                                    .foregroundStyle(.secondary)
+                                    .monospacedDigit()
                             }
-                            .padding(.top, AppTheme.Space.s)
-                        } label: {
-                            Text("内置汇率（以 CNY 为基准）")
-                                .font(.subheadline.weight(.medium))
-                                .foregroundStyle(AppTheme.secondary)
+                            .font(.subheadline)
                         }
-                        .tint(AppTheme.secondary)
+                    } label: {
+                        Label("汇率明细", systemImage: "chart.line.uptrend.xyaxis")
                     }
 
-                    Panel(title: "续费提醒") {
-                        Toggle("开启提醒", isOn: $store.remindersEnabled)
-                            .tint(AppTheme.accent).font(.subheadline.weight(.medium))
-                        Hairline()
-                        Button {
-                            Task {
-                                if await NotificationScheduler.requestAuthorization() {
-                                    store.syncReminders()
-                                }
-                                await loadStatus()
-                            }
-                        } label: {
-                            Label("授权并同步提醒", systemImage: "bell.badge")
-                                .font(.subheadline.weight(.semibold)).foregroundStyle(AppTheme.accent)
+                    Button {
+                        guard !refreshing else { return }
+                        refreshing = true
+                        Task {
+                            await store.refreshRates()
+                            await MainActor.run { refreshing = false }
                         }
-                        Text(statusText).font(.caption).foregroundStyle(AppTheme.tertiary)
-                    }
-
-                    Panel(title: "iCloud 同步") {
-                        Toggle("通过 iCloud 同步订阅", isOn: $store.iCloudSyncEnabled)
-                            .tint(AppTheme.accent).font(.subheadline.weight(.medium))
-                        Hairline()
+                    } label: {
                         HStack {
-                            Button { store.syncFromICloud() } label: {
-                                Label("拉取", systemImage: "icloud.and.arrow.down")
-                                    .font(.subheadline.weight(.semibold))
-                            }.disabled(!store.iCloudSyncEnabled).tint(AppTheme.accent)
+                            Label("立即刷新汇率", systemImage: "arrow.clockwise")
                             Spacer()
-                            Button { store.syncToICloud() } label: {
-                                Label("上传", systemImage: "icloud.and.arrow.up")
-                                    .font(.subheadline.weight(.semibold))
-                            }.disabled(!store.iCloudSyncEnabled).tint(AppTheme.accent)
+                            if refreshing { ProgressView() }
                         }
-                        Text("使用 iCloud Key-Value Store 同步当前订阅。真机需 Apple ID 与应用 iCloud 权限可用。")
-                            .font(.caption).foregroundStyle(AppTheme.tertiary)
                     }
+                } header: {
+                    Text("汇率")
+                } footer: {
+                    Text("汇率每天自动刷新，可能导致订阅价格变动。\(rateUpdatedText)")
+                }
 
-                    Panel(title: "数据") {
-                        Button(role: .destructive) { store.resetSamples() } label: {
-                            Label("恢复样例数据", systemImage: "arrow.counterclockwise")
-                                .font(.subheadline.weight(.semibold))
-                        }.tint(.red)
+                Section {
+                    Toggle(isOn: $store.remindersEnabled) {
+                        Label("开启提醒", systemImage: "bell")
                     }
+                    Button {
+                        Task {
+                            if await NotificationScheduler.requestAuthorization() {
+                                store.syncReminders()
+                            }
+                            await loadStatus()
+                        }
+                    } label: {
+                        Label("授权并同步提醒", systemImage: "bell.badge")
+                    }
+                } header: {
+                    Text("通知")
+                } footer: {
+                    Text(statusText)
+                }
 
-                    Text(appVersion)
-                        .font(.caption2.weight(.medium))
-                        .foregroundStyle(AppTheme.tertiary)
-                        .frame(maxWidth: .infinity)
-                        .padding(.top, AppTheme.Space.s)
+                Section {
+                    Toggle(isOn: $store.iCloudSyncEnabled) {
+                        Label("通过 iCloud 同步订阅", systemImage: "icloud")
+                    }
+                    Button {
+                        store.syncFromICloud()
+                    } label: {
+                        Label("从 iCloud 拉取", systemImage: "icloud.and.arrow.down")
+                    }
+                    .disabled(!store.iCloudSyncEnabled)
+                    Button {
+                        store.syncToICloud()
+                    } label: {
+                        Label("上传到 iCloud", systemImage: "icloud.and.arrow.up")
+                    }
+                    .disabled(!store.iCloudSyncEnabled)
+                } header: {
+                    Text("iCloud")
+                } footer: {
+                    Text("使用 iCloud Key-Value Store 同步当前订阅。真机需 Apple ID 与应用 iCloud 权限可用。")
+                }
+
+                Section {
+                    Button(role: .destructive) {
+                        store.resetSamples()
+                    } label: {
+                        Label("恢复样例数据", systemImage: "arrow.counterclockwise")
+                    }
+                } header: {
+                    Text("数据")
                 }
             }
-            .toolbar(.hidden, for: .navigationBar)
-            .task { await loadStatus() }
+            .listStyle(.insetGrouped)
+            .scrollContentBackground(.visible)
+            .navigationTitle("设置")
+            .navigationBarTitleDisplayMode(.inline)
+            .tint(AppTheme.accent)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("关于") { showAbout = true }
+                }
+            }
+            .sheet(isPresented: $showAbout) { AboutView() }
+            .task {
+                await loadStatus()
+                await store.refreshRatesIfStale()
+            }
         }
     }
 
-    private var appVersion: String {
-        let v = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
-        let b = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "1"
-        return "Subscribe v\(v) (\(b))"
+    private var rateUpdatedText: String {
+        guard let d = store.ratesUpdatedAt else { return "（暂用内置汇率）" }
+        let f = DateFormatter()
+        f.dateFormat = "yyyy-MM-dd HH:mm"
+        return "上次更新 \(f.string(from: d))。"
     }
 
     private var statusText: String {
@@ -130,6 +151,39 @@ struct SettingsView: View {
     }
     private func loadStatus() async {
         authStatus = await UNUserNotificationCenter.current().notificationSettings().authorizationStatus
+    }
+}
+
+private struct AboutView: View {
+    @Environment(\.dismiss) private var dismiss
+    private var version: String {
+        let v = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
+        let b = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "1"
+        return "v\(v) (\(b))"
+    }
+    var body: some View {
+        NavigationStack {
+            List {
+                Section {
+                    HStack {
+                        Text("名称"); Spacer(); Text("Subscribe").foregroundStyle(.secondary)
+                    }
+                    HStack {
+                        Text("版本"); Spacer(); Text(version).foregroundStyle(.secondary).monospacedDigit()
+                    }
+                } footer: {
+                    Text("订阅管理 · 多币种 · 每日汇率")
+                }
+            }
+            .listStyle(.insetGrouped)
+            .navigationTitle("关于")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("完成") { dismiss() }
+                }
+            }
+        }
     }
 }
 
