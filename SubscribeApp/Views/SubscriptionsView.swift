@@ -7,11 +7,12 @@ struct SubscriptionsView: View {
     @State private var sort: SortOption = .renewalDate
 
     private var rows: [Subscription] {
-        let f = store.subscriptions.filter {
-            search.isEmpty
-            || $0.name.localizedCaseInsensitiveContains(search)
-            || $0.plan.localizedCaseInsensitiveContains(search)
-            || $0.category.rawValue.localizedCaseInsensitiveContains(search)
+        let f = store.subscriptions.filter { sub in
+            guard !sub.isArchived else { return false }
+            return search.isEmpty
+                || sub.name.localizedCaseInsensitiveContains(search)
+                || sub.plan.localizedCaseInsensitiveContains(search)
+                || sub.category.rawValue.localizedCaseInsensitiveContains(search)
         }
         switch sort {
         case .renewalDate: return f.sorted { $0.nextBillingDate < $1.nextBillingDate }
@@ -68,7 +69,11 @@ struct SubscriptionsView: View {
                         LazyVStack(spacing: AppTheme.Space.m) {
                             ForEach(Array(rows.enumerated()), id: \.element.id) { i, sub in
                                 Button { editing = sub } label: {
-                                    Row(subscription: sub) { store.delete(ids: [sub.id]) }
+                                    Row(
+                                        subscription: sub,
+                                        onArchive: { store.archive(ids: [sub.id]) },
+                                        onDelete: { store.delete(ids: [sub.id]) }
+                                    )
                                 }
                                 .buttonStyle(.plain).reveal(i + 1)
                             }
@@ -102,6 +107,7 @@ private enum SortOption: String, CaseIterable, Identifiable {
 private struct Row: View {
     @EnvironmentObject private var store: SubscriptionStore
     let subscription: Subscription
+    let onArchive: () -> Void
     let onDelete: () -> Void
     var body: some View {
         HStack(spacing: AppTheme.Space.m) {
@@ -130,7 +136,13 @@ private struct Row: View {
                     .font(.caption2).foregroundStyle(AppTheme.tertiary)
             }
             Menu {
-                Button(role: .destructive, action: onDelete) { Label("删除", systemImage: "trash") }
+                Button { onArchive() } label: {
+                    Label("归档", systemImage: "archivebox")
+                }
+                Divider()
+                Button(role: .destructive, action: onDelete) {
+                    Label("删除", systemImage: "trash")
+                }
             } label: {
                 Image(systemName: "ellipsis").font(.subheadline.weight(.bold))
                     .foregroundStyle(AppTheme.tertiary).frame(width: 28, height: 36)

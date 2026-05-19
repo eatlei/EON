@@ -53,6 +53,11 @@ struct SettingsView: View {
                     } label: {
                         Label("支付方式", systemImage: "creditcard")
                     }
+                    NavigationLink {
+                        ArchivedSubscriptionsView()
+                    } label: {
+                        Label("归档订阅", systemImage: "archivebox")
+                    }
                 }
 
                 Section {
