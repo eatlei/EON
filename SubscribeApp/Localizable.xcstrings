@@ -125,9 +125,6 @@
         }
       }
     },
-    "Subscribe" : {
-
-    },
     "上传到 iCloud" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -259,6 +256,16 @@
         }
       }
     },
+    "加载中…" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loading…"
+          }
+        }
+      }
+    },
     "价格与周期" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -276,6 +283,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Will be cropped to a square icon"
+          }
+        }
+      }
+    },
+    "你的支持是持续更新的动力。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your support keeps the updates coming."
           }
         }
       }
@@ -401,6 +418,7 @@
       }
     },
     "名称" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -482,6 +500,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Plan"
+          }
+        }
+      }
+    },
+    "好的" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
           }
         }
       }
@@ -672,6 +701,17 @@
         }
       }
     },
+    "感谢支持！" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thank you!"
+          }
+        }
+      }
+    },
     "手动续费" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -679,6 +719,27 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Manual"
+          }
+        }
+      }
+    },
+    "打赏完全自愿，用于支持后续开发，不解锁任何功能。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tips are entirely optional, support ongoing development, and unlock nothing."
+          }
+        }
+      }
+    },
+    "打赏暂不可用" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tips unavailable"
           }
         }
       }
@@ -833,6 +894,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Spending by category"
+          }
+        }
+      }
+    },
+    "支持开发者" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Support the developer"
           }
         }
       }
@@ -1175,6 +1246,7 @@
       }
     },
     "版本" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1328,6 +1400,7 @@
       }
     },
     "订阅管理 · 多币种 · 每日汇率" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1432,6 +1505,16 @@
         }
       }
     },
+    "选择金额" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose an amount"
+          }
+        }
+      }
+    },
     "通用" : {
       "localizations" : {
         "en" : {
@@ -1513,66 +1596,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Default currency"
-          }
-        }
-      }
-    },
-    "支持开发者" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Support the developer"
-          }
-        }
-      }
-    },
-    "打赏暂不可用" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tips unavailable"
-          }
-        }
-      }
-    },
-    "打赏完全自愿，用于支持后续开发，不解锁任何功能。" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tips are entirely optional, support ongoing development, and unlock nothing."
-          }
-        }
-      }
-    },
-    "感谢支持！" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Thank you!"
-          }
-        }
-      }
-    },
-    "好的" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "OK"
-          }
-        }
-      }
-    },
-    "你的支持是持续更新的动力。" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Your support keeps the updates coming."
           }
         }
       }

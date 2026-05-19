@@ -6,8 +6,7 @@ final class TipStore: ObservableObject {
     static let productIDs = [
         "com.codex.SubscribeApp.tip.coffee",
         "com.codex.SubscribeApp.tip.snack",
-        "com.codex.SubscribeApp.tip.meal",
-        "com.codex.SubscribeApp.tip.feast"
+        "com.codex.SubscribeApp.tip.meal"
     ]
 
     @Published private(set) var products: [Product] = []

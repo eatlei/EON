@@ -3,46 +3,34 @@
   "nonRenewingSubscriptions" : [],
   "products" : [
     {
-      "displayPrice" : "6.00",
+      "displayPrice" : "1.00",
       "familyShareable" : false,
       "internalID" : "11111111-0000-0000-0000-000000000001",
-      "localizations" : [ { "description" : "Buy the developer a coffee", "displayName" : "Coffee", "locale" : "en_US" } ],
+      "localizations" : [ { "description" : "A small thank-you", "displayName" : "Tip $1", "locale" : "en_US" } ],
       "productID" : "com.codex.SubscribeApp.tip.coffee",
-      "referenceName" : "Tip Coffee",
+      "referenceName" : "Tip 1",
       "type" : "Consumable"
     },
     {
-      "displayPrice" : "18.00",
+      "displayPrice" : "3.00",
       "familyShareable" : false,
       "internalID" : "11111111-0000-0000-0000-000000000002",
-      "localizations" : [ { "description" : "A snack-sized tip", "displayName" : "Snack", "locale" : "en_US" } ],
+      "localizations" : [ { "description" : "A nice tip", "displayName" : "Tip $3", "locale" : "en_US" } ],
       "productID" : "com.codex.SubscribeApp.tip.snack",
-      "referenceName" : "Tip Snack",
+      "referenceName" : "Tip 3",
       "type" : "Consumable"
     },
     {
-      "displayPrice" : "30.00",
+      "displayPrice" : "5.00",
       "familyShareable" : false,
       "internalID" : "11111111-0000-0000-0000-000000000003",
-      "localizations" : [ { "description" : "A meal-sized tip", "displayName" : "Meal", "locale" : "en_US" } ],
+      "localizations" : [ { "description" : "A generous tip", "displayName" : "Tip $5", "locale" : "en_US" } ],
       "productID" : "com.codex.SubscribeApp.tip.meal",
-      "referenceName" : "Tip Meal",
-      "type" : "Consumable"
-    },
-    {
-      "displayPrice" : "68.00",
-      "familyShareable" : false,
-      "internalID" : "11111111-0000-0000-0000-000000000004",
-      "localizations" : [ { "description" : "A generous feast-sized tip", "displayName" : "Feast", "locale" : "en_US" } ],
-      "productID" : "com.codex.SubscribeApp.tip.feast",
-      "referenceName" : "Tip Feast",
+      "referenceName" : "Tip 5",
       "type" : "Consumable"
     }
   ],
-  "settings" : {
-    "_failTransactionsEnabled" : false,
-    "_storeKitErrors" : []
-  },
+  "settings" : { "_failTransactionsEnabled" : false, "_storeKitErrors" : [] },
   "subscriptionGroups" : [],
   "version" : { "major" : 3, "minor" : 0 }
 }
