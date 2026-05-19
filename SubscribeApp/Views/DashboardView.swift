@@ -28,8 +28,8 @@ struct DashboardView: View {
 
                 if store.activeSubscriptions.isEmpty {
                     AddHint()
-                        .padding(.trailing, 34)
-                        .padding(.bottom, 92)
+                        .padding(.trailing, 24)
+                        .padding(.bottom, 10)
                         .allowsHitTesting(false)
                         .transition(.opacity)
                 }
@@ -341,8 +341,9 @@ private struct AddHint: View {
                 .font(.subheadline.weight(.semibold))
                 .foregroundStyle(AppTheme.accent)
             Image(systemName: "arrow.down.right")
-                .font(.system(size: 30, weight: .bold))
+                .font(.system(size: 32, weight: .bold))
                 .foregroundStyle(AppTheme.accent)
+                .padding(.trailing, 6)
         }
     }
 }
