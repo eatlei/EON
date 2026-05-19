@@ -4,19 +4,32 @@ import UserNotifications
 struct SettingsView: View {
     @EnvironmentObject private var store: SubscriptionStore
     @State private var authStatus: UNAuthorizationStatus = .notDetermined
-    @State private var showAbout = false
     @State private var refreshing = false
 
     var body: some View {
         NavigationStack {
             List {
                 Section {
-                    Picker(selection: $store.baseCurrency) {
-                        ForEach(CurrencyCode.allCases) { Text("\($0.rawValue) · \($0.title)").tag($0) }
+                    Menu {
+                        ForEach(CurrencyCode.allCases) { c in
+                            Button {
+                                store.baseCurrency = c
+                            } label: {
+                                if store.baseCurrency == c {
+                                    Label("\(c.rawValue) · \(c.title)", systemImage: "checkmark")
+                                } else {
+                                    Text("\(c.rawValue) · \(c.title)")
+                                }
+                            }
+                        }
                     } label: {
-                        Label("默认币种", systemImage: "dollarsign.circle")
+                        HStack {
+                            Label("默认币种", systemImage: "dollarsign.circle")
+                            Spacer()
+                            Text(store.baseCurrency.rawValue)
+                                .foregroundStyle(.secondary)
+                        }
                     }
-                    .pickerStyle(.menu)
 
                     Picker(selection: $store.appearance) {
                         ForEach(AppAppearance.allCases) { Text($0.title).tag($0) }
@@ -122,12 +135,6 @@ struct SettingsView: View {
             .navigationTitle("设置")
             .navigationBarTitleDisplayMode(.inline)
             .tint(AppTheme.accent)
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button("关于") { showAbout = true }
-                }
-            }
-            .sheet(isPresented: $showAbout) { AboutView() }
             .task {
                 await loadStatus()
                 await store.refreshRatesIfStale()
@@ -153,39 +160,6 @@ struct SettingsView: View {
     }
     private func loadStatus() async {
         authStatus = await UNUserNotificationCenter.current().notificationSettings().authorizationStatus
-    }
-}
-
-private struct AboutView: View {
-    @Environment(\.dismiss) private var dismiss
-    private var version: String {
-        let v = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
-        let b = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "1"
-        return "v\(v) (\(b))"
-    }
-    var body: some View {
-        NavigationStack {
-            List {
-                Section {
-                    HStack {
-                        Text("名称"); Spacer(); Text("Subscribe").foregroundStyle(.secondary)
-                    }
-                    HStack {
-                        Text("版本"); Spacer(); Text(version).foregroundStyle(.secondary).monospacedDigit()
-                    }
-                } footer: {
-                    Text("订阅管理 · 多币种 · 每日汇率")
-                }
-            }
-            .listStyle(.insetGrouped)
-            .navigationTitle("关于")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("完成") { dismiss() }
-                }
-            }
-        }
     }
 }
 
