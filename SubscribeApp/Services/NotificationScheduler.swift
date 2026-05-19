@@ -28,8 +28,8 @@ enum NotificationScheduler {
         components.minute = 0
 
         let content = UNMutableNotificationContent()
-        content.title = "订阅即将续费"
-        content.body = "\(subscription.name) 将在 \(subscription.reminderDaysBefore) 天后续费。"
+        content.title = String(localized: "订阅即将续费")
+        content.body = String(localized: "\(subscription.name) 将在 \(subscription.reminderDaysBefore) 天后续费。")
         content.sound = .default
 
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)

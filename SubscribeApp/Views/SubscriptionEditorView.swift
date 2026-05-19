@@ -91,7 +91,7 @@ struct SubscriptionEditorView: View {
                         if draft.billingCycle == .custom {
                             Hairline()
                             FieldRow("自定义天数") {
-                                Stepper("\(draft.customCycleDays) 天", value: $draft.customCycleDays, in: 1...730)
+                                Stepper(String(localized: "\(draft.customCycleDays) 天"), value: $draft.customCycleDays, in: 1...730)
                                     .fixedSize()
                             }
                         }
@@ -103,7 +103,7 @@ struct SubscriptionEditorView: View {
                         }
                         Hairline()
                         FieldRow("提前提醒") {
-                            Stepper("\(draft.reminderDaysBefore) 天", value: $draft.reminderDaysBefore, in: 0...30)
+                            Stepper(String(localized: "\(draft.reminderDaysBefore) 天"), value: $draft.reminderDaysBefore, in: 0...30)
                                 .fixedSize()
                         }
                     }
@@ -120,7 +120,7 @@ struct SubscriptionEditorView: View {
                     }
                 }
             }
-            .navigationTitle(draft.name.isEmpty ? "新增订阅" : draft.name)
+            .navigationTitle(draft.name.isEmpty ? String(localized: "新增订阅") : draft.name)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {

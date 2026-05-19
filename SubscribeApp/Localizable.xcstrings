@@ -125,6 +125,17 @@
         }
       }
     },
+    "Subscribe 反馈" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Subscribe Feedback"
+          }
+        }
+      }
+    },
     "上传到 iCloud" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -288,21 +299,12 @@
       }
     },
     "使用 iCloud Key-Value Store 同步当前订阅。真机需 Apple ID 与应用 iCloud 权限可用。" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Syncs subscriptions via iCloud Key-Value Store. Requires Apple ID and iCloud entitlement on device."
-          }
-        }
-      }
-    },
-    "开启后自动同步：本机更改即时上传，其他设备的更改自动合并。真机需 Apple ID 与应用 iCloud 权限。" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Auto-syncs when on: local changes upload instantly, other devices' changes merge automatically. Requires an Apple ID and the app's iCloud permission on device."
           }
         }
       }
@@ -412,6 +414,27 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Upcoming"
+          }
+        }
+      }
+    },
+    "反馈" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feedback"
+          }
+        }
+      }
+    },
+    "发送反馈" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Send Feedback"
           }
         }
       }
@@ -641,6 +664,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Developer"
+          }
+        }
+      }
+    },
+    "开启后自动同步：本机更改即时上传，其他设备的更改自动合并。真机需 Apple ID 与应用 iCloud 权限。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auto-syncs when on: local changes upload instantly, other devices' changes merge automatically. Requires an Apple ID and the app's iCloud permission on device."
           }
         }
       }
@@ -1255,6 +1288,16 @@
         }
       }
     },
+    "点这里新增订阅" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap here to add a subscription"
+          }
+        }
+      }
+    },
     "版本" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1462,6 +1505,17 @@
         }
       }
     },
+    "请在此描述你的问题或建议：" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please describe your issue or suggestion:"
+          }
+        }
+      }
+    },
     "财务" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1490,16 +1544,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Type a name and press Search"
-          }
-        }
-      }
-    },
-    "点这里新增订阅" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tap here to add a subscription"
           }
         }
       }
@@ -1577,6 +1621,16 @@
         }
       }
     },
+    "邮件会自动附带版本与设备信息，便于定位问题。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The email automatically includes version and device info to help diagnose issues."
+          }
+        }
+      }
+    },
     "金额" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1620,52 +1674,22 @@
         }
       }
     },
-    "反馈" : {
+    "订阅即将续费" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Feedback"
+            "value" : "Renewal Reminder"
           }
         }
       }
     },
-    "发送反馈" : {
+    "%@ 将在 %lld 天后续费。" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Send Feedback"
-          }
-        }
-      }
-    },
-    "邮件会自动附带版本与设备信息，便于定位问题。" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The email automatically includes version and device info to help diagnose issues."
-          }
-        }
-      }
-    },
-    "请在此描述你的问题或建议：" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Please describe your issue or suggestion:"
-          }
-        }
-      }
-    },
-    "Subscribe 反馈" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Subscribe Feedback"
+            "value" : "%1$@ renews in %2$lld day(s)."
           }
         }
       }
