@@ -22,7 +22,7 @@ targets:
         CFBundleLocalizations:
           - zh-Hans
           - en
-        CFBundleDisplayName: Subscribe
+        CFBundleDisplayName: EON
         UILaunchScreen: {}
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait

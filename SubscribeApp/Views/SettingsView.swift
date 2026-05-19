@@ -213,11 +213,11 @@ struct SettingsView: View {
 
 
         ——
-        App: Subscribe v\(v) (\(b))
+        App: EON v\(v) (\(b))
         iOS: \(ios)
         Device: \(model)
         """
-        let subject = String(localized: "Subscribe 反馈")
+        let subject = String(localized: "EON 反馈")
         var c = URLComponents()
         c.scheme = "mailto"
         c.path = "eatpoc@gmail.com"
