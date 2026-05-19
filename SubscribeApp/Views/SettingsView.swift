@@ -53,8 +53,6 @@ struct SettingsView: View {
                     } label: {
                         Label("支付方式", systemImage: "creditcard")
                     }
-                } header: {
-                    Text("通用")
                 }
 
                 Section {
@@ -87,8 +85,6 @@ struct SettingsView: View {
                             if refreshing { ProgressView() }
                         }
                     }
-                } header: {
-                    Text("汇率")
                 } footer: {
                     Text("汇率每天自动刷新，可能导致订阅价格变动。\(rateUpdatedText)")
                 }
@@ -107,8 +103,6 @@ struct SettingsView: View {
                     } label: {
                         Label("授权并同步提醒", systemImage: "bell.badge")
                     }
-                } header: {
-                    Text("通知")
                 } footer: {
                     Text(statusText)
                 }
@@ -117,8 +111,6 @@ struct SettingsView: View {
                     Toggle(isOn: $store.iCloudSyncEnabled) {
                         Label("通过 iCloud 同步订阅", systemImage: "icloud")
                     }
-                } header: {
-                    Text("数据与同步")
                 } footer: {
                     Text("开启后自动同步：本机更改即时上传，其他设备的更改自动合并。真机需 Apple ID 与应用 iCloud 权限。")
                 }
@@ -137,8 +129,6 @@ struct SettingsView: View {
                         }
                         .contentShape(Rectangle())
                     }
-                } header: {
-                    Text("反馈")
                 } footer: {
                     Text("邮件会自动附带版本与设备信息，便于定位问题。")
                 }
