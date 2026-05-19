@@ -4,6 +4,7 @@ struct SubscriptionEditorView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var store: SubscriptionStore
     @State private var draft: Subscription
+    @State private var showIconPicker = false
 
     init(subscription: Subscription?) {
         _draft = State(initialValue: subscription ?? Subscription(
@@ -30,6 +31,22 @@ struct SubscriptionEditorView: View {
             AppScreen(bottomPadding: AppTheme.Space.l) {
                 VStack(spacing: AppTheme.Space.l) {
                     Panel(title: "基础") {
+                        Button { showIconPicker = true } label: {
+                            HStack(spacing: AppTheme.Space.m) {
+                                Text("图标")
+                                    .font(.subheadline.weight(.medium))
+                                    .foregroundStyle(AppTheme.secondary)
+                                Spacer()
+                                CategoryGlyph(subscription: draft, size: 34)
+                                Image(systemName: "chevron.right")
+                                    .font(.caption.weight(.bold))
+                                    .foregroundStyle(AppTheme.tertiary)
+                            }
+                            .padding(.vertical, AppTheme.Space.s)
+                            .contentShape(Rectangle())
+                        }
+                        .buttonStyle(.plain)
+                        Hairline()
                         FieldRow("名称") { TextField("如 ChatGPT", text: $draft.name).multilineTextAlignment(.trailing) }
                         Hairline()
                         FieldRow("套餐") { TextField("如 Plus", text: $draft.plan).multilineTextAlignment(.trailing) }
@@ -101,6 +118,9 @@ struct SubscriptionEditorView: View {
                     Button("保存") { store.upsert(draft); dismiss() }
                         .tint(AppTheme.accent).disabled(!canSave)
                 }
+            }
+            .sheet(isPresented: $showIconPicker) {
+                IconPickerView(icon: $draft.icon)
             }
         }
     }
