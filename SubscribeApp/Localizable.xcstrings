@@ -81,6 +81,26 @@
         }
       }
     },
+    "共 %lld 笔" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld total"
+          }
+        }
+      }
+    },
+    "共 %lld 笔 · 下一笔 %@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld total · Next: %2$@ on %3$@"
+          }
+        }
+      }
+    },
     "1 %@ = %.4f CNY" : {
       "localizations" : {
         "zh-Hans" : {
@@ -222,6 +242,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Due this year"
+          }
+        }
+      }
+    },
+    "今年总额" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Total this year"
           }
         }
       }
@@ -910,6 +940,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Due this month"
+          }
+        }
+      }
+    },
+    "本月总额" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Total this month"
           }
         }
       }

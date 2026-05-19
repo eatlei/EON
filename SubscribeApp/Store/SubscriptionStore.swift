@@ -145,6 +145,20 @@ final class SubscriptionStore: ObservableObject {
             .sorted { $0.date < $1.date }
     }
 
+    /// 整个周期内的全部扣费（含本期已扣，双向推算）——用于首页总额。
+    func fullCharges(in period: SpendPeriod) -> [RenewalCharge] {
+        let iv = interval(for: period)
+        return activeSubscriptions
+            .flatMap { projectedChargesBidirectional(for: $0, from: iv.start, to: iv.end) }
+            .sorted { $0.date < $1.date }
+    }
+    func fullDueAmount(in period: SpendPeriod) -> Double {
+        fullCharges(in: period).reduce(0) { $0 + $1.amount }
+    }
+    func fullDueCount(in period: SpendPeriod) -> Int {
+        fullCharges(in: period).count
+    }
+
     /// 双向推算：从 nextBillingDate 按周期向前/向后走，覆盖任意 [start,end) 窗口（过去月份也能得到"本该扣费"的日子）。
     private func projectedChargesBidirectional(for subscription: Subscription, from start: Date, to end: Date) -> [RenewalCharge] {
         let calendar = Calendar.current

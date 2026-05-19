@@ -78,8 +78,8 @@ private struct HeroTotal: View {
     let period: SpendPeriod
     var body: some View {
         VStack(alignment: .leading, spacing: AppTheme.Space.s) {
-            SectionLabel(text: period == .month ? "本月待扣费" : "今年待扣费")
-            Text(store.converter.format(store.dueAmount(in: period), currency: store.baseCurrency))
+            SectionLabel(text: period == .month ? "本月总额" : "今年总额")
+            Text(store.converter.format(store.fullDueAmount(in: period), currency: store.baseCurrency))
                 .font(.amountHero())
                 .foregroundStyle(AppTheme.ink)
                 .lineLimit(1).minimumScaleFactor(0.5)
@@ -93,13 +93,12 @@ private struct HeroTotal: View {
         .animation(AppTheme.spring, value: period)
     }
     private var subtitle: String {
-        let n = store.dueCount(in: period)
+        let n = store.fullDueCount(in: period)
         if let next = store.nextCharge(in: period) {
             let date = next.date.formatted(.dateTime.month().day())
-            return String(localized: "\(n) 笔 · 下一笔 \(next.subscription.name) \(date)")
+            return String(localized: "共 \(n) 笔 · 下一笔 \(next.subscription.name) \(date)")
         }
-        let count = store.activeSubscriptions.count
-        return String(localized: "\(count) 个订阅 · 本期无待扣费")
+        return String(localized: "共 \(n) 笔")
     }
 }
 
