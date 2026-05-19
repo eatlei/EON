@@ -134,16 +134,39 @@ struct Hairline: View {
     }
 }
 
+/// 订阅图标：按 subscription.icon 渲染（默认分类色块首字母；可为 SF Symbol 或本地图片）
 struct CategoryGlyph: View {
     let subscription: Subscription
     var size: CGFloat = 38
     var body: some View {
+        Group {
+            switch subscription.icon {
+            case .image(let id):
+                if let ui = IconStore.loadUIImage(id) {
+                    Image(uiImage: ui).resizable().scaledToFill()
+                } else {
+                    letterTile
+                }
+            case .symbol(let name):
+                Image(systemName: name)
+                    .font(.system(size: size * 0.46, weight: .semibold))
+                    .foregroundStyle(.white)
+                    .frame(width: size, height: size)
+                    .background(subscription.category.color)
+            case .category:
+                letterTile
+            }
+        }
+        .frame(width: size, height: size)
+        .clipShape(RoundedRectangle(cornerRadius: size * 0.28))
+    }
+
+    private var letterTile: some View {
         Text(String(subscription.name.prefix(1)).uppercased())
             .font(.system(size: size * 0.44, weight: .heavy, design: .rounded))
             .foregroundStyle(.white)
             .frame(width: size, height: size)
-            .background(subscription.category.color,
-                        in: RoundedRectangle(cornerRadius: size * 0.28))
+            .background(subscription.category.color)
     }
 }
 

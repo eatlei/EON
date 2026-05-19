@@ -112,6 +112,7 @@ struct Subscription: Identifiable, Codable, Hashable {
     var reminderDaysBefore: Int
     var status: RenewalStatus
     var paymentMethod: String
+    var icon: SubscriptionIcon = .category
 
     var isActive: Bool {
         status != .paused
@@ -123,5 +124,35 @@ struct Subscription: Identifiable, Codable, Hashable {
 
     func annualCost(in targetCurrency: CurrencyCode, converter: CurrencyConverter) -> Double {
         monthlyCost(in: targetCurrency, converter: converter) * 12
+    }
+}
+
+enum SubscriptionIcon: Codable, Hashable {
+    case category
+    case symbol(String)
+    case image(String)
+}
+
+extension Subscription {
+    private enum CodingKeys: String, CodingKey {
+        case id, name, plan, category, price, currency, billingCycle,
+             customCycleDays, nextBillingDate, reminderDaysBefore, status, paymentMethod, icon
+    }
+
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id = try c.decodeIfPresent(UUID.self, forKey: .id) ?? UUID()
+        name = try c.decode(String.self, forKey: .name)
+        plan = try c.decode(String.self, forKey: .plan)
+        category = try c.decode(SubscriptionCategory.self, forKey: .category)
+        price = try c.decode(Double.self, forKey: .price)
+        currency = try c.decode(CurrencyCode.self, forKey: .currency)
+        billingCycle = try c.decode(BillingCycle.self, forKey: .billingCycle)
+        customCycleDays = try c.decode(Int.self, forKey: .customCycleDays)
+        nextBillingDate = try c.decode(Date.self, forKey: .nextBillingDate)
+        reminderDaysBefore = try c.decode(Int.self, forKey: .reminderDaysBefore)
+        status = try c.decode(RenewalStatus.self, forKey: .status)
+        paymentMethod = try c.decode(String.self, forKey: .paymentMethod)
+        icon = try c.decodeIfPresent(SubscriptionIcon.self, forKey: .icon) ?? .category
     }
 }

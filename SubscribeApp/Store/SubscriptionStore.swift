@@ -193,6 +193,9 @@ final class SubscriptionStore: ObservableObject {
     }
 
     func delete(ids: [UUID]) {
+        for sub in subscriptions where ids.contains(sub.id) {
+            if case .image(let iconId) = sub.icon { IconStore.delete(iconId) }
+        }
         subscriptions.removeAll { ids.contains($0.id) }
     }
 
