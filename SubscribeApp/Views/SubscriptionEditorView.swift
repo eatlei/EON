@@ -132,7 +132,7 @@ struct SubscriptionEditorView: View {
                 }
             }
             .sheet(isPresented: $showIconPicker) {
-                IconPickerView(icon: $draft.icon)
+                IconPickerView(icon: $draft.icon, appName: $draft.name)
             }
         }
     }

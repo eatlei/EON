@@ -4,6 +4,7 @@ import PhotosUI
 struct IconPickerView: View {
     @Environment(\.dismiss) private var dismiss
     @Binding var icon: SubscriptionIcon
+    var appName: Binding<String>? = nil
 
     private enum Mode: String, CaseIterable, Identifiable {
         case library = "图标库", appstore = "App Store", photo = "相册"
@@ -229,7 +230,12 @@ struct IconPickerView: View {
             do {
                 let data = try await AppStoreIconService.fetchArtwork(app)
                 if let id = IconStore.save(data: data) {
-                    await MainActor.run { icon = .image(id); loading = false; dismiss() }
+                    await MainActor.run {
+                        appName?.wrappedValue = app.name
+                        icon = .image(id)
+                        loading = false
+                        dismiss()
+                    }
                 } else {
                     await MainActor.run { loading = false; asError = "图标处理失败" }
                 }
