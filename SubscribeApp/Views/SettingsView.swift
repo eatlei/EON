@@ -24,6 +24,12 @@ struct SettingsView: View {
                         Label("外观", systemImage: "circle.lefthalf.filled")
                     }
                     .pickerStyle(.menu)
+
+                    NavigationLink {
+                        PaymentMethodsView()
+                    } label: {
+                        Label("支付方式", systemImage: "creditcard")
+                    }
                 } header: {
                     Text("通用")
                 }
@@ -100,20 +106,15 @@ struct SettingsView: View {
                         Label("上传到 iCloud", systemImage: "icloud.and.arrow.up")
                     }
                     .disabled(!store.iCloudSyncEnabled)
-                } header: {
-                    Text("iCloud")
-                } footer: {
-                    Text("使用 iCloud Key-Value Store 同步当前订阅。真机需 Apple ID 与应用 iCloud 权限可用。")
-                }
-
-                Section {
                     Button(role: .destructive) {
                         store.resetSamples()
                     } label: {
                         Label("恢复样例数据", systemImage: "arrow.counterclockwise")
                     }
                 } header: {
-                    Text("数据")
+                    Text("数据与同步")
+                } footer: {
+                    Text("使用 iCloud Key-Value Store 同步当前订阅。真机需 Apple ID 与应用 iCloud 权限可用。")
                 }
             }
             .listStyle(.insetGrouped)

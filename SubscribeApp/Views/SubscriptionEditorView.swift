@@ -79,7 +79,7 @@ struct SubscriptionEditorView: View {
                         Hairline()
                         FieldRow("币种") {
                             Picker("", selection: $draft.currency) {
-                                ForEach(CurrencyCode.allCases) { Text("\($0.rawValue) · \($0.title)").tag($0) }
+                                ForEach(CurrencyCode.allCases) { Text($0.rawValue).tag($0) }
                             }.labelsHidden().tint(AppTheme.ink)
                         }
                         Hairline()
