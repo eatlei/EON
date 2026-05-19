@@ -117,7 +117,7 @@ private struct Row: View {
                             .foregroundStyle(AppTheme.accent)
                     }
                 }
-                Text("\(subscription.plan) · \(subscription.category.rawValue) · \(subscription.billingCycle.rawValue)")
+                Text("\(subscription.plan) · \(subscription.category.title) · \(subscription.billingCycle.title)")
                     .font(.caption).foregroundStyle(AppTheme.secondary).lineLimit(1)
             }
             Spacer(minLength: AppTheme.Space.s)

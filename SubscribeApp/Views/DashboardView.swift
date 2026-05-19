@@ -153,7 +153,7 @@ private struct CategoryPanel: View {
                     ForEach(store.categorySpend.prefix(5)) { item in
                         HStack(spacing: AppTheme.Space.s) {
                             Circle().fill(item.category.color).frame(width: 7, height: 7)
-                            Text(item.category.rawValue)
+                            Text(item.category.title)
                                 .font(.caption.weight(.semibold)).foregroundStyle(AppTheme.ink)
                             Spacer()
                             Text("\(Int((item.share * 100).rounded()))%")

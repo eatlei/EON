@@ -53,13 +53,13 @@ struct SubscriptionEditorView: View {
                         Hairline()
                         FieldRow("分类") {
                             Picker("", selection: $draft.category) {
-                                ForEach(SubscriptionCategory.allCases) { Text($0.rawValue).tag($0) }
+                                ForEach(SubscriptionCategory.allCases) { Text($0.title).tag($0) }
                             }.labelsHidden().tint(AppTheme.ink)
                         }
                         Hairline()
                         FieldRow("状态") {
                             Picker("", selection: $draft.status) {
-                                ForEach(RenewalStatus.allCases) { Text($0.rawValue).tag($0) }
+                                ForEach(RenewalStatus.allCases) { Text($0.title).tag($0) }
                             }.labelsHidden().tint(AppTheme.ink)
                         }
                     }
@@ -78,7 +78,7 @@ struct SubscriptionEditorView: View {
                         Hairline()
                         FieldRow("扣费周期") {
                             Picker("", selection: $draft.billingCycle) {
-                                ForEach(BillingCycle.allCases) { Text($0.rawValue).tag($0) }
+                                ForEach(BillingCycle.allCases) { Text($0.title).tag($0) }
                             }.labelsHidden().tint(AppTheme.ink)
                         }
                         if draft.billingCycle == .custom {

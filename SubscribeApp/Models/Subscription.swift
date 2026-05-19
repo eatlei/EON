@@ -46,6 +46,19 @@ enum SubscriptionCategory: String, CaseIterable, Codable, Identifiable {
 
     var id: String { rawValue }
 
+    var title: String {
+        switch self {
+        case .ai: String(localized: "AI")
+        case .productivity: String(localized: "效率")
+        case .entertainment: String(localized: "影音")
+        case .cloud: String(localized: "云服务")
+        case .developer: String(localized: "开发")
+        case .learning: String(localized: "学习")
+        case .finance: String(localized: "财务")
+        case .other: String(localized: "其他")
+        }
+    }
+
     var color: Color {
         switch self {
         case .ai: .indigo
@@ -68,6 +81,16 @@ enum BillingCycle: String, CaseIterable, Codable, Identifiable {
     case custom = "自定义"
 
     var id: String { rawValue }
+
+    var title: String {
+        switch self {
+        case .weekly: String(localized: "每周")
+        case .monthly: String(localized: "每月")
+        case .quarterly: String(localized: "每季度")
+        case .yearly: String(localized: "每年")
+        case .custom: String(localized: "自定义")
+        }
+    }
 
     func monthlyMultiplier(customDays: Int) -> Double {
         switch self {
@@ -97,6 +120,15 @@ enum RenewalStatus: String, CaseIterable, Codable, Identifiable {
     case paused = "已暂停"
 
     var id: String { rawValue }
+
+    var title: String {
+        switch self {
+        case .active: String(localized: "自动续费")
+        case .manual: String(localized: "手动续费")
+        case .trial: String(localized: "试用期")
+        case .paused: String(localized: "已暂停")
+        }
+    }
 }
 
 struct Subscription: Identifiable, Codable, Hashable {
