@@ -96,7 +96,7 @@ struct SubscriptionEditorView: View {
                             }
                         }
                         Hairline()
-                        FieldRow("下次扣费") {
+                        FieldRow("开始时间") {
                             DatePicker("", selection: $draft.nextBillingDate, displayedComponents: .date)
                                 .labelsHidden()
                                 .tint(AppTheme.ink)

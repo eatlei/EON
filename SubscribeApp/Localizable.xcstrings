@@ -158,6 +158,13 @@
         }
       }
     },
+    "开始时间" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : { "state" : "translated", "value" : "Start date" }
+        }
+      }
+    },
     "下次扣费" : {
       "extractionState" : "stale",
       "localizations" : {
