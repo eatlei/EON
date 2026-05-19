@@ -71,6 +71,16 @@
         }
       }
     },
+    "0" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "0"
+          }
+        }
+      }
+    },
     "1 %@ = %.4f CNY" : {
       "localizations" : {
         "zh-Hans" : {
@@ -104,6 +114,7 @@
       }
     },
     "iCloud" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -365,6 +376,17 @@
         }
       }
     },
+    "名称，如 花呗" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name, e.g. Huabei"
+          }
+        }
+      }
+    },
     "图标" : {
       "localizations" : {
         "en" : {
@@ -492,6 +514,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Notification permission not requested yet."
+          }
+        }
+      }
+    },
+    "已选择，点完成应用" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Selected — tap Done to apply"
           }
         }
       }
@@ -760,66 +792,6 @@
         }
       }
     },
-    "无" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "None"
-          }
-        }
-      }
-    },
-    "添加支付方式" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Add Payment Method"
-          }
-        }
-      }
-    },
-    "名称，如 花呗" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Name, e.g. Huabei"
-          }
-        }
-      }
-    },
-    "添加" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Add"
-          }
-        }
-      }
-    },
-    "添加后可在新增/编辑订阅时选择。" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "You can pick it when adding or editing a subscription."
-          }
-        }
-      }
-    },
-    "订阅里选择的支付方式来自这个列表。删除不影响已保存订阅里已填写的方式。" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Subscriptions pick payment methods from this list. Deleting one doesn't change methods already saved on existing subscriptions."
-          }
-        }
-      }
-    },
     "支出分类" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -843,6 +815,7 @@
       }
     },
     "数据" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -851,6 +824,9 @@
           }
         }
       }
+    },
+    "数据与同步" : {
+
     },
     "新增" : {
       "extractionState" : "stale",
@@ -870,6 +846,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "New Subscription"
+          }
+        }
+      }
+    },
+    "无" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "None"
           }
         }
       }
@@ -1090,6 +1076,38 @@
         }
       }
     },
+    "添加" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add"
+          }
+        }
+      }
+    },
+    "添加后可在新增/编辑订阅时选择。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "You can pick it when adding or editing a subscription."
+          }
+        }
+      }
+    },
+    "添加支付方式" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add Payment Method"
+          }
+        }
+      }
+    },
     "港币" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1274,6 +1292,16 @@
         }
       }
     },
+    "订阅里选择的支付方式来自这个列表。删除不影响已保存订阅里已填写的方式。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Subscriptions pick payment methods from this list. Deleting one doesn't change methods already saved on existing subscriptions."
+          }
+        }
+      }
+    },
     "设置" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1408,6 +1436,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Amount"
+          }
+        }
+      }
+    },
+    "首字母颜色" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Initial Color"
           }
         }
       }

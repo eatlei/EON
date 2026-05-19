@@ -139,9 +139,9 @@ struct SubscriptionEditorView: View {
 }
 
 private struct FieldRow<Trailing: View>: View {
-    let label: String
+    let label: LocalizedStringKey
     @ViewBuilder var trailing: Trailing
-    init(_ label: String, @ViewBuilder trailing: () -> Trailing) {
+    init(_ label: LocalizedStringKey, @ViewBuilder trailing: () -> Trailing) {
         self.label = label
         self.trailing = trailing()
     }
