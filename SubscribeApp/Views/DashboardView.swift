@@ -4,37 +4,32 @@ import SwiftUI
 struct DashboardView: View {
     @EnvironmentObject private var store: SubscriptionStore
     @State private var period: SpendPeriod = .month
+    @State private var showAdd = false
 
     var body: some View {
         NavigationStack {
-            ZStack(alignment: .bottomTrailing) {
-                AppScreen {
-                    if store.activeSubscriptions.isEmpty {
-                        EmptyDashboard()
-                    } else {
-                        VStack(spacing: AppTheme.Space.xl) {
-                            DashboardHeader(period: $period).reveal(0)
-                            HeroTotal(period: period).reveal(1)
-                            UpcomingPanel(period: period).reveal(2)
-                            CategoryPanel().reveal(3)
-                            if period == .month {
-                                CalendarPanel().reveal(4)
-                            } else {
-                                YearPanel().reveal(4)
-                            }
+            AppScreen {
+                if store.activeSubscriptions.isEmpty {
+                    EmptyDashboard(onAdd: { showAdd = true })
+                } else {
+                    VStack(spacing: AppTheme.Space.xl) {
+                        DashboardHeader(period: $period).reveal(0)
+                        HeroTotal(period: period).reveal(1)
+                        UpcomingPanel(period: period).reveal(2)
+                        CategoryPanel().reveal(3)
+                        if period == .month {
+                            CalendarPanel().reveal(4)
+                        } else {
+                            YearPanel().reveal(4)
                         }
                     }
                 }
-
-                if store.activeSubscriptions.isEmpty {
-                    AddHint()
-                        .padding(.trailing, 24)
-                        .padding(.bottom, 10)
-                        .allowsHitTesting(false)
-                        .transition(.opacity)
-                }
             }
             .toolbar(.hidden, for: .navigationBar)
+            .sheet(isPresented: $showAdd) {
+                SubscriptionEditorView(subscription: nil)
+                    .environmentObject(store)
+            }
         }
     }
 }
@@ -321,32 +316,30 @@ private struct YearPanel: View {
 }
 
 private struct EmptyDashboard: View {
+    let onAdd: () -> Void
     var body: some View {
         VStack(spacing: AppTheme.Space.m) {
             Image(systemName: "tray").font(.system(size: 44, weight: .light))
                 .foregroundStyle(AppTheme.tertiary)
             Text("还没有订阅").font(.title3.weight(.bold)).foregroundStyle(AppTheme.ink)
-            Text("点右下角的 + 添加第一个订阅，\n这里会显示你的支出概览。")
+            Text("添加你的第一个订阅，这里会显示支出概览。")
                 .font(.subheadline).foregroundStyle(AppTheme.secondary)
                 .multilineTextAlignment(.center)
+            Button(action: onAdd) {
+                Label("添加订阅", systemImage: "plus")
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, AppTheme.Space.xl)
+                    .padding(.vertical, AppTheme.Space.m)
+                    .background(AppTheme.accent, in: Capsule())
+            }
+            .buttonStyle(.plain)
+            .padding(.top, AppTheme.Space.s)
         }
         .frame(maxWidth: .infinity).padding(.top, 120)
     }
 }
 
-private struct AddHint: View {
-    var body: some View {
-        VStack(alignment: .trailing, spacing: 2) {
-            Text("点这里新增订阅")
-                .font(.subheadline.weight(.semibold))
-                .foregroundStyle(AppTheme.accent)
-            Image(systemName: "arrow.down.right")
-                .font(.system(size: 32, weight: .bold))
-                .foregroundStyle(AppTheme.accent)
-                .padding(.trailing, 6)
-        }
-    }
-}
 
 #Preview {
     DashboardView().environmentObject(SubscriptionStore())

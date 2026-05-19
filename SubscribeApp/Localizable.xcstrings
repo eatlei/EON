@@ -1353,6 +1353,26 @@
         }
       }
     },
+    "添加订阅" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add subscription"
+          }
+        }
+      }
+    },
+    "添加你的第一个订阅，这里会显示支出概览。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add your first subscription and your spending overview will appear here."
+          }
+        }
+      }
+    },
     "港币" : {
       "extractionState" : "stale",
       "localizations" : {
