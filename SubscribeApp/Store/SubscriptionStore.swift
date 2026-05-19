@@ -57,7 +57,7 @@ final class SubscriptionStore: ObservableObject {
            let decoded = try? JSONDecoder.subscriptionDecoder.decode([Subscription].self, from: data) {
             subscriptions = decoded
         } else {
-            subscriptions = []
+            subscriptions = [Self.example]
         }
 
         if let data = UserDefaults.standard.data(forKey: settingsKey),
@@ -426,5 +426,23 @@ private extension JSONEncoder {
         encoder.dateEncodingStrategy = .iso8601
         return encoder
     }
+}
+
+extension SubscriptionStore {
+    static let example = Subscription(
+        name: "Example",
+        plan: "Plus",
+        category: .other,
+        price: 9.9,
+        currency: .cny,
+        billingCycle: .monthly,
+        customCycleDays: 30,
+        nextBillingDate: Calendar.current.date(byAdding: .day, value: 7, to: .now) ?? .now,
+        reminderDaysBefore: 3,
+        status: .active,
+        paymentMethod: "",
+        icon: .category,
+        isArchived: false
+    )
 }
 
