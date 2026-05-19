@@ -94,7 +94,11 @@ final class SubscriptionStore: ObservableObject {
     }
 
     var activeSubscriptions: [Subscription] {
-        subscriptions.filter(\.isActive)
+        subscriptions.filter { $0.isActive && !$0.isArchived }
+    }
+
+    var archivedSubscriptions: [Subscription] {
+        subscriptions.filter(\.isArchived)
     }
 
     var monthlyTotal: Double {
@@ -230,6 +234,19 @@ final class SubscriptionStore: ObservableObject {
             subscriptions[index] = subscription
         } else {
             subscriptions.append(subscription)
+        }
+    }
+
+    func archive(ids: [UUID]) { applyArchived(ids, true) }
+
+    func restore(ids: [UUID]) { applyArchived(ids, false) }
+
+    private func applyArchived(_ ids: [UUID], _ value: Bool) {
+        subscriptions = subscriptions.map { sub in
+            guard ids.contains(sub.id) else { return sub }
+            var s = sub
+            s.isArchived = value
+            return s
         }
     }
 

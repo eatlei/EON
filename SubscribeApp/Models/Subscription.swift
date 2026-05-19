@@ -145,6 +145,7 @@ struct Subscription: Identifiable, Codable, Hashable {
     var status: RenewalStatus
     var paymentMethod: String
     var icon: SubscriptionIcon = .category
+    var isArchived: Bool = false
 
     var isActive: Bool {
         status != .paused
@@ -169,7 +170,7 @@ enum SubscriptionIcon: Codable, Hashable {
 extension Subscription {
     private enum CodingKeys: String, CodingKey {
         case id, name, plan, category, price, currency, billingCycle,
-             customCycleDays, nextBillingDate, reminderDaysBefore, status, paymentMethod, icon
+             customCycleDays, nextBillingDate, reminderDaysBefore, status, paymentMethod, icon, isArchived
     }
 
     init(from decoder: Decoder) throws {
@@ -187,5 +188,6 @@ extension Subscription {
         status = try c.decode(RenewalStatus.self, forKey: .status)
         paymentMethod = try c.decode(String.self, forKey: .paymentMethod)
         icon = try c.decodeIfPresent(SubscriptionIcon.self, forKey: .icon) ?? .category
+        isArchived = try c.decodeIfPresent(Bool.self, forKey: .isArchived) ?? false
     }
 }
