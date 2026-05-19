@@ -163,30 +163,33 @@ struct CategoryGlyph: View {
                 if let ui = IconStore.loadUIImage(id) {
                     Image(uiImage: ui).resizable().scaledToFill()
                 } else {
-                    letterTile(subscription.category.color)
+                    glyphTile(.letter, color: subscription.category.color)
                 }
-            case .symbol(let name):
-                Image(systemName: name)
-                    .font(.system(size: size * 0.46, weight: .semibold))
-                    .foregroundStyle(.white)
-                    .frame(width: size, height: size)
-                    .background(subscription.category.color)
-            case .monogram(let hex):
-                letterTile(Color(hexString: hex))
-            case .category:
-                letterTile(subscription.category.color)
+            case .tile(let glyph, let colorHex):
+                let bg = colorHex.map { Color(hexString: $0) } ?? subscription.category.color
+                glyphTile(glyph, color: bg)
             }
         }
         .frame(width: size, height: size)
         .clipShape(RoundedRectangle(cornerRadius: size * 0.28))
     }
 
-    private func letterTile(_ bg: Color) -> some View {
-        Text(String(subscription.name.prefix(1)).uppercased())
-            .font(.system(size: size * 0.44, weight: .heavy, design: .rounded))
-            .foregroundStyle(.white)
-            .frame(width: size, height: size)
-            .background(bg)
+    @ViewBuilder
+    private func glyphTile(_ glyph: TileGlyph, color: Color) -> some View {
+        switch glyph {
+        case .letter:
+            Text(String(subscription.name.prefix(1)).uppercased())
+                .font(.system(size: size * 0.44, weight: .heavy, design: .rounded))
+                .foregroundStyle(.white)
+                .frame(width: size, height: size)
+                .background(color)
+        case .symbol(let name):
+            Image(systemName: name)
+                .font(.system(size: size * 0.46, weight: .semibold))
+                .foregroundStyle(.white)
+                .frame(width: size, height: size)
+                .background(color)
+        }
     }
 }
 

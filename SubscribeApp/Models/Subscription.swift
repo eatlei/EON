@@ -144,7 +144,7 @@ struct Subscription: Identifiable, Codable, Hashable {
     var reminderDaysBefore: Int
     var status: RenewalStatus
     var paymentMethod: String
-    var icon: SubscriptionIcon = .category
+    var icon: SubscriptionIcon = .default
     var isArchived: Bool = false
 
     var isActive: Bool {
@@ -160,11 +160,83 @@ struct Subscription: Identifiable, Codable, Hashable {
     }
 }
 
-enum SubscriptionIcon: Codable, Hashable {
-    case category
+enum TileGlyph: Hashable {
+    case letter
     case symbol(String)
-    case image(String)
-    case monogram(String)   // 首字母 + 选定颜色（hex，如 "#3D9CFF"）
+}
+
+enum SubscriptionIcon: Hashable {
+    case tile(glyph: TileGlyph, colorHex: String?)   // colorHex == nil ⇒ 用分类色
+    case image(String)                                // 上传 / App Store 下载的图片文件 ID
+
+    static let `default` = SubscriptionIcon.tile(glyph: .letter, colorHex: nil)
+}
+
+extension SubscriptionIcon: Codable {
+    private enum CodingKeys: String, CodingKey {
+        case kind, glyph, symbolName, colorHex, imageID   // new shape
+        case category, symbol, monogram, image            // legacy keys
+    }
+    private struct LegacyPayload: Codable { let _0: String? }
+
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+
+        // New shape (discriminated by "kind")
+        if let kind = try c.decodeIfPresent(String.self, forKey: .kind) {
+            switch kind {
+            case "image":
+                self = .image(try c.decodeIfPresent(String.self, forKey: .imageID) ?? "")
+            case "tile":
+                let colorHex = try c.decodeIfPresent(String.self, forKey: .colorHex)
+                let g = try c.decodeIfPresent(String.self, forKey: .glyph) ?? "letter"
+                if g == "symbol",
+                   let name = try c.decodeIfPresent(String.self, forKey: .symbolName), !name.isEmpty {
+                    self = .tile(glyph: .symbol(name), colorHex: colorHex)
+                } else {
+                    self = .tile(glyph: .letter, colorHex: colorHex)
+                }
+            default:
+                self = .default
+            }
+            return
+        }
+
+        // Legacy shapes
+        if c.contains(.category) {
+            self = .tile(glyph: .letter, colorHex: nil)
+        } else if c.contains(.symbol) {
+            let p = try c.decode(LegacyPayload.self, forKey: .symbol)
+            self = .tile(glyph: .symbol(p._0 ?? ""), colorHex: nil)
+        } else if c.contains(.monogram) {
+            let p = try c.decode(LegacyPayload.self, forKey: .monogram)
+            self = .tile(glyph: .letter, colorHex: p._0)
+        } else if c.contains(.image) {
+            let p = try c.decode(LegacyPayload.self, forKey: .image)
+            self = .image(p._0 ?? "")
+        } else {
+            self = .default
+        }
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var c = encoder.container(keyedBy: CodingKeys.self)
+        switch self {
+        case .image(let id):
+            try c.encode("image", forKey: .kind)
+            try c.encode(id, forKey: .imageID)
+        case .tile(let glyph, let colorHex):
+            try c.encode("tile", forKey: .kind)
+            try c.encodeIfPresent(colorHex, forKey: .colorHex)
+            switch glyph {
+            case .letter:
+                try c.encode("letter", forKey: .glyph)
+            case .symbol(let name):
+                try c.encode("symbol", forKey: .glyph)
+                try c.encode(name, forKey: .symbolName)
+            }
+        }
+    }
 }
 
 extension Subscription {
@@ -187,7 +259,7 @@ extension Subscription {
         reminderDaysBefore = try c.decode(Int.self, forKey: .reminderDaysBefore)
         status = try c.decode(RenewalStatus.self, forKey: .status)
         paymentMethod = try c.decode(String.self, forKey: .paymentMethod)
-        icon = try c.decodeIfPresent(SubscriptionIcon.self, forKey: .icon) ?? .category
+        icon = (try? c.decode(SubscriptionIcon.self, forKey: .icon)) ?? .default
         isArchived = try c.decodeIfPresent(Bool.self, forKey: .isArchived) ?? false
     }
 }

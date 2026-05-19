@@ -441,7 +441,7 @@ extension SubscriptionStore {
         reminderDaysBefore: 3,
         status: .active,
         paymentMethod: "",
-        icon: .category,
+        icon: .default,
         isArchived: false
     )
 }

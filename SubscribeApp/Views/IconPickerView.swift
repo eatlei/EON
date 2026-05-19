@@ -12,25 +12,21 @@ struct IconPickerView: View {
         self._icon = icon
         self.appName = appName
         switch icon.wrappedValue {
-        case .category: _working = State(initialValue: .category)
-        case .symbol(let s): _working = State(initialValue: .symbol(s))
-        case .monogram(let h): _working = State(initialValue: .monogram(h))
+        case .tile(let g, let h):
+            _working = State(initialValue: .tile(glyph: g, colorHex: h))
+            self.originalImageID = nil
         case .image(let id):
             _working = State(initialValue: .existingImage(id))
             self.originalImageID = id
-            return
         }
-        self.originalImageID = nil
     }
 
     private enum WorkingIcon: Equatable {
-        case category
-        case symbol(String)
-        case monogram(String)
+        case tile(glyph: TileGlyph, colorHex: String?)
         case imageData(Data)
         case existingImage(String)
     }
-    @State private var working: WorkingIcon = .category
+    @State private var working: WorkingIcon = .tile(glyph: .letter, colorHex: nil)
     @State private var pendingAppName: String?
     @State private var selectedAppID: Int?
     @State private var commitError: String?
@@ -107,56 +103,99 @@ struct IconPickerView: View {
         }
     }
 
-    // MARK: Library (default + colors + symbols)
+    // MARK: Library (icon grid + separate color row)
+
+    private var currentGlyph: TileGlyph {
+        if case .tile(let g, _) = working { return g }
+        return .letter
+    }
+    private var currentColorHex: String? {
+        if case .tile(_, let h) = working { return h }
+        return nil
+    }
+    private func isGlyphSelected(_ g: TileGlyph) -> Bool {
+        if case .tile(let cur, _) = working { return cur == g }
+        return false
+    }
+    private func isColorSelected(_ hex: String?) -> Bool {
+        if case .tile(_, let cur) = working { return cur == hex }
+        return false
+    }
+    private func pickGlyph(_ g: TileGlyph) {
+        working = .tile(glyph: g, colorHex: currentColorHex)
+        pendingAppName = nil; selectedAppID = nil
+    }
+    private func pickColor(_ hex: String?) {
+        working = .tile(glyph: currentGlyph, colorHex: hex)
+        pendingAppName = nil; selectedAppID = nil
+    }
 
     private var librarySection: some View {
         VStack(spacing: AppTheme.Space.m) {
             VStack(alignment: .leading, spacing: AppTheme.Space.s) {
-                Text("首字母颜色")
+                Text("图标")
                     .font(.subheadline.weight(.medium))
                     .foregroundStyle(AppTheme.secondary)
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 48), spacing: AppTheme.Space.m)], spacing: AppTheme.Space.m) {
-                    // 默认（分类色）
-                    Button { working = .category; pendingAppName = nil; selectedAppID = nil } label: {
-                        ZStack {
-                            Circle().fill(AppTheme.surface)
-                            Image(systemName: "a.square")
-                                .font(.system(size: 18, weight: .bold))
-                                .foregroundStyle(AppTheme.secondary)
-                        }
-                        .frame(width: 44, height: 44)
-                        .overlay(Circle().stroke(working == .category ? AppTheme.accent : AppTheme.hairline,
-                                                 lineWidth: working == .category ? 3 : 1))
+                searchField("搜索图标", text: $symbolQuery)
+                LazyVGrid(columns: grid, spacing: AppTheme.Space.m) {
+                    // 首字母 first
+                    Button { pickGlyph(.letter) } label: {
+                        Text("A")
+                            .font(.system(size: 22, weight: .heavy, design: .rounded))
+                            .foregroundStyle(isGlyphSelected(.letter) ? AppTheme.accent : AppTheme.ink)
+                            .frame(width: 60, height: 60)
+                            .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: AppTheme.radiusSmall))
+                            .overlay(RoundedRectangle(cornerRadius: AppTheme.radiusSmall)
+                                .stroke(isGlyphSelected(.letter) ? AppTheme.accent : AppTheme.hairline,
+                                        lineWidth: isGlyphSelected(.letter) ? 3 : 1))
                     }
                     .buttonStyle(.plain)
 
-                    ForEach(AppTheme.monogramColors, id: \.self) { hex in
-                        Button { working = .monogram(hex); pendingAppName = nil; selectedAppID = nil } label: {
-                            Circle()
-                                .fill(Color(hexString: hex))
-                                .frame(width: 44, height: 44)
-                                .overlay(Circle().stroke(working == .monogram(hex) ? AppTheme.accent : AppTheme.hairline,
-                                                         lineWidth: working == .monogram(hex) ? 3 : 1))
+                    ForEach(filteredSymbols, id: \.self) { s in
+                        Button { pickGlyph(.symbol(s)) } label: {
+                            Image(systemName: s)
+                                .font(.system(size: 24, weight: .semibold))
+                                .foregroundStyle(isGlyphSelected(.symbol(s)) ? AppTheme.accent : AppTheme.ink)
+                                .frame(width: 60, height: 60)
+                                .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: AppTheme.radiusSmall))
+                                .overlay(RoundedRectangle(cornerRadius: AppTheme.radiusSmall)
+                                    .stroke(isGlyphSelected(.symbol(s)) ? AppTheme.accent : AppTheme.hairline,
+                                            lineWidth: isGlyphSelected(.symbol(s)) ? 3 : 1))
                         }
                         .buttonStyle(.plain)
                     }
                 }
             }
             Divider()
-            searchField("搜索图标", text: $symbolQuery)
-            LazyVGrid(columns: grid, spacing: AppTheme.Space.m) {
-                ForEach(filteredSymbols, id: \.self) { s in
-                    Button { working = .symbol(s); pendingAppName = nil; selectedAppID = nil } label: {
-                        Image(systemName: s)
-                            .font(.system(size: 24, weight: .semibold))
-                            .foregroundStyle(working == .symbol(s) ? AppTheme.accent : AppTheme.ink)
-                            .frame(width: 60, height: 60)
-                            .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: AppTheme.radiusSmall))
-                            .overlay(RoundedRectangle(cornerRadius: AppTheme.radiusSmall)
-                                .stroke(working == .symbol(s) ? AppTheme.accent : AppTheme.hairline,
-                                        lineWidth: working == .symbol(s) ? 3 : 1))
+            VStack(alignment: .leading, spacing: AppTheme.Space.s) {
+                Text("颜色")
+                    .font(.subheadline.weight(.medium))
+                    .foregroundStyle(AppTheme.secondary)
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 48), spacing: AppTheme.Space.m)], spacing: AppTheme.Space.m) {
+                    // 分类色 (default, nil)
+                    Button { pickColor(nil) } label: {
+                        ZStack {
+                            Circle().fill(AppTheme.surface)
+                            Image(systemName: "paintpalette")
+                                .font(.system(size: 18, weight: .bold))
+                                .foregroundStyle(AppTheme.secondary)
+                        }
+                        .frame(width: 44, height: 44)
+                        .overlay(Circle().stroke(isColorSelected(nil) ? AppTheme.accent : AppTheme.hairline,
+                                                 lineWidth: isColorSelected(nil) ? 3 : 1))
                     }
                     .buttonStyle(.plain)
+
+                    ForEach(AppTheme.monogramColors, id: \.self) { hex in
+                        Button { pickColor(hex) } label: {
+                            Circle()
+                                .fill(Color(hexString: hex))
+                                .frame(width: 44, height: 44)
+                                .overlay(Circle().stroke(isColorSelected(hex) ? AppTheme.accent : AppTheme.hairline,
+                                                         lineWidth: isColorSelected(hex) ? 3 : 1))
+                        }
+                        .buttonStyle(.plain)
+                    }
                 }
             }
         }
@@ -322,12 +361,8 @@ struct IconPickerView: View {
     private func commit() {
         let finalIcon: SubscriptionIcon
         switch working {
-        case .category:
-            finalIcon = .category
-        case .symbol(let s):
-            finalIcon = .symbol(s)
-        case .monogram(let h):
-            finalIcon = .monogram(h)
+        case .tile(let g, let h):
+            finalIcon = .tile(glyph: g, colorHex: h)
         case .existingImage(let id):
             finalIcon = .image(id)
         case .imageData(let d):

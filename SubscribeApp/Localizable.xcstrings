@@ -516,6 +516,16 @@
         }
       }
     },
+    "颜色" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Color"
+          }
+        }
+      }
+    },
     "图标处理失败" : {
       "extractionState" : "stale",
       "localizations" : {
