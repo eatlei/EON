@@ -52,7 +52,7 @@ final class SubscriptionStore: ObservableObject {
            let decoded = try? JSONDecoder.subscriptionDecoder.decode([Subscription].self, from: data) {
             subscriptions = decoded
         } else {
-            subscriptions = Self.samples
+            subscriptions = []
         }
 
         if let data = UserDefaults.standard.data(forKey: settingsKey),
@@ -234,10 +234,6 @@ final class SubscriptionStore: ObservableObject {
         subscriptions.removeAll { ids.contains($0.id) }
     }
 
-    func resetSamples() {
-        subscriptions = Self.samples
-    }
-
     func addPaymentMethod(_ raw: String) {
         let name = raw.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !name.isEmpty, !paymentMethods.contains(name) else { return }
@@ -390,59 +386,3 @@ private extension JSONEncoder {
     }
 }
 
-extension SubscriptionStore {
-    static let samples: [Subscription] = [
-        Subscription(
-            name: "ChatGPT",
-            plan: "Plus",
-            category: .ai,
-            price: 20,
-            currency: .usd,
-            billingCycle: .monthly,
-            customCycleDays: 30,
-            nextBillingDate: Calendar.current.date(byAdding: .day, value: 8, to: .now) ?? .now,
-            reminderDaysBefore: 3,
-            status: .active,
-            paymentMethod: "Visa 0821"
-        ),
-        Subscription(
-            name: "Netflix",
-            plan: "Standard",
-            category: .entertainment,
-            price: 99,
-            currency: .hkd,
-            billingCycle: .monthly,
-            customCycleDays: 30,
-            nextBillingDate: Calendar.current.date(byAdding: .day, value: 13, to: .now) ?? .now,
-            reminderDaysBefore: 5,
-            status: .active,
-            paymentMethod: "Apple Pay"
-        ),
-        Subscription(
-            name: "iCloud+",
-            plan: "2 TB",
-            category: .cloud,
-            price: 68,
-            currency: .cny,
-            billingCycle: .monthly,
-            customCycleDays: 30,
-            nextBillingDate: Calendar.current.date(byAdding: .day, value: 19, to: .now) ?? .now,
-            reminderDaysBefore: 7,
-            status: .active,
-            paymentMethod: "支付宝"
-        ),
-        Subscription(
-            name: "Notion",
-            plan: "Plus",
-            category: .productivity,
-            price: 96,
-            currency: .usd,
-            billingCycle: .yearly,
-            customCycleDays: 365,
-            nextBillingDate: Calendar.current.date(byAdding: .day, value: 61, to: .now) ?? .now,
-            reminderDaysBefore: 14,
-            status: .active,
-            paymentMethod: "Mastercard 1106"
-        )
-    ]
-}

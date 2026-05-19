@@ -27,10 +27,15 @@ struct SettingsView: View {
                     } label: {
                         HStack {
                             Label("默认币种", systemImage: "dollarsign.circle")
+                                .foregroundStyle(.primary)
                             Spacer()
                             Text(store.baseCurrency.rawValue)
                                 .foregroundStyle(.secondary)
+                            Image(systemName: "chevron.up.chevron.down")
+                                .font(.caption2.weight(.semibold))
+                                .foregroundStyle(.secondary)
                         }
+                        .contentShape(Rectangle())
                     }
 
                     Picker(selection: $store.appearance) {
@@ -121,11 +126,6 @@ struct SettingsView: View {
                         Label("上传到 iCloud", systemImage: "icloud.and.arrow.up")
                     }
                     .disabled(!store.iCloudSyncEnabled)
-                    Button(role: .destructive) {
-                        store.resetSamples()
-                    } label: {
-                        Label("恢复样例数据", systemImage: "arrow.counterclockwise")
-                    }
                 } header: {
                     Text("数据与同步")
                 } footer: {
