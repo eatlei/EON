@@ -1,9 +1,11 @@
 import SwiftUI
 import StoreKit
 import UserNotifications
+import UIKit
 
 struct SettingsView: View {
     @EnvironmentObject private var store: SubscriptionStore
+    @Environment(\.openURL) private var openURL
     @State private var authStatus: UNAuthorizationStatus = .notDetermined
     @State private var refreshing = false
     @StateObject private var tips = TipStore()
@@ -123,6 +125,26 @@ struct SettingsView: View {
 
                 Section {
                     Button {
+                        openURL(feedbackMailURL())
+                    } label: {
+                        HStack {
+                            Label("发送反馈", systemImage: "envelope")
+                                .foregroundStyle(.primary)
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .font(.caption2.weight(.semibold))
+                                .foregroundStyle(.secondary)
+                        }
+                        .contentShape(Rectangle())
+                    }
+                } header: {
+                    Text("反馈")
+                } footer: {
+                    Text("邮件会自动附带版本与设备信息，便于定位问题。")
+                }
+
+                Section {
+                    Button {
                         showTips = true
                     } label: {
                         HStack {
@@ -171,6 +193,44 @@ struct SettingsView: View {
     }
     private func loadStatus() async {
         authStatus = await UNUserNotificationCenter.current().notificationSettings().authorizationStatus
+    }
+
+    private func deviceModelIdentifier() -> String {
+        var sys = utsname()
+        uname(&sys)
+        let mirror = Mirror(reflecting: sys.machine)
+        let id = mirror.children.reduce(into: "") { result, element in
+            if let value = element.value as? Int8, value != 0 {
+                result.append(Character(UnicodeScalar(UInt8(value))))
+            }
+        }
+        return id.isEmpty ? "Unknown" : id
+    }
+
+    private func feedbackMailURL() -> URL {
+        let v = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
+        let b = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "1"
+        let ios = UIDevice.current.systemVersion
+        let model = deviceModelIdentifier()
+        let intro = String(localized: "请在此描述你的问题或建议：")
+        let body = """
+        \(intro)
+
+
+        ——
+        App: Subscribe v\(v) (\(b))
+        iOS: \(ios)
+        Device: \(model)
+        """
+        let subject = String(localized: "Subscribe 反馈")
+        var c = URLComponents()
+        c.scheme = "mailto"
+        c.path = "eatpoc@gmail.com"
+        c.queryItems = [
+            URLQueryItem(name: "subject", value: subject),
+            URLQueryItem(name: "body", value: body)
+        ]
+        return c.url ?? URL(string: "mailto:eatpoc@gmail.com")!
     }
 }
 

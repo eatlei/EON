@@ -1609,6 +1609,56 @@
           }
         }
       }
+    },
+    "反馈" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Feedback"
+          }
+        }
+      }
+    },
+    "发送反馈" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Send Feedback"
+          }
+        }
+      }
+    },
+    "邮件会自动附带版本与设备信息，便于定位问题。" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The email automatically includes version and device info to help diagnose issues."
+          }
+        }
+      }
+    },
+    "请在此描述你的问题或建议：" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please describe your issue or suggestion:"
+          }
+        }
+      }
+    },
+    "Subscribe 反馈" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Subscribe Feedback"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"
