@@ -180,20 +180,24 @@ final class SubscriptionStore: ObservableObject {
     private func projectedChargesBidirectional(for subscription: Subscription, from start: Date, to end: Date) -> [RenewalCharge] {
         let calendar = Calendar.current
         var chargeDate = subscription.nextBillingDate
-        let cycleDays = subscription.billingCycle.days(customDays: subscription.customCycleDays)
         var charges: [RenewalCharge] = []
 
         // 下次扣费在窗口之后（看过去月份）→ 按周期向回倒推到窗口前/内
+        var backGuard = 0
         while chargeDate >= end {
-            guard let prev = calendar.date(byAdding: .day, value: -cycleDays, to: chargeDate) else { break }
-            chargeDate = prev
+            let prev = subscription.billingCycle.advance(chargeDate, by: -1, calendar: calendar, customDays: subscription.customCycleDays)
+            guard prev < chargeDate, backGuard < 5000 else { break }
+            chargeDate = prev; backGuard += 1
         }
         // 仍早于窗口起点 → 按周期前进
+        var fwdGuard = 0
         while chargeDate < start {
-            guard let next = calendar.date(byAdding: .day, value: cycleDays, to: chargeDate) else { break }
-            chargeDate = next
+            let next = subscription.billingCycle.advance(chargeDate, by: 1, calendar: calendar, customDays: subscription.customCycleDays)
+            guard next > chargeDate, fwdGuard < 5000 else { break }
+            chargeDate = next; fwdGuard += 1
         }
         // 收集 [start, end)
+        var collectGuard = 0
         while chargeDate < end {
             if chargeDate >= start {
                 charges.append(RenewalCharge(
@@ -202,8 +206,9 @@ final class SubscriptionStore: ObservableObject {
                     amount: converter.convert(subscription.price, from: subscription.currency, to: baseCurrency)
                 ))
             }
-            guard let next = calendar.date(byAdding: .day, value: cycleDays, to: chargeDate) else { break }
-            chargeDate = next
+            let next = subscription.billingCycle.advance(chargeDate, by: 1, calendar: calendar, customDays: subscription.customCycleDays)
+            guard next > chargeDate, collectGuard < 5000 else { break }
+            chargeDate = next; collectGuard += 1
         }
         return charges
     }
@@ -218,6 +223,29 @@ final class SubscriptionStore: ObservableObject {
 
     func nextCharge(in period: SpendPeriod) -> RenewalCharge? {
         charges(in: period).first { $0.date >= .now } ?? charges(in: period).first
+    }
+
+    /// 每个有效订阅的"下一笔未来扣费"（date >= 现在，日历精确），按日期升序，最多 limit 条。每个订阅最多 1 条。
+    func upcomingCharges(limit: Int = 6) -> [RenewalCharge] {
+        let now = Date()
+        let calendar = Calendar.current
+        return activeSubscriptions.compactMap { sub -> RenewalCharge? in
+            var d = sub.nextBillingDate
+            var guardCount = 0
+            while d < now {
+                let next = sub.billingCycle.advance(d, by: 1, calendar: calendar, customDays: sub.customCycleDays)
+                guard next > d, guardCount < 5000 else { break }
+                d = next; guardCount += 1
+            }
+            guard d >= now else { return nil }
+            return RenewalCharge(
+                subscription: sub,
+                date: d,
+                amount: converter.convert(sub.price, from: sub.currency, to: baseCurrency))
+        }
+        .sorted { $0.date < $1.date }
+        .prefix(limit)
+        .map { $0 }
     }
 
     func monthTotalsForCurrentYear() -> [ForecastMonth] {
@@ -317,24 +345,23 @@ final class SubscriptionStore: ObservableObject {
     private func projectedCharges(for subscription: Subscription, from start: Date, to end: Date) -> [RenewalCharge] {
         let calendar = Calendar.current
         var chargeDate = subscription.nextBillingDate
-        let cycleDays = subscription.billingCycle.days(customDays: subscription.customCycleDays)
         var charges: [RenewalCharge] = []
-
-        while chargeDate < start {
-            chargeDate = calendar.date(byAdding: .day, value: cycleDays, to: chargeDate) ?? end
+        var guardCount = 0
+        func step() -> Bool {
+            let next = subscription.billingCycle.advance(chargeDate, by: 1, calendar: calendar, customDays: subscription.customCycleDays)
+            guard next > chargeDate, guardCount < 5000 else { return false }
+            chargeDate = next; guardCount += 1; return true
         }
-
+        while chargeDate < start { if !step() { return charges } }
         while chargeDate < end {
             if chargeDate >= start {
                 charges.append(RenewalCharge(
                     subscription: subscription,
                     date: chargeDate,
-                    amount: converter.convert(subscription.price, from: subscription.currency, to: baseCurrency)
-                ))
+                    amount: converter.convert(subscription.price, from: subscription.currency, to: baseCurrency)))
             }
-            chargeDate = calendar.date(byAdding: .day, value: cycleDays, to: chargeDate) ?? end
+            if !step() { break }
         }
-
         return charges
     }
 

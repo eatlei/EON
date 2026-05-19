@@ -111,6 +111,17 @@ enum BillingCycle: String, CaseIterable, Codable, Identifiable {
         case .custom: max(customDays, 1)
         }
     }
+
+    /// 按"自然周期"前进/后退 count 个周期（count 可为负）。月/季/年走日历，避免 30/91/365 天近似导致的日期漂移。
+    func advance(_ date: Date, by count: Int, calendar: Calendar, customDays: Int) -> Date {
+        switch self {
+        case .weekly:    return calendar.date(byAdding: .day,   value: 7 * count, to: date) ?? date
+        case .monthly:   return calendar.date(byAdding: .month, value: count,      to: date) ?? date
+        case .quarterly: return calendar.date(byAdding: .month, value: 3 * count,  to: date) ?? date
+        case .yearly:    return calendar.date(byAdding: .year,  value: count,      to: date) ?? date
+        case .custom:    return calendar.date(byAdding: .day,   value: max(customDays, 1) * count, to: date) ?? date
+        }
+    }
 }
 
 enum RenewalStatus: String, CaseIterable, Codable, Identifiable {

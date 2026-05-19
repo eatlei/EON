@@ -15,7 +15,7 @@ struct DashboardView: View {
                     VStack(spacing: AppTheme.Space.xl) {
                         DashboardHeader(period: $period).reveal(0)
                         HeroTotal(period: period).reveal(1)
-                        UpcomingPanel(period: period).reveal(2)
+                        UpcomingPanel().reveal(2)
                         CategoryPanel().reveal(3)
                         if period == .month {
                             CalendarPanel().reveal(4)
@@ -99,7 +99,7 @@ private struct HeroTotal: View {
     }
     private var subtitle: String {
         let n = store.fullDueCount(in: period)
-        if let next = store.nextCharge(in: period) {
+        if let next = store.upcomingCharges().first {
             let date = next.date.formatted(.dateTime.month().day())
             return String(localized: "共 \(n) 笔 · 下一笔 \(next.subscription.name) \(date)")
         }
@@ -109,12 +109,11 @@ private struct HeroTotal: View {
 
 private struct UpcomingPanel: View {
     @EnvironmentObject private var store: SubscriptionStore
-    let period: SpendPeriod
-    private var charges: [RenewalCharge] { Array(store.charges(in: period).prefix(6)) }
+    private var charges: [RenewalCharge] { store.upcomingCharges() }
     var body: some View {
         Panel(title: "即将扣费") {
             if charges.isEmpty {
-                Text("本期没有待扣费订阅")
+                Text("暂无即将扣费")
                     .font(.subheadline).foregroundStyle(AppTheme.secondary)
                     .frame(maxWidth: .infinity, alignment: .leading).padding(.vertical, AppTheme.Space.s)
             } else {
