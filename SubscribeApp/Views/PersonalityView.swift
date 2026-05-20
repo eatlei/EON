@@ -24,16 +24,28 @@ struct PersonalityView: View {
     @State private var revealTick = 0
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: AppTheme.Space.xl) {
-                heroImage
-                content
+        // 主内容 = 大图 + 名字 + 标语 + 详情;放在可滚动区。
+        // 辅助说明(随订阅变化 / 仅供娱乐)从滚动内容里拆出来,固定在弹窗底部,
+        // 这样用户看主内容时眼睛不会被这两行 caption 拽下去。
+        VStack(spacing: 0) {
+            ScrollView {
+                VStack(spacing: AppTheme.Space.xl) {
+                    heroImage
+                    content
+                }
+                .padding(.horizontal, AppTheme.Space.xl)
+                .padding(.top, AppTheme.Space.l)
+                .padding(.bottom, AppTheme.Space.l)
+                .frame(maxWidth: .infinity)
+            }
+
+            VStack(spacing: AppTheme.Space.xs) {
                 evolutionHint
                 disclaimer
             }
             .padding(.horizontal, AppTheme.Space.xl)
-            .padding(.top, AppTheme.Space.l)
-            .padding(.bottom, AppTheme.Space.xxl)
+            .padding(.top, AppTheme.Space.s)
+            .padding(.bottom, AppTheme.Space.m)
             .frame(maxWidth: .infinity)
         }
         .background(AppTheme.canvas.ignoresSafeArea())

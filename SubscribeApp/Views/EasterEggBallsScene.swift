@@ -67,7 +67,9 @@ final class EasterEggBallsScene: SKScene, SKPhysicsContactDelegate {
               size.width > 1, size.height > 1 else { return }
         hasSpawned = true
 
-        let radius: CGFloat = 22
+        // 球直径从 44 升到 64,在 iPhone 屏幕上更"有分量",图标也能看清是什么。
+        // 上限 24 个 × 64pt 直径,堆在底部不至于互相叠死。
+        let radius: CGFloat = 32
         for (i, tex) in pendingTextures.enumerated() {
             let ball = SKSpriteNode(texture: tex)
             ball.size = CGSize(width: radius * 2, height: radius * 2)
@@ -188,21 +190,41 @@ struct EasterEggBallsView: View {
     }
 
     /// 用 ImageRenderer 把每个订阅的 CategoryGlyph 烤成圆形 UIImage。
-    /// 用 88pt × displayScale 的分辨率,iPhone 上球只显示 44pt,纹理留 2× 余量
-    /// 滚动时不会糊。圆形外面加一圈半透明白边,看起来更像"实体球"。
+    /// 128pt × displayScale 的分辨率配合场景里 64pt 的球,纹理 2× 余量滚动时
+    /// 不糊;白边 + 顶部高光 + 阴影叠出"实体玻璃球"的体积感。
     @MainActor
     private func bakeTextures() -> [SKTexture] {
         let used = Array(subscriptions.prefix(Self.ballCap))
-        let renderSize: CGFloat = 88
+        let renderSize: CGFloat = 128
         var out: [SKTexture] = []
         for sub in used {
-            let view = CategoryGlyph(subscription: sub, size: renderSize)
-                .frame(width: renderSize, height: renderSize)
-                .clipShape(Circle())
-                .overlay(
-                    Circle().stroke(Color.white.opacity(0.55), lineWidth: 2)
-                )
-                .shadow(color: .black.opacity(0.18), radius: 3, x: 0, y: 1)
+            let view = ZStack {
+                CategoryGlyph(subscription: sub, size: renderSize)
+                    .frame(width: renderSize, height: renderSize)
+                    .clipShape(Circle())
+                // 顶部偏左的高光 —— 一小撮 radial gradient,撑起"球面"的反光感,
+                // 让平的 icon 看起来真的像个抛了光的玻璃 / 弹珠球。
+                Circle()
+                    .fill(
+                        RadialGradient(
+                            colors: [Color.white.opacity(0.55), Color.white.opacity(0.0)],
+                            center: UnitPoint(x: 0.32, y: 0.22),
+                            startRadius: 0,
+                            endRadius: renderSize * 0.55
+                        )
+                    )
+                    .blendMode(.screen)
+                    .allowsHitTesting(false)
+                // 边缘 ring —— 内描边,模拟球壳厚度。
+                Circle()
+                    .strokeBorder(Color.white.opacity(0.75), lineWidth: 3)
+                Circle()
+                    .strokeBorder(Color.black.opacity(0.18), lineWidth: 1)
+                    .padding(3)
+            }
+            .frame(width: renderSize, height: renderSize)
+            .shadow(color: .black.opacity(0.28), radius: 5, x: 0, y: 2)
+
             let renderer = ImageRenderer(content: view)
             renderer.scale = displayScale
             if let ui = renderer.uiImage {

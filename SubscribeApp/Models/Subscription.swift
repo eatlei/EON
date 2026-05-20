@@ -253,6 +253,10 @@ struct Subscription: Identifiable, Codable, Hashable {
     /// 适用场景:公司报销的订阅、家人共享的、给客户买的等等。默认 true。
     var includeInStatistics: Bool = true
     var isArchived: Bool = false
+    /// 订阅"结束日"。nil = 永久续费;非 nil = 到这天为止,
+    /// 之后 SubscriptionStore.autoArchiveExpiredSubscriptions() 会把它自动归档。
+    /// 旧数据没有这字段,decodeIfPresent 默认 nil,行为跟以前一致。
+    var endDate: Date? = nil
 
     var isActive: Bool {
         status != .paused
@@ -350,7 +354,7 @@ extension Subscription {
     private enum CodingKeys: String, CodingKey {
         case id, name, plan, category, price, currency, billingCycle,
              customCycleDays, nextBillingDate, reminderDaysBefore, status, paymentMethod, icon, isArchived,
-             customCategoryID, startDate, includeInStatistics
+             customCategoryID, startDate, includeInStatistics, endDate
     }
 
     init(from decoder: Decoder) throws {
@@ -372,6 +376,7 @@ extension Subscription {
         customCategoryID = try c.decodeIfPresent(UUID.self, forKey: .customCategoryID)
         startDate = try c.decodeIfPresent(Date.self, forKey: .startDate)
         includeInStatistics = try c.decodeIfPresent(Bool.self, forKey: .includeInStatistics) ?? true
+        endDate = try c.decodeIfPresent(Date.self, forKey: .endDate)
     }
 }
 

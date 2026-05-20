@@ -144,8 +144,29 @@ final class SubscriptionStore: ObservableObject {
             }
         }
         syncReminders()
+        // 启动时跑一遍"到期归档" —— 旧设备上一直开着 App 没动也得追得回来。
+        autoArchiveExpiredSubscriptions()
         Task { await refreshRatesIfStale() }
         startSyncObservers()
+    }
+
+    /// 把所有"设置了 endDate 且已经到日"的订阅自动归档。
+    /// init 调一次,App 回到前台时再调一次 —— 跨午夜会触发,无需用户手动。
+    /// 命中后会顺手 syncReminders() 取消那条已归档订阅的本地通知。
+    func autoArchiveExpiredSubscriptions(asOf now: Date = .now) {
+        let cal = Calendar.current
+        let today = cal.startOfDay(for: now)
+        var changed = false
+        subscriptions = subscriptions.map { sub in
+            guard !sub.isArchived,
+                  let end = sub.endDate,
+                  cal.startOfDay(for: end) <= today else { return sub }
+            var s = sub
+            s.isArchived = true
+            changed = true
+            return s
+        }
+        if changed { syncReminders() }
     }
 
     var activeSubscriptions: [Subscription] {
@@ -567,7 +588,11 @@ final class SubscriptionStore: ObservableObject {
             object: nil,
             queue: .main
         ) { [weak self] _ in
-            Task { @MainActor in self?.syncFromICloud() }
+            Task { @MainActor in
+                self?.syncFromICloud()
+                // 回到前台时也跑一次到期归档,跨午夜的订阅这时就会自动下架。
+                self?.autoArchiveExpiredSubscriptions()
+            }
         }
     }
 

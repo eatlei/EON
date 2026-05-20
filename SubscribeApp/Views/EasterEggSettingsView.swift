@@ -13,8 +13,14 @@ struct EasterEggSettingsView: View {
         ZStack {
             // 背景球。.allowsHitTesting(false) 把所有点击 / 滚动都让给 List,
             // 球纯粹是看 / 摇着玩,不能拖。
-            if !store.activeSubscriptions.isEmpty {
-                EasterEggBallsView(subscriptions: store.activeSubscriptions)
+            //
+            // 数据源用"全部未归档的订阅"(包括暂停的),让用户看到的球数 = 订阅
+            // 列表里实际看到的条数。之前用 activeSubscriptions 会过滤掉 paused
+            // 状态,导致用户"明明有 12 个订阅但只看到 6 个球"。归档订阅理所当然
+            // 不出现,因为它们已经不算活跃数据。
+            let ballSubs = store.subscriptions.filter { !$0.isArchived }
+            if !ballSubs.isEmpty {
+                EasterEggBallsView(subscriptions: ballSubs)
                     .ignoresSafeArea()
                     .allowsHitTesting(false)
             }

@@ -7,6 +7,9 @@ struct SubscriptionEditorView: View {
     @State private var priceText: String
     @State private var showIconPicker = false
     private let isNew: Bool
+    /// 用来区分"在编辑一个已归档订阅" —— 这种情况下编辑器其实是"重启"流程,
+    /// 标题改成「重启订阅」,保存时自动把 isArchived 翻回 false。
+    private let isReactivating: Bool
     @State private var didApplyDefaults = false
 
     private enum Field: Hashable { case name, plan, price }
@@ -14,6 +17,7 @@ struct SubscriptionEditorView: View {
 
     init(subscription: Subscription?) {
         self.isNew = subscription == nil
+        self.isReactivating = subscription?.isArchived ?? false
         // 新建订阅:默认字母 tile,颜色每次随机从 8 个 monogram 预设里挑一个。
         // 这样空名字也有视觉存在感,且每次打开都不一样。
         // 默认"开始时间"= 今天的 00:00(用 startOfDay 抹掉时分秒,DatePicker 不会
@@ -39,6 +43,30 @@ struct SubscriptionEditorView: View {
 
     private var canSave: Bool {
         !draft.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && draft.price >= 0
+    }
+
+    /// "设置结束日期"开关。打开 → endDate 默认为今天 + 1 年(给个合理可调起点),
+    /// 关闭 → endDate 清空。DatePicker 单独绑 draft.endDate(非 nil 时)。
+    private var hasEndDateBinding: Binding<Bool> {
+        Binding(
+            get: { draft.endDate != nil },
+            set: { on in
+                if on {
+                    let cal = Calendar.current
+                    let oneYearOut = cal.date(byAdding: .year, value: 1, to: .now) ?? .now
+                    draft.endDate = cal.startOfDay(for: oneYearOut)
+                } else {
+                    draft.endDate = nil
+                }
+            }
+        )
+    }
+
+    private var endDateBinding: Binding<Date> {
+        Binding(
+            get: { draft.endDate ?? Date() },
+            set: { draft.endDate = $0 }
+        )
     }
 
     private var paymentOptions: [String] {
@@ -179,6 +207,22 @@ struct SubscriptionEditorView: View {
                                 Stepper(String(localized: "\(draft.reminderDaysBefore) 天"), value: $draft.reminderDaysBefore, in: 0...30)
                                     .fixedSize()
                             }
+                            // 结束日期开关 —— 打开后可以挑一个截止日,到日 App 会自动归档。
+                            // 适用于"已经准备退订/试用结束/合同到期"这类已知终点的订阅。
+                            Hairline()
+                            FieldRow("设置结束日期") {
+                                Toggle("", isOn: hasEndDateBinding)
+                                    .labelsHidden()
+                                    .tint(AppTheme.accent)
+                            }
+                            if draft.endDate != nil {
+                                Hairline()
+                                FieldRow("结束于") {
+                                    DatePicker("", selection: endDateBinding, displayedComponents: .date)
+                                        .labelsHidden()
+                                        .tint(.primary)
+                                }
+                            }
                         }
 
                         MaterialPanel(title: "支付") {
@@ -224,7 +268,11 @@ struct SubscriptionEditorView: View {
                 }
                 .scrollDismissesKeyboard(.interactively)
             }
-            .navigationTitle(isNew ? String(localized: "新增订阅") : String(localized: "编辑订阅"))
+            .navigationTitle(
+                isNew ? String(localized: "新增订阅")
+                : isReactivating ? String(localized: "重启订阅")
+                : String(localized: "编辑订阅")
+            )
             .navigationBarTitleDisplayMode(.inline)
             // 整个 navigation bar 的底板隐藏 —— 让 ImmersiveBackground 直接顶到屏幕顶
             // 端;按钮自身用 .glassEffect 胶囊保证在任何背景色下都能稳定读出。
@@ -261,6 +309,16 @@ struct SubscriptionEditorView: View {
                         // startDate 也不动,这样"已扣 N 次"才有可追溯的基准日。
                         if isNew && draft.startDate == nil {
                             draft.startDate = draft.nextBillingDate
+                        }
+                        // 重启归档订阅:取消归档 + 如果残留的 endDate 已过期就清掉,
+                        // 否则下次 autoArchive 又会立刻把它打回归档,等于没重启。
+                        if isReactivating {
+                            draft.isArchived = false
+                            if let end = draft.endDate,
+                               Calendar.current.startOfDay(for: end) <=
+                               Calendar.current.startOfDay(for: .now) {
+                                draft.endDate = nil
+                            }
                         }
                         store.upsert(draft)
                         dismiss()
