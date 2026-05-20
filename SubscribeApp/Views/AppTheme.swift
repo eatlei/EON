@@ -282,7 +282,8 @@ struct SegmentedPill<Tag: Hashable>: View {
             }
         }
         .padding(3)
-        .background(AppTheme.surface, in: Capsule())
+        // Liquid Glass 胶囊 —— 浮在吸顶 Header 上时,跟右侧的货币按钮一组质感
+        .glassEffect(.regular, in: Capsule())
         .overlay(Capsule().stroke(AppTheme.hairline, lineWidth: 0.5))
     }
 }

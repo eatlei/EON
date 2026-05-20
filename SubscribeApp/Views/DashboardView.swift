@@ -8,24 +8,44 @@ struct DashboardView: View {
 
     var body: some View {
         NavigationStack {
-            AppScreen {
+            Group {
                 if store.activeSubscriptions.isEmpty {
-                    EmptyDashboard(onAdd: { showAdd = true })
+                    AppScreen { EmptyDashboard(onAdd: { showAdd = true }) }
                 } else {
-                    VStack(spacing: AppTheme.Space.xl) {
-                        DashboardHeader(period: $period).reveal(0)
-                        HeroTotal(period: period).reveal(1)
-                        QuickStatsPanel(period: period).reveal(2)
-                        UpcomingPanel().reveal(3)
-                        ForecastPanel().reveal(4)
-                        CategoryPanel().reveal(5)
-                        TopSpendersPanel(period: period).reveal(6)
-                        if period == .month {
-                            CalendarPanel().reveal(7)
-                        } else {
-                            YearPanel().reveal(7)
+                    // 自定义滚动容器:页面内容滚动时,顶部的 DashboardHeader
+                    // 通过 safeAreaInset 吸顶,并附带 Liquid Glass 背景。
+                    // ScrollViewReader 让日历点击时能滚动到详情位置。
+                    ScrollViewReader { proxy in
+                        ScrollView {
+                            VStack(spacing: AppTheme.Space.xl) {
+                                HeroTotal(period: period).reveal(0)
+                                QuickStatsPanel(period: period).reveal(1)
+                                UpcomingPanel().reveal(2)
+                                CategoryPanel().reveal(3)
+                                if period == .year {
+                                    YearPanel().reveal(4)
+                                } else {
+                                    // 月 + 季 都用日历(季模式下日历仍然只
+                                    // 显示当前月,因为日历本来就是月维度的)。
+                                    CalendarPanel(scrollProxy: proxy).reveal(4)
+                                }
+                            }
+                            .padding(.horizontal, AppTheme.Space.xl)
+                            .padding(.top, AppTheme.Space.m)
+                            .padding(.bottom, AppTheme.dockClearance)
                         }
+                        .scrollDismissesKeyboard(.interactively)
+                        .background(AppTheme.canvas.ignoresSafeArea())
                     }
+                }
+            }
+            .safeAreaInset(edge: .top, spacing: 0) {
+                if !store.activeSubscriptions.isEmpty {
+                    DashboardHeader(period: $period)
+                        .padding(.horizontal, AppTheme.Space.xl)
+                        .padding(.top, AppTheme.Space.s)
+                        .padding(.bottom, AppTheme.Space.m)
+                        .background(.thinMaterial)
                 }
             }
             .toolbar(.hidden, for: .navigationBar)
@@ -46,12 +66,11 @@ private struct DashboardHeader: View {
                 selection: $period,
                 items: SpendPeriod.allCases.map { ($0, $0.title) }
             )
-            .frame(width: 132)
+            .frame(maxWidth: 200)  // 三档,留点空间不要顶到右边
 
             Spacer()
 
             Menu {
-                // Alphabetical by ISO code — matches the order used in Settings → 货币.
                 Picker("", selection: $store.baseCurrency) {
                     ForEach(CurrencyCode.allCases.sorted { $0.rawValue < $1.rawValue }) { c in
                         Text("\(c.rawValue) · \(c.title)").tag(c)
@@ -63,9 +82,9 @@ private struct DashboardHeader: View {
                     Text(store.baseCurrency.rawValue).font(.subheadline.weight(.bold))
                 }
                 .foregroundStyle(AppTheme.ink)
-                .padding(.horizontal, AppTheme.Space.m).padding(.vertical, AppTheme.Space.s)
-                .background(AppTheme.surface, in: Capsule())
-                .overlay(Capsule().stroke(AppTheme.hairline, lineWidth: 0.5))
+                .padding(.horizontal, AppTheme.Space.m)
+                .padding(.vertical, 10)
+                .glassEffect(.regular, in: Capsule())
             }
         }
     }
@@ -76,7 +95,7 @@ private struct HeroTotal: View {
     let period: SpendPeriod
     var body: some View {
         VStack(alignment: .leading, spacing: AppTheme.Space.s) {
-            SectionLabel(text: period == .month ? "本月总额" : "今年总额")
+            SectionLabel(text: heroLabel)
             Text(store.converter.format(store.fullDueAmount(in: period), currency: store.baseCurrency))
                 .font(.amountHero())
                 .foregroundStyle(AppTheme.ink)
@@ -98,36 +117,54 @@ private struct HeroTotal: View {
         }
         return String(localized: "共 \(n) 笔")
     }
+
+    private var heroLabel: LocalizedStringKey {
+        switch period {
+        case .month:   "本月总额"
+        case .quarter: "本季总额"
+        case .year:    "今年总额"
+        }
+    }
 }
 
 private struct UpcomingPanel: View {
     @EnvironmentObject private var store: SubscriptionStore
-    @State private var expanded = false
 
-    private let collapsedLimit = 3
+    private var charges: [RenewalCharge] { store.upcomingCharges(limit: 3) }
 
-    private var allCharges: [RenewalCharge] { store.upcomingCharges(limit: 100) }
-    private var visibleCharges: [RenewalCharge] {
-        expanded ? allCharges : Array(allCharges.prefix(collapsedLimit))
+    var body: some View {
+        Panel(title: "即将扣费") {
+            if charges.isEmpty {
+                Text("暂无即将扣费")
+                    .font(.subheadline).foregroundStyle(AppTheme.secondary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.vertical, AppTheme.Space.s)
+            } else {
+                VStack(spacing: 0) {
+                    ForEach(Array(charges.enumerated()), id: \.element.id) { i, c in
+                        if i > 0 { Hairline() }
+                        row(c)
+                    }
+                }
+            }
+        }
     }
-    private var hiddenCount: Int { max(0, allCharges.count - collapsedLimit) }
 
-    /// Buckets the visible charges into 本月 / 之后 so a yearly sub whose next
-    /// charge is 12 months away doesn't get confused for an imminent bill.
-    private struct Bucket: Identifiable { let id = UUID(); let title: String; let charges: [RenewalCharge] }
-    private var buckets: [Bucket] {
+    /// 从今天到目标日期的整天数 —— 用日历的 startOfDay 算,跨夜不会算成 0。
+    private func daysUntil(_ date: Date) -> Int {
         let cal = Calendar.current
-        let now = Date()
-        let monthEnd = cal.dateInterval(of: .month, for: now)?.end ?? now
-        let thisMonth = visibleCharges.filter { $0.date < monthEnd }
-        let later     = visibleCharges.filter { $0.date >= monthEnd }
-        var out: [Bucket] = []
-        if !thisMonth.isEmpty { out.append(Bucket(title: String(localized: "本月"), charges: thisMonth)) }
-        if !later.isEmpty     { out.append(Bucket(title: String(localized: "之后"), charges: later)) }
-        return out
+        let today = cal.startOfDay(for: .now)
+        let target = cal.startOfDay(for: date)
+        return cal.dateComponents([.day], from: today, to: target).day ?? 0
     }
 
-    /// 跨年的扣费补上年份(明年/2027 年的就一眼看得出来),当年就只显示月日。
+    private func daysCaption(_ days: Int) -> String {
+        if days <= 0 { return String(localized: "今天扣费") }
+        if days == 1 { return String(localized: "明天扣费") }
+        return String(localized: "还有 \(days) 天")
+    }
+
+    /// 跨年的扣费补上年份;当年只显示月日。
     private func formatDate(_ date: Date) -> String {
         let cal = Calendar.current
         if cal.component(.year, from: date) == cal.component(.year, from: Date()) {
@@ -136,70 +173,37 @@ private struct UpcomingPanel: View {
         return date.formatted(.dateTime.year().month().day())
     }
 
-    var body: some View {
-        Panel(title: "即将扣费") {
-            if allCharges.isEmpty {
-                Text("暂无即将扣费")
-                    .font(.subheadline).foregroundStyle(AppTheme.secondary)
-                    .frame(maxWidth: .infinity, alignment: .leading).padding(.vertical, AppTheme.Space.s)
-            } else {
-                VStack(spacing: 0) {
-                    ForEach(Array(buckets.enumerated()), id: \.element.id) { bi, bucket in
-                        // Group label — skip the leading divider for the very first bucket.
-                        if bi > 0 { Hairline() }
-                        HStack {
-                            Text(bucket.title)
-                                .font(.caption.weight(.bold))
-                                .tracking(0.6)
-                                .textCase(.uppercase)
-                                .foregroundStyle(AppTheme.tertiary)
-                            Spacer()
-                        }
-                        .padding(.top, bi == 0 ? 0 : AppTheme.Space.s)
-                        .padding(.bottom, 2)
-
-                        ForEach(Array(bucket.charges.enumerated()), id: \.element.id) { i, c in
-                            if i > 0 { Hairline() }
-                            HStack(spacing: AppTheme.Space.m) {
-                                CategoryGlyph(subscription: c.subscription)
-                                VStack(alignment: .leading, spacing: 2) {
-                                    Text(c.subscription.name).font(.subheadline.weight(.semibold))
-                                        .foregroundStyle(AppTheme.ink)
-                                    Text("\(formatDate(c.date)) · \(c.subscription.plan)")
-                                        .font(.caption).foregroundStyle(AppTheme.secondary)
-                                }
-                                Spacer()
-                                Text(store.converter.format(c.amount, currency: store.baseCurrency))
-                                    .font(.amount()).foregroundStyle(AppTheme.ink)
-                            }
-                            .padding(.vertical, AppTheme.Space.m)
-                        }
-                    }
-
-                    if hiddenCount > 0 {
-                        Hairline()
-                        Button {
-                            withAnimation(AppTheme.spring) { expanded.toggle() }
-                        } label: {
-                            HStack(spacing: 4) {
-                                Spacer()
-                                Text(expanded
-                                     ? String(localized: "收起")
-                                     : String(localized: "更多 \(hiddenCount) 项"))
-                                    .font(.caption.weight(.semibold))
-                                Image(systemName: expanded ? "chevron.up" : "chevron.down")
-                                    .font(.caption2.weight(.bold))
-                                Spacer()
-                            }
-                            .foregroundStyle(AppTheme.accent)
-                            .padding(.vertical, AppTheme.Space.m)
-                            .contentShape(Rectangle())
-                        }
-                        .buttonStyle(.plain)
+    @ViewBuilder
+    private func row(_ c: RenewalCharge) -> some View {
+        let days = daysUntil(c.date)
+        HStack(spacing: AppTheme.Space.m) {
+            CategoryGlyph(subscription: c.subscription)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(c.subscription.name)
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(AppTheme.ink)
+                HStack(spacing: 4) {
+                    Text(daysCaption(days))
+                        .font(.caption.weight(.bold))
+                        .foregroundStyle(AppTheme.accent)
+                    Text("·")
+                        .font(.caption).foregroundStyle(AppTheme.tertiary)
+                    Text(formatDate(c.date))
+                        .font(.caption).foregroundStyle(AppTheme.secondary)
+                    if !c.subscription.plan.isEmpty {
+                        Text("·")
+                            .font(.caption).foregroundStyle(AppTheme.tertiary)
+                        Text(c.subscription.plan)
+                            .font(.caption).foregroundStyle(AppTheme.secondary)
+                            .lineLimit(1)
                     }
                 }
             }
+            Spacer()
+            Text(store.converter.format(c.amount, currency: store.baseCurrency))
+                .font(.amount()).foregroundStyle(AppTheme.ink)
         }
+        .padding(.vertical, AppTheme.Space.m)
     }
 }
 
@@ -235,12 +239,18 @@ private struct CategoryPanel: View {
 
 private struct CalendarPanel: View {
     @EnvironmentObject private var store: SubscriptionStore
+    /// 外层 ScrollView 的 proxy —— 点中某一天后用它把详情滚到屏幕顶部,
+    /// 避免详情被吸顶 Header 或屏幕底部遮挡。
+    let scrollProxy: ScrollViewProxy
     @State private var monthAnchor: Date = Calendar.current.dateInterval(of: .month, for: .now)?.start ?? .now
     /// 用户点过的那一天(nil 表示未选,只看到"今天"高亮)。换月时自动重置。
     @State private var selectedDay: Int? = nil
     @State private var showMonthPicker = false
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 6), count: 7)
     private let symbols = Calendar.current.veryShortStandaloneWeekdaySymbols
+
+    /// 详情面板的 ScrollView ID —— 点中某天后用它来 scrollTo。
+    private let detailID = "calendarDetail"
 
     private var currentMonthStart: Date {
         Calendar.current.dateInterval(of: .month, for: .now)?.start ?? .now
@@ -372,51 +382,28 @@ private struct CalendarPanel: View {
                     }
                 }
 
-                // 点中某天 + 那天有扣费,展开看具体哪些订阅
+                // 点中某天 + 那天有扣费,展开看具体哪些订阅。整块嵌一个浅
+                // surface 子卡 + 内描边,跟外面的 Panel 形成"层级",比直接
+                // 摊在网格下面更有"详情面板"的味道。
                 if let day = selectedDay,
                    let interval = Calendar.current.dateInterval(of: .month, for: monthAnchor),
                    let dayDate = Calendar.current.date(byAdding: .day, value: day - 1, to: interval.start),
                    let charges = byDay[day], !charges.isEmpty {
-                    Hairline()
-                    HStack {
-                        Text(dayDate.formatted(.dateTime.month().day().weekday(.wide)))
-                            .font(.caption.weight(.bold))
-                            .foregroundStyle(AppTheme.ink)
-                        Spacer()
-                        Text(store.converter.format(
-                            charges.reduce(0) { $0 + $1.amount },
-                            currency: store.baseCurrency))
-                            .font(.caption.weight(.bold))
-                            .foregroundStyle(AppTheme.accent)
-                    }
-                    .padding(.top, AppTheme.Space.s)
-
-                    VStack(spacing: AppTheme.Space.s) {
-                        ForEach(charges) { c in
-                            HStack(spacing: AppTheme.Space.s) {
-                                CategoryGlyph(subscription: c.subscription, size: 28)
-                                VStack(alignment: .leading, spacing: 1) {
-                                    Text(c.subscription.name)
-                                        .font(.caption.weight(.semibold))
-                                        .foregroundStyle(AppTheme.ink)
-                                    if !c.subscription.plan.isEmpty {
-                                        Text(c.subscription.plan)
-                                            .font(.caption2)
-                                            .foregroundStyle(AppTheme.secondary)
-                                    }
-                                }
-                                Spacer()
-                                Text(store.converter.format(c.amount, currency: store.baseCurrency))
-                                    .font(.caption.weight(.semibold).monospacedDigit())
-                                    .foregroundStyle(AppTheme.ink)
-                            }
-                        }
-                    }
+                    detailCard(dayDate: dayDate, charges: charges)
+                        .id(detailID)
+                        .transition(.opacity.combined(with: .move(edge: .top)))
                 }
             }
             .animation(AppTheme.spring, value: monthAnchor)
             .animation(AppTheme.spring, value: selectedDay)
             .onChange(of: monthAnchor) { _, _ in selectedDay = nil }
+            .onChange(of: selectedDay) { _, newValue in
+                // 点中一个有扣费的日期才滚动,避免取消选中也滚一下。
+                guard newValue != nil else { return }
+                withAnimation(AppTheme.spring) {
+                    scrollProxy.scrollTo(detailID, anchor: .center)
+                }
+            }
         }
         .sheet(isPresented: $showMonthPicker) {
             MonthPickerSheet(monthAnchor: $monthAnchor)
@@ -434,6 +421,75 @@ private struct CalendarPanel: View {
         let lead = firstWeekday - cal.firstWeekday
         let offset = lead >= 0 ? lead : lead + 7
         return Array(repeating: nil, count: offset) + range.map { Optional($0) }
+    }
+
+    /// 高级感的日详情子卡:大号日期 + 当日金额徽章,行间用细分隔,
+    /// 每行图标(36pt)+ 名称/套餐 + 金额。整体压在 surface 上 + glassBorder。
+    @ViewBuilder
+    private func detailCard(dayDate: Date, charges: [RenewalCharge]) -> some View {
+        let total = charges.reduce(0.0) { $0 + $1.amount }
+        VStack(alignment: .leading, spacing: AppTheme.Space.m) {
+            HStack(alignment: .firstTextBaseline, spacing: AppTheme.Space.s) {
+                VStack(alignment: .leading, spacing: 0) {
+                    Text(dayDate.formatted(.dateTime.day()))
+                        .font(.system(size: 30, weight: .heavy, design: .rounded))
+                        .foregroundStyle(AppTheme.ink)
+                        .contentTransition(.numericText())
+                    Text(dayDate.formatted(.dateTime.weekday(.wide).month(.abbreviated)))
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(AppTheme.secondary)
+                }
+                Spacer()
+                HStack(spacing: 4) {
+                    Image(systemName: "creditcard.fill")
+                        .font(.caption2.weight(.bold))
+                    Text(store.converter.format(total, currency: store.baseCurrency))
+                        .font(.subheadline.weight(.bold).monospacedDigit())
+                }
+                .foregroundStyle(AppTheme.accent)
+                .padding(.horizontal, 10).padding(.vertical, 6)
+                .background(AppTheme.accent.opacity(0.14), in: Capsule())
+            }
+
+            VStack(spacing: 0) {
+                ForEach(Array(charges.enumerated()), id: \.element.id) { i, c in
+                    if i > 0 { Hairline().padding(.leading, 36 + AppTheme.Space.m) }
+                    HStack(spacing: AppTheme.Space.m) {
+                        CategoryGlyph(subscription: c.subscription, size: 36)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(c.subscription.name)
+                                .font(.subheadline.weight(.semibold))
+                                .foregroundStyle(AppTheme.ink)
+                            HStack(spacing: 4) {
+                                Circle().fill(c.subscription.category.color).frame(width: 6, height: 6)
+                                Text(c.subscription.category.title)
+                                    .font(.caption)
+                                    .foregroundStyle(AppTheme.secondary)
+                                if !c.subscription.plan.isEmpty {
+                                    Text("·")
+                                        .font(.caption).foregroundStyle(AppTheme.tertiary)
+                                    Text(c.subscription.plan)
+                                        .font(.caption)
+                                        .foregroundStyle(AppTheme.secondary)
+                                        .lineLimit(1)
+                                }
+                            }
+                        }
+                        Spacer()
+                        Text(store.converter.format(c.amount, currency: store.baseCurrency))
+                            .font(.amount()).foregroundStyle(AppTheme.ink)
+                    }
+                    .padding(.vertical, AppTheme.Space.s)
+                }
+            }
+        }
+        .padding(AppTheme.Space.m)
+        .background(
+            AppTheme.canvas.opacity(0.6),
+            in: RoundedRectangle(cornerRadius: AppTheme.radiusSmall)
+        )
+        .glassBorder(cornerRadius: AppTheme.radiusSmall)
+        .padding(.top, AppTheme.Space.s)
     }
 }
 
@@ -454,54 +510,6 @@ private struct YearPanel: View {
                 AxisValueLabel(format: .dateTime.month(.narrow)) } }
             .chartYAxis(.hidden)
             .frame(height: 128)
-        }
-    }
-}
-
-// MARK: - 30 天预览面板
-
-/// 把今后 30 天的每笔扣费画成柱状图,按分类色上色。让用户一眼看到
-/// "下个月的支出节奏",哪几天会大额出账,哪几天没事。
-private struct ForecastPanel: View {
-    @EnvironmentObject private var store: SubscriptionStore
-
-    private var charges: [RenewalCharge] { store.chargesInNext(30) }
-    private var total: Double { charges.reduce(0) { $0 + $1.amount } }
-
-    var body: some View {
-        if !charges.isEmpty {
-            Panel(title: "30 天预览") {
-                VStack(alignment: .leading, spacing: AppTheme.Space.s) {
-                    Chart(charges) { c in
-                        BarMark(
-                            x: .value("date", c.date, unit: .day),
-                            y: .value("amount", c.amount)
-                        )
-                        .foregroundStyle(c.subscription.category.color)
-                        .cornerRadius(3)
-                    }
-                    .chartXAxis {
-                        AxisMarks(values: .stride(by: .day, count: 7)) { _ in
-                            AxisValueLabel(
-                                format: .dateTime.month(.abbreviated).day(),
-                                centered: false
-                            )
-                            .font(.caption2)
-                        }
-                    }
-                    .chartYAxis(.hidden)
-                    .frame(height: 120)
-
-                    HStack {
-                        Text(String(localized: "共 \(charges.count) 笔"))
-                            .font(.caption).foregroundStyle(AppTheme.secondary)
-                        Spacer()
-                        Text(store.converter.format(total, currency: store.baseCurrency))
-                            .font(.caption.weight(.bold))
-                            .foregroundStyle(AppTheme.ink)
-                    }
-                }
-            }
         }
     }
 }
@@ -680,61 +688,6 @@ private struct StatCard: View {
         .padding(AppTheme.Space.m)
         .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: AppTheme.radiusSmall))
         .glassBorder(cornerRadius: AppTheme.radiusSmall)
-    }
-}
-
-// MARK: - Top spenders 面板
-
-/// Top 5 月费最高的订阅,按当前 period 切换显示月/年金额。让用户一眼看到
-/// "钱主要花在哪儿",做"砍订阅"决策时最有用的一个面板。
-private struct TopSpendersPanel: View {
-    @EnvironmentObject private var store: SubscriptionStore
-    let period: SpendPeriod
-
-    private var top: [Subscription] {
-        store.activeSubscriptions
-            .sorted {
-                $0.monthlyCost(in: store.baseCurrency, converter: store.converter)
-                > $1.monthlyCost(in: store.baseCurrency, converter: store.converter)
-            }
-            .prefix(5)
-            .map { $0 }
-    }
-
-    var body: some View {
-        if !top.isEmpty {
-            Panel(title: "最贵的订阅") {
-                VStack(spacing: 0) {
-                    ForEach(Array(top.enumerated()), id: \.element.id) { i, sub in
-                        if i > 0 { Hairline() }
-                        HStack(spacing: AppTheme.Space.m) {
-                            Text("\(i + 1)")
-                                .font(.caption.weight(.heavy).monospacedDigit())
-                                .foregroundStyle(AppTheme.tertiary)
-                                .frame(width: 14, alignment: .center)
-                            CategoryGlyph(subscription: sub, size: 30)
-                            VStack(alignment: .leading, spacing: 1) {
-                                Text(sub.name).font(.subheadline.weight(.semibold))
-                                    .foregroundStyle(AppTheme.ink)
-                                Text(sub.category.title)
-                                    .font(.caption).foregroundStyle(AppTheme.secondary)
-                            }
-                            Spacer()
-                            Text(store.converter.format(
-                                amount(for: sub),
-                                currency: store.baseCurrency))
-                                .font(.amount()).foregroundStyle(AppTheme.ink)
-                        }
-                        .padding(.vertical, AppTheme.Space.s)
-                    }
-                }
-            }
-        }
-    }
-
-    private func amount(for sub: Subscription) -> Double {
-        let monthly = sub.monthlyCost(in: store.baseCurrency, converter: store.converter)
-        return period == .year ? monthly * 12 : monthly
     }
 }
 

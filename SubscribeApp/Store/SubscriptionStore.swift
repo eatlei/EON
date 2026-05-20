@@ -172,8 +172,14 @@ final class SubscriptionStore: ObservableObject {
     }
 
     func interval(for period: SpendPeriod) -> DateInterval {
-        let component: Calendar.Component = period == .month ? .month : .year
-        return Calendar.current.dateInterval(of: component, for: .now) ?? DateInterval(start: .now, duration: 0)
+        let component: Calendar.Component
+        switch period {
+        case .month:   component = .month
+        case .quarter: component = .quarter
+        case .year:    component = .year
+        }
+        return Calendar.current.dateInterval(of: component, for: .now)
+            ?? DateInterval(start: .now, duration: 0)
     }
 
     func charges(in period: SpendPeriod) -> [RenewalCharge] {

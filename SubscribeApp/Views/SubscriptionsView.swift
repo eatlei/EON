@@ -30,54 +30,15 @@ struct SubscriptionsView: View {
 
     var body: some View {
         NavigationStack {
-            AppScreen {
+            ScrollView {
                 VStack(spacing: AppTheme.Space.l) {
-                    HStack(spacing: AppTheme.Space.s) {
-                        HStack(spacing: AppTheme.Space.s) {
-                            Image(systemName: "magnifyingglass").foregroundStyle(AppTheme.tertiary)
-                            TextField("搜索名称、套餐或分类", text: $search)
-                                .textInputAutocapitalization(.never)
-                            if !search.isEmpty {
-                                Button { search = "" } label: {
-                                    Image(systemName: "xmark.circle.fill").foregroundStyle(AppTheme.tertiary)
-                                }.buttonStyle(.plain)
-                            }
-                        }
-                        .padding(AppTheme.Space.m)
-                        .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: AppTheme.radius))
-                        .overlay(RoundedRectangle(cornerRadius: AppTheme.radius).stroke(AppTheme.hairline, lineWidth: 0.5))
-
-                        Menu {
-                            Picker("", selection: $sort) {
-                                ForEach(SortOption.allCases) {
-                                    Label($0.title, systemImage: $0.icon).tag($0)
-                                }
-                            }
-                        } label: {
-                            Image(systemName: "arrow.up.arrow.down")
-                                .font(.subheadline.weight(.bold)).foregroundStyle(AppTheme.ink)
-                                .frame(width: 44, height: 44)
-                                .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: AppTheme.radius))
-                                .overlay(RoundedRectangle(cornerRadius: AppTheme.radius).stroke(AppTheme.hairline, lineWidth: 0.5))
-                        }
-                    }
-                    .reveal(0)
-
-                    // 月/季/年 三档切换 — 整页所有金额按所选口径换算后再展示。
-                    // 跟首页 Month/Year 切换、图标库的来源切换共用 SegmentedPill 样式。
-                    SegmentedPill(
-                        selection: $viewPeriod,
-                        items: ViewPeriod.allCases.map { ($0, $0.title) }
-                    )
-                    .reveal(1)
-
                     if rows.isEmpty {
                         VStack(spacing: AppTheme.Space.m) {
                             Image(systemName: "rectangle.stack").font(.system(size: 40, weight: .light))
                                 .foregroundStyle(AppTheme.tertiary)
                             Text(search.isEmpty ? "还没有订阅" : "没有匹配的订阅")
                                 .font(.headline).foregroundStyle(AppTheme.ink)
-                        }.frame(maxWidth: .infinity).padding(.top, 100).reveal(2)
+                        }.frame(maxWidth: .infinity).padding(.top, 100).reveal(0)
                     } else {
                         LazyVStack(spacing: AppTheme.Space.m) {
                             ForEach(Array(rows.enumerated()), id: \.element.id) { i, sub in
@@ -89,14 +50,68 @@ struct SubscriptionsView: View {
                                         onDelete: { store.delete(ids: [sub.id]) }
                                     )
                                 }
-                                .buttonStyle(.plain).reveal(i + 2)
+                                .buttonStyle(.plain).reveal(i)
                             }
                         }
                     }
                 }
+                .padding(.horizontal, AppTheme.Space.xl)
+                .padding(.top, AppTheme.Space.m)
+                .padding(.bottom, AppTheme.dockClearance)
+            }
+            .scrollDismissesKeyboard(.interactively)
+            .background(AppTheme.canvas.ignoresSafeArea())
+            .safeAreaInset(edge: .top, spacing: 0) {
+                header
+                    .padding(.horizontal, AppTheme.Space.xl)
+                    .padding(.top, AppTheme.Space.s)
+                    .padding(.bottom, AppTheme.Space.m)
+                    .background(.thinMaterial)
             }
             .toolbar(.hidden, for: .navigationBar)
             .sheet(item: $editing) { SubscriptionEditorView(subscription: $0) }
+        }
+    }
+
+    /// 吸顶 Header:第一行 月/季/年 + 排序按钮,第二行搜索框。
+    /// 跟 Overview 的 Header 同款 Liquid Glass 风,统一观感。
+    @ViewBuilder
+    private var header: some View {
+        VStack(spacing: AppTheme.Space.s) {
+            HStack(spacing: AppTheme.Space.m) {
+                SegmentedPill(
+                    selection: $viewPeriod,
+                    items: ViewPeriod.allCases.map { ($0, $0.title) }
+                )
+
+                Menu {
+                    Picker("", selection: $sort) {
+                        ForEach(SortOption.allCases) {
+                            Label($0.title, systemImage: $0.icon).tag($0)
+                        }
+                    }
+                } label: {
+                    Image(systemName: "arrow.up.arrow.down")
+                        .font(.subheadline.weight(.bold))
+                        .foregroundStyle(AppTheme.ink)
+                        .frame(width: 40, height: 40)
+                        .glassEffect(.regular, in: Capsule())
+                }
+            }
+
+            HStack(spacing: AppTheme.Space.s) {
+                Image(systemName: "magnifyingglass").foregroundStyle(AppTheme.tertiary)
+                TextField("搜索名称、套餐或分类", text: $search)
+                    .textInputAutocapitalization(.never)
+                if !search.isEmpty {
+                    Button { search = "" } label: {
+                        Image(systemName: "xmark.circle.fill").foregroundStyle(AppTheme.tertiary)
+                    }.buttonStyle(.plain)
+                }
+            }
+            .padding(.horizontal, AppTheme.Space.m)
+            .padding(.vertical, 10)
+            .glassEffect(.regular, in: Capsule())
         }
     }
 }
