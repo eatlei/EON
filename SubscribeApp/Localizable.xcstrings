@@ -813,6 +813,36 @@
         }
       }
     },
+    "继续往下拉…" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Weiter ziehen…" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Keep pulling…" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Sigue tirando…" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Continue à tirer…" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "もっと引っ張って…" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "더 당겨봐…" } }
+      }
+    },
+    "再来一点!" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Noch ein bisschen!" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "A little more!" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "¡Un poco más!" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Encore un peu !" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "もうちょっと!" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "조금만 더!" } }
+      }
+    },
+    "松手发射 🚀" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Loslassen zum Abfeuern 🚀" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Release to launch 🚀" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Suelta para lanzar 🚀" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Lâche pour décoller 🚀" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "離して発射 🚀" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "놓으면 발사 🚀" } }
+      }
+    },
     "AI 提示词参考(可编辑后粘贴到 AI)" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -3383,33 +3413,126 @@
       }
     },
     "周期·季" : {
+      "extractionState" : "stale",
       "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Q" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Q" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "T" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "T" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "季" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "분" } }
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Q"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Q"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "T"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "T"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "季"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "분"
+          }
+        }
       }
     },
     "周期·年" : {
+      "extractionState" : "stale",
       "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "J" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Y" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "A" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "A" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "年" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "년" } }
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "J"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Y"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "年"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "년"
+          }
+        }
       }
     },
     "周期·月" : {
+      "extractionState" : "stale",
       "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "M" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "M" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "M" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "M" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "月" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "월" } }
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "M"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "M"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "M"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "M"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "月"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "월"
+          }
+        }
       }
     },
     "图标" : {
