@@ -33,6 +33,7 @@
 		7E26F5C9A2784A91CFB7CA10 /* IconPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78326829449ABBC508F536A3 /* IconPickerView.swift */; };
 		7EC121F3AC0DE9CB43EF36E1 /* SubscriptionEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A000AE363FDB1ADBCB23F5 /* SubscriptionEditorView.swift */; };
 		81EFDBC0D53F6C4CDD5DBD68 /* PaymentMethodsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18249F1BDF27876BC795427 /* PaymentMethodsView.swift */; };
+		82BB1651BE2CC4EBB841454A /* EasterEggBallsScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0953D3BBAFF01058C05C4E00 /* EasterEggBallsScene.swift */; };
 		91B4CADF7E9ABE9F1AA38641 /* AppearanceSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E326D177E55F0830811DA8 /* AppearanceSettingsView.swift */; };
 		97C0DA795C10287CF73F8C15 /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ECFF1B53B3302FE53141D65 /* AppTheme.swift */; };
 		9B59004C5BFFD6EC95BAC4A8 /* SpinningIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = F83900B936E3D2CE2D308A08 /* SpinningIcon.swift */; };
@@ -52,6 +53,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0953D3BBAFF01058C05C4E00 /* EasterEggBallsScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EasterEggBallsScene.swift; sourceTree = "<group>"; };
 		0BE86960227F0CF15441A869 /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		0CC03432ABBED16209C01940 /* DailyWelcomeConfetti.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyWelcomeConfetti.swift; sourceTree = "<group>"; };
 		10A3F11D2D1B4CFE31C07A34 /* SubscribeApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SubscribeApp.entitlements; sourceTree = "<group>"; };
@@ -139,6 +141,7 @@
 				0CC03432ABBED16209C01940 /* DailyWelcomeConfetti.swift */,
 				3BFDBF0EB309BC18707263B5 /* DashboardView.swift */,
 				6A685EDE27E39F3F2842793B /* DataSyncSettingsView.swift */,
+				0953D3BBAFF01058C05C4E00 /* EasterEggBallsScene.swift */,
 				85D7F4A455AC9C81607B7E4C /* EasterEggSettingsView.swift */,
 				78326829449ABBC508F536A3 /* IconPickerView.swift */,
 				10A7DA4B5B98C499EBB2BC70 /* LifetimeDetailView.swift */,
@@ -294,6 +297,7 @@
 				4BEB780CDCCBFB7E7CDA90E9 /* DailyWelcomeConfetti.swift in Sources */,
 				2B249D94308F325B4A5D1D10 /* DashboardView.swift in Sources */,
 				F4D243320C3F978CCD1A413C /* DataSyncSettingsView.swift in Sources */,
+				82BB1651BE2CC4EBB841454A /* EasterEggBallsScene.swift in Sources */,
 				4C64DDA41CC72F88E10CE6A4 /* EasterEggSettingsView.swift in Sources */,
 				597F4F5AA13C2526CFC82C1B /* ExchangeRateService.swift in Sources */,
 				7E26F5C9A2784A91CFB7CA10 /* IconPickerView.swift in Sources */,
