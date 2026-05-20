@@ -46,23 +46,13 @@ struct SubscriptionEditorView: View {
         NavigationStack {
             AppScreen(bottomPadding: AppTheme.Space.l) {
                 VStack(spacing: AppTheme.Space.l) {
+                    EditorHero(subscription: draft) { showIconPicker = true }
+                        // Break out of AppScreen's horizontal padding so the hero is edge-to-edge.
+                        .padding(.horizontal, -AppTheme.Space.xl)
+                        // Pull up under the navbar a touch so the hero hugs the top.
+                        .padding(.top, -AppTheme.Space.m)
+
                     Panel(title: "基础") {
-                        Button { showIconPicker = true } label: {
-                            HStack(spacing: AppTheme.Space.m) {
-                                Text("图标")
-                                    .font(.subheadline.weight(.medium))
-                                    .foregroundStyle(AppTheme.secondary)
-                                Spacer()
-                                CategoryGlyph(subscription: draft, size: 34)
-                                Image(systemName: "chevron.right")
-                                    .font(.caption.weight(.bold))
-                                    .foregroundStyle(AppTheme.tertiary)
-                            }
-                            .padding(.vertical, AppTheme.Space.s)
-                            .contentShape(Rectangle())
-                        }
-                        .buttonStyle(.plain)
-                        Hairline()
                         FieldRow("名称") {
                             TextField("如 ChatGPT", text: $draft.name)
                                 .multilineTextAlignment(.trailing)
@@ -166,6 +156,16 @@ struct SubscriptionEditorView: View {
                     didApplyDefaults = true
                 }
             }
+            // "0" 在金额框中是默认值,用户聚焦时清空,失焦后若为空则补回 "0"。
+            // 这样无需按删除就能直接输入数字替换。
+            .onChange(of: focused) { _, newFocus in
+                if newFocus == .price && priceText == "0" {
+                    priceText = ""
+                } else if newFocus != .price && priceText.isEmpty {
+                    priceText = "0"
+                    draft.price = 0
+                }
+            }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("取消") { dismiss() }.tint(AppTheme.secondary)
@@ -195,8 +195,7 @@ struct SubscriptionEditorView: View {
 
     // MARK: - Price input helpers
 
-    /// Strip everything except digits and one decimal point. Reject leading dots without a digit?
-    /// We allow "5.", ".5" etc. while typing — both parse as valid Doubles.
+    /// Strip everything except digits and one decimal point.
     private static func sanitizePriceInput(_ raw: String) -> String {
         let filtered = raw.filter { $0.isNumber || $0 == "." }
         guard let firstDot = filtered.firstIndex(of: ".") else { return filtered }
@@ -205,10 +204,10 @@ struct SubscriptionEditorView: View {
         return String(head) + "." + tail
     }
 
-    /// Display the existing price as natural input text (no formatter padding / trailing zeros).
-    /// 0 → "" so the placeholder "0" shows for new drafts.
+    /// Display the existing price as natural input text. 0 → "0" (visible
+    /// default; cleared on focus so typing replaces it).
     private static func formatPriceForInput(_ value: Double) -> String {
-        guard value != 0 else { return "" }
+        guard value != 0 else { return "0" }
         let f = NumberFormatter()
         f.numberStyle = .decimal
         f.minimumFractionDigits = 0
@@ -217,6 +216,97 @@ struct SubscriptionEditorView: View {
         return f.string(from: NSNumber(value: value)) ?? String(value)
     }
 }
+
+// MARK: - Hero header (Apple Music-style immersive icon backdrop)
+
+private struct EditorHero: View {
+    let subscription: Subscription
+    let onTapIcon: () -> Void
+
+    var body: some View {
+        ZStack {
+            background
+            // Bottom shade so the title stays legible over light gradients.
+            LinearGradient(
+                colors: [.clear, .black.opacity(0.28)],
+                startPoint: .center, endPoint: .bottom
+            )
+
+            VStack(spacing: AppTheme.Space.m) {
+                Button(action: onTapIcon) {
+                    CategoryGlyph(subscription: subscription, size: 96)
+                        .shadow(color: .black.opacity(0.35), radius: 22, y: 10)
+                        .overlay(alignment: .bottomTrailing) {
+                            // Edit affordance — hints the icon is tappable.
+                            Image(systemName: "pencil.circle.fill")
+                                .font(.title3)
+                                .symbolRenderingMode(.palette)
+                                .foregroundStyle(.white, .black.opacity(0.5))
+                                .offset(x: 4, y: 4)
+                        }
+                }
+                .buttonStyle(.plain)
+
+                if !subscription.name.isEmpty {
+                    Text(subscription.name)
+                        .font(.title3.weight(.heavy))
+                        .foregroundStyle(.white)
+                        .shadow(color: .black.opacity(0.55), radius: 6, y: 2)
+                        .lineLimit(1)
+                        .padding(.horizontal, AppTheme.Space.l)
+                        .transition(.opacity.combined(with: .scale(scale: 0.92)))
+                }
+            }
+            .padding(.vertical, AppTheme.Space.xl)
+        }
+        .frame(maxWidth: .infinity)
+        .frame(height: 240)
+        .clipped()
+        .animation(.smooth(duration: 0.4), value: subscription.icon)
+        .animation(.smooth(duration: 0.25), value: subscription.name.isEmpty)
+    }
+
+    /// Apple Music trick: when the icon is an image, scale it up and blur it
+    /// heavily — same artwork = same color palette. For tile glyphs, use the
+    /// tile's color (or category color) with a soft radial highlight.
+    @ViewBuilder
+    private var background: some View {
+        switch subscription.icon {
+        case .image(let id):
+            if let ui = IconStore.loadUIImage(id) {
+                Color.clear.overlay(
+                    Image(uiImage: ui)
+                        .resizable()
+                        .scaledToFill()
+                        .blur(radius: 50)
+                        .saturation(1.35)
+                )
+                .clipped()
+            } else {
+                tileBackground(subscription.category.color)
+            }
+        case .tile(_, let hex):
+            tileBackground(hex.map { Color(hexString: $0) } ?? subscription.category.color)
+        }
+    }
+
+    private func tileBackground(_ color: Color) -> some View {
+        ZStack {
+            color
+            LinearGradient(
+                colors: [color.opacity(0.0), color.opacity(0.35)],
+                startPoint: .top, endPoint: .bottom
+            )
+            RadialGradient(
+                colors: [.white.opacity(0.30), .clear],
+                center: UnitPoint(x: 0.28, y: 0.22),
+                startRadius: 0, endRadius: 220
+            )
+        }
+    }
+}
+
+// MARK: - Field row
 
 private struct FieldRow<Trailing: View>: View {
     let label: LocalizedStringKey
