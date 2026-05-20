@@ -5,12 +5,13 @@ struct SubscriptionsView: View {
     @State private var editing: Subscription?
     @State private var search = ""
     @State private var sort: SortOption = .renewalDate
-    @State private var cycleFilter: BillingCycle? = nil
+    /// 视图换算口径:把所有订阅的金额换算到这个周期下展示(月/季/年)。
+    /// 例:年付订阅 ¥120 在"按月"下显示 ¥10/月,在"按季"下显示 ¥30/季。
+    @State private var viewPeriod: ViewPeriod = .monthly
 
     private var rows: [Subscription] {
         let f = store.subscriptions.filter { sub in
             guard !sub.isArchived else { return false }
-            if let cf = cycleFilter, sub.billingCycle != cf { return false }
             return search.isEmpty
                 || sub.name.localizedCaseInsensitiveContains(search)
                 || sub.plan.localizedCaseInsensitiveContains(search)
@@ -47,38 +48,29 @@ struct SubscriptionsView: View {
                         .overlay(RoundedRectangle(cornerRadius: AppTheme.radius).stroke(AppTheme.hairline, lineWidth: 0.5))
 
                         Menu {
-                            Section(header: Text("筛选周期")) {
-                                Picker("", selection: $cycleFilter) {
-                                    Text("全部").tag(BillingCycle?.none)
-                                    ForEach(BillingCycle.allCases) { c in
-                                        Text(c.title).tag(Optional(c))
-                                    }
-                                }
-                            }
-                            Section(header: Text("排序")) {
-                                Picker("", selection: $sort) {
-                                    ForEach(SortOption.allCases) {
-                                        Label($0.title, systemImage: $0.icon).tag($0)
-                                    }
+                            Picker("", selection: $sort) {
+                                ForEach(SortOption.allCases) {
+                                    Label($0.title, systemImage: $0.icon).tag($0)
                                 }
                             }
                         } label: {
-                            ZStack(alignment: .topTrailing) {
-                                Image(systemName: "line.3.horizontal.decrease.circle")
-                                    .font(.subheadline.weight(.bold)).foregroundStyle(AppTheme.ink)
-                                    .frame(width: 44, height: 44)
-                                    .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: AppTheme.radius))
-                                    .overlay(RoundedRectangle(cornerRadius: AppTheme.radius).stroke(AppTheme.hairline, lineWidth: 0.5))
-                                if cycleFilter != nil {
-                                    Circle()
-                                        .fill(AppTheme.accent)
-                                        .frame(width: 8, height: 8)
-                                        .offset(x: -6, y: 6)
-                                }
-                            }
+                            Image(systemName: "arrow.up.arrow.down")
+                                .font(.subheadline.weight(.bold)).foregroundStyle(AppTheme.ink)
+                                .frame(width: 44, height: 44)
+                                .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: AppTheme.radius))
+                                .overlay(RoundedRectangle(cornerRadius: AppTheme.radius).stroke(AppTheme.hairline, lineWidth: 0.5))
                         }
                     }
                     .reveal(0)
+
+                    // 月/季/年 三档切换 — 整页所有金额按所选口径换算后再展示
+                    Picker("", selection: $viewPeriod) {
+                        ForEach(ViewPeriod.allCases) { p in
+                            Text(p.title).tag(p)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    .reveal(1)
 
                     if rows.isEmpty {
                         VStack(spacing: AppTheme.Space.m) {
@@ -86,18 +78,19 @@ struct SubscriptionsView: View {
                                 .foregroundStyle(AppTheme.tertiary)
                             Text(search.isEmpty ? "还没有订阅" : "没有匹配的订阅")
                                 .font(.headline).foregroundStyle(AppTheme.ink)
-                        }.frame(maxWidth: .infinity).padding(.top, 100).reveal(1)
+                        }.frame(maxWidth: .infinity).padding(.top, 100).reveal(2)
                     } else {
                         LazyVStack(spacing: AppTheme.Space.m) {
                             ForEach(Array(rows.enumerated()), id: \.element.id) { i, sub in
                                 Button { editing = sub } label: {
                                     Row(
                                         subscription: sub,
+                                        viewPeriod: viewPeriod,
                                         onArchive: { store.archive(ids: [sub.id]) },
                                         onDelete: { store.delete(ids: [sub.id]) }
                                     )
                                 }
-                                .buttonStyle(.plain).reveal(i + 1)
+                                .buttonStyle(.plain).reveal(i + 2)
                             }
                         }
                     }
@@ -126,9 +119,39 @@ private enum SortOption: String, CaseIterable, Identifiable {
     }
 }
 
+/// 列表换算口径(把任意周期的订阅都摊到指定时间单位下展示)。
+enum ViewPeriod: String, CaseIterable, Identifiable, Hashable {
+    case monthly, quarterly, yearly
+    var id: String { rawValue }
+    var title: String {
+        switch self {
+        case .monthly:   String(localized: "每月")
+        case .quarterly: String(localized: "每季度")
+        case .yearly:    String(localized: "每年")
+        }
+    }
+    /// 月费乘上这个系数 = 该周期对应金额。
+    var monthlyMultiplier: Double {
+        switch self {
+        case .monthly: 1
+        case .quarterly: 3
+        case .yearly: 12
+        }
+    }
+    /// 金额后的紧凑后缀。
+    var suffix: String {
+        switch self {
+        case .monthly:   String(localized: "/月")
+        case .quarterly: String(localized: "/季")
+        case .yearly:    String(localized: "/年")
+        }
+    }
+}
+
 private struct Row: View {
     @EnvironmentObject private var store: SubscriptionStore
     let subscription: Subscription
+    let viewPeriod: ViewPeriod
     let onArchive: () -> Void
     let onDelete: () -> Void
 
@@ -143,6 +166,20 @@ private struct Row: View {
             if let ui = IconStore.averageColor(id) { return Color(uiColor: ui) }
             return subscription.category.color
         }
+    }
+
+    /// 在当前 viewPeriod 口径下,该订阅折算到的金额(已换算到 baseCurrency)。
+    private var displayedAmount: Double {
+        let monthly = subscription.monthlyCost(in: store.baseCurrency, converter: store.converter)
+        return monthly * viewPeriod.monthlyMultiplier
+    }
+
+    /// 副标题:精简显示。优先「套餐 · 分类」;套餐为空时只展示分类。
+    /// 周期不再展示在这里,因为整页已经统一了换算口径(/月 /季 /年)。
+    private var subtitle: String {
+        let plan = subscription.plan.trimmingCharacters(in: .whitespaces)
+        if plan.isEmpty { return subscription.category.title }
+        return "\(plan) · \(subscription.category.title)"
     }
 
     var body: some View {
@@ -165,27 +202,21 @@ private struct Row: View {
                             .foregroundStyle(colored ? Color.white : AppTheme.accent)
                     }
                 }
-                Text("\(subscription.plan) · \(subscription.category.title) · \(subscription.billingCycle.title)")
+                Text(subtitle)
                     .font(.caption)
                     .foregroundStyle(colored ? Color.white.opacity(0.78) : AppTheme.secondary)
                     .lineLimit(1)
             }
             Spacer(minLength: AppTheme.Space.s)
             VStack(alignment: .trailing, spacing: 4) {
-                // 显示**本周期**实际金额(按用户当前 baseCurrency 换算),配上 /月 /年 /季
-                // 这种短后缀,一眼就能区分订阅是月付/年付/季付/周付/自定义。
                 HStack(alignment: .firstTextBaseline, spacing: 1) {
-                    Text(store.converter.format(
-                        store.converter.convert(subscription.price,
-                                                from: subscription.currency,
-                                                to: store.baseCurrency),
-                        currency: store.baseCurrency))
+                    Text(store.converter.format(displayedAmount, currency: store.baseCurrency))
                         .font(.system(size: 19, weight: .bold, design: .rounded))
                         .foregroundStyle(colored ? Color.white : AppTheme.ink)
                         .lineLimit(1)
                         .minimumScaleFactor(0.7)
                         .shadow(color: colored ? .black.opacity(0.30) : .clear, radius: 2, x: 0, y: 1)
-                    Text(subscription.billingCycle.shortSuffix(customDays: subscription.customCycleDays))
+                    Text(viewPeriod.suffix)
                         .font(.caption2.weight(.semibold))
                         .foregroundStyle(colored ? Color.white.opacity(0.72) : AppTheme.secondary)
                 }
@@ -221,16 +252,11 @@ private struct Row: View {
     private var coloredCardBackground: some View {
         if colored {
             ZStack {
-                // 1. 深色底(不分浅色/深色模式,卡片本身就是"暗色玻璃"风,跟 Apple 一致)
                 Color(red: 0.10, green: 0.11, blue: 0.14)
-
-                // 2. 顶部极淡 sheen + 底部一抹更深的阴影,给一点点立体感
                 LinearGradient(
                     colors: [.white.opacity(0.04), .clear, .black.opacity(0.18)],
                     startPoint: .top, endPoint: .bottom
                 )
-
-                // 3. 关键:左侧的彩色径向光晕(icon 色),从图标位置发散,右半边几乎消失
                 RadialGradient(
                     stops: [
                         .init(color: cardColor.opacity(0.95), location: 0.0),
@@ -242,8 +268,6 @@ private struct Row: View {
                     startRadius: 0,
                     endRadius: 240
                 )
-
-                // 4. 顶部一道更细微的反光,让卡片像有玻璃表面
                 LinearGradient(
                     colors: [.white.opacity(0.06), .clear],
                     startPoint: .top, endPoint: .center
@@ -255,7 +279,6 @@ private struct Row: View {
         }
     }
 
-    /// 卡片边:彩色版用极淡的白色描边(玻璃感),素色版保持原 hairline。
     @ViewBuilder
     private var coloredCardBorder: some View {
         if colored {
