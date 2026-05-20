@@ -126,10 +126,13 @@ private struct Row: View {
     var body: some View {
         HStack(spacing: AppTheme.Space.m) {
             CategoryGlyph(subscription: subscription, size: 44)
+                .shadow(color: colored ? .black.opacity(0.25) : .clear,
+                        radius: 6, x: 0, y: 3)
             VStack(alignment: .leading, spacing: 3) {
                 HStack(spacing: 6) {
                     Text(subscription.name).font(.subheadline.weight(.semibold))
                         .foregroundStyle(colored ? Color.white : AppTheme.ink)
+                        .shadow(color: colored ? .black.opacity(0.30) : .clear, radius: 2, x: 0, y: 1)
                     if subscription.status == .trial {
                         Text("试用").font(.caption2.weight(.bold))
                             .padding(.horizontal, 6).padding(.vertical, 2)
@@ -142,7 +145,7 @@ private struct Row: View {
                 }
                 Text("\(subscription.plan) · \(subscription.category.title) · \(subscription.billingCycle.title)")
                     .font(.caption)
-                    .foregroundStyle(colored ? Color.white.opacity(0.75) : AppTheme.secondary)
+                    .foregroundStyle(colored ? Color.white.opacity(0.78) : AppTheme.secondary)
                     .lineLimit(1)
             }
             Spacer(minLength: AppTheme.Space.s)
@@ -152,9 +155,10 @@ private struct Row: View {
                     currency: store.baseCurrency))
                     .font(.amountSmall())
                     .foregroundStyle(colored ? Color.white : AppTheme.ink)
+                    .shadow(color: colored ? .black.opacity(0.30) : .clear, radius: 2, x: 0, y: 1)
                 Text(subscription.nextBillingDate.formatted(.dateTime.month().day()))
                     .font(.caption2)
-                    .foregroundStyle(colored ? Color.white.opacity(0.7) : AppTheme.tertiary)
+                    .foregroundStyle(colored ? Color.white.opacity(0.72) : AppTheme.tertiary)
             }
             Menu {
                 Button { onArchive() } label: {
@@ -172,29 +176,56 @@ private struct Row: View {
             }
         }
         .padding(AppTheme.Space.l)
-        .background(
-            Group {
-                if colored {
-                    // 底色 + 35% 黑色压暗,让 CategoryGlyph(图标本色)
-                    // 在卡片上仍能凸显;同时保证白色文字对比稳定。
-                    ZStack {
-                        cardColor
-                        Color.black.opacity(0.35)
-                    }
-                } else {
-                    AppTheme.surface
-                }
+        .background(coloredCardBackground)
+        .overlay(coloredCardBorder)
+        .opacity(subscription.isActive ? 1 : 0.5)
+    }
+
+    /// 卡片底:基础色 + 顶亮底暗的线性渐变 + 左上角径向高光,做出"打光的塑料/玻璃"质感。
+    @ViewBuilder
+    private var coloredCardBackground: some View {
+        if colored {
+            ZStack {
+                cardColor
+                // 顶部柔光 → 中段透明 → 底部加深,营造表面"反光"感
+                LinearGradient(
+                    stops: [
+                        .init(color: .white.opacity(0.20), location: 0.0),
+                        .init(color: .white.opacity(0.04), location: 0.35),
+                        .init(color: .black.opacity(0.04), location: 0.65),
+                        .init(color: .black.opacity(0.28), location: 1.0),
+                    ],
+                    startPoint: .top, endPoint: .bottom
+                )
+                // 左上角软高光(像有一束光照过来)
+                RadialGradient(
+                    colors: [.white.opacity(0.22), .clear],
+                    center: UnitPoint(x: 0.22, y: 0.18),
+                    startRadius: 0, endRadius: 170
+                )
             }
             .clipShape(RoundedRectangle(cornerRadius: AppTheme.radius))
-        )
-        .overlay(
+        } else {
+            AppTheme.surface.clipShape(RoundedRectangle(cornerRadius: AppTheme.radius))
+        }
+    }
+
+    /// 卡片边:彩色版用"上亮下淡"的描边渐变,模拟玻璃反射;素色版保持原 hairline。
+    @ViewBuilder
+    private var coloredCardBorder: some View {
+        if colored {
             RoundedRectangle(cornerRadius: AppTheme.radius)
                 .stroke(
-                    colored ? Color.white.opacity(0.10) : AppTheme.hairline,
-                    lineWidth: 0.5
+                    LinearGradient(
+                        colors: [.white.opacity(0.40), .white.opacity(0.08), .clear],
+                        startPoint: .top, endPoint: .bottom
+                    ),
+                    lineWidth: 0.8
                 )
-        )
-        .opacity(subscription.isActive ? 1 : 0.5)
+        } else {
+            RoundedRectangle(cornerRadius: AppTheme.radius)
+                .stroke(AppTheme.hairline, lineWidth: 0.5)
+        }
     }
 }
 
