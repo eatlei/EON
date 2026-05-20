@@ -181,27 +181,39 @@ private struct Row: View {
         .opacity(subscription.isActive ? 1 : 0.5)
     }
 
-    /// 卡片底:基础色 + 顶亮底暗的线性渐变 + 左上角径向高光,做出"打光的塑料/玻璃"质感。
+    /// 参考 iOS 26 Apple Arcade / Library 卡片风格:深色底 + 左侧从图标色发散的径向光晕,
+    /// 越往右越暗,直到接近纯深色。色彩只作"个性提示"而不是 dominant fill,既有性格
+    /// 又克制高级。
     @ViewBuilder
     private var coloredCardBackground: some View {
         if colored {
             ZStack {
-                cardColor
-                // 顶部柔光 → 中段透明 → 底部加深,营造表面"反光"感
+                // 1. 深色底(不分浅色/深色模式,卡片本身就是"暗色玻璃"风,跟 Apple 一致)
+                Color(red: 0.10, green: 0.11, blue: 0.14)
+
+                // 2. 顶部极淡 sheen + 底部一抹更深的阴影,给一点点立体感
                 LinearGradient(
-                    stops: [
-                        .init(color: .white.opacity(0.20), location: 0.0),
-                        .init(color: .white.opacity(0.04), location: 0.35),
-                        .init(color: .black.opacity(0.04), location: 0.65),
-                        .init(color: .black.opacity(0.28), location: 1.0),
-                    ],
+                    colors: [.white.opacity(0.04), .clear, .black.opacity(0.18)],
                     startPoint: .top, endPoint: .bottom
                 )
-                // 左上角软高光(像有一束光照过来)
+
+                // 3. 关键:左侧的彩色径向光晕(icon 色),从图标位置发散,右半边几乎消失
                 RadialGradient(
-                    colors: [.white.opacity(0.22), .clear],
-                    center: UnitPoint(x: 0.22, y: 0.18),
-                    startRadius: 0, endRadius: 170
+                    stops: [
+                        .init(color: cardColor.opacity(0.95), location: 0.0),
+                        .init(color: cardColor.opacity(0.55), location: 0.35),
+                        .init(color: cardColor.opacity(0.18), location: 0.7),
+                        .init(color: .clear,                  location: 1.0),
+                    ],
+                    center: UnitPoint(x: 0.13, y: 0.50),
+                    startRadius: 0,
+                    endRadius: 240
+                )
+
+                // 4. 顶部一道更细微的反光,让卡片像有玻璃表面
+                LinearGradient(
+                    colors: [.white.opacity(0.06), .clear],
+                    startPoint: .top, endPoint: .center
                 )
             }
             .clipShape(RoundedRectangle(cornerRadius: AppTheme.radius))
@@ -210,17 +222,17 @@ private struct Row: View {
         }
     }
 
-    /// 卡片边:彩色版用"上亮下淡"的描边渐变,模拟玻璃反射;素色版保持原 hairline。
+    /// 卡片边:彩色版用极淡的白色描边(玻璃感),素色版保持原 hairline。
     @ViewBuilder
     private var coloredCardBorder: some View {
         if colored {
             RoundedRectangle(cornerRadius: AppTheme.radius)
                 .stroke(
                     LinearGradient(
-                        colors: [.white.opacity(0.40), .white.opacity(0.08), .clear],
+                        colors: [.white.opacity(0.18), .white.opacity(0.04), .clear],
                         startPoint: .top, endPoint: .bottom
                     ),
-                    lineWidth: 0.8
+                    lineWidth: 0.6
                 )
         } else {
             RoundedRectangle(cornerRadius: AppTheme.radius)
