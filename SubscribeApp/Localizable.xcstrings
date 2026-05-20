@@ -11542,6 +11542,39 @@
         }
       }
     },
+    "共 %lld 笔订阅 · %@" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "%lld Abos · %@" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "%lld subscriptions · %@" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "%lld suscripciones · %@" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "%lld abonnements · %@" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "%lld 件のサブスク · %@" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "구독 %lld개 · %@" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "共 %lld 筆訂閱 · %@" } }
+      }
+    },
+    "当前币种" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Aktuelle Währung" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Current currency" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Moneda actual" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Devise actuelle" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "現在の通貨" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "현재 통화" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "當前幣種" } }
+      }
+    },
+    "切换后,所有订阅金额会按最新汇率换算到这个币种展示。" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Alle Abo-Beträge werden zum aktuellen Kurs in diese Währung umgerechnet angezeigt." } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "All subscription amounts will be displayed in this currency, converted at the latest rate." } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Los importes de las suscripciones se mostrarán en esta divisa al tipo de cambio más reciente." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Tous les montants d’abonnement seront affichés dans cette devise au taux le plus récent." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "切り替え後、全サブスクの金額が最新レートでこの通貨に換算されて表示されます。" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "변경 후 모든 구독 금액이 최신 환율로 이 통화에 환산되어 표시됩니다." } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "切換後,所有訂閱金額會按最新匯率換算到這個幣種展示。" } }
+      }
+    },
     "汇率已更新" : {
       "extractionState" : "stale",
       "localizations" : {

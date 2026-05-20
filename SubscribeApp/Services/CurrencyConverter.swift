@@ -31,4 +31,15 @@ struct CurrencyConverter {
         formatter.maximumFractionDigits = currency == .jpy ? 0 : 2
         return formatter.string(from: NSNumber(value: amount)) ?? "\(currency.symbol)\(String(format: "%.2f", amount))"
     }
+
+    /// 只输出数字部分(不带货币符号),供 Hero 这种"要把符号单独画小一号"的
+    /// 场景。日元等没有小数的币种保留 0 位。
+    func formatAmountOnly(_ amount: Double, currency: CurrencyCode) -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.maximumFractionDigits = currency == .jpy ? 0 : 2
+        formatter.minimumFractionDigits = currency == .jpy ? 0 : 2
+        formatter.usesGroupingSeparator = true
+        return formatter.string(from: NSNumber(value: amount)) ?? String(format: "%.2f", amount)
+    }
 }

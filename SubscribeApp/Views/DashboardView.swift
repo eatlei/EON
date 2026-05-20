@@ -120,6 +120,7 @@ struct DashboardView: View {
 private struct DashboardHeader: View {
     @EnvironmentObject private var store: SubscriptionStore
     @Binding var period: SpendPeriod
+    @State private var showCurrencyPicker = false
 
     /// SegmentedPill 在切换时是用 withAnimation 包的赋值;但 period 这个全局
     /// state 一变,Hero/Stats/Lifetime 等所有跟 period 相关的子视图都会重算,
@@ -148,16 +149,12 @@ private struct DashboardHeader: View {
 
             Spacer()
 
-            Menu {
-                Picker("", selection: $store.baseCurrency) {
-                    ForEach(CurrencyCode.allCases.sorted { $0.rawValue < $1.rawValue }) { c in
-                        Text("\(c.rawValue) · \(c.title)").tag(c)
-                    }
-                }
+            // 货币按钮 —— 点击弹出 CurrencyPickerSheet,sheet 出现时会自动滚动
+            // 到当前选中币种,而不是吊在 USD/AUD 这种字母靠前的位置让用户翻找。
+            Button {
+                showCurrencyPicker = true
             } label: {
                 HStack(spacing: 6) {
-                    // 之前是地球 icon,"global currency" 的暗示太弱;换成 dollarsign.circle
-                    // 是国际通用的"货币 / 钱币"视觉符号,任何地区用户一眼就懂。
                     Image(systemName: "dollarsign.circle.fill").font(.subheadline.weight(.bold))
                     Text(store.baseCurrency.rawValue).font(.subheadline.weight(.bold))
                 }
@@ -166,6 +163,13 @@ private struct DashboardHeader: View {
                 .padding(.vertical, 10)
                 .glassEffect(.regular, in: Capsule())
             }
+            .buttonStyle(.plain)
+            .sheet(isPresented: $showCurrencyPicker) {
+                CurrencyPickerSheet()
+                    .environmentObject(store)
+                    .presentationDetents([.medium, .large])
+                    .presentationDragIndicator(.visible)
+            }
         }
     }
 }
@@ -173,14 +177,29 @@ private struct DashboardHeader: View {
 private struct HeroTotal: View {
     @EnvironmentObject private var store: SubscriptionStore
     let period: SpendPeriod
+
+    private var amount: Double { store.fullDueAmount(in: period) }
+    private var amountText: String {
+        store.converter.formatAmountOnly(amount, currency: store.baseCurrency)
+    }
+
     var body: some View {
         VStack(alignment: .leading, spacing: AppTheme.Space.s) {
             SectionLabel(text: heroLabel)
-            Text(store.converter.format(store.fullDueAmount(in: period), currency: store.baseCurrency))
-                .font(.amountHero())
-                .foregroundStyle(AppTheme.ink)
-                .lineLimit(1).minimumScaleFactor(0.5)
-                .contentTransition(.numericText())
+            // 货币符号单独画一份,小一号、baseline 跟数字底齐 —— Apple Wallet
+            // / Stocks app 都是这种"小符号 + 大数字"的处理,视觉上数字才是主角。
+            HStack(alignment: .firstTextBaseline, spacing: 4) {
+                Text(store.baseCurrency.symbol)
+                    .font(.system(size: 24, weight: .bold, design: .rounded))
+                    .foregroundStyle(AppTheme.secondary)
+                Text(amountText)
+                    .font(.amountHero())
+                    .foregroundStyle(AppTheme.ink)
+                    .lineLimit(1).minimumScaleFactor(0.5)
+                    .contentTransition(.numericText())
+            }
+            // "共 N 笔订阅 · 文案":先把数量说清楚,后面挂一段根据数量变化的彩蛋
+            // 小尾巴,让 Hero 既有信息量又有情绪。
             Text(subtitle)
                 .font(.subheadline.weight(.medium))
                 .foregroundStyle(AppTheme.secondary)
@@ -192,21 +211,21 @@ private struct HeroTotal: View {
         // 出场也会被一起拉伸。.contentTransition(.numericText()) 已经在 Text
         // 上单独配了数字滚动效果,够用了。
     }
-    /// 一段根据订阅数量变化的彩蛋小尾巴 —— 替代原来的"共 N 笔 · 下一笔 X" 信息,
-    /// 让 Hero 多一点情绪、少一点冰冷。具体扣费日期已经在"即将扣费"面板里展示了,
-    /// 这里不重复。文案随订阅总数走,从"刚起步"到"该砍砍了"几个梯度。
+
+    /// 副标题 = "共 N 笔订阅 · <文案>"。文案随订阅总数走,从"刚起步"到
+    /// "该砍砍了"几个梯度。
     private var subtitle: String {
         let count = store.activeSubscriptions.count
-        let key: String
+        let flavor: String
         switch count {
-        case ...1:  key = "只养了一只小可爱"
-        case 2...3: key = "刚刚好的精致生活"
-        case 4...6: key = "已经是稳定营收人 💸"
-        case 7...10: key = "你这是公司还是个人?"
-        case 11...15: key = "再不砍就要破产了…"
-        default: key = "钱包在哭 😭"
+        case ...1:  flavor = String(localized: "只养了一只小可爱")
+        case 2...3: flavor = String(localized: "刚刚好的精致生活")
+        case 4...6: flavor = String(localized: "已经是稳定营收人 💸")
+        case 7...10: flavor = String(localized: "你这是公司还是个人?")
+        case 11...15: flavor = String(localized: "再不砍就要破产了…")
+        default: flavor = String(localized: "钱包在哭 😭")
         }
-        return String(localized: String.LocalizationValue(key))
+        return String(localized: "共 \(count) 笔订阅 · \(flavor)")
     }
 
     private var heroLabel: LocalizedStringKey {
