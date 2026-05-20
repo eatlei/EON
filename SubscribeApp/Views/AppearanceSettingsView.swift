@@ -5,7 +5,9 @@ struct AppearanceSettingsView: View {
     @EnvironmentObject private var store: SubscriptionStore
     @Environment(\.openURL) private var openURL
     @State private var showLanguageDialog = false
-    @State private var showLanguageAppliedAlert = false
+    /// 切语言后的"正在重启"全屏 HUD —— Bundle 的本地化表只有进程冷启动才会重读,
+    /// 所以这里走 exit(0) 真重启:HUD 给用户 0.6s 视觉缓冲再退出,避免"啪一下"的突兀感。
+    @State private var restarting = false
 
     /// 当前 App 实际使用的语言代码(取自 Bundle 或 AppleLanguages 用户偏好)。
     private var currentLanguageCode: String {
@@ -115,17 +117,37 @@ struct AppearanceSettingsView: View {
             }
             Button("取消", role: .cancel) { }
         }
-        .alert("语言已更新", isPresented: $showLanguageAppliedAlert) {
-            Button("好的", role: .cancel) { }
-        } message: {
-            Text("重新打开 EON 后生效。")
+        // 重启 HUD —— 盖满全屏,把当前界面遮住,避免用户在 exit(0) 前
+        // 一瞬间看到旧语言的 UI 闪一下。
+        .overlay {
+            if restarting {
+                ZStack {
+                    Color.black.opacity(0.45).ignoresSafeArea()
+                    VStack(spacing: 14) {
+                        ProgressView().tint(.white).scaleEffect(1.2)
+                        Text("正在重启 EON…")
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(.white)
+                    }
+                    .padding(.horizontal, 28).padding(.vertical, 22)
+                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
+                }
+                .transition(.opacity)
+            }
         }
+        .animation(.easeOut(duration: 0.2), value: restarting)
     }
 
     private func applyLanguage(_ code: String) {
         UserDefaults.standard.set([code], forKey: "AppleLanguages")
         UserDefaults.standard.synchronize()
-        showLanguageAppliedAlert = true
+        // 立刻把"正在重启"HUD 推上来,然后短暂等 0.6s 让动画 + ProgressView 跑一下,
+        // 再调 exit(0) 真正结束进程。下次用户点开图标,Bundle 会按新的 AppleLanguages
+        // 重读本地化表,整个 App 就是新语言了。
+        restarting = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+            exit(0)
+        }
     }
 
     /// EON 当前支持的展示语言。需要跟 project.yml 的 CFBundleLocalizations 保持一致。

@@ -2204,12 +2204,42 @@
     },
     "偏好" : {
       "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Präferenzen" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Preferences" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Preferencias" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Préférences" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "環境設定" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "환경설정" } }
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Präferenzen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preferences"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preferencias"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Préférences"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "環境設定"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "환경설정"
+          }
+        }
       }
     },
     "全年扣费分布" : {
@@ -3068,12 +3098,42 @@
     },
     "卡片" : {
       "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Karten" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Cards" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Tarjetas" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Cartes" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "カード" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "카드" } }
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Karten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cards"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tarjetas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cartes"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "カード"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "카드"
+          }
+        }
       }
     },
     "印尼盾" : {
@@ -3934,12 +3994,42 @@
     },
     "外观与语言" : {
       "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Darstellung & Sprache" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Appearance & Language" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Apariencia e idioma" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Apparence et langue" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "外観と言語" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "모양 및 언어" } }
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Darstellung & Sprache"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Appearance & Language"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apariencia e idioma"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apparence et langue"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "外観と言語"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "모양 및 언어"
+          }
+        }
       }
     },
     "多" : {
@@ -7412,12 +7502,42 @@
     },
     "显示" : {
       "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Anzeige" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Display" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Pantalla" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Affichage" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "表示" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "표시" } }
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anzeige"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Display"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pantalla"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Affichage"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "表示"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "표시"
+          }
+        }
       }
     },
     "暂无即将扣费" : {
@@ -10152,22 +10272,42 @@
     },
     "给 EON 打个分" : {
       "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "EON bewerten" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Rate EON" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Valorar EON" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Évaluer EON" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "EON を評価" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "EON 평가하기" } }
-      }
-    },
-    "颜色已被使用" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Farbe bereits verwendet" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Color already used" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Color ya usado" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Couleur déjà utilisée" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "この色は使用中" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "이미 사용 중인 색상" } }
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "EON bewerten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rate EON"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Valorar EON"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Évaluer EON"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "EON を評価"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "EON 평가하기"
+          }
+        }
       }
     },
     "继续往下拉…" : {
@@ -12529,6 +12669,57 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "색상"
+          }
+        }
+      }
+    },
+    "正在重启 EON…" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "EON wird neu gestartet…" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Restarting EON…" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Reiniciando EON…" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Redémarrage d’EON…" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "EON を再起動中…" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "EON 재시작 중…" } }
+      }
+    },
+    "颜色已被使用" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Farbe bereits verwendet"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Color already used"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Color ya usado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couleur déjà utilisée"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "この色は使用中"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이미 사용 중인 색상"
           }
         }
       }

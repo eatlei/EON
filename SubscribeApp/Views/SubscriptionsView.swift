@@ -88,13 +88,17 @@ struct SubscriptionsView: View {
                 .padding(.top, AppTheme.Space.m)
                 .padding(.bottom, AppTheme.dockClearance)
             }
-            // iOS 18+ 原生的"看到 ScrollView 的几何变化"接口。比之前用 PreferenceKey
-            // 测自定义 sensor 的 minY 靠谱得多 —— contentOffset.y 在自然 top 时就是 0,
-            // 用户下拉超出 top 时为负数,负多少 = 拉了多少 pt。不受 safeAreaInset 干扰。
+            // iOS 18+ 原生的 ScrollGeometry 监听 —— 把"用户拉过 natural top 多少
+            // pt"算出来。重点是要减掉 `contentInsets.top`:UIScrollView 在自然 top 时
+            // contentOffset.y = -contentInsets.top(不是 0)。之前没减,导致页面一加
+            // 载就被判定成"已经拉了 50pt",气泡直接显示,触觉也乱响。
+            //
+            //   natural top: contentOffset.y == -contentInsets.top  → pull = 0
+            //   下拉 30pt :  contentOffset.y == -contentInsets.top-30 → pull = 30
+            //   向上滚 100pt: contentOffset.y > -contentInsets.top      → pull < 0 → 钳到 0
             .onScrollGeometryChange(for: CGFloat.self) { geo in
-                geo.contentOffset.y
-            } action: { _, newValue in
-                let pullAmount = max(0, -newValue)
+                max(0, -(geo.contentOffset.y + geo.contentInsets.top))
+            } action: { _, pullAmount in
                 handlePullOffset(pullAmount)
             }
             .scrollDismissesKeyboard(.interactively)
