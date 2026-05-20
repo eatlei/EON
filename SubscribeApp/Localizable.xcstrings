@@ -3774,6 +3774,53 @@
         }
       }
     },
+    "再随机一次" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erneut mischen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shuffle again"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mezclar otra vez"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Remélanger"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "もう一度シャッフル"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "다시 섞기"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "再隨機一次"
+          }
+        }
+      }
+    },
     "最贵的订阅" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -8772,6 +8819,53 @@
         }
       }
     },
+    "按添加时间" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nach Hinzugefügt-Datum"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "By added date"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Por fecha de añadido"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Par date d’ajout"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "追加日順"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "추가한 날짜순"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "按添加時間"
+          }
+        }
+      }
+    },
     "按费用" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -8809,6 +8903,100 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "금액순"
+          }
+        }
+      }
+    },
+    "按费用 · 低 → 高" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kosten · niedrig → hoch"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "By cost · low → high"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Por coste · bajo → alto"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Coût · bas → élevé"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "費用 · 低 → 高"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "비용 · 낮음 → 높음"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "按費用 · 低 → 高"
+          }
+        }
+      }
+    },
+    "按费用 · 高 → 低" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kosten · hoch → niedrig"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "By cost · high → low"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Por coste · alto → bajo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Coût · élevé → bas"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "費用 · 高 → 低"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "비용 · 높음 → 낮음"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "按費用 · 高 → 低"
           }
         }
       }
@@ -11826,59 +12014,26 @@
         }
       }
     },
-    "按添加时间" : {
+    "暂无分类支出" : {
       "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Nach Hinzugefügt-Datum" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "By added date" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Por fecha de añadido" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Par date d’ajout" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "追加日順" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "추가한 날짜순" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "按添加時間" } }
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Noch keine Kategorie-Ausgaben" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "No category spending yet" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Aún no hay gastos por categoría" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Aucune dépense par catégorie" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "カテゴリー支出なし" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "카테고리 지출 없음" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "暫無分類支出" } }
       }
     },
-    "按费用 · 高 → 低" : {
+    "%lld 个订阅 · 月均" : {
       "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Kosten · hoch → niedrig" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "By cost · high → low" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Por coste · alto → bajo" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Coût · élevé → bas" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "費用 · 高 → 低" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "비용 · 높음 → 낮음" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "按費用 · 高 → 低" } }
-      }
-    },
-    "按费用 · 低 → 高" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Kosten · niedrig → hoch" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "By cost · low → high" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Por coste · bajo → alto" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Coût · bas → élevé" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "費用 · 低 → 高" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "비용 · 낮음 → 높음" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "按費用 · 低 → 高" } }
-      }
-    },
-    "随机" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Zufällig" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Random" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Aleatorio" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Aléatoire" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "ランダム" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "랜덤" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "隨機" } }
-      }
-    },
-    "再随机一次" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Erneut mischen" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Shuffle again" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Mezclar otra vez" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Remélanger" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "もう一度シャッフル" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "다시 섞기" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "再隨機一次" } }
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "%lld Abos · monatlich" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "%lld subs · per month" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "%lld suscripciones · mensual" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "%lld abos · mensuel" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "%lld 件 · 月割り" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "구독 %lld개 · 월 평균" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "%lld 個訂閱 · 月均" } }
       }
     },
     "汇率已更新" : {
@@ -16930,6 +17085,53 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "隨心意"
+          }
+        }
+      }
+    },
+    "随机" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zufällig"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Random"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aleatorio"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aléatoire"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ランダム"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "랜덤"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "隨機"
           }
         }
       }

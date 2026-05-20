@@ -322,30 +322,51 @@ private struct UpcomingPanel: View {
 private struct CategoryPanel: View {
     @EnvironmentObject private var store: SubscriptionStore
     var body: some View {
-        Panel(title: "支出分类") {
-            HStack(spacing: AppTheme.Space.xl) {
-                Chart(store.categorySpend) { item in
-                    SectorMark(angle: .value("金额", item.amount),
-                               innerRadius: .ratio(0.68), angularInset: 1.5)
-                        .foregroundStyle(item.color)
+        // 整个面板包成 NavigationLink → 跳到 CategoryDetailView。手动画了一个
+        // 标题行(原本是 Panel(title:) 自带的标题区),为了在右侧能塞一个
+        // chevron 提示用户"这里可以点进去"。
+        NavigationLink {
+            CategoryDetailView()
+        } label: {
+            VStack(alignment: .leading, spacing: AppTheme.Space.m) {
+                HStack {
+                    Text("支出分类")
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(AppTheme.ink)
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                        .font(.caption.weight(.bold))
+                        .foregroundStyle(AppTheme.tertiary)
                 }
-                .frame(width: 116, height: 116)
+                HStack(spacing: AppTheme.Space.xl) {
+                    Chart(store.categorySpend) { item in
+                        SectorMark(angle: .value("金额", item.amount),
+                                   innerRadius: .ratio(0.68), angularInset: 1.5)
+                            .foregroundStyle(item.color)
+                    }
+                    .frame(width: 116, height: 116)
 
-                VStack(spacing: AppTheme.Space.s) {
-                    ForEach(store.categorySpend.prefix(5)) { item in
-                        HStack(spacing: AppTheme.Space.s) {
-                            Circle().fill(item.color).frame(width: 7, height: 7)
-                            Text(item.title)
-                                .font(.caption.weight(.semibold)).foregroundStyle(AppTheme.ink)
-                            Spacer()
-                            Text("\(Int((item.share * 100).rounded()))%")
-                                .font(.caption.weight(.bold).monospacedDigit())
-                                .foregroundStyle(AppTheme.secondary)
+                    VStack(spacing: AppTheme.Space.s) {
+                        ForEach(store.categorySpend.prefix(5)) { item in
+                            HStack(spacing: AppTheme.Space.s) {
+                                Circle().fill(item.color).frame(width: 7, height: 7)
+                                Text(item.title)
+                                    .font(.caption.weight(.semibold)).foregroundStyle(AppTheme.ink)
+                                Spacer()
+                                Text("\(Int((item.share * 100).rounded()))%")
+                                    .font(.caption.weight(.bold).monospacedDigit())
+                                    .foregroundStyle(AppTheme.secondary)
+                            }
                         }
                     }
                 }
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(AppTheme.Space.l)
+            .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: AppTheme.radius))
+            .glassBorder()
         }
+        .buttonStyle(.plain)
     }
 }
 

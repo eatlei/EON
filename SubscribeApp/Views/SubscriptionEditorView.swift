@@ -245,19 +245,13 @@ struct SubscriptionEditorView: View {
                 }
             }
             .toolbar {
-                // 取消:ghost 按钮 —— 半透明黑色胶囊垫底 + 白字。在任何 tile 色上
-                // 都能读出,但视觉上不抢"保存"的主操作位。
+                // iOS 26 会自动给 ToolbarItem 包一层 Liquid Glass 胶囊。
+                // 不要再手动 .background(... in: Capsule()) —— 那是在系统胶囊
+                // 内部又叠一层底色,看起来就是两层嵌套的奇怪样子。
+                // 这里只给纯 Button + 文本 + 字体,系统自己渲染就漂亮。
                 ToolbarItem(placement: .cancellationAction) {
-                    Button { dismiss() } label: {
-                        Text("取消")
-                            .font(.subheadline.weight(.semibold))
-                            .foregroundStyle(.white)
-                            .padding(.horizontal, 14).padding(.vertical, 7)
-                            .background(Color.black.opacity(0.32), in: Capsule())
-                    }
+                    Button("取消") { dismiss() }
                 }
-                // 保存:实色主操作按钮 —— accent 填充 + 白字。一眼能看出是当前
-                // 页面的主操作,跟取消形成主 / 次的清晰区分。
                 ToolbarItem(placement: .confirmationAction) {
                     Button {
                         focused = nil
@@ -272,14 +266,12 @@ struct SubscriptionEditorView: View {
                         dismiss()
                     } label: {
                         Text("保存")
-                            .font(.subheadline.weight(.bold))
-                            .foregroundStyle(.white)
-                            .padding(.horizontal, 14).padding(.vertical, 7)
-                            .background(
-                                (canSave ? AppTheme.accent : AppTheme.accent.opacity(0.45)),
-                                in: Capsule()
-                            )
                     }
+                    // .bold + .borderedProminent 让 iOS 把"保存"渲染成主操作样式,
+                    // 比取消视觉权重高一点,但不需要我们手画胶囊。
+                    .fontWeight(.bold)
+                    .buttonStyle(.borderedProminent)
+                    .tint(AppTheme.accent)
                     .disabled(!canSave)
                 }
                 // 键盘工具栏:任何键盘都能一键收起(decimal pad 没有 return)。

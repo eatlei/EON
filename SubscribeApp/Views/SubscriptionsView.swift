@@ -12,6 +12,8 @@ struct SubscriptionsView: View {
     /// 但订阅顺序刷新。.sorted 的对象是 hash("\(id)-\(seed)"),所以同一 seed
     /// 下排序是稳定的(每次 view 重渲不会跳)。
     @State private var randomSeed: Int = 0
+    /// 列表 / 卡片 两种展示样式。默认 list,卡片视图走 MasonryGrid 两列瀑布流。
+    @State private var viewMode: ListViewMode = .list
 
     private var rows: [Subscription] {
         let f = store.subscriptions.filter { sub in
@@ -68,7 +70,7 @@ struct SubscriptionsView: View {
                             Text(search.isEmpty ? "还没有订阅" : "没有匹配的订阅")
                                 .font(.headline).foregroundStyle(AppTheme.ink)
                         }.frame(maxWidth: .infinity).padding(.top, 100).reveal(1)
-                    } else {
+                    } else if viewMode == .list {
                         LazyVStack(spacing: AppTheme.Space.m) {
                             ForEach(Array(rows.enumerated()), id: \.element.id) { i, sub in
                                 Button { editing = sub } label: {
@@ -78,6 +80,18 @@ struct SubscriptionsView: View {
                                         onArchive: { store.archive(ids: [sub.id]) },
                                         onDelete: { store.delete(ids: [sub.id]) }
                                     )
+                                }
+                                .buttonStyle(.plain)
+                                .reveal(i + 1)
+                            }
+                        }
+                    } else {
+                        // 2 列瀑布流卡片视图。MasonryGrid 是自己写的 Layout 协议
+                        // 实现:遇到下一张卡片就放进当前更短的那一列,真的"流"起来。
+                        MasonryGrid(columns: 2, spacing: AppTheme.Space.m) {
+                            ForEach(Array(rows.enumerated()), id: \.element.id) { i, sub in
+                                Button { editing = sub } label: {
+                                    GridCard(subscription: sub, viewPeriod: viewPeriod)
                                 }
                                 .buttonStyle(.plain)
                                 .reveal(i + 1)
@@ -114,6 +128,20 @@ struct SubscriptionsView: View {
             .frame(maxWidth: 200)   // 跟 Overview 同款最小宽度
 
             Spacer()
+
+            // 视图模式切换 —— list <-> grid。点一下立刻切,带轻微缩放过渡。
+            Button {
+                withAnimation(.spring(response: 0.32, dampingFraction: 0.85)) {
+                    viewMode = (viewMode == .list) ? .grid : .list
+                }
+            } label: {
+                Image(systemName: viewMode == .list ? "square.grid.2x2" : "rectangle.grid.1x2")
+                    .font(.subheadline.weight(.bold))
+                    .foregroundStyle(AppTheme.ink)
+                    .frame(width: 40, height: 40)
+                    .glassEffect(.regular, in: Capsule())
+            }
+            .buttonStyle(.plain)
 
             Menu {
                 // 普通几种排序方式 —— Picker 风格,选中态由 .pickerStyle(.inline) 自动打勾
@@ -209,6 +237,12 @@ private enum SortOption: String, CaseIterable, Identifiable {
         case .random:      "shuffle"
         }
     }
+}
+
+/// 订阅页的两种排版方式。
+private enum ListViewMode: String, Hashable {
+    case list   // 单列长卡片(默认)
+    case grid   // 双列瀑布流卡片
 }
 
 /// 列表换算口径(把任意周期的订阅都摊到指定时间单位下展示)。
@@ -397,6 +431,113 @@ private struct Row: View {
         }
     }
 
+}
+
+// MARK: - GridCard (双列瀑布流模式下用的紧凑卡)
+
+/// 卡片视图模式下每个订阅的展示形态。比 Row 紧凑很多 —— 设计上整张卡是"图标
+/// 上 + 名字中 + 金额下"三段式,自适应高度(名字 / 套餐长的卡片会自然变高,
+/// 短的就矮),配合 MasonryGrid 形成瀑布流。
+private struct GridCard: View {
+    @EnvironmentObject private var store: SubscriptionStore
+    @Environment(\.colorScheme) private var colorScheme
+    let subscription: Subscription
+    let viewPeriod: ViewPeriod
+
+    private var colored: Bool { store.coloredSubscriptionCards }
+    private var isDark: Bool { colorScheme == .dark }
+
+    private var cardColor: Color {
+        switch subscription.icon {
+        case .tile(_, let hex):
+            return hex.map { Color(hexString: $0) } ?? subscription.displayCategoryColor
+        case .image(let id):
+            if let ui = IconStore.averageColor(id) { return Color(uiColor: ui) }
+            return subscription.displayCategoryColor
+        }
+    }
+
+    private var displayedAmount: Double {
+        let monthly = subscription.monthlyCost(in: store.baseCurrency, converter: store.converter)
+        return monthly * viewPeriod.monthlyMultiplier
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                CategoryGlyph(subscription: subscription, size: 40)
+                    .shadow(color: colored ? .black.opacity(isDark ? 0.25 : 0.10) : .clear,
+                            radius: 5, x: 0, y: 2)
+                Spacer()
+                if subscription.status == .trial {
+                    Text("试用")
+                        .font(.caption2.weight(.bold))
+                        .padding(.horizontal, 6).padding(.vertical, 2)
+                        .background(AppTheme.accent.opacity(0.14), in: Capsule())
+                        .foregroundStyle(AppTheme.accent)
+                }
+            }
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(subscription.name)
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(AppTheme.ink)
+                    // 卡片宽度小,长名字让它换行而不是截断,这样卡片高度变化形成瀑布流。
+                    .lineLimit(2)
+                    .fixedSize(horizontal: false, vertical: true)
+                Text(subscription.displayCategoryTitle)
+                    .font(.caption2)
+                    .foregroundStyle(AppTheme.secondary)
+                    .lineLimit(1)
+            }
+
+            HStack(alignment: .firstTextBaseline) {
+                Text(store.converter.format(displayedAmount, currency: store.baseCurrency))
+                    .font(.system(size: 16, weight: .bold, design: .rounded))
+                    .foregroundStyle(AppTheme.ink)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
+                Spacer(minLength: 4)
+                if !subscription.includeInStatistics {
+                    Text("不计入")
+                        .font(.system(size: 9, weight: .bold))
+                        .padding(.horizontal, 5).padding(.vertical, 2)
+                        .background(AppTheme.tertiary.opacity(0.18), in: Capsule())
+                        .foregroundStyle(AppTheme.secondary)
+                }
+            }
+            Text(subscription.nextBillingDate.formatted(.dateTime.month().day()))
+                .font(.caption2)
+                .foregroundStyle(AppTheme.tertiary)
+        }
+        .padding(AppTheme.Space.m)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(gridCardBackground)
+        .glassBorder()
+        .opacity(subscription.isActive ? 1 : 0.5)
+    }
+
+    @ViewBuilder
+    private var gridCardBackground: some View {
+        if colored {
+            ZStack {
+                AppTheme.surface
+                RadialGradient(
+                    stops: [
+                        .init(color: cardColor.opacity(isDark ? 0.80 : 0.30), location: 0.00),
+                        .init(color: cardColor.opacity(isDark ? 0.30 : 0.10), location: 0.55),
+                        .init(color: .clear,                                  location: 1.00),
+                    ],
+                    center: UnitPoint(x: 0.15, y: 0.20),
+                    startRadius: 0,
+                    endRadius: 200
+                )
+            }
+            .clipShape(RoundedRectangle(cornerRadius: AppTheme.radius))
+        } else {
+            AppTheme.surface.clipShape(RoundedRectangle(cornerRadius: AppTheme.radius))
+        }
+    }
 }
 
 #Preview {
