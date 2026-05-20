@@ -56,14 +56,7 @@ struct DataSyncSettingsView: View {
                     }
                 } label: {
                     HStack(spacing: 12) {
-                        SettingsIcon(name: "arrow.triangle.2.circlepath")
-                            .rotationEffect(.degrees(syncing ? 360 : 0))
-                            .animation(
-                                syncing
-                                    ? .linear(duration: 0.9).repeatForever(autoreverses: false)
-                                    : .default,
-                                value: syncing
-                            )
+                        SpinningIcon(name: "arrow.triangle.2.circlepath", isSpinning: syncing)
                         Text("立即同步").foregroundStyle(syncEnabled ? AppTheme.ink : AppTheme.tertiary)
                         Spacer()
                     }

@@ -7,7 +7,7 @@ struct AppStoreApp: Identifiable, Hashable {
 }
 
 enum AppStoreRegion: String, CaseIterable, Identifiable {
-    case cn, us, jp, gb, hk, de
+    case cn, us, jp, gb, hk, de, kr, fr, es
 
     var id: String { rawValue }
     var title: String {
@@ -18,7 +18,31 @@ enum AppStoreRegion: String, CaseIterable, Identifiable {
         case .gb: String(localized: "英国")
         case .hk: String(localized: "香港")
         case .de: String(localized: "德国")
+        case .kr: String(localized: "韩国")
+        case .fr: String(localized: "法国")
+        case .es: String(localized: "西班牙")
         }
+    }
+
+    /// 根据用户当前 App 语言挑一个最贴近的 App Store 区。挑不到就退到 .us
+    /// —— 美区是 iTunes Search API 覆盖最完整的库,任何用户最起码都能搜得动。
+    /// 调用时机:打开 IconPicker 默认 region。后续用户在面板里可以手动改。
+    static var preferred: AppStoreRegion {
+        // AppleLanguages 是用户在 App 内手动选过的优先;否则取 Bundle 的首选语种。
+        let lang = (UserDefaults.standard.array(forKey: "AppleLanguages") as? [String])?.first
+            ?? Bundle.main.preferredLocalizations.first ?? "en"
+        // 注意顺序:先 zh-Hant 再 zh-Hans 再 zh,免得 hasPrefix("zh") 把繁体也吞了
+        if lang.hasPrefix("zh-Hant") { return .hk }   // 繁中没有 .tw 选项时,香港区最接近
+        if lang.hasPrefix("zh-Hans") { return .cn }
+        if lang.hasPrefix("zh") { return .cn }
+        if lang.hasPrefix("ja") { return .jp }
+        if lang.hasPrefix("ko") { return .kr }
+        if lang.hasPrefix("de") { return .de }
+        if lang.hasPrefix("fr") { return .fr }
+        if lang.hasPrefix("es") { return .es }
+        if lang.hasPrefix("en-GB") { return .gb }
+        if lang.hasPrefix("en") { return .us }
+        return .us
     }
 }
 

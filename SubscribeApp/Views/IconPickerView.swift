@@ -56,7 +56,9 @@ struct IconPickerView: View {
     ]
 
     @State private var asQuery = ""
-    @State private var region: AppStoreRegion = .cn
+    /// 默认地区跟随用户当前 App 语言走 —— 中文用户 → 中国/香港区,英文 → 美区,
+    /// 日韩德法西各取本区。用户后续在面板里仍可手动切换。匹配不到的语言退到美区。
+    @State private var region: AppStoreRegion = .preferred
     @State private var results: [AppStoreApp] = []
     @State private var loading = false
     @State private var asError: String?

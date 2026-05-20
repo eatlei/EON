@@ -32,24 +32,6 @@ struct CurrencySettingsView: View {
             }
 
             Section {
-                DisclosureGroup {
-                    ForEach(CurrencyCode.allCases) { c in
-                        HStack {
-                            Text(c.rawValue)
-                            Spacer()
-                            Text("1 \(c.rawValue) = \(store.cnyRates[c, default: 1], specifier: "%.4f") CNY")
-                                .foregroundStyle(.secondary)
-                                .monospacedDigit()
-                        }
-                        .font(.subheadline)
-                    }
-                } label: {
-                    HStack(spacing: 12) {
-                        SettingsIcon(name: "chart.line.uptrend.xyaxis")
-                        Text("汇率明细")
-                    }
-                }
-
                 Button {
                     guard !refreshing else { return }
                     refreshing = true
@@ -70,16 +52,9 @@ struct CurrencySettingsView: View {
                     }
                 } label: {
                     HStack(spacing: 12) {
-                        // 旋转角度只跟 refreshing 翻转,配合 0.9s 节奏的 repeatForever。
-                        // 短请求会被上面的 sleep 拉到 0.9s,所以肉眼一定能看到一圈。
-                        SettingsIcon(name: "arrow.clockwise")
-                            .rotationEffect(.degrees(refreshing ? 360 : 0))
-                            .animation(
-                                refreshing
-                                    ? .linear(duration: 0.9).repeatForever(autoreverses: false)
-                                    : .default,
-                                value: refreshing
-                            )
+                        // 旋转走 SpinningIcon —— 持续转;结束时平滑转完最后一圈,
+                        // 不再有"360 回弹到 0"的回退动效。
+                        SpinningIcon(name: "arrow.clockwise", isSpinning: refreshing)
                         Text("立即刷新汇率").foregroundStyle(AppTheme.ink)
                         Spacer()
                     }

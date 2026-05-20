@@ -212,18 +212,19 @@ private struct HeroTotal: View {
         // 上单独配了数字滚动效果,够用了。
     }
 
-    /// 副标题 = "共 N 笔订阅 · <文案>"。文案随订阅总数走,从"刚起步"到
-    /// "该砍砍了"几个梯度。
+    /// 副标题 = "共 N 笔订阅 · <文案>"。文案分级:刻意避开带贬义 / 价值判断
+    /// 的话术(没有"破产"、"花太多"、"公司还是个人"),改成中性 + 验证性的
+    /// 表达 —— "你需要这些工具是合理的"。
     private var subtitle: String {
         let count = store.activeSubscriptions.count
         let flavor: String
         switch count {
-        case ...1:  flavor = String(localized: "只养了一只小可爱")
-        case 2...3: flavor = String(localized: "刚刚好的精致生活")
-        case 4...6: flavor = String(localized: "已经是稳定营收人 💸")
-        case 7...10: flavor = String(localized: "你这是公司还是个人?")
-        case 11...15: flavor = String(localized: "再不砍就要破产了…")
-        default: flavor = String(localized: "钱包在哭 😭")
+        case ...1:  flavor = String(localized: "刚刚启程,慢慢添置")
+        case 2...3: flavor = String(localized: "精挑细选,够用就好")
+        case 4...6: flavor = String(localized: "覆盖了大部分日常需要")
+        case 7...10: flavor = String(localized: "搭得挺完整的工具栈")
+        case 11...15: flavor = String(localized: "全方位的数字生活配置")
+        default: flavor = String(localized: "重度数字工作者的标配 ⚙️")
         }
         return String(localized: "共 \(count) 笔订阅 · \(flavor)")
     }

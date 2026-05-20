@@ -938,6 +938,7 @@
       }
     },
     "4 秒内可撤销" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3376,6 +3377,53 @@
         }
       }
     },
+    "共 %lld 笔订阅 · %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Abos · %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld subscriptions · %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld suscripciones · %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld abonnements · %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld 件のサブスク · %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "구독 %lld개 · %@"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "共 %lld 筆訂閱 · %@"
+          }
+        }
+      }
+    },
     "关于" : {
       "localizations" : {
         "de" : {
@@ -4003,6 +4051,52 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "切換後 EON 會重啟一次以套用新語言。"
+          }
+        }
+      }
+    },
+    "切换后,所有订阅金额会按最新汇率换算到这个币种展示。" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle Abo-Beträge werden zum aktuellen Kurs in diese Währung umgerechnet angezeigt."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All subscription amounts will be displayed in this currency, converted at the latest rate."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Los importes de las suscripciones se mostrarán en esta divisa al tipo de cambio más reciente."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tous les montants d’abonnement seront affichés dans cette devise au taux le plus récent."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "切り替え後、全サブスクの金額が最新レートでこの通貨に換算されて表示されます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "변경 후 모든 구독 금액이 최신 환율로 이 통화에 환산되어 표시됩니다."
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "切換後,所有訂閱金額會按最新匯率換算到這個幣種展示。"
           }
         }
       }
@@ -5186,6 +5280,7 @@
       }
     },
     "在订阅列表里把任意一张卡片往左拉过一半,松手即可归档,顶部会弹出\"撤销\"按钮 4 秒。关闭后只能从卡片右侧菜单里归档。" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -7567,6 +7662,52 @@
         }
       }
     },
+    "当前币种" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktuelle Währung"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Current currency"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Moneda actual"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Devise actuelle"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "現在の通貨"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "현재 통화"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "當前幣種"
+          }
+        }
+      }
+    },
     "彩色订阅卡片" : {
       "localizations" : {
         "de" : {
@@ -9046,6 +9187,7 @@
       }
     },
     "撤销" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -11542,37 +11684,103 @@
         }
       }
     },
-    "共 %lld 笔订阅 · %@" : {
+    "刚刚启程,慢慢添置" : {
       "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "%lld Abos · %@" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "%lld subscriptions · %@" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "%lld suscripciones · %@" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "%lld abonnements · %@" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "%lld 件のサブスク · %@" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "구독 %lld개 · %@" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "共 %lld 筆訂閱 · %@" } }
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Frisch gestartet, Schritt für Schritt" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Just starting out, taking it slow" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Empezando con calma, paso a paso" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Tout début, on prend son temps" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "始まったばかり、ゆっくり揃えていこう" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "이제 시작, 천천히 갖춰가는 중" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "剛剛啟程,慢慢添置" } }
       }
     },
-    "当前币种" : {
+    "精挑细选,够用就好" : {
       "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Aktuelle Währung" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Current currency" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Moneda actual" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Devise actuelle" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "現在の通貨" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "현재 통화" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "當前幣種" } }
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Sorgfältig ausgewählt, genau richtig" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Carefully chosen, just enough" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Bien elegidas, lo justo y necesario" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Choisis avec soin, juste ce qu’il faut" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "厳選した、ちょうどいい数" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "엄선한, 딱 필요한 만큼" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "精挑細選,夠用就好" } }
       }
     },
-    "切换后,所有订阅金额会按最新汇率换算到这个币种展示。" : {
+    "覆盖了大部分日常需要" : {
       "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Alle Abo-Beträge werden zum aktuellen Kurs in diese Währung umgerechnet angezeigt." } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "All subscription amounts will be displayed in this currency, converted at the latest rate." } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Los importes de las suscripciones se mostrarán en esta divisa al tipo de cambio más reciente." } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Tous les montants d’abonnement seront affichés dans cette devise au taux le plus récent." } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "切り替え後、全サブスクの金額が最新レートでこの通貨に換算されて表示されます。" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "변경 후 모든 구독 금액이 최신 환율로 이 통화에 환산되어 표시됩니다." } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "切換後,所有訂閱金額會按最新匯率換算到這個幣種展示。" } }
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Deckt den Alltag gut ab" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Covers most of your daily needs" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Cubre la mayoría del día a día" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Couvre l’essentiel du quotidien" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "日常のほとんどをカバー" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "일상의 대부분을 커버" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "覆蓋了大部分日常需要" } }
+      }
+    },
+    "搭得挺完整的工具栈" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Ein ziemlich kompletter Tool-Stack" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "A pretty complete toolkit" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Un conjunto de herramientas bastante completo" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Une boîte à outils plutôt complète" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "なかなか完成度の高い装備" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "꽤 짜임새 있는 툴 스택" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "搭得挺完整的工具棧" } }
+      }
+    },
+    "全方位的数字生活配置" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Rundum ausgestattetes digitales Leben" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "A well-rounded digital life setup" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Una configuración digital muy completa" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Une configuration numérique bien complète" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "全方位のデジタルライフ装備" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "전방위 디지털 라이프 셋업" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "全方位的數字生活配置" } }
+      }
+    },
+    "重度数字工作者的标配 ⚙️" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Standardausstattung für Power-User ⚙️" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "The standard kit for power users ⚙️" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "El equipo estándar de un power user ⚙️" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "L’équipement type d’un power user ⚙️" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "ヘビーユーザーの標準装備 ⚙️" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "헤비 유저의 표준 셋업 ⚙️" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "重度數字工作者的標配 ⚙️" } }
+      }
+    },
+    "韩国" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Korea" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Korea" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Corea" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Corée" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "韓国" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "한국" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "韓國" } }
+      }
+    },
+    "法国" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Frankreich" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "France" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Francia" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "France" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "フランス" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "프랑스" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "法國" } }
+      }
+    },
+    "西班牙" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Spanien" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Spain" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "España" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Espagne" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "スペイン" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "스페인" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "西班牙" } }
       }
     },
     "汇率已更新" : {

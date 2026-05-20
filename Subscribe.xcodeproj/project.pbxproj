@@ -31,6 +31,7 @@
 		81EFDBC0D53F6C4CDD5DBD68 /* PaymentMethodsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18249F1BDF27876BC795427 /* PaymentMethodsView.swift */; };
 		91B4CADF7E9ABE9F1AA38641 /* AppearanceSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E326D177E55F0830811DA8 /* AppearanceSettingsView.swift */; };
 		97C0DA795C10287CF73F8C15 /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ECFF1B53B3302FE53141D65 /* AppTheme.swift */; };
+		9B59004C5BFFD6EC95BAC4A8 /* SpinningIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = F83900B936E3D2CE2D308A08 /* SpinningIcon.swift */; };
 		9B848F4CCD77B6A204D3D2F6 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE86960227F0CF15441A869 /* Toast.swift */; };
 		9E33482B494895D9981618F5 /* IconStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E64A9893062485E4E3DD9FD /* IconStore.swift */; };
 		C27ABAC774BB186CFA0496F6 /* LLMExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D75247CB3B2D0B30F64A187A /* LLMExporter.swift */; };
@@ -83,6 +84,7 @@
 		F1E326D177E55F0830811DA8 /* AppearanceSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettingsView.swift; sourceTree = "<group>"; };
 		F2D50004C111F68A7196F305 /* AboutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutView.swift; sourceTree = "<group>"; };
 		F48BEDC374CBD54A7C010158 /* ExchangeRateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeRateService.swift; sourceTree = "<group>"; };
+		F83900B936E3D2CE2D308A08 /* SpinningIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpinningIcon.swift; sourceTree = "<group>"; };
 		FA4B32A05C5F9821174DE793 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		FAF4459274422611AF74E573 /* NotificationSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettingsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -133,6 +135,7 @@
 				A27A1E1F038AAF41ECAE8CC9 /* RandomSpotlightSheet.swift */,
 				5ECE824190F78DD3AD0B9A41 /* SettingsView.swift */,
 				DB3757917818B820ACD482C2 /* ShakeDetector.swift */,
+				F83900B936E3D2CE2D308A08 /* SpinningIcon.swift */,
 				57A000AE363FDB1ADBCB23F5 /* SubscriptionEditorView.swift */,
 				EF2B1A4EE8C71CFEC125E8C6 /* SubscriptionsView.swift */,
 				ABA05720A891C34355A2A203 /* TipSheet.swift */,
@@ -286,6 +289,7 @@
 				D61908DF7B850466890A7CB3 /* RandomSpotlightSheet.swift in Sources */,
 				D4B7D72CFE9D15A3BCA812F1 /* SettingsView.swift in Sources */,
 				F48247FF7D34F4FCF323BCBD /* ShakeDetector.swift in Sources */,
+				9B59004C5BFFD6EC95BAC4A8 /* SpinningIcon.swift in Sources */,
 				E9CF9A04AB2F2BAB155135E3 /* SubscribeApp.swift in Sources */,
 				5939321A4C7E3D1ABC5C23C2 /* Subscription.swift in Sources */,
 				7EC121F3AC0DE9CB43EF36E1 /* SubscriptionEditorView.swift in Sources */,
