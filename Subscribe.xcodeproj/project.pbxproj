@@ -37,14 +37,12 @@
 		DB7E76AC52762B27F7253673 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 65DED4E03282BB7A1926B1D5 /* Assets.xcassets */; };
 		E9CF9A04AB2F2BAB155135E3 /* SubscribeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9CA153951B96AEB8859C0B8 /* SubscribeApp.swift */; };
 		F4D243320C3F978CCD1A413C /* DataSyncSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A685EDE27E39F3F2842793B /* DataSyncSettingsView.swift */; };
-		FCCB37FFD00B2C06242A2853 /* PullToLaunch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4341D15FFB860E8A23CEAD79 /* PullToLaunch.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		10A3F11D2D1B4CFE31C07A34 /* SubscribeApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SubscribeApp.entitlements; sourceTree = "<group>"; };
 		278E1A85DA8D02D3694C43DD /* SubscriptionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionStore.swift; sourceTree = "<group>"; };
 		3BFDBF0EB309BC18707263B5 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
-		4341D15FFB860E8A23CEAD79 /* PullToLaunch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PullToLaunch.swift; sourceTree = "<group>"; };
 		5499976ECD845C44C8FBD8CB /* Subscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subscription.swift; sourceTree = "<group>"; };
 		55C474BE951C367D83194A7B /* NotificationScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationScheduler.swift; sourceTree = "<group>"; };
 		57A000AE363FDB1ADBCB23F5 /* SubscriptionEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionEditorView.swift; sourceTree = "<group>"; };
@@ -117,7 +115,6 @@
 				78326829449ABBC508F536A3 /* IconPickerView.swift */,
 				FAF4459274422611AF74E573 /* NotificationSettingsView.swift */,
 				F18249F1BDF27876BC795427 /* PaymentMethodsView.swift */,
-				4341D15FFB860E8A23CEAD79 /* PullToLaunch.swift */,
 				5ECE824190F78DD3AD0B9A41 /* SettingsView.swift */,
 				57A000AE363FDB1ADBCB23F5 /* SubscriptionEditorView.swift */,
 				EF2B1A4EE8C71CFEC125E8C6 /* SubscriptionsView.swift */,
@@ -264,7 +261,6 @@
 				C82EC5D3AA16B65ABBFE635D /* NotificationScheduler.swift in Sources */,
 				2BDCDD1205A9EB3291AA9B76 /* NotificationSettingsView.swift in Sources */,
 				81EFDBC0D53F6C4CDD5DBD68 /* PaymentMethodsView.swift in Sources */,
-				FCCB37FFD00B2C06242A2853 /* PullToLaunch.swift in Sources */,
 				D4B7D72CFE9D15A3BCA812F1 /* SettingsView.swift in Sources */,
 				E9CF9A04AB2F2BAB155135E3 /* SubscribeApp.swift in Sources */,
 				5939321A4C7E3D1ABC5C23C2 /* Subscription.swift in Sources */,

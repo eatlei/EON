@@ -241,6 +241,11 @@ struct Subscription: Identifiable, Codable, Hashable {
     /// 显示用 custom 的 name / color;否则回退到内置 `category` 的 title / color。
     /// 删除自定义分类时,所有引用它的订阅会被自动解绑(置为 nil)。
     var customCategoryID: UUID? = nil
+    /// 订阅的"起始扣费日" —— 用来算"已经扣过几次费 / 累计花了多少钱"。
+    /// 创建时默认 = nextBillingDate;之后用户即便手动改 nextBillingDate(比如
+    /// 把日期往后挪躲过一笔),startDate 也保持不变,代表"我从这天开始订的"。
+    /// 旧数据没有这个字段:decodeIfPresent 返回 nil,fall back 到 nextBillingDate。
+    var startDate: Date? = nil
     var isArchived: Bool = false
 
     var isActive: Bool {
@@ -339,7 +344,7 @@ extension Subscription {
     private enum CodingKeys: String, CodingKey {
         case id, name, plan, category, price, currency, billingCycle,
              customCycleDays, nextBillingDate, reminderDaysBefore, status, paymentMethod, icon, isArchived,
-             customCategoryID
+             customCategoryID, startDate
     }
 
     init(from decoder: Decoder) throws {
@@ -359,6 +364,39 @@ extension Subscription {
         icon = (try? c.decode(SubscriptionIcon.self, forKey: .icon)) ?? .default
         isArchived = try c.decodeIfPresent(Bool.self, forKey: .isArchived) ?? false
         customCategoryID = try c.decodeIfPresent(UUID.self, forKey: .customCategoryID)
+        startDate = try c.decodeIfPresent(Date.self, forKey: .startDate)
+    }
+}
+
+// MARK: - Billing count + lifetime spend
+
+extension Subscription {
+    /// 推断的"起始扣费日"。如果有 startDate 就用 startDate;
+    /// 旧数据没有就拿 nextBillingDate 当起点 —— 至少不会算成 "未来扣费"。
+    var effectiveStartDate: Date { startDate ?? nextBillingDate }
+
+    /// 从 startDate 一直推算到 now,统计期间会发生几次扣费。
+    /// startDate 当天算 1 次;后续每跨一个 cycle 加 1。还没开始扣费就返回 0。
+    func billingCountElapsed(asOf now: Date = .now) -> Int {
+        let cal = Calendar.current
+        var date = effectiveStartDate
+        guard date <= now else { return 0 }
+        var count = 0
+        var guardCount = 0
+        while date <= now {
+            count += 1
+            let next = billingCycle.advance(date, by: 1, calendar: cal, customDays: customCycleDays)
+            guard next > date, guardCount < 10_000 else { break }
+            date = next
+            guardCount += 1
+        }
+        return count
+    }
+
+    /// 累计支付金额(基础币种口径)= 已扣次数 × 单次价格。
+    func lifetimeSpend(in base: CurrencyCode, converter: CurrencyConverter, asOf now: Date = .now) -> Double {
+        let perCycle = converter.convert(price, from: currency, to: base)
+        return perCycle * Double(billingCountElapsed(asOf: now))
     }
 }
 

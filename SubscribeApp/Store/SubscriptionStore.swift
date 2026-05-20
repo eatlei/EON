@@ -197,6 +197,32 @@ final class SubscriptionStore: ObservableObject {
         .sorted { $0.amount > $1.amount }
     }
 
+    // MARK: - Lifetime spend (cumulative billing)
+
+    /// 整个活跃订阅集合"从各自起始日累计扣过的钱"之和(基础币种)。
+    var totalLifetimeSpend: Double {
+        activeSubscriptions.reduce(0) { acc, sub in
+            acc + sub.lifetimeSpend(in: baseCurrency, converter: converter)
+        }
+    }
+
+    /// 总扣费次数 —— 跟 totalLifetimeSpend 同口径,用作"已经为这些订阅付过 N 笔"
+    /// 的一行文案。
+    var totalLifetimeChargeCount: Int {
+        activeSubscriptions.reduce(0) { $0 + $1.billingCountElapsed() }
+    }
+
+    /// 按累计支付金额排序的活跃订阅 —— Overview 的 Lifetime 面板用来挑 top N。
+    func subscriptionsByLifetimeSpend(limit: Int = 3) -> [Subscription] {
+        activeSubscriptions
+            .sorted {
+                $0.lifetimeSpend(in: baseCurrency, converter: converter) >
+                $1.lifetimeSpend(in: baseCurrency, converter: converter)
+            }
+            .prefix(limit)
+            .map { $0 }
+    }
+
     // MARK: - Custom categories CRUD
 
     /// 还能再加几个 custom 分类(达到上限就返回 0)。

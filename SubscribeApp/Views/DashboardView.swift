@@ -26,20 +26,24 @@ struct DashboardView: View {
                                 QuickStatsPanel(period: period).reveal(2)
                                 UpcomingPanel().reveal(3)
                                 CategoryPanel().reveal(4)
-                                // 切换 period 时,这里的视图结构会变(日历换成柱图+热力图),
-                                // 没有显式 transaction 的话 SwiftUI 会插值新旧布局的高度差,
-                                // 整个页面看上去会"拉伸一下"。手动清掉 animation 让结构切换
-                                // 瞬时完成,只保留数字 contentTransition 的滚动效果。
+                                // 累计支付面板:跨整个生命周期的"我到底花了多少钱在订阅上",
+                                // 用 startDate + 周期反推。只有当至少有一笔订阅已经发生过
+                                // 真实扣费时才出现,避免空显示一个 ¥0。
+                                LifetimePanel().reveal(5)
+
+                                // 只把 period 条件相关的"日历 vs 年图"片段挂 .id(period)
+                                // + 禁用 animation,这样它会在切换时直接重建、不做高度
+                                // 插值;但其他面板(Hero / Stats / Upcoming / Category /
+                                // Calendar 自身的子动画)的动画行为保持原样。
                                 Group {
                                     if period == .year {
-                                        YearPanel().reveal(5)
-                                        YearHeatmapPanel().reveal(6)
+                                        YearPanel().reveal(6)
+                                        YearHeatmapPanel().reveal(7)
                                     } else {
-                                        // 月 + 季 都用日历(季模式下日历仍然只
-                                        // 显示当前月,因为日历本来就是月维度的)。
-                                        CalendarPanel(scrollProxy: proxy).reveal(5)
+                                        CalendarPanel(scrollProxy: proxy).reveal(6)
                                     }
                                 }
+                                .id(period == .year ? "year-section" : "calendar-section")
                                 .transaction { $0.animation = nil }
                             }
                             .padding(.horizontal, AppTheme.Space.xl)
@@ -91,7 +95,9 @@ private struct DashboardHeader: View {
                 }
             } label: {
                 HStack(spacing: 6) {
-                    Image(systemName: "globe").font(.caption.weight(.bold))
+                    // 之前是地球 icon,"global currency" 的暗示太弱;换成 dollarsign.circle
+                    // 是国际通用的"货币 / 钱币"视觉符号,任何地区用户一眼就懂。
+                    Image(systemName: "dollarsign.circle.fill").font(.subheadline.weight(.bold))
                     Text(store.baseCurrency.rawValue).font(.subheadline.weight(.bold))
                 }
                 .foregroundStyle(AppTheme.ink)
@@ -125,13 +131,21 @@ private struct HeroTotal: View {
         // 出场也会被一起拉伸。.contentTransition(.numericText()) 已经在 Text
         // 上单独配了数字滚动效果,够用了。
     }
+    /// 一段根据订阅数量变化的彩蛋小尾巴 —— 替代原来的"共 N 笔 · 下一笔 X" 信息,
+    /// 让 Hero 多一点情绪、少一点冰冷。具体扣费日期已经在"即将扣费"面板里展示了,
+    /// 这里不重复。文案随订阅总数走,从"刚起步"到"该砍砍了"几个梯度。
     private var subtitle: String {
-        let n = store.fullDueCount(in: period)
-        if let next = store.upcomingCharges().first {
-            let date = next.date.formatted(.dateTime.month().day())
-            return String(localized: "共 \(n) 笔 · 下一笔 \(next.subscription.name) \(date)")
+        let count = store.activeSubscriptions.count
+        let key: String
+        switch count {
+        case ...1:  key = "只养了一只小可爱"
+        case 2...3: key = "刚刚好的精致生活"
+        case 4...6: key = "已经是稳定营收人 💸"
+        case 7...10: key = "你这是公司还是个人?"
+        case 11...15: key = "再不砍就要破产了…"
+        default: key = "钱包在哭 😭"
         }
-        return String(localized: "共 \(n) 笔")
+        return String(localized: String.LocalizationValue(key))
     }
 
     private var heroLabel: LocalizedStringKey {
@@ -252,6 +266,74 @@ private struct CategoryPanel: View {
     }
 }
 
+// MARK: - 累计支付面板
+//
+// 利用每笔订阅的 startDate + 计费周期反算"它从开始用到今天累计扣了多少钱",
+// 加总展示。再列出 top 3 "贡献最大"的订阅,让用户一眼看到"我这几年最烧钱的
+// 是哪几个"。是个比"月均 / 年均"更有体感的"沉没成本"视角。
+private struct LifetimePanel: View {
+    @EnvironmentObject private var store: SubscriptionStore
+
+    private var total: Double { store.totalLifetimeSpend }
+    private var totalCount: Int { store.totalLifetimeChargeCount }
+    private var top: [Subscription] { store.subscriptionsByLifetimeSpend(limit: 3) }
+
+    var body: some View {
+        // 没真正扣过费(全是未来的)就不显示这个面板,免得空展示 ¥0。
+        if total > 0 && !top.isEmpty {
+            Panel(title: "累计支付") {
+                VStack(alignment: .leading, spacing: AppTheme.Space.m) {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(store.converter.format(total, currency: store.baseCurrency))
+                            .font(.system(size: 32, weight: .heavy, design: .rounded))
+                            .foregroundStyle(AppTheme.ink)
+                            .contentTransition(.numericText())
+                            .lineLimit(1).minimumScaleFactor(0.6)
+                        Text(String(localized: "覆盖 \(store.activeSubscriptions.count) 个订阅 · 共 \(totalCount) 笔扣费"))
+                            .font(.caption)
+                            .foregroundStyle(AppTheme.secondary)
+                    }
+
+                    Hairline()
+
+                    VStack(spacing: 0) {
+                        ForEach(Array(top.enumerated()), id: \.element.id) { i, sub in
+                            if i > 0 { Hairline() }
+                            row(rank: i + 1, sub: sub)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func row(rank: Int, sub: Subscription) -> some View {
+        let lifetime = sub.lifetimeSpend(in: store.baseCurrency, converter: store.converter)
+        let count = sub.billingCountElapsed()
+        HStack(spacing: AppTheme.Space.m) {
+            // 第 1 名给 accent 高亮,后面用 tertiary,自然形成"领奖台"感
+            Text("\(rank)")
+                .font(.caption.weight(.heavy).monospacedDigit())
+                .foregroundStyle(rank == 1 ? AppTheme.accent : AppTheme.tertiary)
+                .frame(width: 14, alignment: .center)
+            CategoryGlyph(subscription: sub, size: 32)
+            VStack(alignment: .leading, spacing: 1) {
+                Text(sub.name)
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(AppTheme.ink)
+                Text(String(localized: "已扣 \(count) 次"))
+                    .font(.caption2)
+                    .foregroundStyle(AppTheme.secondary)
+            }
+            Spacer()
+            Text(store.converter.format(lifetime, currency: store.baseCurrency))
+                .font(.amount()).foregroundStyle(AppTheme.ink)
+        }
+        .padding(.vertical, AppTheme.Space.s)
+    }
+}
+
 private struct CalendarPanel: View {
     @EnvironmentObject private var store: SubscriptionStore
     /// 外层 ScrollView 的 proxy —— 点中某一天后用它把详情滚到屏幕顶部,
@@ -360,9 +442,9 @@ private struct CalendarPanel: View {
                             let isInteractive = !cs.isEmpty
                             Button {
                                 guard isInteractive else { return }
-                                withAnimation(AppTheme.spring) {
-                                    selectedDay = (selectedDay == day) ? nil : day
-                                }
+                                // selectedDay 的过渡由外层 ZStack 的 .animation(value:)
+                                // 接管,这里只做赋值,避免双重动画导致的残影。
+                                selectedDay = (selectedDay == day) ? nil : day
                             } label: {
                                 VStack(spacing: 0) {  // 圆点紧贴数字
                                     // iOS Calendar 风格 —— 今天用主题色实心圆 + 白色数字,
@@ -418,22 +500,32 @@ private struct CalendarPanel: View {
                 // 点中某天 + 那天有扣费,展开看具体哪些订阅。整块嵌一个浅
                 // surface 子卡 + 内描边,跟外面的 Panel 形成"层级",比直接
                 // 摊在网格下面更有"详情面板"的味道。
-                if let day = selectedDay,
-                   let interval = Calendar.current.dateInterval(of: .month, for: monthAnchor),
-                   let dayDate = Calendar.current.date(byAdding: .day, value: day - 1, to: interval.start),
-                   let charges = byDay[day], !charges.isEmpty {
-                    detailCard(dayDate: dayDate, charges: charges)
-                        .id(detailID)
-                        // 只用 opacity 过渡 —— 之前的 .move(edge: .top) 在收起
-                        // 时会把视图从顶部"滑走"造成短暂残影,纯 opacity 干净。
-                        .transition(.opacity)
+                //
+                // 注意:用 ZStack { if ... } 模式而不是 Panel 顶层 if,这样收起时
+                // ZStack 内的 view 平滑 fade-out 不会留"残影"。配合 .animation
+                // (value: selectedDay) 把动画上下文绑定在 selectedDay 这个 key 上,
+                // 月份切换的 spring 不会顺带触发详情卡的过渡。
+                ZStack {
+                    if let day = selectedDay,
+                       let interval = Calendar.current.dateInterval(of: .month, for: monthAnchor),
+                       let dayDate = Calendar.current.date(byAdding: .day, value: day - 1, to: interval.start),
+                       let charges = byDay[day], !charges.isEmpty {
+                        detailCard(dayDate: dayDate, charges: charges)
+                            .id(detailID)
+                            .transition(.opacity)
+                    }
                 }
+                .animation(.easeInOut(duration: 0.22), value: selectedDay)
             }
             .animation(AppTheme.spring, value: monthAnchor)
             .onChange(of: monthAnchor) { _, _ in
-                withAnimation(AppTheme.spring) { selectedDay = nil }
+                // 月份切换时立刻清掉选中的"那一天",但用普通赋值 ——
+                // 上面的 ZStack 已经用 .animation(value: selectedDay) 接管了过渡。
+                selectedDay = nil
             }
             .onChange(of: selectedDay) { _, newValue in
+                // 只在 newValue 非空(= 用户刚选了某天)时把详情滚到视口中部。
+                // 取消选中(newValue == nil)就不滚,避免"收起的同时跳一下"。
                 guard newValue != nil else { return }
                 withAnimation(AppTheme.spring) {
                     scrollProxy.scrollTo(detailID, anchor: .center)
@@ -728,10 +820,10 @@ private struct QuickStatsPanel: View {
     }
 
     var body: some View {
+        // 顶部 Hero 已经展示了当前周期的"总额"+ "订阅数量彩蛋",所以这里不再放"活跃
+        // 订阅"卡(信息重复)。剩两张:周期均摊金额 + 平均每个订阅。两张卡视觉更稳定,
+        // 切换 period 也不容易引起页面拉伸。
         HStack(spacing: AppTheme.Space.m) {
-            StatCard(label: "活跃订阅",
-                     value: "\(activeCount)",
-                     hint: activeHint)
             StatCard(label: periodicLabel,
                      value: store.converter.format(periodicTotal, currency: store.baseCurrency),
                      hint: periodicHint)

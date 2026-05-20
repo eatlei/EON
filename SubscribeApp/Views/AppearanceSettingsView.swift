@@ -108,14 +108,24 @@ struct AppearanceSettingsView: View {
         .scrollContentBackground(.visible)
         .navigationTitle("外观")
         .navigationBarTitleDisplayMode(.inline)
-        .confirmationDialog("语言", isPresented: $showLanguageDialog, titleVisibility: .visible) {
-            ForEach(Self.supportedLanguages, id: \.code) { lang in
-                Button(lang.name) { applyLanguage(lang.code) }
-            }
-            Button("在 iOS 设置里更改…") {
-                if let url = URL(string: UIApplication.openSettingsURLString) { openURL(url) }
-            }
-            Button("取消", role: .cancel) { }
+        // 之前用 confirmationDialog 在 iPad / 大屏上会渲染成带气泡指针的 popover,
+        // 但 row 上根本没有 anchor view,指针指向乱飞。改成 .sheet + 自定义列表,
+        // 跨设备表现一致,语言选项也能滚动显示。
+        .sheet(isPresented: $showLanguageDialog) {
+            LanguagePickerSheet(
+                languages: Self.supportedLanguages,
+                currentCode: currentLanguageCode,
+                onPick: { code in
+                    showLanguageDialog = false
+                    applyLanguage(code)
+                },
+                onOpenSystemSettings: {
+                    showLanguageDialog = false
+                    if let url = URL(string: UIApplication.openSettingsURLString) { openURL(url) }
+                }
+            )
+            .presentationDetents([.medium, .large])
+            .presentationDragIndicator(.visible)
         }
         // 重启 HUD —— 盖满全屏,把当前界面遮住,避免用户在 exit(0) 前
         // 一瞬间看到旧语言的 UI 闪一下。
@@ -161,6 +171,64 @@ struct AppearanceSettingsView: View {
         ("fr",      "Français"),
         ("de",      "Deutsch"),
     ]
+}
+
+// MARK: - 语言选择 sheet
+
+/// 语言选择面板。用 sheet + List 实现,iPhone / iPad 都呈现成底部弹层,
+/// 不会出现 confirmationDialog 在 popover 模式下气泡指针乱指的问题。
+private struct LanguagePickerSheet: View {
+    let languages: [(code: String, name: String)]
+    let currentCode: String
+    let onPick: (String) -> Void
+    let onOpenSystemSettings: () -> Void
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationStack {
+            List {
+                Section {
+                    ForEach(languages, id: \.code) { lang in
+                        Button {
+                            onPick(lang.code)
+                        } label: {
+                            HStack {
+                                Text(lang.name).foregroundStyle(.primary)
+                                Spacer()
+                                if currentCode.hasPrefix(lang.code) {
+                                    Image(systemName: "checkmark")
+                                        .foregroundStyle(AppTheme.accent)
+                                        .font(.subheadline.weight(.bold))
+                                }
+                            }
+                            .contentShape(Rectangle())
+                        }
+                        .buttonStyle(.plain)
+                    }
+                } footer: {
+                    Text("切换后 EON 会重启一次以套用新语言。")
+                }
+
+                Section {
+                    Button(action: onOpenSystemSettings) {
+                        HStack(spacing: 12) {
+                            SettingsIcon(name: "gear")
+                            Text("在 iOS 设置里更改…").foregroundStyle(.primary)
+                        }
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+            .listStyle(.insetGrouped)
+            .navigationTitle("语言")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("取消") { dismiss() }
+                }
+            }
+        }
+    }
 }
 
 #Preview {

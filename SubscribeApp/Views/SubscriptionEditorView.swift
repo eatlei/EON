@@ -209,10 +209,12 @@ struct SubscriptionEditorView: View {
             }
             .navigationTitle(isNew ? String(localized: "新增订阅") : String(localized: "编辑订阅"))
             .navigationBarTitleDisplayMode(.inline)
-            // Let the immersive bg show through the toolbar; force light glyphs so
-            // they read on any tile color (top of the bg has a dim gradient to help).
-            .toolbarBackground(.hidden, for: .navigationBar)
-            .toolbarColorScheme(.dark, for: .navigationBar)
+            // 之前是隐藏 toolbar 背景 + 强行白字,在浅色 tile(比如 Netflix 红、苹果黄)
+            // 顶部就会出现"取消 / 保存"字几乎透明读不清的情况。改成 ultraThinMaterial
+            // 给 navigation bar 加一层薄玻璃,toolbarColorScheme 留给系统按背景自动适配:
+            // 任何 tile 色下,按钮都能稳定看清。
+            .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
             .onAppear {
                 if isNew && !didApplyDefaults {
                     draft.reminderDaysBefore = store.defaultReminderDays
@@ -236,6 +238,12 @@ struct SubscriptionEditorView: View {
                     Button("保存") {
                         focused = nil
                         draft.price = Double(priceText) ?? 0
+                        // 新订阅首次保存时把 startDate 固定下来 = 当时的 nextBillingDate。
+                        // 之后即便用户改 nextBillingDate(把下次扣费日往后挪),
+                        // startDate 也不动,这样"已扣 N 次"才有可追溯的基准日。
+                        if isNew && draft.startDate == nil {
+                            draft.startDate = draft.nextBillingDate
+                        }
                         store.upsert(draft)
                         dismiss()
                     }
