@@ -1,5 +1,6 @@
 import SwiftUI
 import UIKit
+import StoreKit
 
 enum AppLinks {
     // TODO: replace with the published URLs once available.
@@ -12,6 +13,9 @@ enum AppLinks {
 
 struct AboutView: View {
     @Environment(\.openURL) private var openURL
+    /// iOS 16+ 的 in-app 评分入口 —— 由系统决定何时真正展示弹窗(同一版本一年最多 3 次),
+    /// 我们调用它就行,不需要自己手写表单或者跳 App Store。
+    @Environment(\.requestReview) private var requestReview
     @StateObject private var tips = TipStore()
     @State private var showTips = false
 
@@ -46,15 +50,17 @@ struct AboutView: View {
                                 .padding(10)
                         }
                     }
-                    .frame(width: 80, height: 80)
-                    .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+                    .frame(width: 128, height: 128)   // 从 80 加到 128,跟 iOS 设置页里的 App icon 视觉量级对齐
+                    .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
                     .overlay(
-                        RoundedRectangle(cornerRadius: 18, style: .continuous)
+                        RoundedRectangle(cornerRadius: 28, style: .continuous)
                             .stroke(AppTheme.hairline, lineWidth: 1)
                     )
+                    .shadow(color: .black.opacity(0.12), radius: 12, x: 0, y: 6)
+                    .padding(.top, AppTheme.Space.s)
 
                     Text("EON")
-                        .font(.title2.bold())
+                        .font(.title.bold())
                     Text(versionText)
                         .font(.footnote)
                         .foregroundStyle(.secondary)
@@ -93,11 +99,13 @@ struct AboutView: View {
 
             Section {
                 Button {
-                    openURL(AppLinks.appStoreReviewURL)
+                    // 直接在 App 内调起系统评分弹窗,不再跳出去 App Store。
+                    // 系统会按自己的频控决定要不要真正展示,我们调用就完事。
+                    requestReview()
                 } label: {
                     HStack(spacing: 12) {
                         SettingsIcon(name: "star.bubble")
-                        Text("在 App Store 评分").foregroundStyle(AppTheme.ink)
+                        Text("给 EON 打个分").foregroundStyle(AppTheme.ink)
                     }
                 }
                 .buttonStyle(.plain)

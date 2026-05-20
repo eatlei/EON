@@ -145,16 +145,26 @@ struct CategorySettingsView: View {
             }
         }
 
-        // 新建自定义分类
+        // 新建自定义分类 —— 把"除我之外都已用掉"的色号传进去禁用
         .sheet(isPresented: $showingNewCustom) {
-            CustomCategoryEditorSheet(category: nil) { name, hex in
+            CustomCategoryEditorSheet(
+                category: nil,
+                usedColors: Set(store.customCategories.map { $0.colorHex.lowercased() })
+            ) { name, hex in
                 store.addCustomCategory(name: name, colorHex: hex)
             }
         }
 
-        // 编辑已有自定义分类
+        // 编辑已有自定义分类 —— 用掉的色号是 "其他 custom 用掉的",自己原来的色仍可选
         .sheet(item: $editingCustom) { existing in
-            CustomCategoryEditorSheet(category: existing) { name, hex in
+            CustomCategoryEditorSheet(
+                category: existing,
+                usedColors: Set(
+                    store.customCategories
+                        .filter { $0.id != existing.id }
+                        .map { $0.colorHex.lowercased() }
+                )
+            ) { name, hex in
                 store.updateCustomCategory(
                     CustomCategory(id: existing.id, name: name, colorHex: hex)
                 )
@@ -168,16 +178,26 @@ struct CategorySettingsView: View {
 private struct CustomCategoryEditorSheet: View {
     @Environment(\.dismiss) private var dismiss
     let category: CustomCategory?
+    /// 已经被"其他 custom 分类"占用的颜色 hex(小写)。这些色号在选色盘上会
+    /// 灰掉并禁用点击,避免两个 custom 分类撞色让饼图 / 卡片视觉混淆。
+    let usedColors: Set<String>
     let onSave: (String, String) -> Void
 
     @State private var name: String
     @State private var colorHex: String
 
-    init(category: CustomCategory?, onSave: @escaping (String, String) -> Void) {
+    init(category: CustomCategory?,
+         usedColors: Set<String>,
+         onSave: @escaping (String, String) -> Void) {
         self.category = category
+        self.usedColors = usedColors
         self.onSave = onSave
         _name = State(initialValue: category?.name ?? "")
-        _colorHex = State(initialValue: category?.colorHex ?? CustomCategory.palette.first!)
+        // 默认选第一个"还没被用掉"的色,避免新建的时候默认就选到一个禁用项。
+        let firstFree = CustomCategory.palette.first {
+            !usedColors.contains($0.lowercased())
+        } ?? CustomCategory.palette.first!
+        _colorHex = State(initialValue: category?.colorHex ?? firstFree)
     }
 
     private var canSave: Bool {
@@ -239,11 +259,16 @@ private struct CustomCategoryEditorSheet: View {
     @ViewBuilder
     private func colorSwatch(_ hex: String) -> some View {
         let isSelected = hex == colorHex
-        Button { colorHex = hex } label: {
+        let isUsed = usedColors.contains(hex.lowercased())
+        Button {
+            guard !isUsed else { return }
+            colorHex = hex
+        } label: {
             ZStack {
                 Circle().fill(Color(hexString: hex))
                     .frame(width: 36, height: 36)
-                if isSelected {
+                    .opacity(isUsed ? 0.28 : 1)
+                if isSelected && !isUsed {
                     Circle()
                         .stroke(AppTheme.ink, lineWidth: 2.5)
                         .frame(width: 42, height: 42)
@@ -251,10 +276,18 @@ private struct CustomCategoryEditorSheet: View {
                         .font(.system(size: 14, weight: .heavy))
                         .foregroundStyle(.white)
                 }
+                // 已占用的色号画一条斜杠,一眼就能看出来"这个不能选"。
+                if isUsed {
+                    Image(systemName: "slash.circle")
+                        .font(.system(size: 18, weight: .bold))
+                        .foregroundStyle(AppTheme.secondary)
+                }
             }
             .frame(height: 44)
         }
         .buttonStyle(.plain)
+        .disabled(isUsed)
+        .accessibilityLabel(Text(isUsed ? String(localized: "颜色已被使用") : ""))
     }
 }
 

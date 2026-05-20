@@ -813,36 +813,6 @@
         }
       }
     },
-    "继续往下拉…" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Weiter ziehen…" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Keep pulling…" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Sigue tirando…" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Continue à tirer…" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "もっと引っ張って…" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "더 당겨봐…" } }
-      }
-    },
-    "再来一点!" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Noch ein bisschen!" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "A little more!" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "¡Un poco más!" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Encore un peu !" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "もうちょっと!" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "조금만 더!" } }
-      }
-    },
-    "松手发射 🚀" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Loslassen zum Abfeuern 🚀" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Release to launch 🚀" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Suelta para lanzar 🚀" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Lâche pour décoller 🚀" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "離して発射 🚀" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "놓으면 발사 🚀" } }
-      }
-    },
     "AI 提示词参考(可编辑后粘贴到 AI)" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -2232,6 +2202,16 @@
         }
       }
     },
+    "偏好" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Präferenzen" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Preferences" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Preferencias" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Préférences" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "環境設定" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "환경설정" } }
+      }
+    },
     "全年扣费分布" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -2640,6 +2620,47 @@
         }
       }
     },
+    "再来一点!" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noch ein bisschen!"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A little more!"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¡Un poco más!"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Encore un peu !"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "もうちょっと!"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "조금만 더!"
+          }
+        }
+      }
+    },
     "最贵的订阅" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -3043,6 +3064,16 @@
             "value" : "불러오는 중…"
           }
         }
+      }
+    },
+    "卡片" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Karten" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Cards" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Tarjetas" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Cartes" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "カード" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "카드" } }
       }
     },
     "印尼盾" : {
@@ -3699,6 +3730,7 @@
       }
     },
     "在 App Store 评分" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3898,6 +3930,16 @@
             "value" : "외관"
           }
         }
+      }
+    },
+    "外观与语言" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Darstellung & Sprache" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Appearance & Language" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Apariencia e idioma" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Apparence et langue" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "外観と言語" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "모양 및 언어" } }
       }
     },
     "多" : {
@@ -6758,7 +6800,6 @@
       }
     },
     "数据" : {
-      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -7369,6 +7410,16 @@
         }
       }
     },
+    "显示" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Anzeige" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Display" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Pantalla" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Affichage" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "表示" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "표시" } }
+      }
+    },
     "暂无即将扣费" : {
       "localizations" : {
         "de" : {
@@ -7894,6 +7945,47 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "이번 기간 결제할 구독이 없습니다"
+          }
+        }
+      }
+    },
+    "松手发射 🚀" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loslassen zum Abfeuern 🚀"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Release to launch 🚀"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suelta para lanzar 🚀"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lâche pour décoller 🚀"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "離して発射 🚀"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "놓으면 발사 🚀"
           }
         }
       }
@@ -10058,6 +10150,67 @@
         }
       }
     },
+    "给 EON 打个分" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "EON bewerten" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Rate EON" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Valorar EON" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Évaluer EON" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "EON を評価" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "EON 평가하기" } }
+      }
+    },
+    "颜色已被使用" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Farbe bereits verwendet" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Color already used" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Color ya usado" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Couleur déjà utilisée" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "この色は使用中" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "이미 사용 중인 색상" } }
+      }
+    },
+    "继续往下拉…" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weiter ziehen…"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keep pulling…"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sigue tirando…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continue à tirer…"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "もっと引っ張って…"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "더 당겨봐…"
+          }
+        }
+      }
+    },
     "绿" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -10674,7 +10827,6 @@
       }
     },
     "订阅" : {
-      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {

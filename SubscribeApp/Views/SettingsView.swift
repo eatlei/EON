@@ -1,36 +1,31 @@
 import SwiftUI
 import UIKit
 
+/// 整 App 的设置入口。条目按"用途接近"原则分了 4 段:
+/// - 偏好:外观(含语言/主题/卡片)
+/// - 订阅:跟订阅本体最相关的设置
+/// - 数据:iCloud 同步与导出
+/// - 关于:App 信息 / 评分 / 反馈
 struct SettingsView: View {
     @EnvironmentObject private var store: SubscriptionStore
-    @Environment(\.openURL) private var openURL
-    @State private var showLanguageDialog = false
-    @State private var showLanguageAppliedAlert = false
-
-    /// 当前 App 实际使用的语言代码(取自 Bundle 或 AppleLanguages 用户偏好)。
-    private var currentLanguageCode: String {
-        if let saved = (UserDefaults.standard.array(forKey: "AppleLanguages") as? [String])?.first {
-            return saved
-        }
-        return Bundle.main.preferredLocalizations.first ?? "zh-Hans"
-    }
-
-    /// 当前语言的显示名(简体中文 / English / …)。
-    private var currentLanguageName: String {
-        Self.supportedLanguages.first { currentLanguageCode.hasPrefix($0.code) }?.name
-            ?? currentLanguageCode
-    }
 
     var body: some View {
         NavigationStack {
             List {
+                // MARK: 偏好(外观 / 语言 / 主题色 / 卡片样式都收到这一层)
                 Section {
                     NavigationLink { AppearanceSettingsView() } label: {
                         HStack(spacing: 12) {
                             SettingsIcon(name: "paintpalette")
-                            Text("外观")
+                            Text("外观与语言")
                         }
                     }
+                } header: {
+                    Text("偏好")
+                }
+
+                // MARK: 订阅相关(高频改动放在显眼位置)
+                Section {
                     NavigationLink { CurrencySettingsView() } label: {
                         HStack(spacing: 12) {
                             SettingsIcon(name: "dollarsign.circle")
@@ -39,39 +34,22 @@ struct SettingsView: View {
                             Text(store.baseCurrency.rawValue).foregroundStyle(.secondary)
                         }
                     }
-                    NavigationLink { NotificationSettingsView() } label: {
-                        HStack(spacing: 12) {
-                            SettingsIcon(name: "bell")
-                            Text("通知")
-                        }
-                    }
                     NavigationLink { CategorySettingsView() } label: {
                         HStack(spacing: 12) {
                             SettingsIcon(name: "tag")
                             Text("分类")
                         }
                     }
-                    Button {
-                        showLanguageDialog = true
-                    } label: {
-                        HStack(spacing: 12) {
-                            SettingsIcon(name: "character.book.closed")
-                            Text("语言")
-                                .foregroundStyle(.primary)
-                            Spacer()
-                            Text(currentLanguageName)
-                                .foregroundStyle(.secondary)
-                        }
-                        .contentShape(Rectangle())
-                    }
-                    .buttonStyle(.plain)
-                }
-
-                Section {
                     NavigationLink { PaymentMethodsView() } label: {
                         HStack(spacing: 12) {
                             SettingsIcon(name: "creditcard")
                             Text("支付方式")
+                        }
+                    }
+                    NavigationLink { NotificationSettingsView() } label: {
+                        HStack(spacing: 12) {
+                            SettingsIcon(name: "bell")
+                            Text("通知")
                         }
                     }
                     NavigationLink { ArchivedSubscriptionsView() } label: {
@@ -80,14 +58,23 @@ struct SettingsView: View {
                             Text("归档订阅")
                         }
                     }
+                } header: {
+                    Text("订阅")
+                }
+
+                // MARK: 数据与同步
+                Section {
                     NavigationLink { DataSyncSettingsView() } label: {
                         HStack(spacing: 12) {
                             SettingsIcon(name: "externaldrive")
                             Text("iCloud 与数据")
                         }
                     }
+                } header: {
+                    Text("数据")
                 }
 
+                // MARK: 关于
                 Section {
                     NavigationLink { AboutView() } label: {
                         HStack(spacing: 12) {
@@ -95,45 +82,16 @@ struct SettingsView: View {
                             Text("关于")
                         }
                     }
+                } header: {
+                    Text("关于")
                 }
             }
             .listStyle(.insetGrouped)
             .scrollContentBackground(.visible)
             .navigationTitle("设置")
             .navigationBarTitleDisplayMode(.inline)
-            .confirmationDialog("语言", isPresented: $showLanguageDialog, titleVisibility: .visible) {
-                ForEach(Self.supportedLanguages, id: \.code) { lang in
-                    Button(lang.name) { applyLanguage(lang.code) }
-                }
-                Button("在 iOS 设置里更改…") {
-                    if let url = URL(string: UIApplication.openSettingsURLString) { openURL(url) }
-                }
-                Button("取消", role: .cancel) { }
-            }
-            .alert("语言已更新", isPresented: $showLanguageAppliedAlert) {
-                Button("好的", role: .cancel) { }
-            } message: {
-                Text("重新打开 EON 后生效。")
-            }
         }
     }
-
-    private func applyLanguage(_ code: String) {
-        UserDefaults.standard.set([code], forKey: "AppleLanguages")
-        UserDefaults.standard.synchronize()
-        showLanguageAppliedAlert = true
-    }
-
-    /// EON 当前支持的展示语言。需要跟 project.yml 的 CFBundleLocalizations 保持一致。
-    fileprivate static let supportedLanguages: [(code: String, name: String)] = [
-        ("zh-Hans", "简体中文"),
-        ("en",      "English"),
-        ("ja",      "日本語"),
-        ("ko",      "한국어"),
-        ("es",      "Español"),
-        ("fr",      "Français"),
-        ("de",      "Deutsch"),
-    ]
 }
 
 #Preview {
