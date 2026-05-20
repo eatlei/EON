@@ -149,12 +149,14 @@ enum ViewPeriod: String, CaseIterable, Identifiable, Hashable {
 
 private struct Row: View {
     @EnvironmentObject private var store: SubscriptionStore
+    @Environment(\.colorScheme) private var colorScheme
     let subscription: Subscription
     let viewPeriod: ViewPeriod
     let onArchive: () -> Void
     let onDelete: () -> Void
 
     private var colored: Bool { store.coloredSubscriptionCards }
+    private var isDark: Bool { colorScheme == .dark }
 
     /// 卡片底色:.tile 取色号,.image 取图像平均色,均回退分类色。
     private var cardColor: Color {
@@ -184,26 +186,22 @@ private struct Row: View {
     var body: some View {
         HStack(spacing: AppTheme.Space.m) {
             CategoryGlyph(subscription: subscription, size: 44)
-                .shadow(color: colored ? .black.opacity(0.25) : .clear,
+                .shadow(color: colored ? .black.opacity(isDark ? 0.25 : 0.10) : .clear,
                         radius: 6, x: 0, y: 3)
             VStack(alignment: .leading, spacing: 3) {
                 HStack(spacing: 6) {
                     Text(subscription.name).font(.subheadline.weight(.semibold))
-                        .foregroundStyle(colored ? Color.white : AppTheme.ink)
-                        .shadow(color: colored ? .black.opacity(0.30) : .clear, radius: 2, x: 0, y: 1)
+                        .foregroundStyle(AppTheme.ink)
                     if subscription.status == .trial {
                         Text("试用").font(.caption2.weight(.bold))
                             .padding(.horizontal, 6).padding(.vertical, 2)
-                            .background(
-                                colored ? Color.white.opacity(0.22) : AppTheme.accent.opacity(0.14),
-                                in: Capsule()
-                            )
-                            .foregroundStyle(colored ? Color.white : AppTheme.accent)
+                            .background(AppTheme.accent.opacity(0.14), in: Capsule())
+                            .foregroundStyle(AppTheme.accent)
                     }
                 }
                 Text(subtitle)
                     .font(.caption)
-                    .foregroundStyle(colored ? Color.white.opacity(0.78) : AppTheme.secondary)
+                    .foregroundStyle(AppTheme.secondary)
                     .lineLimit(1)
             }
             Spacer(minLength: AppTheme.Space.s)
@@ -212,13 +210,12 @@ private struct Row: View {
                 // 在每张卡片上再写一次是冗余。
                 Text(store.converter.format(displayedAmount, currency: store.baseCurrency))
                     .font(.system(size: 19, weight: .bold, design: .rounded))
-                    .foregroundStyle(colored ? Color.white : AppTheme.ink)
+                    .foregroundStyle(AppTheme.ink)
                     .lineLimit(1)
                     .minimumScaleFactor(0.7)
-                    .shadow(color: colored ? .black.opacity(0.30) : .clear, radius: 2, x: 0, y: 1)
                 Text(subscription.nextBillingDate.formatted(.dateTime.month().day()))
                     .font(.caption2)
-                    .foregroundStyle(colored ? Color.white.opacity(0.72) : AppTheme.tertiary)
+                    .foregroundStyle(AppTheme.tertiary)
             }
             Menu {
                 Button { onArchive() } label: {
@@ -231,7 +228,7 @@ private struct Row: View {
                 .tint(.red)
             } label: {
                 Image(systemName: "ellipsis").font(.subheadline.weight(.bold))
-                    .foregroundStyle(colored ? Color.white.opacity(0.7) : AppTheme.tertiary)
+                    .foregroundStyle(AppTheme.tertiary)
                     .frame(width: 28, height: 36)
             }
         }
@@ -241,33 +238,44 @@ private struct Row: View {
         .opacity(subscription.isActive ? 1 : 0.5)
     }
 
-    /// 参考 iOS 26 Apple Arcade / Library 卡片风格:深色底 + 左侧从图标色发散的径向光晕,
-    /// 越往右越暗,直到接近纯深色。色彩只作"个性提示"而不是 dominant fill,既有性格
-    /// 又克制高级。
+    /// 卡片底色 = AppTheme.surface(自动适配明暗模式)+ icon 主色径向光晕。
+    /// 光晕透明度在浅色模式下显著降低,避免在白底页面里"突兀"。
+    /// 深色模式还保留 Apple Library 那种"暗玻璃 + 浓色光晕"的味道。
     @ViewBuilder
     private var coloredCardBackground: some View {
         if colored {
             ZStack {
-                Color(red: 0.10, green: 0.11, blue: 0.14)
-                LinearGradient(
-                    colors: [.white.opacity(0.04), .clear, .black.opacity(0.18)],
-                    startPoint: .top, endPoint: .bottom
-                )
+                AppTheme.surface
+
+                // 深色模式才需要的顶部 sheen + 底部 shadow(浅色模式上加这层就脏了)
+                if isDark {
+                    LinearGradient(
+                        colors: [.white.opacity(0.04), .clear, .black.opacity(0.18)],
+                        startPoint: .top, endPoint: .bottom
+                    )
+                }
+
+                // 左侧色彩光晕。深色 0.95 → 0.55 → 0.18 → clear;浅色 0.38 → 0.18 → 0.05 → clear。
+                // 浅色下的光晕只是轻轻染色,黑色文字依然清晰。
                 RadialGradient(
                     stops: [
-                        .init(color: cardColor.opacity(0.95), location: 0.0),
-                        .init(color: cardColor.opacity(0.55), location: 0.35),
-                        .init(color: cardColor.opacity(0.18), location: 0.7),
-                        .init(color: .clear,                  location: 1.0),
+                        .init(color: cardColor.opacity(isDark ? 0.95 : 0.38), location: 0.0),
+                        .init(color: cardColor.opacity(isDark ? 0.55 : 0.18), location: 0.35),
+                        .init(color: cardColor.opacity(isDark ? 0.18 : 0.05), location: 0.70),
+                        .init(color: .clear, location: 1.0),
                     ],
                     center: UnitPoint(x: 0.13, y: 0.50),
                     startRadius: 0,
                     endRadius: 240
                 )
-                LinearGradient(
-                    colors: [.white.opacity(0.06), .clear],
-                    startPoint: .top, endPoint: .center
-                )
+
+                // 深色模式上的玻璃反光高光 —— 浅色下加白色高光等于没加,直接跳过。
+                if isDark {
+                    LinearGradient(
+                        colors: [.white.opacity(0.06), .clear],
+                        startPoint: .top, endPoint: .center
+                    )
+                }
             }
             .clipShape(RoundedRectangle(cornerRadius: AppTheme.radius))
         } else {
@@ -277,7 +285,7 @@ private struct Row: View {
 
     @ViewBuilder
     private var coloredCardBorder: some View {
-        if colored {
+        if colored && isDark {
             RoundedRectangle(cornerRadius: AppTheme.radius)
                 .stroke(
                     LinearGradient(
