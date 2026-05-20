@@ -17,12 +17,13 @@ struct DashboardView: View {
                         HeroTotal(period: period).reveal(1)
                         QuickStatsPanel(period: period).reveal(2)
                         UpcomingPanel().reveal(3)
-                        CategoryPanel().reveal(4)
-                        TopSpendersPanel(period: period).reveal(5)
+                        ForecastPanel().reveal(4)
+                        CategoryPanel().reveal(5)
+                        TopSpendersPanel(period: period).reveal(6)
                         if period == .month {
-                            CalendarPanel().reveal(6)
+                            CalendarPanel().reveal(7)
                         } else {
-                            YearPanel().reveal(6)
+                            YearPanel().reveal(7)
                         }
                     }
                 }
@@ -237,6 +238,7 @@ private struct CalendarPanel: View {
     @State private var monthAnchor: Date = Calendar.current.dateInterval(of: .month, for: .now)?.start ?? .now
     /// 用户点过的那一天(nil 表示未选,只看到"今天"高亮)。换月时自动重置。
     @State private var selectedDay: Int? = nil
+    @State private var showMonthPicker = false
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 6), count: 7)
     private let symbols = Calendar.current.veryShortStandaloneWeekdaySymbols
 
@@ -278,16 +280,9 @@ private struct CalendarPanel: View {
 
                     Spacer()
 
-                    Menu {
-                        ForEach((-24...24), id: \.self) { off in
-                            if let d = Calendar.current.date(byAdding: .month, value: off, to: currentMonthStart) {
-                                Button(monthLabel(d)) {
-                                    if let s = Calendar.current.dateInterval(of: .month, for: d)?.start {
-                                        monthAnchor = s
-                                    }
-                                }
-                            }
-                        }
+                    // 点月份名打开"年 + 12 个月按钮"的弹窗,比下拉列表好选得多。
+                    Button {
+                        showMonthPicker = true
                     } label: {
                         HStack(spacing: 5) {
                             Text(monthLabel(monthAnchor))
@@ -297,7 +292,9 @@ private struct CalendarPanel: View {
                                 .font(.caption2.weight(.bold))
                                 .foregroundStyle(AppTheme.secondary)
                         }
+                        .contentShape(Rectangle())
                     }
+                    .buttonStyle(.plain)
 
                     if !isCurrentMonth {
                         Button { monthAnchor = currentMonthStart } label: {
@@ -334,33 +331,43 @@ private struct CalendarPanel: View {
                             let isToday = todayInVisibleMonth == day
                             let isSelected = selectedDay == day
                             Button {
-                                // 任意一天都能点(没扣费的日子点了取消高亮)。
                                 selectedDay = (selectedDay == day) ? nil : day
                             } label: {
                                 VStack(spacing: 3) {
-                                    Text("\(day)")
-                                        .font(.caption.monospacedDigit().weight(cs.isEmpty ? .regular : .bold))
-                                        .foregroundStyle(dayTextColor(isToday: isToday, isSelected: isSelected, hasCharges: !cs.isEmpty))
+                                    // iOS Calendar 风格 —— 今天是一颗实心 accent 圆,圈住数字,
+                                    // 其他状态全部走单元格底色,不会跟"今天"撞色。
+                                    ZStack {
+                                        if isToday {
+                                            Circle()
+                                                .fill(AppTheme.accent)
+                                                .frame(width: 26, height: 26)
+                                        }
+                                        Text("\(day)")
+                                            .font(.caption.monospacedDigit().weight(isToday || !cs.isEmpty ? .bold : .regular))
+                                            .foregroundStyle(
+                                                isToday ? .white
+                                                : (cs.isEmpty ? AppTheme.tertiary : AppTheme.ink)
+                                            )
+                                    }
+                                    .frame(width: 26, height: 26)
+
                                     HStack(spacing: 2) {
                                         ForEach(cs.prefix(3)) { c in
                                             Circle().fill(c.subscription.category.color).frame(width: 4, height: 4)
                                         }
                                     }.frame(height: 4)
                                 }
-                                .frame(height: 34).frame(maxWidth: .infinity)
-                                .background(dayBackground(isToday: isToday, isSelected: isSelected, hasCharges: !cs.isEmpty),
-                                            in: RoundedRectangle(cornerRadius: AppTheme.radiusSmall))
-                                .overlay(
-                                    isToday
-                                        ? RoundedRectangle(cornerRadius: AppTheme.radiusSmall)
-                                            .stroke(AppTheme.accent, lineWidth: 1.5)
-                                        : nil
+                                .frame(height: 38).frame(maxWidth: .infinity)
+                                .background(
+                                    isSelected && !isToday ? AppTheme.accent.opacity(0.30)
+                                    : (!cs.isEmpty && !isToday ? AppTheme.accent.opacity(0.14) : .clear),
+                                    in: RoundedRectangle(cornerRadius: AppTheme.radiusSmall)
                                 )
                                 .contentShape(Rectangle())
                             }
                             .buttonStyle(.plain)
                         } else {
-                            Color.clear.frame(height: 34)
+                            Color.clear.frame(height: 38)
                         }
                     }
                 }
@@ -411,21 +418,13 @@ private struct CalendarPanel: View {
             .animation(AppTheme.spring, value: selectedDay)
             .onChange(of: monthAnchor) { _, _ in selectedDay = nil }
         }
+        .sheet(isPresented: $showMonthPicker) {
+            MonthPickerSheet(monthAnchor: $monthAnchor)
+                .presentationDetents([.height(360)])
+                .presentationDragIndicator(.visible)
+        }
     }
 
-    private func dayTextColor(isToday: Bool, isSelected: Bool, hasCharges: Bool) -> Color {
-        if isToday { return .white }
-        if hasCharges { return AppTheme.ink }
-        if isSelected { return AppTheme.ink }
-        return AppTheme.tertiary
-    }
-
-    private func dayBackground(isToday: Bool, isSelected: Bool, hasCharges: Bool) -> Color {
-        if isToday { return AppTheme.accent }
-        if isSelected { return AppTheme.accent.opacity(0.35) }
-        if hasCharges { return AppTheme.accent.opacity(0.22) }
-        return .clear
-    }
 
     private var cells: [Int?] {
         let cal = Calendar.current
@@ -456,6 +455,160 @@ private struct YearPanel: View {
             .chartYAxis(.hidden)
             .frame(height: 128)
         }
+    }
+}
+
+// MARK: - 30 天预览面板
+
+/// 把今后 30 天的每笔扣费画成柱状图,按分类色上色。让用户一眼看到
+/// "下个月的支出节奏",哪几天会大额出账,哪几天没事。
+private struct ForecastPanel: View {
+    @EnvironmentObject private var store: SubscriptionStore
+
+    private var charges: [RenewalCharge] { store.chargesInNext(30) }
+    private var total: Double { charges.reduce(0) { $0 + $1.amount } }
+
+    var body: some View {
+        if !charges.isEmpty {
+            Panel(title: "30 天预览") {
+                VStack(alignment: .leading, spacing: AppTheme.Space.s) {
+                    Chart(charges) { c in
+                        BarMark(
+                            x: .value("date", c.date, unit: .day),
+                            y: .value("amount", c.amount)
+                        )
+                        .foregroundStyle(c.subscription.category.color)
+                        .cornerRadius(3)
+                    }
+                    .chartXAxis {
+                        AxisMarks(values: .stride(by: .day, count: 7)) { _ in
+                            AxisValueLabel(
+                                format: .dateTime.month(.abbreviated).day(),
+                                centered: false
+                            )
+                            .font(.caption2)
+                        }
+                    }
+                    .chartYAxis(.hidden)
+                    .frame(height: 120)
+
+                    HStack {
+                        Text(String(localized: "共 \(charges.count) 笔"))
+                            .font(.caption).foregroundStyle(AppTheme.secondary)
+                        Spacer()
+                        Text(store.converter.format(total, currency: store.baseCurrency))
+                            .font(.caption.weight(.bold))
+                            .foregroundStyle(AppTheme.ink)
+                    }
+                }
+            }
+        }
+    }
+}
+
+// MARK: - 选月份弹窗
+
+/// 替换原本"-24 到 +24 个月"的下拉列表。改成一个年份步进 + 12 月按钮网格,
+/// 一次只看一个年,跨年点头部箭头切换,空间小、选起来直观很多。
+private struct MonthPickerSheet: View {
+    @Binding var monthAnchor: Date
+    @Environment(\.dismiss) private var dismiss
+    @State private var year: Int
+
+    init(monthAnchor: Binding<Date>) {
+        self._monthAnchor = monthAnchor
+        let cal = Calendar.current
+        self._year = State(initialValue: cal.component(.year, from: monthAnchor.wrappedValue))
+    }
+
+    private var anchorYear: Int { Calendar.current.component(.year, from: monthAnchor) }
+    private var anchorMonth: Int { Calendar.current.component(.month, from: monthAnchor) }
+    private var currentYear: Int { Calendar.current.component(.year, from: .now) }
+    private var currentMonth: Int { Calendar.current.component(.month, from: .now) }
+
+    var body: some View {
+        VStack(spacing: AppTheme.Space.l) {
+            // Year stepper
+            HStack {
+                yearStepperButton(systemName: "chevron.left") { year -= 1 }
+                Spacer()
+                Text(verbatim: "\(year)")
+                    .font(.system(size: 30, weight: .heavy, design: .rounded))
+                    .foregroundStyle(AppTheme.ink)
+                    .contentTransition(.numericText())
+                Spacer()
+                yearStepperButton(systemName: "chevron.right") { year += 1 }
+            }
+            .padding(.horizontal, AppTheme.Space.l)
+
+            LazyVGrid(
+                columns: Array(repeating: GridItem(.flexible(), spacing: AppTheme.Space.m), count: 3),
+                spacing: AppTheme.Space.m
+            ) {
+                ForEach(1...12, id: \.self) { m in
+                    monthButton(m)
+                }
+            }
+            .padding(.horizontal, AppTheme.Space.l)
+
+            Spacer(minLength: 0)
+        }
+        .padding(.top, AppTheme.Space.xl)
+        .background(AppTheme.canvas.ignoresSafeArea())
+        .animation(AppTheme.spring, value: year)
+    }
+
+    @ViewBuilder
+    private func yearStepperButton(systemName: String, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Image(systemName: systemName)
+                .font(.subheadline.weight(.bold))
+                .foregroundStyle(AppTheme.ink)
+                .frame(width: 40, height: 40)
+                .background(AppTheme.surface, in: Circle())
+                .overlay(Circle().stroke(AppTheme.hairline, lineWidth: 0.5))
+        }
+        .buttonStyle(.plain)
+    }
+
+    @ViewBuilder
+    private func monthButton(_ m: Int) -> some View {
+        let isSelected = (year == anchorYear && m == anchorMonth)
+        let isCurrent  = (year == currentYear && m == currentMonth)
+        Button {
+            let comps = DateComponents(year: year, month: m, day: 1)
+            if let d = Calendar.current.date(from: comps) {
+                monthAnchor = d
+                dismiss()
+            }
+        } label: {
+            VStack(spacing: 2) {
+                Text(monthShortName(m))
+                    .font(.subheadline.weight(.semibold))
+                if isCurrent && !isSelected {
+                    Circle()
+                        .fill(AppTheme.accent)
+                        .frame(width: 4, height: 4)
+                } else {
+                    Color.clear.frame(width: 4, height: 4)
+                }
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 14)
+            .background(
+                isSelected ? AppTheme.ink : AppTheme.surface,
+                in: RoundedRectangle(cornerRadius: AppTheme.radius)
+            )
+            .foregroundStyle(isSelected ? AppTheme.surface : AppTheme.ink)
+            .glassBorder(cornerRadius: AppTheme.radius)
+        }
+        .buttonStyle(.plain)
+    }
+
+    private func monthShortName(_ m: Int) -> String {
+        let f = DateFormatter()
+        f.locale = .current
+        return f.shortStandaloneMonthSymbols[m - 1]
     }
 }
 

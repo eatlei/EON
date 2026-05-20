@@ -257,6 +257,16 @@ final class SubscriptionStore: ObservableObject {
     }
 
     /// 每个有效订阅的"下一笔未来扣费"（date >= 现在，日历精确），按日期升序，最多 limit 条。每个订阅最多 1 条。
+    /// 接下来 `days` 天内每个订阅会发生的所有扣费 —— 同一订阅在窗口里可能出现多次
+    /// (周付订阅就会出现 ~4 次)。专供 Overview 上的 30 天预览柱图使用。
+    func chargesInNext(_ days: Int) -> [RenewalCharge] {
+        let now = Date()
+        guard let end = Calendar.current.date(byAdding: .day, value: days, to: now) else { return [] }
+        return activeSubscriptions
+            .flatMap { projectedCharges(for: $0, from: now, to: end) }
+            .sorted { $0.date < $1.date }
+    }
+
     func upcomingCharges(limit: Int = 6) -> [RenewalCharge] {
         let now = Date()
         let calendar = Calendar.current
