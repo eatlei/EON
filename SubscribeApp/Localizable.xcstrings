@@ -2264,7 +2264,6 @@
       }
     },
     "分类": {
-      "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -2997,6 +2996,47 @@
         }
       }
     },
+    "在 iOS 设置里更改…": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In iOS-Einstellungen ändern…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Change in iOS Settings…"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cambiar en Ajustes de iOS…"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modifier dans Réglages iOS…"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iOS 設定で変更…"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iOS 설정에서 변경…"
+          }
+        }
+      }
+    },
     "基础": {
       "extractionState": "stale",
       "localizations": {
@@ -3319,6 +3359,47 @@
           "stringUnit": {
             "state": "translated",
             "value": "예: Visa 0821"
+          }
+        }
+      }
+    },
+    "如 游戏 / 健身 / 杂项": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "z. B. Games / Fitness / Sonstiges"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "e.g. Games / Fitness / Misc"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "p. ej. Juegos / Fitness / Otros"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ex. Jeux / Fitness / Divers"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "例:ゲーム / フィットネス / その他"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "예: 게임 / 피트니스 / 기타"
           }
         }
       }
@@ -7519,6 +7600,46 @@
         }
       }
     },
+    "点一下任意分类可以改名。颜色和原名固定不变,改名只影响显示。": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tippe auf eine Kategorie, um sie umzubenennen. Farben und Originalnamen bleiben fest; das Umbenennen ändert nur die Anzeige."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap any category to rename it. Colours and original names stay locked; renaming only affects what you see."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toca cualquier categoría para renombrarla. Los colores y los nombres originales se mantienen; el cambio solo afecta a la visualización."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Touchez une catégorie pour la renommer. Les couleurs et les noms d'origine restent inchangés ; le renommage n'affecte que l'affichage."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "カテゴリをタップすると名前を変更できます。色と元の名前は固定で、表示名だけが変わります。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "카테고리를 탭하면 이름을 바꿀 수 있습니다. 색상과 원래 이름은 그대로이며 표시 이름만 변경됩니다."
+          }
+        }
+      }
+    },
     "点一下任意订阅可以查看并恢复。恢复后会重新出现在订阅列表里。": {
       "localizations": {
         "de": {
@@ -9189,6 +9310,47 @@
         }
       }
     },
+    "语言已更新": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sprache aktualisiert"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Language updated"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Idioma actualizado"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Langue mise à jour"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "言語を変更しました"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "언어가 변경됨"
+          }
+        }
+      }
+    },
     "请在此描述你的问题或建议：": {
       "extractionState": "stale",
       "localizations": {
@@ -9881,6 +10043,87 @@
         }
       }
     },
+    "重命名": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Umbenennen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rename"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Renombrar"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Renommer"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "名前を変更"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이름 변경"
+          }
+        }
+      }
+    },
+    "重新打开 EON 后生效。": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Öffne EON neu, damit es wirkt."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reopen EON to apply."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reabre EON para que se aplique."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rouvrez EON pour appliquer."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EON を開き直すと反映されます。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EON을 다시 열면 적용됩니다."
+          }
+        }
+      }
+    },
     "金额": {
       "extractionState": "stale",
       "localizations": {
@@ -10330,6 +10573,46 @@
         }
       }
     },
+    "默认: %@": {
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Standard: %@"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Default: %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Predeterminado: %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Par défaut : %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "デフォルト: %@"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "기본값: %@"
+          }
+        }
+      }
+    },
     "默认币种": {
       "localizations": {
         "de": {
@@ -10370,282 +10653,442 @@
         }
       }
     },
-    "点一下任意分类可以改名。颜色和原名固定不变,改名只影响显示。": {
+    "之后": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tap any category to rename it. Colours and original names stay locked; renaming only affects what you see."
+            "value": "Later"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "カテゴリをタップすると名前を変更できます。色と元の名前は固定で、表示名だけが変わります。"
+            "value": "それ以降"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "카테고리를 탭하면 이름을 바꿀 수 있습니다. 색상과 원래 이름은 그대로이며 표시 이름만 변경됩니다."
+            "value": "이후"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Toca cualquier categoría para renombrarla. Los colores y los nombres originales se mantienen; el cambio solo afecta a la visualización."
+            "value": "Más tarde"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Touchez une catégorie pour la renommer. Les couleurs et les noms d'origine restent inchangés ; le renommage n'affecte que l'affichage."
+            "value": "Plus tard"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tippe auf eine Kategorie, um sie umzubenennen. Farben und Originalnamen bleiben fest; das Umbenennen ändert nur die Anzeige."
+            "value": "Später"
           }
         }
       }
     },
-    "重命名": {
+    "活跃订阅": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Rename"
+            "value": "Active"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "名前を変更"
+            "value": "アクティブ"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "이름 변경"
+            "value": "활성"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Renombrar"
+            "value": "Activas"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Renommer"
+            "value": "Actives"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Umbenennen"
+            "value": "Aktiv"
           }
         }
       }
     },
-    "如 游戏 / 健身 / 杂项": {
+    "年度预估": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "e.g. Games / Fitness / Misc"
+            "value": "Annual est."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "例:ゲーム / フィットネス / その他"
+            "value": "年間予想"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "예: 게임 / 피트니스 / 기타"
+            "value": "연간 예상"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "p. ej. Juegos / Fitness / Otros"
+            "value": "Anual aprox."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "ex. Jeux / Fitness / Divers"
+            "value": "Annuel estimé"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "z. B. Games / Fitness / Sonstiges"
+            "value": "Jahres-Schätzung"
           }
         }
       }
     },
-    "默认: %@": {
+    "平均每个": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Default: %@"
+            "value": "Average"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "デフォルト: %@"
+            "value": "平均"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "기본값: %@"
+            "value": "평균"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Predeterminado: %@"
+            "value": "Promedio"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Par défaut : %@"
+            "value": "Moyenne"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Standard: %@"
+            "value": "Durchschnitt"
           }
         }
       }
     },
-    "语言已更新": {
+    "按月": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Language updated"
+            "value": "per month"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "言語を変更しました"
+            "value": "月あたり"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "언어가 변경됨"
+            "value": "월별"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Idioma actualizado"
+            "value": "por mes"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Langue mise à jour"
+            "value": "par mois"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sprache aktualisiert"
+            "value": "pro Monat"
           }
         }
       }
     },
-    "重新打开 EON 后生效。": {
+    "最贵的订阅": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reopen EON to apply."
+            "value": "Top Spending"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "EON を開き直すと反映されます。"
+            "value": "支出の多い順"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "EON을 다시 열면 적용됩니다."
+            "value": "지출 상위"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reabre EON para que se aplique."
+            "value": "Mayor gasto"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Rouvrez EON pour appliquer."
+            "value": "Plus dépensé"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Öffne EON neu, damit es wirkt."
+            "value": "Top-Ausgaben"
           }
         }
       }
     },
-    "在 iOS 设置里更改…": {
+    "%lld 个试用": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Change in iOS Settings…"
+            "value": "%lld trial"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "iOS 設定で変更…"
+            "value": "%lld 個試用版"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "iOS 설정에서 변경…"
+            "value": "%lld개 시험판"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cambiar en Ajustes de iOS…"
+            "value": "%lld de prueba"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Modifier dans Réglages iOS…"
+            "value": "%lld d'essai"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "In iOS-Einstellungen ändern…"
+            "value": "%lld in der Testphase"
+          }
+        }
+      }
+    },
+    "月均": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Monthly"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "月割り"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "월 평균"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mensual"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mensuel"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Monatlich"
+          }
+        }
+      }
+    },
+    "年均": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annual"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "年割り"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "연 평균"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Anual"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Annuel"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jährlich"
+          }
+        }
+      }
+    },
+    "全部摊到每月": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "all subs averaged"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "月割り合計"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "월 단위로 합산"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "promedio mensual"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "moyenne mensuelle"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Monatsdurchschnitt"
+          }
+        }
+      }
+    },
+    "全部摊到每年": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "all subs averaged"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "年割り合計"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "연 단위로 합산"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "promedio anual"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "moyenne annuelle"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jahresdurchschnitt"
           }
         }
       }

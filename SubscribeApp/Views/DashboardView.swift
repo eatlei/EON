@@ -15,12 +15,14 @@ struct DashboardView: View {
                     VStack(spacing: AppTheme.Space.xl) {
                         DashboardHeader(period: $period).reveal(0)
                         HeroTotal(period: period).reveal(1)
-                        UpcomingPanel().reveal(2)
-                        CategoryPanel().reveal(3)
+                        QuickStatsPanel(period: period).reveal(2)
+                        UpcomingPanel().reveal(3)
+                        CategoryPanel().reveal(4)
+                        TopSpendersPanel(period: period).reveal(5)
                         if period == .month {
-                            CalendarPanel().reveal(4)
+                            CalendarPanel().reveal(6)
                         } else {
-                            YearPanel().reveal(4)
+                            YearPanel().reveal(6)
                         }
                     }
                 }
@@ -109,6 +111,30 @@ private struct UpcomingPanel: View {
     }
     private var hiddenCount: Int { max(0, allCharges.count - collapsedLimit) }
 
+    /// Buckets the visible charges into 本月 / 之后 so a yearly sub whose next
+    /// charge is 12 months away doesn't get confused for an imminent bill.
+    private struct Bucket: Identifiable { let id = UUID(); let title: String; let charges: [RenewalCharge] }
+    private var buckets: [Bucket] {
+        let cal = Calendar.current
+        let now = Date()
+        let monthEnd = cal.dateInterval(of: .month, for: now)?.end ?? now
+        let thisMonth = visibleCharges.filter { $0.date < monthEnd }
+        let later     = visibleCharges.filter { $0.date >= monthEnd }
+        var out: [Bucket] = []
+        if !thisMonth.isEmpty { out.append(Bucket(title: String(localized: "本月"), charges: thisMonth)) }
+        if !later.isEmpty     { out.append(Bucket(title: String(localized: "之后"), charges: later)) }
+        return out
+    }
+
+    /// 跨年的扣费补上年份(明年/2027 年的就一眼看得出来),当年就只显示月日。
+    private func formatDate(_ date: Date) -> String {
+        let cal = Calendar.current
+        if cal.component(.year, from: date) == cal.component(.year, from: Date()) {
+            return date.formatted(.dateTime.month().day())
+        }
+        return date.formatted(.dateTime.year().month().day())
+    }
+
     var body: some View {
         Panel(title: "即将扣费") {
             if allCharges.isEmpty {
@@ -117,21 +143,36 @@ private struct UpcomingPanel: View {
                     .frame(maxWidth: .infinity, alignment: .leading).padding(.vertical, AppTheme.Space.s)
             } else {
                 VStack(spacing: 0) {
-                    ForEach(Array(visibleCharges.enumerated()), id: \.element.id) { i, c in
-                        if i > 0 { Hairline() }
-                        HStack(spacing: AppTheme.Space.m) {
-                            CategoryGlyph(subscription: c.subscription)
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text(c.subscription.name).font(.subheadline.weight(.semibold))
-                                    .foregroundStyle(AppTheme.ink)
-                                Text("\(c.date.formatted(.dateTime.month().day())) · \(c.subscription.plan)")
-                                    .font(.caption).foregroundStyle(AppTheme.secondary)
-                            }
+                    ForEach(Array(buckets.enumerated()), id: \.element.id) { bi, bucket in
+                        // Group label — skip the leading divider for the very first bucket.
+                        if bi > 0 { Hairline() }
+                        HStack {
+                            Text(bucket.title)
+                                .font(.caption.weight(.bold))
+                                .tracking(0.6)
+                                .textCase(.uppercase)
+                                .foregroundStyle(AppTheme.tertiary)
                             Spacer()
-                            Text(store.converter.format(c.amount, currency: store.baseCurrency))
-                                .font(.amount()).foregroundStyle(AppTheme.ink)
                         }
-                        .padding(.vertical, AppTheme.Space.m)
+                        .padding(.top, bi == 0 ? 0 : AppTheme.Space.s)
+                        .padding(.bottom, 2)
+
+                        ForEach(Array(bucket.charges.enumerated()), id: \.element.id) { i, c in
+                            if i > 0 { Hairline() }
+                            HStack(spacing: AppTheme.Space.m) {
+                                CategoryGlyph(subscription: c.subscription)
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text(c.subscription.name).font(.subheadline.weight(.semibold))
+                                        .foregroundStyle(AppTheme.ink)
+                                    Text("\(formatDate(c.date)) · \(c.subscription.plan)")
+                                        .font(.caption).foregroundStyle(AppTheme.secondary)
+                                }
+                                Spacer()
+                                Text(store.converter.format(c.amount, currency: store.baseCurrency))
+                                    .font(.amount()).foregroundStyle(AppTheme.ink)
+                            }
+                            .padding(.vertical, AppTheme.Space.m)
+                        }
                     }
 
                     if hiddenCount > 0 {
@@ -194,6 +235,8 @@ private struct CategoryPanel: View {
 private struct CalendarPanel: View {
     @EnvironmentObject private var store: SubscriptionStore
     @State private var monthAnchor: Date = Calendar.current.dateInterval(of: .month, for: .now)?.start ?? .now
+    /// 用户点过的那一天(nil 表示未选,只看到"今天"高亮)。换月时自动重置。
+    @State private var selectedDay: Int? = nil
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 6), count: 7)
     private let symbols = Calendar.current.veryShortStandaloneWeekdaySymbols
 
@@ -202,6 +245,11 @@ private struct CalendarPanel: View {
     }
     private var isCurrentMonth: Bool {
         Calendar.current.isDate(monthAnchor, equalTo: currentMonthStart, toGranularity: .month)
+    }
+    /// 显示的月份里"今天"是几号(不是这个月则返回 nil)。
+    private var todayInVisibleMonth: Int? {
+        guard isCurrentMonth else { return nil }
+        return Calendar.current.component(.day, from: .now)
     }
     private func monthLabel(_ d: Date) -> String {
         d.formatted(.dateTime.year().month(.wide))
@@ -283,27 +331,100 @@ private struct CalendarPanel: View {
                     ForEach(Array(cells.enumerated()), id: \.offset) { _, day in
                         if let day {
                             let cs = byDay[day] ?? []
-                            VStack(spacing: 3) {
-                                Text("\(day)")
-                                    .font(.caption.monospacedDigit().weight(cs.isEmpty ? .regular : .bold))
-                                    .foregroundStyle(cs.isEmpty ? AppTheme.tertiary : AppTheme.ink)
-                                HStack(spacing: 2) {
-                                    ForEach(cs.prefix(3)) { c in
-                                        Circle().fill(c.subscription.category.color).frame(width: 4, height: 4)
-                                    }
-                                }.frame(height: 4)
+                            let isToday = todayInVisibleMonth == day
+                            let isSelected = selectedDay == day
+                            Button {
+                                // 任意一天都能点(没扣费的日子点了取消高亮)。
+                                selectedDay = (selectedDay == day) ? nil : day
+                            } label: {
+                                VStack(spacing: 3) {
+                                    Text("\(day)")
+                                        .font(.caption.monospacedDigit().weight(cs.isEmpty ? .regular : .bold))
+                                        .foregroundStyle(dayTextColor(isToday: isToday, isSelected: isSelected, hasCharges: !cs.isEmpty))
+                                    HStack(spacing: 2) {
+                                        ForEach(cs.prefix(3)) { c in
+                                            Circle().fill(c.subscription.category.color).frame(width: 4, height: 4)
+                                        }
+                                    }.frame(height: 4)
+                                }
+                                .frame(height: 34).frame(maxWidth: .infinity)
+                                .background(dayBackground(isToday: isToday, isSelected: isSelected, hasCharges: !cs.isEmpty),
+                                            in: RoundedRectangle(cornerRadius: AppTheme.radiusSmall))
+                                .overlay(
+                                    isToday
+                                        ? RoundedRectangle(cornerRadius: AppTheme.radiusSmall)
+                                            .stroke(AppTheme.accent, lineWidth: 1.5)
+                                        : nil
+                                )
+                                .contentShape(Rectangle())
                             }
-                            .frame(height: 34).frame(maxWidth: .infinity)
-                            .background(cs.isEmpty ? Color.clear : AppTheme.accent.opacity(0.22),
-                                        in: RoundedRectangle(cornerRadius: AppTheme.radiusSmall))
+                            .buttonStyle(.plain)
                         } else {
                             Color.clear.frame(height: 34)
                         }
                     }
                 }
+
+                // 点中某天 + 那天有扣费,展开看具体哪些订阅
+                if let day = selectedDay,
+                   let interval = Calendar.current.dateInterval(of: .month, for: monthAnchor),
+                   let dayDate = Calendar.current.date(byAdding: .day, value: day - 1, to: interval.start),
+                   let charges = byDay[day], !charges.isEmpty {
+                    Hairline()
+                    HStack {
+                        Text(dayDate.formatted(.dateTime.month().day().weekday(.wide)))
+                            .font(.caption.weight(.bold))
+                            .foregroundStyle(AppTheme.ink)
+                        Spacer()
+                        Text(store.converter.format(
+                            charges.reduce(0) { $0 + $1.amount },
+                            currency: store.baseCurrency))
+                            .font(.caption.weight(.bold))
+                            .foregroundStyle(AppTheme.accent)
+                    }
+                    .padding(.top, AppTheme.Space.s)
+
+                    VStack(spacing: AppTheme.Space.s) {
+                        ForEach(charges) { c in
+                            HStack(spacing: AppTheme.Space.s) {
+                                CategoryGlyph(subscription: c.subscription, size: 28)
+                                VStack(alignment: .leading, spacing: 1) {
+                                    Text(c.subscription.name)
+                                        .font(.caption.weight(.semibold))
+                                        .foregroundStyle(AppTheme.ink)
+                                    if !c.subscription.plan.isEmpty {
+                                        Text(c.subscription.plan)
+                                            .font(.caption2)
+                                            .foregroundStyle(AppTheme.secondary)
+                                    }
+                                }
+                                Spacer()
+                                Text(store.converter.format(c.amount, currency: store.baseCurrency))
+                                    .font(.caption.weight(.semibold).monospacedDigit())
+                                    .foregroundStyle(AppTheme.ink)
+                            }
+                        }
+                    }
+                }
             }
             .animation(AppTheme.spring, value: monthAnchor)
+            .animation(AppTheme.spring, value: selectedDay)
+            .onChange(of: monthAnchor) { _, _ in selectedDay = nil }
         }
+    }
+
+    private func dayTextColor(isToday: Bool, isSelected: Bool, hasCharges: Bool) -> Color {
+        if isToday { return .white }
+        if hasCharges { return AppTheme.ink }
+        if isSelected { return AppTheme.ink }
+        return AppTheme.tertiary
+    }
+
+    private func dayBackground(isToday: Bool, isSelected: Bool, hasCharges: Bool) -> Color {
+        if isToday { return AppTheme.accent }
+        if isSelected { return AppTheme.accent.opacity(0.35) }
+        if hasCharges { return AppTheme.accent.opacity(0.22) }
+        return .clear
     }
 
     private var cells: [Int?] {
@@ -335,6 +456,132 @@ private struct YearPanel: View {
             .chartYAxis(.hidden)
             .frame(height: 128)
         }
+    }
+}
+
+// MARK: - Quick stats (2×2 数字面板)
+
+/// 把"活跃订阅数 / 本月总额 / 今年总额 / 平均"4 个最常看的数字摆在一起,
+/// 让用户翻开 Overview 第一眼就能掌握全局,不用扫所有卡片。
+private struct QuickStatsPanel: View {
+    @EnvironmentObject private var store: SubscriptionStore
+    let period: SpendPeriod
+
+    private var activeCount: Int { store.activeSubscriptions.count }
+    private var monthly: Double { store.monthlyTotal }
+    private var annual: Double { store.annualTotal }
+    private var averagePerSub: Double {
+        guard activeCount > 0 else { return 0 }
+        return monthly / Double(activeCount)
+    }
+    private var trialCount: Int {
+        store.activeSubscriptions.filter { $0.status == .trial }.count
+    }
+
+    var body: some View {
+        LazyVGrid(
+            columns: [GridItem(.flexible(), spacing: AppTheme.Space.m),
+                      GridItem(.flexible(), spacing: AppTheme.Space.m)],
+            spacing: AppTheme.Space.m
+        ) {
+            StatCard(label: "活跃订阅",
+                     value: "\(activeCount)",
+                     hint: trialCount > 0 ? String(localized: "\(trialCount) 个试用") : nil)
+            StatCard(label: "月均",
+                     value: store.converter.format(monthly, currency: store.baseCurrency),
+                     hint: String(localized: "全部摊到每月"))
+            StatCard(label: "年均",
+                     value: store.converter.format(annual, currency: store.baseCurrency),
+                     hint: String(localized: "全部摊到每年"))
+            StatCard(label: "平均每个",
+                     value: store.converter.format(averagePerSub, currency: store.baseCurrency),
+                     hint: String(localized: "按月"))
+        }
+    }
+}
+
+private struct StatCard: View {
+    let label: LocalizedStringKey
+    let value: String
+    let hint: String?
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(label)
+                .font(.caption.weight(.medium))
+                .foregroundStyle(AppTheme.secondary)
+            Text(value)
+                .font(.system(size: 22, weight: .bold, design: .rounded))
+                .foregroundStyle(AppTheme.ink)
+                .lineLimit(1).minimumScaleFactor(0.6)
+            if let hint {
+                Text(hint)
+                    .font(.caption2)
+                    .foregroundStyle(AppTheme.tertiary)
+            } else {
+                // 占位保高度统一,免得有 hint 的卡和没 hint 的卡高低不齐
+                Text(" ").font(.caption2)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(AppTheme.Space.m)
+        .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: AppTheme.radiusSmall))
+        .glassBorder(cornerRadius: AppTheme.radiusSmall)
+    }
+}
+
+// MARK: - Top spenders 面板
+
+/// Top 5 月费最高的订阅,按当前 period 切换显示月/年金额。让用户一眼看到
+/// "钱主要花在哪儿",做"砍订阅"决策时最有用的一个面板。
+private struct TopSpendersPanel: View {
+    @EnvironmentObject private var store: SubscriptionStore
+    let period: SpendPeriod
+
+    private var top: [Subscription] {
+        store.activeSubscriptions
+            .sorted {
+                $0.monthlyCost(in: store.baseCurrency, converter: store.converter)
+                > $1.monthlyCost(in: store.baseCurrency, converter: store.converter)
+            }
+            .prefix(5)
+            .map { $0 }
+    }
+
+    var body: some View {
+        if !top.isEmpty {
+            Panel(title: "最贵的订阅") {
+                VStack(spacing: 0) {
+                    ForEach(Array(top.enumerated()), id: \.element.id) { i, sub in
+                        if i > 0 { Hairline() }
+                        HStack(spacing: AppTheme.Space.m) {
+                            Text("\(i + 1)")
+                                .font(.caption.weight(.heavy).monospacedDigit())
+                                .foregroundStyle(AppTheme.tertiary)
+                                .frame(width: 14, alignment: .center)
+                            CategoryGlyph(subscription: sub, size: 30)
+                            VStack(alignment: .leading, spacing: 1) {
+                                Text(sub.name).font(.subheadline.weight(.semibold))
+                                    .foregroundStyle(AppTheme.ink)
+                                Text(sub.category.title)
+                                    .font(.caption).foregroundStyle(AppTheme.secondary)
+                            }
+                            Spacer()
+                            Text(store.converter.format(
+                                amount(for: sub),
+                                currency: store.baseCurrency))
+                                .font(.amount()).foregroundStyle(AppTheme.ink)
+                        }
+                        .padding(.vertical, AppTheme.Space.s)
+                    }
+                }
+            }
+        }
+    }
+
+    private func amount(for sub: Subscription) -> Double {
+        let monthly = sub.monthlyCost(in: store.baseCurrency, converter: store.converter)
+        return period == .year ? monthly * 12 : monthly
     }
 }
 
