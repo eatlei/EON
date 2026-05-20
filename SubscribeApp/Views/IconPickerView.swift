@@ -44,7 +44,7 @@ struct IconPickerView: View {
     }
     @State private var mode: Mode = .library
 
-    @State private var symbolQuery = ""
+    // 搜索框已移除 —— 图标候选不多,直接滚动即可
     private let symbols = [
         "sparkles", "brain.head.profile", "play.rectangle.fill", "music.note", "film.fill",
         "headphones", "tv", "cloud.fill", "externaldrive.fill", "hammer.fill",
@@ -54,9 +54,6 @@ struct IconPickerView: View {
         "camera.fill", "paintbrush.fill", "lock.shield.fill", "wifi", "bag.fill",
         "cart.fill", "photo.fill"
     ]
-    private var filteredSymbols: [String] {
-        symbolQuery.isEmpty ? symbols : symbols.filter { $0.localizedCaseInsensitiveContains(symbolQuery) }
-    }
 
     @State private var asQuery = ""
     @State private var region: AppStoreRegion = .cn
@@ -136,7 +133,6 @@ struct IconPickerView: View {
                 Text("图标")
                     .font(.subheadline.weight(.medium))
                     .foregroundStyle(AppTheme.secondary)
-                searchField("搜索图标", text: $symbolQuery)
                 LazyVGrid(columns: grid, spacing: AppTheme.Space.m) {
                     // 首字母 first
                     Button { pickGlyph(.letter) } label: {
@@ -151,7 +147,7 @@ struct IconPickerView: View {
                     }
                     .buttonStyle(.plain)
 
-                    ForEach(filteredSymbols, id: \.self) { s in
+                    ForEach(symbols, id: \.self) { s in
                         Button { pickGlyph(.symbol(s)) } label: {
                             Image(systemName: s)
                                 .font(.system(size: 24, weight: .semibold))

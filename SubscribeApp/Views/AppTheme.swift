@@ -117,9 +117,11 @@ enum AppTheme {
 
     static let spring = Animation.spring(response: 0.42, dampingFraction: 0.86)
 
+    // 灰色去掉 —— 上面一组都是有"性格"的色,新建订阅的随机色和图标选择面板
+    // 都从这里取,不希望用户拿到一张灰扑扑的卡片。
     static let monogramColors: [String] = [
         "#3D9CFF", "#5856D6", "#FF375F", "#FF8A00",
-        "#34C759", "#00C2C7", "#AF52DE", "#8E8E93"
+        "#34C759", "#00C2C7", "#AF52DE"
     ]
 }
 
@@ -175,10 +177,7 @@ struct MaterialPanel<Content: View>: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(AppTheme.Space.l)
         .background(Color.black.opacity(0.50), in: RoundedRectangle(cornerRadius: AppTheme.radius))
-        .overlay(
-            RoundedRectangle(cornerRadius: AppTheme.radius)
-                .stroke(.white.opacity(0.12), lineWidth: 1)
-        )
+        .glassBorder()
     }
 }
 
@@ -201,10 +200,7 @@ struct Panel<Content: View>: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(AppTheme.Space.l)
         .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: AppTheme.radius))
-        .overlay(
-            RoundedRectangle(cornerRadius: AppTheme.radius)
-                .stroke(AppTheme.hairline, lineWidth: 1)
-        )
+        .glassBorder()
     }
 }
 
@@ -222,6 +218,40 @@ struct SectionLabel: View {
 struct Hairline: View {
     var body: some View {
         Rectangle().fill(AppTheme.hairline).frame(height: 1)
+    }
+}
+
+/// 卡片用的"毛玻璃边框":暗色模式上一道白色顶光,亮色模式上一道极淡的黑色描边
+/// 顺便定义底边,模拟玻璃边缘对光的反射 / 折射。给整页 panel/卡片统一质感。
+struct GlassBorder: ViewModifier {
+    @Environment(\.colorScheme) private var colorScheme
+    var cornerRadius: CGFloat = AppTheme.radius
+
+    func body(content: Content) -> some View {
+        content.overlay(
+            RoundedRectangle(cornerRadius: cornerRadius)
+                .stroke(strokeStyle, lineWidth: 0.8)
+        )
+    }
+
+    private var strokeStyle: LinearGradient {
+        let dark = colorScheme == .dark
+        return LinearGradient(
+            stops: [
+                .init(color: dark ? .white.opacity(0.26) : .black.opacity(0.08), location: 0.0),
+                .init(color: dark ? .white.opacity(0.06) : .black.opacity(0.04), location: 0.40),
+                .init(color: .clear,                                              location: 0.85),
+                .init(color: dark ? .white.opacity(0.03) : .black.opacity(0.02),  location: 1.0),
+            ],
+            startPoint: .top, endPoint: .bottom
+        )
+    }
+}
+
+extension View {
+    /// 整 App 卡片统一的毛玻璃边框。`cornerRadius` 默认与 Panel/AppScreen 一致。
+    func glassBorder(cornerRadius: CGFloat = AppTheme.radius) -> some View {
+        modifier(GlassBorder(cornerRadius: cornerRadius))
     }
 }
 

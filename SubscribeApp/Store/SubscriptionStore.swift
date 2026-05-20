@@ -53,6 +53,16 @@ final class SubscriptionStore: ObservableObject {
         didSet { saveSettings() }
     }
 
+    /// 用户在"分类管理"里给分类起的自定义名字。Key 是 SubscriptionCategory.rawValue,
+    /// 空串视为未自定义。改动会立即 mirror 到 SubscriptionCategory.nameOverrides 上,
+    /// 这样全 App 所有读 title 的地方自动跟进。
+    @Published var categoryNameOverrides: [String: String] = [:] {
+        didSet {
+            SubscriptionCategory.nameOverrides = categoryNameOverrides
+            saveSettings()
+        }
+    }
+
     @Published private(set) var cnyRates: [CurrencyCode: Double] = CurrencyConverter.builtin
     @Published private(set) var ratesUpdatedAt: Date?
     var converter: CurrencyConverter { CurrencyConverter(cnyRates: cnyRates) }
@@ -85,11 +95,15 @@ final class SubscriptionStore: ObservableObject {
             accentTheme = settings.accentTheme
             defaultReminderDays = settings.defaultReminderDays
             coloredSubscriptionCards = settings.coloredSubscriptionCards
+            categoryNameOverrides = settings.categoryNameOverrides
         } else {
             baseCurrency = .cny
             remindersEnabled = true
             iCloudSyncEnabled = false
         }
+        // Mirror category overrides into the enum's static lookup so every read
+        // of SubscriptionCategory.title sees the user's customised names.
+        SubscriptionCategory.nameOverrides = categoryNameOverrides
 
         AppTheme.accentTheme = accentTheme
 
@@ -414,7 +428,8 @@ final class SubscriptionStore: ObservableObject {
             paymentMethods: paymentMethods,
             accentTheme: accentTheme,
             defaultReminderDays: defaultReminderDays,
-            coloredSubscriptionCards: coloredSubscriptionCards
+            coloredSubscriptionCards: coloredSubscriptionCards,
+            categoryNameOverrides: categoryNameOverrides
         )
         if let data = try? JSONEncoder().encode(settings) {
             UserDefaults.standard.set(data, forKey: settingsKey)
@@ -462,12 +477,14 @@ private struct Settings: Codable {
     var accentTheme: AccentTheme
     var defaultReminderDays: Int
     var coloredSubscriptionCards: Bool
+    var categoryNameOverrides: [String: String]
 
     static let defaultPaymentMethods = ["支付宝", "微信支付", "Apple Pay", "Visa", "Mastercard", "银联", "PayPal"]
 
     init(baseCurrency: CurrencyCode, remindersEnabled: Bool, iCloudSyncEnabled: Bool,
          appearance: AppAppearance, paymentMethods: [String], accentTheme: AccentTheme,
-         defaultReminderDays: Int, coloredSubscriptionCards: Bool) {
+         defaultReminderDays: Int, coloredSubscriptionCards: Bool,
+         categoryNameOverrides: [String: String]) {
         self.baseCurrency = baseCurrency
         self.remindersEnabled = remindersEnabled
         self.iCloudSyncEnabled = iCloudSyncEnabled
@@ -476,6 +493,7 @@ private struct Settings: Codable {
         self.accentTheme = accentTheme
         self.defaultReminderDays = defaultReminderDays
         self.coloredSubscriptionCards = coloredSubscriptionCards
+        self.categoryNameOverrides = categoryNameOverrides
     }
 
     init(from decoder: Decoder) throws {
@@ -489,6 +507,7 @@ private struct Settings: Codable {
         accentTheme = try c.decodeIfPresent(AccentTheme.self, forKey: .accentTheme) ?? .blue
         defaultReminderDays = try c.decodeIfPresent(Int.self, forKey: .defaultReminderDays) ?? 3
         coloredSubscriptionCards = try c.decodeIfPresent(Bool.self, forKey: .coloredSubscriptionCards) ?? true
+        categoryNameOverrides = try c.decodeIfPresent([String: String].self, forKey: .categoryNameOverrides) ?? [:]
     }
 }
 

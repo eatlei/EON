@@ -1899,6 +1899,7 @@
       }
     },
     "全部": {
+      "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -4912,6 +4913,7 @@
       }
     },
     "排序": {
+      "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -5354,6 +5356,47 @@
           "stringUnit": {
             "state": "translated",
             "value": "개발자 후원하기"
+          }
+        }
+      }
+    },
+    "收起": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Weniger anzeigen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show less"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réduire"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Réduire"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "閉じる"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "접기"
           }
         }
       }
@@ -6044,6 +6087,47 @@
           "stringUnit": {
             "state": "translated",
             "value": "타사 종속성이 없습니다."
+          }
+        }
+      }
+    },
+    "更多 %lld 项": {
+      "extractionState": "stale",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld weitere"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld more"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld más"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld de plus"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "あと %lld 件"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld개 더"
           }
         }
       }
@@ -7964,6 +8048,7 @@
       }
     },
     "筛选周期": {
+      "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -10285,82 +10370,282 @@
         }
       }
     },
-    "收起": {
+    "点一下任意分类可以改名。颜色和原名固定不变,改名只影响显示。": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Show less"
+            "value": "Tap any category to rename it. Colours and original names stay locked; renaming only affects what you see."
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "閉じる"
+            "value": "カテゴリをタップすると名前を変更できます。色と元の名前は固定で、表示名だけが変わります。"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "접기"
+            "value": "카테고리를 탭하면 이름을 바꿀 수 있습니다. 색상과 원래 이름은 그대로이며 표시 이름만 변경됩니다."
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Réduire"
+            "value": "Toca cualquier categoría para renombrarla. Los colores y los nombres originales se mantienen; el cambio solo afecta a la visualización."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Réduire"
+            "value": "Touchez une catégorie pour la renommer. Les couleurs et les noms d'origine restent inchangés ; le renommage n'affecte que l'affichage."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Weniger anzeigen"
+            "value": "Tippe auf eine Kategorie, um sie umzubenennen. Farben und Originalnamen bleiben fest; das Umbenennen ändert nur die Anzeige."
           }
         }
       }
     },
-    "更多 %lld 项": {
+    "重命名": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld more"
+            "value": "Rename"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "あと %lld 件"
+            "value": "名前を変更"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld개 더"
+            "value": "이름 변경"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld más"
+            "value": "Renombrar"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld de plus"
+            "value": "Renommer"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld weitere"
+            "value": "Umbenennen"
+          }
+        }
+      }
+    },
+    "如 游戏 / 健身 / 杂项": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "e.g. Games / Fitness / Misc"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "例:ゲーム / フィットネス / その他"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "예: 게임 / 피트니스 / 기타"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "p. ej. Juegos / Fitness / Otros"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ex. Jeux / Fitness / Divers"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "z. B. Games / Fitness / Sonstiges"
+          }
+        }
+      }
+    },
+    "默认: %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Default: %@"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "デフォルト: %@"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "기본값: %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Predeterminado: %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Par défaut : %@"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Standard: %@"
+          }
+        }
+      }
+    },
+    "语言已更新": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Language updated"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "言語を変更しました"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "언어가 변경됨"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Idioma actualizado"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Langue mise à jour"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sprache aktualisiert"
+          }
+        }
+      }
+    },
+    "重新打开 EON 后生效。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reopen EON to apply."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EON を開き直すと反映されます。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EON을 다시 열면 적용됩니다."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reabre EON para que se aplique."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rouvrez EON pour appliquer."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Öffne EON neu, damit es wirkt."
+          }
+        }
+      }
+    },
+    "在 iOS 设置里更改…": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Change in iOS Settings…"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iOS 設定で変更…"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iOS 설정에서 변경…"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cambiar en Ajustes de iOS…"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Modifier dans Réglages iOS…"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "In iOS-Einstellungen ändern…"
           }
         }
       }

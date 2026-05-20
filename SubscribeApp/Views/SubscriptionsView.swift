@@ -234,7 +234,7 @@ private struct Row: View {
         }
         .padding(AppTheme.Space.l)
         .background(coloredCardBackground)
-        .overlay(coloredCardBorder)
+        .glassBorder()
         .opacity(subscription.isActive ? 1 : 0.5)
     }
 
@@ -255,18 +255,21 @@ private struct Row: View {
                     )
                 }
 
-                // 左侧色彩光晕。深色 0.95 → 0.55 → 0.18 → clear;浅色 0.38 → 0.18 → 0.05 → clear。
-                // 浅色下的光晕只是轻轻染色,黑色文字依然清晰。
+                // 左侧色彩光晕 —— 加密 stop 数量、扩大 endRadius,让右半边的衰减
+                // 更平滑,不再有"突然消失"的硬边。
                 RadialGradient(
                     stops: [
-                        .init(color: cardColor.opacity(isDark ? 0.95 : 0.38), location: 0.0),
-                        .init(color: cardColor.opacity(isDark ? 0.55 : 0.18), location: 0.35),
-                        .init(color: cardColor.opacity(isDark ? 0.18 : 0.05), location: 0.70),
-                        .init(color: .clear, location: 1.0),
+                        .init(color: cardColor.opacity(isDark ? 0.95 : 0.38), location: 0.00),
+                        .init(color: cardColor.opacity(isDark ? 0.70 : 0.27), location: 0.20),
+                        .init(color: cardColor.opacity(isDark ? 0.45 : 0.18), location: 0.40),
+                        .init(color: cardColor.opacity(isDark ? 0.25 : 0.10), location: 0.60),
+                        .init(color: cardColor.opacity(isDark ? 0.10 : 0.04), location: 0.80),
+                        .init(color: cardColor.opacity(isDark ? 0.03 : 0.01), location: 0.92),
+                        .init(color: .clear,                                  location: 1.00),
                     ],
                     center: UnitPoint(x: 0.13, y: 0.50),
                     startRadius: 0,
-                    endRadius: 240
+                    endRadius: 320  // 比卡片宽更大一点,让边缘自然消逝在卡片外
                 )
 
                 // 深色模式上的玻璃反光高光 —— 浅色下加白色高光等于没加,直接跳过。
@@ -283,22 +286,6 @@ private struct Row: View {
         }
     }
 
-    @ViewBuilder
-    private var coloredCardBorder: some View {
-        if colored && isDark {
-            RoundedRectangle(cornerRadius: AppTheme.radius)
-                .stroke(
-                    LinearGradient(
-                        colors: [.white.opacity(0.18), .white.opacity(0.04), .clear],
-                        startPoint: .top, endPoint: .bottom
-                    ),
-                    lineWidth: 0.6
-                )
-        } else {
-            RoundedRectangle(cornerRadius: AppTheme.radius)
-                .stroke(AppTheme.hairline, lineWidth: 0.5)
-        }
-    }
 }
 
 #Preview {

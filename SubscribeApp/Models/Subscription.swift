@@ -106,7 +106,17 @@ enum SubscriptionCategory: String, CaseIterable, Codable, Identifiable {
 
     var id: String { rawValue }
 
+    /// 用户在设置 → 分类 里自定义的标题。Key 是 rawValue,Value 是用户起的名字。
+    /// 商店启动时灌入,所有 .title 的读取都先看这里。enum 的 rawValue(持久化键)
+    /// 永远不变,只改显示名 —— 不会破坏已有数据。
+    nonisolated(unsafe) static var nameOverrides: [String: String] = [:]
+
     var title: String {
+        if let custom = Self.nameOverrides[rawValue], !custom.isEmpty { return custom }
+        return defaultTitle
+    }
+
+    var defaultTitle: String {
         switch self {
         case .ai: String(localized: "AI")
         case .productivity: String(localized: "效率")
