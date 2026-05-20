@@ -40,7 +40,7 @@ struct NotificationSettingsView: View {
                     }
                 }
             } footer: {
-                Text("决定新建订阅时默认提前几天提醒。")
+                Text("新建订阅默认就用这个提醒天数。")
             }
         }
         .listStyle(.insetGrouped)
@@ -52,9 +52,9 @@ struct NotificationSettingsView: View {
 
     private var statusText: String {
         switch authStatus {
-        case .authorized, .provisional, .ephemeral: String(localized: "系统通知已授权，按每个订阅的提前天数提醒。")
-        case .denied: String(localized: "系统通知未授权，需在 iOS 设置中允许通知。")
-        case .notDetermined: String(localized: "尚未请求系统通知权限。")
+        case .authorized, .provisional, .ephemeral: String(localized: "通知已开启,我们会按每个订阅的设置准时提醒你。")
+        case .denied: String(localized: "通知被关闭了。可以去 iOS 设置里打开。")
+        case .notDetermined: String(localized: "还没有开启通知。点上面的按钮申请权限。")
         @unknown default: String(localized: "通知权限状态未知。")
         }
     }

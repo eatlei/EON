@@ -37,7 +37,7 @@ struct ArchivedSubscriptionsView: View {
                         .buttonStyle(.plain)
                     }
                 } footer: {
-                    Text("点订阅可查看信息并恢复。恢复后会重新出现在订阅列表与统计中。")
+                    Text("点一下任意订阅可以查看并恢复。恢复后会重新出现在订阅列表里。")
                 }
             }
         }

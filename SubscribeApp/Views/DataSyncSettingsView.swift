@@ -53,7 +53,7 @@ struct DataSyncSettingsView: View {
                 .disabled(!syncEnabled)
                 .buttonStyle(.plain)
             } header: { Text("iCloud") } footer: {
-                Text("开启后自动同步：本机更改即时上传，其他设备的更改自动合并。真机需登录 iCloud，模拟器/未登录设备此项不生效。")
+                Text("开启后,你在任何一台设备上的修改都会同步到其他设备。需登录 iCloud,模拟器看不到效果。")
             }
 
             // Export
@@ -82,7 +82,7 @@ struct DataSyncSettingsView: View {
                 }
                 .buttonStyle(.plain)
             } header: { Text("导出") } footer: {
-                Text("数据仅在你选择的目标 App 中传输，应用不会上传到任何服务器。Markdown 含一段建议提示词，复制后直接粘到 AI 助手即可分析。")
+                Text("数据只发到你选择的 App,EON 不会上传到任何服务器。Markdown 末尾带了一段提示词,粘到 ChatGPT / Claude 就能直接分析你的订阅。")
             }
         }
         .listStyle(.insetGrouped)

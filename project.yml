@@ -22,6 +22,11 @@ targets:
         CFBundleLocalizations:
           - zh-Hans
           - en
+          - ja
+          - ko
+          - es
+          - fr
+          - de
         CFBundleDisplayName: EON
         UILaunchScreen: {}
         UISupportedInterfaceOrientations:

@@ -11,7 +11,7 @@ struct PaymentMethodsView: View {
                 ForEach(store.paymentMethods, id: \.self) { Text($0) }
                     .onDelete { store.removePaymentMethods(at: $0) }
             } footer: {
-                Text("订阅里选择的支付方式来自这个列表。删除不影响已保存订阅里已填写的方式。")
+                Text("添加订阅时可以从这个列表里选支付方式。删除不会影响已经填好的订阅。")
             }
         }
         .listStyle(.insetGrouped)

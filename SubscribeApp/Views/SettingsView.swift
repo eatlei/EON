@@ -1,7 +1,9 @@
 import SwiftUI
+import UIKit
 
 struct SettingsView: View {
     @EnvironmentObject private var store: SubscriptionStore
+    @Environment(\.openURL) private var openURL
 
     var body: some View {
         NavigationStack {
@@ -27,6 +29,23 @@ struct SettingsView: View {
                             Text("通知")
                         }
                     }
+                    Button {
+                        if let url = URL(string: UIApplication.openSettingsURLString) {
+                            openURL(url)
+                        }
+                    } label: {
+                        HStack(spacing: 12) {
+                            SettingsIcon(name: "character.book.closed")
+                            Text("语言")
+                                .foregroundStyle(.primary)
+                            Spacer()
+                            Image(systemName: "arrow.up.right.square")
+                                .font(.caption2.weight(.semibold))
+                                .foregroundStyle(.secondary)
+                        }
+                        .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
                 }
 
                 Section {

@@ -324,7 +324,7 @@ private struct EmptyDashboard: View {
             Image(systemName: "tray").font(.system(size: 44, weight: .light))
                 .foregroundStyle(AppTheme.tertiary)
             Text("还没有订阅").font(.title3.weight(.bold)).foregroundStyle(AppTheme.ink)
-            Text("添加你的第一个订阅，这里会显示支出概览。")
+            Text("添加你的第一个订阅,这里会显示完整支出概览。")
                 .font(.subheadline).foregroundStyle(AppTheme.secondary)
                 .multilineTextAlignment(.center)
             Button(action: onAdd) {

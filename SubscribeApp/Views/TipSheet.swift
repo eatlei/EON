@@ -35,7 +35,7 @@ struct TipSheet: View {
                 } header: {
                     Text("选择金额")
                 } footer: {
-                    Text("打赏完全自愿，用于支持后续开发，不解锁任何功能。")
+                    Text("完全自愿。纯粹支持开发,不解锁任何功能。")
                 }
             }
             .listStyle(.insetGrouped)

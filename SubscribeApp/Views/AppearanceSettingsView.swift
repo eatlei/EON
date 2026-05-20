@@ -62,7 +62,7 @@ struct AppearanceSettingsView: View {
                     }
                 }
             } footer: {
-                Text("开启后,订阅列表中每张卡片会按图标颜色填充背景;关闭则使用默认浅色卡片。")
+                Text("让每张订阅卡片渲染上图标的主色调。关闭则回到默认浅色卡片。")
             }
         }
         .listStyle(.insetGrouped)

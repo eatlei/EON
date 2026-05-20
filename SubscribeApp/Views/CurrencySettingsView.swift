@@ -66,7 +66,7 @@ struct CurrencySettingsView: View {
                 }
                 .buttonStyle(.plain)
             } footer: {
-                Text("汇率每天自动刷新，可能导致订阅价格变动。\(rateUpdatedText)")
+                Text("每天自动同步最新汇率,订阅价格会跟着浮动。\(rateUpdatedText)")
             }
         }
         .listStyle(.insetGrouped)
