@@ -498,6 +498,53 @@
         }
       }
     },
+    "%lld 个订阅 · 月均" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Abos · monatlich"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld subs · per month"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld suscripciones · mensual"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld abos · mensuel"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld 件 · 月割り"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "구독 %lld개 · 월 평균"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld 個訂閱 · 月均"
+          }
+        }
+      }
+    },
     "%lld 个订阅 · 本期无待扣费" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -755,6 +802,9 @@
           }
         }
       }
+    },
+    "+%@" : {
+
     },
     "🎲 摇出来的" : {
       "extractionState" : "stale",
@@ -4705,6 +4755,7 @@
       }
     },
     "取消" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -9645,7 +9696,6 @@
       }
     },
     "支出分类" : {
-      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -10581,6 +10631,52 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "표시"
+          }
+        }
+      }
+    },
+    "暂无分类支出" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noch keine Kategorie-Ausgaben"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No category spending yet"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aún no hay gastos por categoría"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune dépense par catégorie"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "カテゴリー支出なし"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "카테고리 지출 없음"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "暫無分類支出"
           }
         }
       }
@@ -12014,26 +12110,389 @@
         }
       }
     },
-    "暂无分类支出" : {
+    "订阅人格" : {
       "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Noch keine Kategorie-Ausgaben" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "No category spending yet" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Aún no hay gastos por categoría" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Aucune dépense par catégorie" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "カテゴリー支出なし" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "카테고리 지출 없음" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "暫無分類支出" } }
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Abo-Persönlichkeit" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Sub Persona" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Tu personalidad" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Ta perso d’abo" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "サブスク人格" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "구독 인격" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "訂閱人格" } }
       }
     },
-    "%lld 个订阅 · 月均" : {
+    "仅供娱乐 · 不代表 EON 的任何评价或建议" : {
       "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "%lld Abos · monatlich" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "%lld subs · per month" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "%lld suscripciones · mensual" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "%lld abos · mensuel" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "%lld 件 · 月割り" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "구독 %lld개 · 월 평균" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "%lld 個訂閱 · 月均" } }
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Nur zum Spaß · Keine Bewertung oder Empfehlung von EON" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Just for fun · Not a judgment or recommendation from EON" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Solo por diversión · No es valoración ni recomendación de EON" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Juste pour le fun · Pas un jugement ni une recommandation d’EON" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "あくまでお遊びです · EON からの評価や推奨ではありません" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "재미를 위한 기능 · EON 의 평가나 권고가 아닙니다" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "僅供娛樂 · 不代表 EON 的任何評價或建議" } }
+      }
+    },
+    "AI 先驱" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "KI-Pionier" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "AI Pioneer" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Pionero IA" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Pionnier IA" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "AI パイオニア" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "AI 개척자" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "AI 先驅" } }
+      }
+    },
+    "你的助手们都长着算法的脸 🧠" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Deine Assistenten haben alle ein Algorithmen-Gesicht 🧠" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Your assistants all wear algorithm faces 🧠" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Tus asistentes tienen cara de algoritmo 🧠" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Tes assistants ont tous une tête d’algorithme 🧠" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "アシスタントは全員アルゴリズムの顔 🧠" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "당신의 비서는 모두 알고리즘 얼굴 🧠" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "你的助手們都長著演算法的臉 🧠" } }
+      }
+    },
+    "ChatGPT、Claude、Midjourney 都在你的订阅栏里安家。早上跟 AI 写代码,晚上跟 AI 写日记 —— 智能时代的常住居民,大概就长你这样。" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "ChatGPT, Claude, Midjourney — they all live in your subscription list. Coding with AI in the morning, journaling with AI at night. A native of the AI era looks a lot like you." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "ChatGPT、Claude、Midjourney — みんなあなたのサブスク欄に住んでいます。朝は AI とコード、夜は AI と日記。AI 時代の住人はきっとあなたのような人。" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "ChatGPT, Claude, Midjourney — 모두 당신의 구독 리스트에 살고 있어요. 아침엔 AI 와 코딩, 밤엔 AI 와 일기. AI 시대의 원주민이 바로 당신." } },
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "ChatGPT, Claude, Midjourney — alle wohnen in deiner Abo-Liste. Morgens mit KI coden, abends mit KI Tagebuch führen." } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "ChatGPT, Claude, Midjourney viven en tu lista. Por la mañana programas con IA, por la noche escribes diarios con IA." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "ChatGPT, Claude, Midjourney habitent ta liste. Le matin tu codes avec l’IA, le soir tu écris ton journal avec l’IA." } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "ChatGPT、Claude、Midjourney 都在你的訂閱欄裡安家。早上跟 AI 寫程式,晚上跟 AI 寫日記 —— 智能時代的常住居民,大概就長你這樣。" } }
+      }
+    },
+    "效率猎人" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Produktivitäts-Jäger" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Productivity Hunter" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Cazador de productividad" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Chasseur de productivité" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "効率ハンター" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "효율 헌터" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "效率獵人" } }
+      }
+    },
+    "每一分钟都被工具温柔安排了 ✅" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Jede Minute sanft von Tools organisiert ✅" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Every minute gently scheduled by your tools ✅" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Cada minuto organizado con cariño por tus herramientas ✅" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Chaque minute tendrement orchestrée par tes outils ✅" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "毎分がツールによって優しく予定済み ✅" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "매 분이 도구들로 인해 알차게 정리됨 ✅" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "每一分鐘都被工具溫柔安排了 ✅" } }
+      }
+    },
+    "Notion、Things、Obsidian、Raycast,你的工具像精密的齿轮咬合在一起。每个 task 都有它的位置,每个想法都不会丢。" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Notion, Things, Obsidian, Raycast — your tools mesh like precision gears. Every task has its spot, every idea finds a home." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "Notion、Things、Obsidian、Raycast。ツールは精密な歯車のように噛み合います。すべての task に居場所、すべてのアイデアに帰る場所。" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "Notion, Things, Obsidian, Raycast — 도구들이 정밀 톱니바퀴처럼 맞물려요." } },
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Notion, Things, Obsidian, Raycast — deine Tools greifen wie Zahnräder ineinander." } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Notion, Things, Obsidian, Raycast — tus herramientas encajan como engranajes." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Notion, Things, Obsidian, Raycast — tes outils s’imbriquent comme des engrenages." } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "Notion、Things、Obsidian、Raycast,你的工具像精密的齒輪咬合在一起。每個 task 都有它的位置,每個想法都不會丟。" } }
+      }
+    },
+    "沙发观察家" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Couch-Beobachter" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Couch Connoisseur" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Crítico de sofá" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Connaisseur du canapé" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "ソファ評論家" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "소파 감상가" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "沙發觀察家" } }
+      }
+    },
+    "下班后,你交给屏幕来照顾 🎬" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Nach Feierabend übernimmt der Bildschirm 🎬" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "After work, you let the screens take care of you 🎬" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Después del trabajo te dejas cuidar por las pantallas 🎬" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Après le boulot, ce sont les écrans qui prennent soin de toi 🎬" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "退勤後は画面に身を委ねる 🎬" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "퇴근 후엔 화면이 당신을 돌봐요 🎬" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "下班後,你交給螢幕來照顧 🎬" } }
+      }
+    },
+    "Netflix、Spotify、YouTube Premium、漫画 App —— 你的休闲时间被精挑细选的内容填得满满当当。沙发就是你的剧院。" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Netflix, Spotify, YouTube Premium, comic apps — your downtime is curated and packed. The couch is your private theater." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "Netflix、Spotify、YouTube Premium、マンガアプリ。あなたの余暇は厳選コンテンツで満たされ、ソファは個人シアターに。" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "Netflix, Spotify, YouTube Premium, 만화 앱 — 당신의 여가는 엄선된 콘텐츠로 가득." } },
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Netflix, Spotify, YouTube Premium, Comic-Apps — deine Freizeit ist kuratiert und voll." } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Netflix, Spotify, YouTube Premium, apps de cómics — tu tiempo libre está curado al detalle." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Netflix, Spotify, YouTube Premium, apps de BD — tes temps libres sont triés sur le volet." } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "Netflix、Spotify、YouTube Premium、漫畫 App —— 你的休閒時間被精挑細選的內容填得滿滿當當。沙發就是你的劇院。" } }
+      }
+    },
+    "云端游民" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Cloud-Nomade" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Cloud Nomad" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Nómada en la nube" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Nomade du cloud" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "クラウドノマド" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "클라우드 노마드" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "雲端遊民" } }
+      }
+    },
+    "你的人生都漂在云上 ☁️" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Dein Leben schwebt in der Cloud ☁️" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Your whole life floats in the cloud ☁️" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Toda tu vida flota en la nube ☁️" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Ta vie entière flotte dans le cloud ☁️" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "あなたの人生はぜんぶ雲の上 ☁️" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "당신의 인생은 모두 구름 위 ☁️" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "你的人生都漂在雲上 ☁️" } }
+      }
+    },
+    "iCloud、Dropbox、Google One、Backblaze… 你的数据漂在天上,设备坏了也不慌。云端就是你的随身硬盘。" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "iCloud, Dropbox, Google One, Backblaze… your data lives in the sky. Devices break, you don't blink." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "iCloud、Dropbox、Google One、Backblaze… データは空に。端末が壊れても動じません。" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "iCloud, Dropbox, Google One, Backblaze… 데이터는 하늘에." } },
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "iCloud, Dropbox, Google One, Backblaze… deine Daten leben im Himmel." } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "iCloud, Dropbox, Google One, Backblaze… tus datos viven en el cielo." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "iCloud, Dropbox, Google One, Backblaze… tes données vivent dans le ciel." } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "iCloud、Dropbox、Google One、Backblaze… 你的資料漂在天上,裝置壞了也不慌。雲端就是你的隨身硬碟。" } }
+      }
+    },
+    "代码匠人" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Code-Handwerker" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Code Craftsperson" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Artesano del código" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Artisan du code" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "コード職人" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "코드 장인" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "代碼匠人" } }
+      }
+    },
+    "工具栈比代码栈还要丰富 ⌨️" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Dein Tool-Stack ist umfangreicher als dein Code-Stack ⌨️" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Your tool stack outranks your code stack ⌨️" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Tu stack de herramientas supera al de código ⌨️" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Ta pile d’outils dépasse ta pile de code ⌨️" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "ツールスタックがコードスタックより充実 ⌨️" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "툴 스택이 코드 스택보다 풍부 ⌨️" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "工具棧比程式碼棧還要豐富 ⌨️" } }
+      }
+    },
+    "GitHub、JetBrains、Linear、Vercel、Cursor —— 你的 Mac 上每一个 App 都是为代码服务的。Bug 永远会有,工具不能少。" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "GitHub, JetBrains, Linear, Vercel, Cursor — every app on your Mac exists to serve code." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "GitHub、JetBrains、Linear、Vercel、Cursor。Mac 上のあらゆる App はコードのため。" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "GitHub, JetBrains, Linear, Vercel, Cursor — Mac 의 모든 앱이 코드를 위한 것." } },
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "GitHub, JetBrains, Linear, Vercel, Cursor — jede App auf deinem Mac dient dem Code." } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "GitHub, JetBrains, Linear, Vercel, Cursor — cada app de tu Mac vive para el código." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "GitHub, JetBrains, Linear, Vercel, Cursor — chaque app sur ton Mac sert le code." } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "GitHub、JetBrains、Linear、Vercel、Cursor —— 你的 Mac 上每一個 App 都是為程式碼服務的。Bug 永遠會有,工具不能少。" } }
+      }
+    },
+    "终身学习者" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Lebenslang Lernende" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Lifelong Learner" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Eterno aprendiz" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Apprenant à vie" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "生涯学習者" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "평생 학습자" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "終身學習者" } }
+      }
+    },
+    "课买得比上得快,但也在前进 📚" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Kurse schneller gekauft als belegt — aber du machst Fortschritte 📚" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Buying courses faster than finishing them — still moving forward 📚" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Compras cursos más rápido de lo que los terminas — y aun así avanzas 📚" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Tu achètes des cours plus vite que tu ne les finis — mais tu avances 📚" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "受講より購入の方が早いけど、ちゃんと前進中 📚" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "강의는 사는 속도가 더 빠르지만 그래도 전진 중 📚" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "課買得比上得快,但也在前進 📚" } }
+      }
+    },
+    "Duolingo、Coursera、Masterclass、Skillshare —— 你相信每一个订阅都是对未来自己的投资。永不停歇地往前走。" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Duolingo, Coursera, Masterclass, Skillshare — every subscription is an investment in tomorrow's you." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "Duolingo、Coursera、Masterclass、Skillshare。すべての登録は未来の自分への投資。" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "Duolingo, Coursera, Masterclass, Skillshare — 모든 구독은 미래의 자신에 대한 투자." } },
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Duolingo, Coursera, Masterclass, Skillshare — jedes Abo ist eine Investition in dein zukünftiges Ich." } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Duolingo, Coursera, Masterclass, Skillshare — cada suscripción es una inversión en tu yo futuro." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Duolingo, Coursera, Masterclass, Skillshare — chaque abo est un investissement dans le toi de demain." } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "Duolingo、Coursera、Masterclass、Skillshare —— 你相信每一個訂閱都是對未來自己的投資。永不停歇地往前走。" } }
+      }
+    },
+    "理财规划师" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Finanz-Stratege" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Finance Strategist" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Estratega financiero" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Stratège financier" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "ファイナンスストラテジスト" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "금융 전략가" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "理財規劃師" } }
+      }
+    },
+    "你把人生跑成了一个 Excel 📊" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Du führst dein Leben wie ein Excel 📊" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "You run your life like a spreadsheet 📊" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Llevas tu vida como un Excel 📊" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Tu gères ta vie comme un Excel 📊" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "人生を Excel のように回している 📊" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "인생을 엑셀처럼 굴리는 사람 📊" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "你把人生跑成了一個 Excel 📊" } }
+      }
+    },
+    "记账 App、理财软件、投资平台,你认真对待每一分钱。你的人生有 budget、有 forecast、有月度 review。" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Budget apps, finance trackers, investment platforms — you run your life on budgets, forecasts, and monthly reviews." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "家計簿、資産管理、投資プラットフォーム。一円も真剣に。" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "가계부, 자산 관리, 투자 플랫폼 — 모든 돈을 진지하게." } },
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Haushalts-Apps, Finanz-Tracker, Anlage-Plattformen — du nimmst jeden Cent ernst." } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Apps de presupuesto, gestores financieros, plataformas de inversión — te tomas cada euro en serio." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Apps de budget, outils financiers, plateformes d’investissement — tu prends chaque euro au sérieux." } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "記帳 App、理財軟體、投資平台,你認真對待每一分錢。" } }
+      }
+    },
+    "兴趣收藏家" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Interessen-Sammler" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Curiosity Collector" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Coleccionista de intereses" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Collectionneur d’intérêts" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "趣味コレクター" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "취향 수집가" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "興趣收藏家" } }
+      }
+    },
+    "兴趣广得令人羡慕 🎒" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Beneidenswert vielseitige Interessen 🎒" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Enviably wide-ranging interests 🎒" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Intereses tan amplios que dan envidia 🎒" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Des intérêts à donner envie tellement c’est varié 🎒" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "羨ましいほど興味の幅が広い 🎒" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "부러울 만큼 다양한 관심사 🎒" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "興趣廣得令人羨慕 🎒" } }
+      }
+    },
+    "你的订阅栏五花八门:健身、冥想、播客、菜谱、宠物… 没有一条清晰主线,但每一样都让生活更立体。" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Fitness, meditation, podcasts, recipes, pets… your list reads like a tasting menu. No single thread — life gets more textured." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "フィットネス、瞑想、ポッドキャスト、レシピ、ペット…。サブスク欄は試食皿のよう。" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "피트니스, 명상, 팟캐스트, 레시피, 반려동물… 구독 리스트가 모듬 한 접시." } },
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Fitness, Meditation, Podcasts, Rezepte, Haustiere … deine Abo-Liste liest sich wie ein Probier-Teller." } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Fitness, meditación, podcasts, recetas, mascotas… tu lista parece una tabla de degustación." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Fitness, méditation, podcasts, recettes, animaux… ta liste se lit comme un plateau dégustation." } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "你的訂閱欄五花八門:健身、冥想、播客、菜譜、寵物… 沒有一條清晰主線,但每一樣都讓生活更立體。" } }
+      }
+    },
+    "数字极简者" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Digitaler Minimalist" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Digital Minimalist" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Minimalista digital" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Minimaliste numérique" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "デジタルミニマリスト" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "디지털 미니멀리스트" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "數位極簡者" } }
+      }
+    },
+    "刚刚启程,留白也是一种美 🌱" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Gerade losgegangen — Leerraum ist auch eine Form von Schönheit 🌱" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Just getting started — whitespace is its own beauty 🌱" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Acabas de empezar — el vacío también es belleza 🌱" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Tu commences à peine — le vide est aussi une beauté 🌱" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "始まったばかり — 余白もひとつの美 🌱" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "이제 막 시작 — 여백도 하나의 아름다움 🌱" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "剛剛啟程,留白也是一種美 🌱" } }
+      }
+    },
+    "你的订阅栏还很干净。也许你刚下载 EON,也许你天生就是数字极简者 —— 无论哪种,你都掌握着选择权。" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Your list is still nicely empty. Maybe you just installed EON, maybe you're a born minimalist — either way, you hold the choices." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "サブスク欄はまだスッキリ。" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "구독 리스트가 아직 깔끔해요." } },
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Deine Abo-Liste ist noch schön leer." } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Tu lista todavía está limpia." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Ta liste est encore bien vide." } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "你的訂閱欄還很乾淨。" } }
+      }
+    },
+    "平衡大师" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Balance-Meister" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "The Balanced One" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Maestro del equilibrio" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Maître de l’équilibre" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "バランスマスター" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "균형의 달인" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "平衡大師" } }
+      }
+    },
+    "各司其职,生活有序而完整 ⚖️" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Alles an seinem Platz, das Leben strukturiert ⚖️" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Everything in its place, a life that hums along ⚖️" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Cada cosa en su sitio, una vida ordenada ⚖️" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Chaque chose à sa place, une vie organisée ⚖️" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "それぞれが役割を持ち、生活は秩序立って完全 ⚖️" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "각자가 제 역할을, 삶은 정돈되고 완전 ⚖️" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "各司其職,生活有序而完整 ⚖️" } }
+      }
+    },
+    "你的订阅在 5 个以上分类里均匀分布,工作、生活、学习、娱乐都没有偏废 —— 这才是高级的数字生活。" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Your subs spread evenly across 5+ categories. Work, life, learning, fun — nothing neglected." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "サブスクは 5 カテゴリー以上に均等分布。" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "구독이 5개 이상 카테고리에 고르게 분포." } },
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Deine Abos verteilen sich gleichmäßig auf 5+ Kategorien." } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Tus suscripciones se reparten por igual en 5+ categorías." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Tes abos se répartissent équitablement sur 5+ catégories." } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "你的訂閱在 5 個以上分類裡均勻分布,工作、生活、學習、娛樂都沒有偏廢 —— 這才是高級的數位生活。" } }
+      }
+    },
+    "探索狂热者" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Begeisterter Entdecker" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Curious Explorer" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Explorador entusiasta" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Explorateur passionné" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "探求の達人" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "탐험가 기질" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "探索狂熱者" } }
+      }
+    },
+    "今天又订阅了什么新东西? ✨" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Was hast du heute Neues abonniert? ✨" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "What did you subscribe to today? ✨" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "¿A qué te has suscrito hoy? ✨" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Tu t’es abonné à quoi aujourd’hui ? ✨" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "今日は何に登録した? ✨" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "오늘은 또 뭘 구독했어요? ✨" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "今天又訂閱了什麼新東西? ✨" } }
+      }
+    },
+    "你最近平均每天都在添加新订阅,可能在探索新工具,也可能在尝试新生活方式。EON 不评判,只默默记下你的轨迹。" : {
+      "localizations" : {
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "You've been adding a new subscription almost every day. EON doesn't judge — it just quietly tracks the trail." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "ほぼ毎日サブスクが増えています。EON は評価せず、軌跡を静かに記録します。" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "거의 매일 새 구독이 늘고 있어요. EON 은 평가하지 않고 조용히 기록만 합니다." } },
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Du fügst fast täglich ein neues Abo hinzu. EON urteilt nicht, dokumentiert nur deine Spur." } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Casi cada día añades una suscripción nueva. EON no juzga, solo registra el rastro." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Tu ajoutes presque un nouvel abo chaque jour. EON ne juge pas, il note juste la trace." } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "你最近平均每天都在添加新訂閱,EON 不評判,只默默記下你的軌跡。" } }
       }
     },
     "汇率已更新" : {

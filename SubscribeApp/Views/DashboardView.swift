@@ -119,7 +119,7 @@ struct DashboardView: View {
 private struct DashboardHeader: View {
     @EnvironmentObject private var store: SubscriptionStore
     @Binding var period: SpendPeriod
-    @State private var showCurrencyPicker = false
+    @State private var showPersonality = false
 
     /// SegmentedPill 在切换时是用 withAnimation 包的赋值;但 period 这个全局
     /// state 一变,Hero/Stats/Lifetime 等所有跟 period 相关的子视图都会重算,
@@ -148,14 +148,12 @@ private struct DashboardHeader: View {
 
             Spacer()
 
-            // 货币按钮 —— 点击弹出 CurrencyPickerSheet,sheet 出现时会自动滚动
-            // 到当前选中币种,而不是吊在 USD/AUD 这种字母靠前的位置让用户翻找。
-            Button {
-                showCurrencyPicker = true
-            } label: {
+            // 货币切换从右上角下线了 —— 改去"设置 → 货币"那一栏走专门页面。
+            // 这个位置留给"订阅人格"彩蛋的入口:点一下打开 PersonalityView。
+            NavigationLink(destination: PersonalityView()) {
                 HStack(spacing: 6) {
-                    Image(systemName: "dollarsign.circle.fill").font(.subheadline.weight(.bold))
-                    Text(store.baseCurrency.rawValue).font(.subheadline.weight(.bold))
+                    Image(systemName: "sparkles").font(.subheadline.weight(.bold))
+                    Text("订阅人格").font(.subheadline.weight(.bold))
                 }
                 .foregroundStyle(AppTheme.ink)
                 .padding(.horizontal, AppTheme.Space.m)
@@ -163,12 +161,6 @@ private struct DashboardHeader: View {
                 .glassEffect(.regular, in: Capsule())
             }
             .buttonStyle(.plain)
-            .sheet(isPresented: $showCurrencyPicker) {
-                CurrencyPickerSheet()
-                    .environmentObject(store)
-                    .presentationDetents([.medium, .large])
-                    .presentationDragIndicator(.visible)
-            }
         }
     }
 }

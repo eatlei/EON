@@ -366,16 +366,25 @@ final class SubscriptionStore: ObservableObject {
     /// 接下来 `days` 天内每个订阅会发生的所有扣费 —— 同一订阅在窗口里可能出现多次
     /// (周付订阅就会出现 ~4 次)。专供 Overview 上的 30 天预览柱图使用。
     func chargesInNext(_ days: Int) -> [RenewalCharge] {
-        let now = Date()
-        guard let end = Calendar.current.date(byAdding: .day, value: days, to: now) else { return [] }
+        // 同 upcomingCharges 的修复:用 startOfDay 作为"现在",避免今天 00:00
+        // 被当成已经过去。否则今天到期的订阅会被跳到下一个周期。
+        let cal = Calendar.current
+        let now = cal.startOfDay(for: Date())
+        guard let end = cal.date(byAdding: .day, value: days, to: now) else { return [] }
         return activeSubscriptions
             .flatMap { projectedCharges(for: $0, from: now, to: end) }
             .sorted { $0.date < $1.date }
     }
 
     func upcomingCharges(limit: Int = 6) -> [RenewalCharge] {
-        let now = Date()
+        // 关键:用 startOfDay,不要用 Date()。
+        // nextBillingDate 存的是 00:00,Date() 是当下时刻(比如 21:53)。
+        // 如果 nextBillingDate 正好是今天,d (00:00) < now (21:53) 永远成立,
+        // 循环会把 d 推到下一个 cycle —— 对年付订阅就是直接跳到"明年同一天"。
+        // 用 startOfDay 之后,今天的 bill 在凌晨 00:00 之前都被视作"未到来",
+        // 当前/即将续费的判断回归直觉。
         let calendar = Calendar.current
+        let now = calendar.startOfDay(for: Date())
         return activeSubscriptions.compactMap { sub -> RenewalCharge? in
             var d = sub.nextBillingDate
             var guardCount = 0
