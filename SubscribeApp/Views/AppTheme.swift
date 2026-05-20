@@ -148,12 +148,14 @@ struct AppScreen<Content: View>: View {
     }
 }
 
-/// 玻璃材质 Panel — 用于 immersive 背景上的表单分组。
-/// 关键:在 Material 之下垫一层固定的暗色 (`Color.black.opacity(0.36)`),
-/// 让面板永远是"暗色磨砂",不再依赖 Material 的 vibrancy 自动适配。
-/// 这样无论 immersive 背景是亮色、暗色、还是复杂图像(比如 Netflix LOGO 的
-/// 红色径向),面板里的白色文字都能稳定可读 —— 实测 vibrancy 在 Image 背景
-/// 上会把 .primary 折叠到几乎不可见。
+/// 沉浸背景上的暗色半透明面板。
+///
+/// 注意:这里**故意不用** `.ultraThinMaterial`。Material 自带 vibrancy 效果会
+/// 透过 blurred Image 背景把白色前景"反向适配"成几乎不可见(实测 Netflix 风
+/// 图标做完 immersive 背景后,面板里的所有 .foregroundStyle 文本全部失踪)。
+/// 用一个固定的暗色填充 (`Color.black.opacity(0.50)`) 把面板"压暗",底色透
+/// 过 50% 还能微微染色保持沉浸感,白色文字稳定可读 —— Apple Music 列表区域
+/// 用的就是这种"暗化的艺图"做底,不是真 Material。
 struct MaterialPanel<Content: View>: View {
     var title: LocalizedStringKey? = nil
     @ViewBuilder var content: Content
@@ -172,14 +174,7 @@ struct MaterialPanel<Content: View>: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(AppTheme.Space.l)
-        .background(
-            ZStack {
-                RoundedRectangle(cornerRadius: AppTheme.radius)
-                    .fill(.black.opacity(0.36))
-                RoundedRectangle(cornerRadius: AppTheme.radius)
-                    .fill(.ultraThinMaterial)
-            }
-        )
+        .background(Color.black.opacity(0.50), in: RoundedRectangle(cornerRadius: AppTheme.radius))
         .overlay(
             RoundedRectangle(cornerRadius: AppTheme.radius)
                 .stroke(.white.opacity(0.12), lineWidth: 1)

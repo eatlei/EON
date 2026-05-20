@@ -323,13 +323,22 @@ private struct ImmersiveBackground: View {
         switch subscription.icon {
         case .image(let id):
             if let ui = IconStore.loadUIImage(id) {
-                // Apple Music trick: same artwork = same colors. Blur fills.
-                Image(uiImage: ui)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-                    .blur(radius: 60)
-                    .saturation(1.35)
-                    .clipped()
+                // CRITICAL: use a GeometryReader to give the image an EXPLICIT
+                // width/height. Without it, .resizable().aspectRatio(.fill)
+                // produces an unbounded layout that — combined with .blur —
+                // occluded sibling views in the parent ZStack on iOS 26,
+                // making the entire form panels' content invisible. Plain
+                // `.blur(radius:)` on an unframed `.aspectRatio(.fill)` image
+                // is the root cause, not the blur itself.
+                GeometryReader { geo in
+                    Image(uiImage: ui)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: geo.size.width, height: geo.size.height)
+                        .blur(radius: 60)
+                        .saturation(1.35)
+                        .clipped()
+                }
             } else {
                 tileLayer(subscription.category.color)
             }
