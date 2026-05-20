@@ -157,6 +157,8 @@ struct SubscriptionsView: View {
                 // 随机排序单独一个按钮 —— 点一下就刷新 randomSeed,即便当前
                 // 已经选中 random 也能"再随机一次"(Picker 模式下重复点同
                 // 一选项不会触发任何事件,这里走 Button 路径绕开它)。
+                // 当前已经是 random 时,把 leading icon 换成 checkmark,跟
+                // Picker 的选中样式视觉一致;否则用 shuffle icon。
                 Button {
                     randomSeed = Int.random(in: Int.min...Int.max)
                     sort = .random
@@ -165,7 +167,7 @@ struct SubscriptionsView: View {
                         sort == .random
                             ? String(localized: "再随机一次")
                             : SortOption.random.title,
-                        systemImage: SortOption.random.icon
+                        systemImage: sort == .random ? "checkmark" : SortOption.random.icon
                     )
                 }
             } label: {
@@ -220,8 +222,11 @@ private enum SortOption: String, CaseIterable, Identifiable {
         switch self {
         case .addedNewest: String(localized: "按添加时间")
         case .duration:    String(localized: "按周期长度")
-        case .costHighLow: String(localized: "按费用 · 高 → 低")
-        case .costLowHigh: String(localized: "按费用 · 低 → 高")
+        // 原来叫 "按费用 · 高 → 低" / "按费用 · 低 → 高",在 Menu 的窄行里容易换行;
+        // 缩成 "费用从高到低" / "费用从低到高" 6 个字,无中点 / 箭头特殊字符,
+        // 任何字号 / 语言都能稳稳单行展示。
+        case .costHighLow: String(localized: "费用从高到低")
+        case .costLowHigh: String(localized: "费用从低到高")
         case .name:        String(localized: "按名称")
         case .random:      String(localized: "随机")
         }
@@ -320,21 +325,15 @@ private struct Row: View {
                 HStack(spacing: 6) {
                     Text(subscription.name).font(.subheadline.weight(.semibold))
                         .foregroundStyle(AppTheme.ink)
+                        .lineLimit(1)
                     if subscription.status == .trial {
                         Text("试用").font(.caption2.weight(.bold))
                             .padding(.horizontal, 6).padding(.vertical, 2)
                             .background(AppTheme.accent.opacity(0.14), in: Capsule())
                             .foregroundStyle(AppTheme.accent)
                     }
-                    // 用户明确关闭了"计入统计" → 用一个低调灰色徽章告诉他,
-                    // 免得回头看着 Hero 总额对不上发懵。
-                    if !subscription.includeInStatistics {
-                        Text("不计入")
-                            .font(.caption2.weight(.bold))
-                            .padding(.horizontal, 6).padding(.vertical, 2)
-                            .background(AppTheme.tertiary.opacity(0.18), in: Capsule())
-                            .foregroundStyle(AppTheme.secondary)
-                    }
+                    // "不计入"徽章从这一行移走了 —— 跟订阅名抢同一行会挤,
+                    // 改放到整张卡片的左上角(见 body 末尾的 .overlay)。
                 }
                 Text(subtitle)
                     .font(.caption)
@@ -381,6 +380,19 @@ private struct Row: View {
         .background(coloredCardBackground)
         .glassBorder()
         .opacity(subscription.isActive ? 1 : 0.5)
+        // "不计入"徽章定位到整张卡片的左上角。原先和订阅名共享一行,长名字
+        // 会被挤掉一截;这里独立一层,跟内容互不影响。
+        .overlay(alignment: .topLeading) {
+            if !subscription.includeInStatistics {
+                Text("不计入")
+                    .font(.system(size: 9, weight: .bold))
+                    .padding(.horizontal, 6).padding(.vertical, 2)
+                    .background(AppTheme.tertiary.opacity(0.18), in: Capsule())
+                    .foregroundStyle(AppTheme.secondary)
+                    .padding(.leading, 10)
+                    .padding(.top, 8)
+            }
+        }
     }
 
     /// 卡片底色 = AppTheme.surface(自动适配明暗模式)+ icon 主色径向光晕。
@@ -498,14 +510,8 @@ private struct GridCard: View {
                     .lineLimit(1)
                     .minimumScaleFactor(0.7)
                 Spacer(minLength: 4)
-                if !subscription.includeInStatistics {
-                    Text("不计入")
-                        .font(.system(size: 9, weight: .bold))
-                        .padding(.horizontal, 5).padding(.vertical, 2)
-                        .background(AppTheme.tertiary.opacity(0.18), in: Capsule())
-                        .foregroundStyle(AppTheme.secondary)
-                }
             }
+            // 不计入徽章不再放底部金额行,统一挪到卡片左上角(见 .overlay)。
             Text(subscription.nextBillingDate.formatted(.dateTime.month().day()))
                 .font(.caption2)
                 .foregroundStyle(AppTheme.tertiary)
@@ -515,6 +521,17 @@ private struct GridCard: View {
         .background(gridCardBackground)
         .glassBorder()
         .opacity(subscription.isActive ? 1 : 0.5)
+        .overlay(alignment: .topLeading) {
+            if !subscription.includeInStatistics {
+                Text("不计入")
+                    .font(.system(size: 9, weight: .bold))
+                    .padding(.horizontal, 5).padding(.vertical, 2)
+                    .background(AppTheme.tertiary.opacity(0.18), in: Capsule())
+                    .foregroundStyle(AppTheme.secondary)
+                    .padding(.leading, 8)
+                    .padding(.top, 8)
+            }
+        }
     }
 
     @ViewBuilder

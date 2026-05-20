@@ -149,8 +149,12 @@ private struct DashboardHeader: View {
             Spacer()
 
             // 货币切换从右上角下线了 —— 改去"设置 → 货币"那一栏走专门页面。
-            // 这个位置留给"订阅人格"彩蛋的入口:点一下打开 PersonalityView。
-            NavigationLink(destination: PersonalityView()) {
+            // 这里换成"订阅人格"彩蛋的入口。原本是 NavigationLink,但很多用户
+            // 反映点了没反应(safeAreaInset + NavigationStack 的组合下 NL 有时
+            // 不上车);改成 Button + .sheet,既稳又能配 sheet 内丰富的入场动画。
+            Button {
+                showPersonality = true
+            } label: {
                 HStack(spacing: 6) {
                     Image(systemName: "sparkles").font(.subheadline.weight(.bold))
                     Text("订阅人格").font(.subheadline.weight(.bold))
@@ -159,8 +163,16 @@ private struct DashboardHeader: View {
                 .padding(.horizontal, AppTheme.Space.m)
                 .padding(.vertical, 10)
                 .glassEffect(.regular, in: Capsule())
+                .contentShape(Capsule())   // 整个胶囊都是 hit area
             }
             .buttonStyle(.plain)
+            .sheet(isPresented: $showPersonality) {
+                NavigationStack {
+                    PersonalityView()
+                }
+                .presentationDetents([.large])
+                .presentationDragIndicator(.visible)
+            }
         }
     }
 }
@@ -187,10 +199,13 @@ private struct HeroTotal: View {
                     .font(.amountHero())
                     .foregroundStyle(AppTheme.ink)
                     .lineLimit(1).minimumScaleFactor(0.5)
-                // 之前用 .contentTransition(.numericText()) 让数字滚动切换,
-                // 副作用是切 period 时数字宽度变化会顺带把 Hero / QuickStats
-                // 卡片的宽度也插值一下 —— 这就是用户反复反映的"年 tab 拉伸"。
-                // 拿掉之后切换瞬间完成,代价是失去数字滚动的小动效,值得。
+                    // 数字滚动动效:contentTransition 把每位数从旧值平滑滚到新值;
+                    // .animation(_:value:) 把动画严格 scope 在这个 Text 的 amount
+                    // 变化上,不会让父层 layout 跟着一起插值 —— 这是关键。
+                    // (之前出"年 tab 拉伸"是因为没加 scoped animation,所有依赖
+                    // period 的 view 在同一个动画 transaction 里被一起插值。)
+                    .contentTransition(.numericText())
+                    .animation(.easeOut(duration: 0.45), value: amount)
             }
             // "共 N 笔订阅 · 文案":先把数量说清楚,后面挂一段根据数量变化的彩蛋
             // 小尾巴,让 Hero 既有信息量又有情绪。
@@ -950,8 +965,11 @@ private struct StatCard: View {
                 .font(.system(size: 20, weight: .bold, design: .rounded))
                 .foregroundStyle(AppTheme.ink)
                 .lineLimit(1).minimumScaleFactor(0.55)
-            // 不挂 contentTransition:切 period 时数字宽度变化会让卡片宽度
-            // 也跟着插值,视觉上是 "Overview 在拉伸" —— 用户多次反馈的现象。
+                // 跟 Hero amount 同样的 scoped 动画:只在 value 字符串变化时
+                // 触发数字滚动,不波及父层 layout(卡片宽度由 maxWidth: .infinity
+                // 锚定,不会随文本宽度抖动)。
+                .contentTransition(.numericText())
+                .animation(.easeOut(duration: 0.45), value: value)
             if let hint {
                 Text(hint)
                     .font(.caption2)

@@ -1,18 +1,34 @@
 import SwiftUI
 import UIKit
 
-/// 二级页面:展示用户的"订阅人格"。布局是 1 张大图 + 名字 + 口号 + 描述,
-/// 底部一句免责声明"仅供娱乐"。
+/// 二级页面:展示用户的"订阅人格"。布局是 1 张大图 + 名字 + 口号 + 描述 +
+/// 一句"会随订阅变化"的提示 + 免责声明。入场带丰富的动画(渐显 / 缩放 /
+/// 错开节奏),配合震动反馈,做出"翻牌揭晓"的惊喜感。
 struct PersonalityView: View {
     @EnvironmentObject private var store: SubscriptionStore
 
     private var type: PersonalityType { store.personality }
+
+    // MARK: - 进场动画相关 state
+    //
+    // 每个 state 控制 view 链里一组元素的"是否进场",时间错开 0.05~0.15 秒就能
+    // 形成"图先到 → 名字到 → 标语到 → 详情到 → 提示到"的瀑布感。
+    @State private var heroAppeared = false      // 大图缩放 + 旋转入场
+    @State private var nameAppeared = false      // 人格名字
+    @State private var taglineAppeared = false   // 一句标语
+    @State private var detailAppeared = false    // 详细描述
+    @State private var hintAppeared = false      // 会变化的提示
+    @State private var disclaimerAppeared = false // 免责声明
+
+    /// 进场时的轻触反馈:大图弹到位时一下 medium impact,跟视觉的"啪"对上。
+    @State private var revealTick = 0
 
     var body: some View {
         ScrollView {
             VStack(spacing: AppTheme.Space.xl) {
                 heroImage
                 content
+                evolutionHint
                 disclaimer
             }
             .padding(.horizontal, AppTheme.Space.xl)
@@ -23,11 +39,35 @@ struct PersonalityView: View {
         .background(AppTheme.canvas.ignoresSafeArea())
         .navigationTitle("订阅人格")
         .navigationBarTitleDisplayMode(.inline)
+        .sensoryFeedback(.impact(weight: .medium), trigger: revealTick)
+        .task {
+            await playEntryAnimation()
+        }
+    }
+
+    /// 入场动画编排 —— 各元素错开节奏,跟一次 medium haptic 同步。
+    private func playEntryAnimation() async {
+        // 大图先弹到位
+        withAnimation(.spring(response: 0.55, dampingFraction: 0.7)) {
+            heroAppeared = true
+        }
+        revealTick &+= 1
+        try? await Task.sleep(nanoseconds: 220_000_000)
+        withAnimation(.easeOut(duration: 0.35)) { nameAppeared = true }
+        try? await Task.sleep(nanoseconds: 110_000_000)
+        withAnimation(.easeOut(duration: 0.35)) { taglineAppeared = true }
+        try? await Task.sleep(nanoseconds: 110_000_000)
+        withAnimation(.easeOut(duration: 0.4)) { detailAppeared = true }
+        try? await Task.sleep(nanoseconds: 130_000_000)
+        withAnimation(.easeOut(duration: 0.4)) { hintAppeared = true }
+        try? await Task.sleep(nanoseconds: 110_000_000)
+        withAnimation(.easeOut(duration: 0.4)) { disclaimerAppeared = true }
     }
 
     // MARK: - 大图
 
-    /// 优先用 Asset 里的真实插画,没有就用渐变 + SF Symbol 兜底 —— 装饰但不寒酸。
+    /// 真图(Assets 里)优先,没有就用渐变 + SF Symbol 兜底。入场做 spring 缩放
+    /// + 轻微旋转,显得"啪一下揭出来"。
     @ViewBuilder
     private var heroImage: some View {
         let assetName = type.imageAssetName
@@ -39,7 +79,6 @@ struct PersonalityView: View {
                     .resizable()
                     .scaledToFill()
             } else {
-                // 占位:径向色块 + 大号 SF Symbol。色调跟着 type.tint。
                 RadialGradient(
                     stops: [
                         .init(color: type.tint.opacity(0.85), location: 0.0),
@@ -61,7 +100,11 @@ struct PersonalityView: View {
             RoundedRectangle(cornerRadius: 32, style: .continuous)
                 .stroke(AppTheme.hairline, lineWidth: 0.5)
         )
-        .shadow(color: type.tint.opacity(0.20), radius: 20, x: 0, y: 10)
+        .shadow(color: type.tint.opacity(0.25), radius: 22, x: 0, y: 12)
+        // 入场缩放 + 极轻旋转:0.85 → 1.0, -2° → 0°,弹簧节奏
+        .scaleEffect(heroAppeared ? 1.0 : 0.85)
+        .rotationEffect(.degrees(heroAppeared ? 0 : -2))
+        .opacity(heroAppeared ? 1 : 0)
     }
 
     // MARK: - 文字部分
@@ -69,25 +112,68 @@ struct PersonalityView: View {
     @ViewBuilder
     private var content: some View {
         VStack(spacing: AppTheme.Space.s) {
+            // 名字 —— 从下方淡入
             Text(type.name)
-                .font(.system(size: 30, weight: .heavy, design: .rounded))
+                .font(.system(size: 32, weight: .heavy, design: .rounded))
                 .foregroundStyle(AppTheme.ink)
                 .multilineTextAlignment(.center)
+                .opacity(nameAppeared ? 1 : 0)
+                .offset(y: nameAppeared ? 0 : 12)
 
+            // 标语 —— 跟在名字后面 0.1s 进入
             Text(type.tagline)
                 .font(.headline.weight(.semibold))
                 .foregroundStyle(type.tint)
                 .multilineTextAlignment(.center)
                 .padding(.bottom, 4)
+                .opacity(taglineAppeared ? 1 : 0)
+                .offset(y: taglineAppeared ? 0 : 10)
 
+            // 详情 —— 多行段落,渐显
             Text(type.detail)
                 .font(.body)
                 .foregroundStyle(AppTheme.secondary)
                 .multilineTextAlignment(.center)
                 .lineSpacing(4)
                 .fixedSize(horizontal: false, vertical: true)
+                .opacity(detailAppeared ? 1 : 0)
+                .offset(y: detailAppeared ? 0 : 8)
         }
         .padding(.horizontal, AppTheme.Space.s)
+    }
+
+    // MARK: - "会随订阅变化"提示
+    //
+    // 用户要求显式提醒:你的订阅一变,人格也会跟着变,就像真正的 MBTI 在不同
+    // 人生阶段会不一样。一个温和的小卡片放在描述下面、免责声明上面。
+
+    @ViewBuilder
+    private var evolutionHint: some View {
+        HStack(alignment: .top, spacing: 10) {
+            Image(systemName: "arrow.triangle.2.circlepath")
+                .font(.subheadline.weight(.bold))
+                .foregroundStyle(type.tint)
+                .padding(.top, 2)
+            VStack(alignment: .leading, spacing: 4) {
+                Text("会随你而变")
+                    .font(.subheadline.weight(.bold))
+                    .foregroundStyle(AppTheme.ink)
+                Text("订阅多了 / 少了 / 偏好变了,你的人格也会跟着改变 —— 就跟你的 MBTI 会因人生阶段不同而不同一样,这是个会呼吸的标签。")
+                    .font(.caption)
+                    .foregroundStyle(AppTheme.secondary)
+                    .lineSpacing(2)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            Spacer(minLength: 0)
+        }
+        .padding(AppTheme.Space.m)
+        .background(type.tint.opacity(0.10), in: RoundedRectangle(cornerRadius: AppTheme.radius))
+        .overlay(
+            RoundedRectangle(cornerRadius: AppTheme.radius)
+                .stroke(type.tint.opacity(0.22), lineWidth: 1)
+        )
+        .opacity(hintAppeared ? 1 : 0)
+        .offset(y: hintAppeared ? 0 : 14)
     }
 
     // MARK: - 免责声明
@@ -104,6 +190,7 @@ struct PersonalityView: View {
                 .multilineTextAlignment(.center)
         }
         .padding(.top, AppTheme.Space.m)
+        .opacity(disclaimerAppeared ? 1 : 0)
     }
 }
 
