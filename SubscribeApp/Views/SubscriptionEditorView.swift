@@ -4,13 +4,17 @@ struct SubscriptionEditorView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject private var store: SubscriptionStore
     @State private var draft: Subscription
+    @State private var priceText: String
     @State private var showIconPicker = false
     private let isNew: Bool
     @State private var didApplyDefaults = false
 
+    private enum Field: Hashable { case name, plan, price }
+    @FocusState private var focused: Field?
+
     init(subscription: Subscription?) {
         self.isNew = subscription == nil
-        _draft = State(initialValue: subscription ?? Subscription(
+        let initial = subscription ?? Subscription(
             name: "",
             plan: "",
             category: .productivity,
@@ -22,7 +26,9 @@ struct SubscriptionEditorView: View {
             reminderDaysBefore: 3,
             status: .active,
             paymentMethod: ""
-        ))
+        )
+        _draft = State(initialValue: initial)
+        _priceText = State(initialValue: Self.formatPriceForInput(initial.price))
     }
 
     private var canSave: Bool {
@@ -57,9 +63,25 @@ struct SubscriptionEditorView: View {
                         }
                         .buttonStyle(.plain)
                         Hairline()
-                        FieldRow("名称") { TextField("如 ChatGPT", text: $draft.name).multilineTextAlignment(.trailing) }
+                        FieldRow("名称") {
+                            TextField("如 ChatGPT", text: $draft.name)
+                                .multilineTextAlignment(.trailing)
+                                .textInputAutocapitalization(.words)
+                                .autocorrectionDisabled()
+                                .submitLabel(.next)
+                                .focused($focused, equals: .name)
+                                .onSubmit { focused = .plan }
+                        }
                         Hairline()
-                        FieldRow("套餐") { TextField("如 Plus", text: $draft.plan).multilineTextAlignment(.trailing) }
+                        FieldRow("套餐") {
+                            TextField("如 Plus", text: $draft.plan)
+                                .multilineTextAlignment(.trailing)
+                                .textInputAutocapitalization(.words)
+                                .autocorrectionDisabled()
+                                .submitLabel(.next)
+                                .focused($focused, equals: .plan)
+                                .onSubmit { focused = .price }
+                        }
                         Hairline()
                         FieldRow("分类") {
                             Picker("", selection: $draft.category) {
@@ -76,8 +98,18 @@ struct SubscriptionEditorView: View {
 
                     Panel(title: "价格与周期") {
                         FieldRow("金额") {
-                            TextField("0", value: $draft.price, format: .number.precision(.fractionLength(2)))
-                                .keyboardType(.decimalPad).multilineTextAlignment(.trailing)
+                            TextField("0", text: $priceText)
+                                .keyboardType(.decimalPad)
+                                .multilineTextAlignment(.trailing)
+                                .focused($focused, equals: .price)
+                                .onChange(of: priceText) { _, newValue in
+                                    let sanitized = Self.sanitizePriceInput(newValue)
+                                    if sanitized != newValue {
+                                        priceText = sanitized
+                                        return // onChange will fire again with the sanitized value
+                                    }
+                                    draft.price = Double(sanitized) ?? 0
+                                }
                         }
                         Hairline()
                         FieldRow("币种") {
@@ -122,6 +154,9 @@ struct SubscriptionEditorView: View {
                         }
                     }
                 }
+                // Tap outside any field dismisses the keyboard.
+                .contentShape(Rectangle())
+                .onTapGesture { focused = nil }
             }
             .navigationTitle(draft.name.isEmpty ? String(localized: "新增订阅") : draft.name)
             .navigationBarTitleDisplayMode(.inline)
@@ -136,14 +171,50 @@ struct SubscriptionEditorView: View {
                     Button("取消") { dismiss() }.tint(AppTheme.secondary)
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("保存") { store.upsert(draft); dismiss() }
-                        .tint(AppTheme.accent).disabled(!canSave)
+                    Button("保存") {
+                        focused = nil
+                        draft.price = Double(priceText) ?? 0
+                        store.upsert(draft)
+                        dismiss()
+                    }
+                    .tint(AppTheme.accent).disabled(!canSave)
+                }
+                // Keyboard toolbar — works for every keyboard type (including .decimalPad
+                // which has no return key) so the user can always dismiss in one tap.
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    Button(String(localized: "完成")) { focused = nil }
+                        .fontWeight(.semibold)
                 }
             }
             .sheet(isPresented: $showIconPicker) {
                 IconPickerView(icon: $draft.icon, appName: $draft.name)
             }
         }
+    }
+
+    // MARK: - Price input helpers
+
+    /// Strip everything except digits and one decimal point. Reject leading dots without a digit?
+    /// We allow "5.", ".5" etc. while typing — both parse as valid Doubles.
+    private static func sanitizePriceInput(_ raw: String) -> String {
+        let filtered = raw.filter { $0.isNumber || $0 == "." }
+        guard let firstDot = filtered.firstIndex(of: ".") else { return filtered }
+        let head = filtered[..<firstDot]
+        let tail = filtered[filtered.index(after: firstDot)...].filter { $0 != "." }
+        return String(head) + "." + tail
+    }
+
+    /// Display the existing price as natural input text (no formatter padding / trailing zeros).
+    /// 0 → "" so the placeholder "0" shows for new drafts.
+    private static func formatPriceForInput(_ value: Double) -> String {
+        guard value != 0 else { return "" }
+        let f = NumberFormatter()
+        f.numberStyle = .decimal
+        f.minimumFractionDigits = 0
+        f.maximumFractionDigits = 4
+        f.usesGroupingSeparator = false
+        return f.string(from: NSNumber(value: value)) ?? String(value)
     }
 }
 

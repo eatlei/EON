@@ -143,6 +143,7 @@ struct AppScreen<Content: View>: View {
                 .padding(.top, AppTheme.Space.m)
                 .padding(.bottom, bottomPadding)
         }
+        .scrollDismissesKeyboard(.interactively)
         .background(AppTheme.canvas.ignoresSafeArea())
     }
 }
