@@ -29,24 +29,30 @@ struct DashboardView: View {
                                 QuickStatsPanel(period: period).reveal(2)
                                 UpcomingPanel().reveal(3)
                                 CategoryPanel().reveal(4)
-                                // 累计支付面板:跨整个生命周期的"我到底花了多少钱在订阅上",
-                                // 用 startDate + 周期反推。只有当至少有一笔订阅已经发生过
-                                // 真实扣费时才出现,避免空显示一个 ¥0。
-                                LifetimePanel().reveal(5)
+                                // 累计支付 / 日历 / 年图 / 热力图都不挂 .reveal —— 这些
+                                // 是"条件出现"的面板,挂上去之后切换 period 会从 offset
+                                // y:+10 + opacity 0 重新滑入,延迟 240–280ms,在用户看
+                                // 起来就是页面底部被"扯了一下"。让它们 instant snap-in
+                                // 反而稳定:页面看不出抖动。
+                                //
+                                // 注意:.reveal 内部的 .animation(value:) 会覆盖父层
+                                // .transaction 的 animation = nil,所以靠 transaction 关
+                                // 不掉它 —— 只能不挂这个 modifier。
+                                LifetimePanel()
 
-                                // 只把 period 条件相关的"日历 vs 年图"片段挂 .id(period)
-                                // + 禁用 animation,这样它会在切换时直接重建、不做高度
-                                // 插值;但其他面板(Hero / Stats / Upcoming / Category /
-                                // Calendar 自身的子动画)的动画行为保持原样。
                                 Group {
                                     if period == .year {
-                                        YearPanel().reveal(6)
-                                        YearHeatmapPanel().reveal(7)
+                                        YearPanel()
+                                        YearHeatmapPanel()
                                     } else {
-                                        CalendarPanel(scrollProxy: proxy).reveal(6)
+                                        CalendarPanel(scrollProxy: proxy)
                                     }
                                 }
+                                // .id 让切换瞬间 tear down + remount,而不让 SwiftUI
+                                // 试图在不同结构间插值高度差。再叠一层 .transition(.identity)
+                                // 显式声明"这次切换不要任何动画":两手都做齐才能真的没动效。
                                 .id(period == .year ? "year-section" : "calendar-section")
+                                .transition(.identity)
                                 .transaction { $0.animation = nil }
                             }
                             .padding(.horizontal, AppTheme.Space.xl)
@@ -114,10 +120,28 @@ struct DashboardView: View {
 private struct DashboardHeader: View {
     @EnvironmentObject private var store: SubscriptionStore
     @Binding var period: SpendPeriod
+
+    /// SegmentedPill 在切换时是用 withAnimation 包的赋值;但 period 这个全局
+    /// state 一变,Hero/Stats/Lifetime 等所有跟 period 相关的子视图都会重算,
+    /// 内部 numericText 等 contentTransition 会在 withAnimation 的 spring 上下
+    /// 文里跑出来 —— 顺带把页面底部条件 Group 的高度差也插值掉。
+    /// 用一个不带 animation 的本地 binding 隔离:UI 上选中态变化仍走 spring,
+    /// 但绑给业务 state 的 period 写入是 non-animated。
+    private var quietPeriodBinding: Binding<SpendPeriod> {
+        Binding(
+            get: { period },
+            set: { newValue in
+                var t = Transaction()
+                t.animation = nil
+                withTransaction(t) { period = newValue }
+            }
+        )
+    }
+
     var body: some View {
         HStack(spacing: AppTheme.Space.m) {
             SegmentedPill(
-                selection: $period,
+                selection: quietPeriodBinding,
                 items: SpendPeriod.allCases.map { ($0, $0.title) }
             )
             .frame(maxWidth: 200)  // 三档,留点空间不要顶到右边
