@@ -5,10 +5,12 @@ struct SubscriptionsView: View {
     @State private var editing: Subscription?
     @State private var search = ""
     @State private var sort: SortOption = .renewalDate
+    @State private var cycleFilter: BillingCycle? = nil
 
     private var rows: [Subscription] {
         let f = store.subscriptions.filter { sub in
             guard !sub.isArchived else { return false }
+            if let cf = cycleFilter, sub.billingCycle != cf { return false }
             return search.isEmpty
                 || sub.name.localizedCaseInsensitiveContains(search)
                 || sub.plan.localizedCaseInsensitiveContains(search)
@@ -45,15 +47,35 @@ struct SubscriptionsView: View {
                         .overlay(RoundedRectangle(cornerRadius: AppTheme.radius).stroke(AppTheme.hairline, lineWidth: 0.5))
 
                         Menu {
-                            Picker("", selection: $sort) {
-                                ForEach(SortOption.allCases) { Label($0.title, systemImage: $0.icon).tag($0) }
+                            Section(header: Text("筛选周期")) {
+                                Picker("", selection: $cycleFilter) {
+                                    Text("全部").tag(BillingCycle?.none)
+                                    ForEach(BillingCycle.allCases) { c in
+                                        Text(c.title).tag(Optional(c))
+                                    }
+                                }
+                            }
+                            Section(header: Text("排序")) {
+                                Picker("", selection: $sort) {
+                                    ForEach(SortOption.allCases) {
+                                        Label($0.title, systemImage: $0.icon).tag($0)
+                                    }
+                                }
                             }
                         } label: {
-                            Image(systemName: "arrow.up.arrow.down")
-                                .font(.subheadline.weight(.bold)).foregroundStyle(AppTheme.ink)
-                                .frame(width: 44, height: 44)
-                                .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: AppTheme.radius))
-                                .overlay(RoundedRectangle(cornerRadius: AppTheme.radius).stroke(AppTheme.hairline, lineWidth: 0.5))
+                            ZStack(alignment: .topTrailing) {
+                                Image(systemName: "line.3.horizontal.decrease.circle")
+                                    .font(.subheadline.weight(.bold)).foregroundStyle(AppTheme.ink)
+                                    .frame(width: 44, height: 44)
+                                    .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: AppTheme.radius))
+                                    .overlay(RoundedRectangle(cornerRadius: AppTheme.radius).stroke(AppTheme.hairline, lineWidth: 0.5))
+                                if cycleFilter != nil {
+                                    Circle()
+                                        .fill(AppTheme.accent)
+                                        .frame(width: 8, height: 8)
+                                        .offset(x: -6, y: 6)
+                                }
+                            }
                         }
                     }
                     .reveal(0)
@@ -149,13 +171,24 @@ private struct Row: View {
                     .lineLimit(1)
             }
             Spacer(minLength: AppTheme.Space.s)
-            VStack(alignment: .trailing, spacing: 3) {
-                Text(store.converter.format(
-                    subscription.monthlyCost(in: store.baseCurrency, converter: store.converter),
-                    currency: store.baseCurrency))
-                    .font(.amountSmall())
-                    .foregroundStyle(colored ? Color.white : AppTheme.ink)
-                    .shadow(color: colored ? .black.opacity(0.30) : .clear, radius: 2, x: 0, y: 1)
+            VStack(alignment: .trailing, spacing: 4) {
+                // 显示**本周期**实际金额(按用户当前 baseCurrency 换算),配上 /月 /年 /季
+                // 这种短后缀,一眼就能区分订阅是月付/年付/季付/周付/自定义。
+                HStack(alignment: .firstTextBaseline, spacing: 1) {
+                    Text(store.converter.format(
+                        store.converter.convert(subscription.price,
+                                                from: subscription.currency,
+                                                to: store.baseCurrency),
+                        currency: store.baseCurrency))
+                        .font(.system(size: 19, weight: .bold, design: .rounded))
+                        .foregroundStyle(colored ? Color.white : AppTheme.ink)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.7)
+                        .shadow(color: colored ? .black.opacity(0.30) : .clear, radius: 2, x: 0, y: 1)
+                    Text(subscription.billingCycle.shortSuffix(customDays: subscription.customCycleDays))
+                        .font(.caption2.weight(.semibold))
+                        .foregroundStyle(colored ? Color.white.opacity(0.72) : AppTheme.secondary)
+                }
                 Text(subscription.nextBillingDate.formatted(.dateTime.month().day()))
                     .font(.caption2)
                     .foregroundStyle(colored ? Color.white.opacity(0.72) : AppTheme.tertiary)

@@ -172,6 +172,17 @@ enum BillingCycle: String, CaseIterable, Codable, Identifiable {
         }
     }
 
+    /// 在金额后展示的紧凑单位后缀(例:"/月" "/年")。custom 周期带上天数。
+    func shortSuffix(customDays: Int) -> String {
+        switch self {
+        case .weekly:    return String(localized: "/周")
+        case .monthly:   return String(localized: "/月")
+        case .quarterly: return String(localized: "/季")
+        case .yearly:    return String(localized: "/年")
+        case .custom:    return String(localized: "/\(max(customDays, 1))天")
+        }
+    }
+
     /// 按"自然周期"前进/后退 count 个周期（count 可为负）。月/季/年走日历，避免 30/91/365 天近似导致的日期漂移。
     func advance(_ date: Date, by count: Int, calendar: Calendar, customDays: Int) -> Date {
         switch self {
