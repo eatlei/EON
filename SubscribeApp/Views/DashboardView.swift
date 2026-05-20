@@ -392,8 +392,21 @@ private struct LifetimePanel: View {
     var body: some View {
         // 没真正扣过费(全是未来的)就不显示这个面板,免得空展示 ¥0。
         if total > 0 && !top.isEmpty {
-            Panel(title: "累计支付") {
+            // 包成 NavigationLink → LifetimeDetailView。手动画标题行以便右侧
+            // 放 chevron 提示可点(跟 CategoryPanel 同一套思路)。
+            NavigationLink {
+                LifetimeDetailView()
+            } label: {
                 VStack(alignment: .leading, spacing: AppTheme.Space.m) {
+                    HStack {
+                        Text("累计支付")
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(AppTheme.ink)
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .font(.caption.weight(.bold))
+                            .foregroundStyle(AppTheme.tertiary)
+                    }
                     VStack(alignment: .leading, spacing: 4) {
                         Text(store.converter.format(total, currency: store.baseCurrency))
                             .font(.system(size: 32, weight: .heavy, design: .rounded))
@@ -414,7 +427,12 @@ private struct LifetimePanel: View {
                         }
                     }
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(AppTheme.Space.l)
+                .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: AppTheme.radius))
+                .glassBorder()
             }
+            .buttonStyle(.plain)
         }
     }
 

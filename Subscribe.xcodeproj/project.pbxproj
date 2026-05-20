@@ -27,6 +27,7 @@
 		5964F4F0877646452D849F50 /* TipSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABA05720A891C34355A2A203 /* TipSheet.swift */; };
 		597F4F5AA13C2526CFC82C1B /* ExchangeRateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F48BEDC374CBD54A7C010158 /* ExchangeRateService.swift */; };
 		618617A35E5BD79A34BD0D7E /* CategorySettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD93304A76F63734E76AB1E8 /* CategorySettingsView.swift */; };
+		61D5CEA366C8C4AEC711150D /* LifetimeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10A7DA4B5B98C499EBB2BC70 /* LifetimeDetailView.swift */; };
 		669A6F80B5B67437D8692262 /* SubscriptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF2B1A4EE8C71CFEC125E8C6 /* SubscriptionsView.swift */; };
 		6A3529ED5CBF9D52D08375C4 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = FA4B32A05C5F9821174DE793 /* Localizable.xcstrings */; };
 		7E26F5C9A2784A91CFB7CA10 /* IconPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78326829449ABBC508F536A3 /* IconPickerView.swift */; };
@@ -54,6 +55,7 @@
 		0BE86960227F0CF15441A869 /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		0CC03432ABBED16209C01940 /* DailyWelcomeConfetti.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyWelcomeConfetti.swift; sourceTree = "<group>"; };
 		10A3F11D2D1B4CFE31C07A34 /* SubscribeApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SubscribeApp.entitlements; sourceTree = "<group>"; };
+		10A7DA4B5B98C499EBB2BC70 /* LifetimeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifetimeDetailView.swift; sourceTree = "<group>"; };
 		1307B8977CD8A78BC957BB94 /* PersonalityType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalityType.swift; sourceTree = "<group>"; };
 		278E1A85DA8D02D3694C43DD /* SubscriptionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionStore.swift; sourceTree = "<group>"; };
 		3BFDBF0EB309BC18707263B5 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
@@ -139,6 +141,7 @@
 				6A685EDE27E39F3F2842793B /* DataSyncSettingsView.swift */,
 				85D7F4A455AC9C81607B7E4C /* EasterEggSettingsView.swift */,
 				78326829449ABBC508F536A3 /* IconPickerView.swift */,
+				10A7DA4B5B98C499EBB2BC70 /* LifetimeDetailView.swift */,
 				7FECDF2B6EF79BCC0A033120 /* MasonryGrid.swift */,
 				FAF4459274422611AF74E573 /* NotificationSettingsView.swift */,
 				F18249F1BDF27876BC795427 /* PaymentMethodsView.swift */,
@@ -296,6 +299,7 @@
 				7E26F5C9A2784A91CFB7CA10 /* IconPickerView.swift in Sources */,
 				9E33482B494895D9981618F5 /* IconStore.swift in Sources */,
 				C27ABAC774BB186CFA0496F6 /* LLMExporter.swift in Sources */,
+				61D5CEA366C8C4AEC711150D /* LifetimeDetailView.swift in Sources */,
 				449118277B1D0591B951EEA5 /* MasonryGrid.swift in Sources */,
 				C82EC5D3AA16B65ABBFE635D /* NotificationScheduler.swift in Sources */,
 				2BDCDD1205A9EB3291AA9B76 /* NotificationSettingsView.swift in Sources */,

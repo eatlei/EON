@@ -3221,6 +3221,52 @@
         }
       }
     },
+    "会随你而变" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verändert sich mit dir"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Evolves with you"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cambia contigo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Évolue avec toi"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "あなたと共に変わります"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "당신과 함께 변해요"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "會隨你而變"
+          }
+        }
+      }
+    },
     "你养的不是订阅,是开发者" : {
       "localizations" : {
         "de" : {
@@ -6186,39 +6232,162 @@
       }
     },
     "周期·季" : {
+      "extractionState" : "stale",
       "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Q" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Q" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "T" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "T" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "季" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "분" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "季" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "季" } }
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Q"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Q"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "T"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "T"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "季"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "분"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "季"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "季"
+          }
+        }
       }
     },
     "周期·年" : {
+      "extractionState" : "stale",
       "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "J" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Y" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "A" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "A" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "年" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "년" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "年" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "年" } }
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "J"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Y"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "年"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "년"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "年"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "年"
+          }
+        }
       }
     },
     "周期·月" : {
+      "extractionState" : "stale",
       "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "M" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "M" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "M" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "M" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "月" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "월" } },
-        "zh-Hans" : { "stringUnit" : { "state" : "translated", "value" : "月" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "月" } }
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "M"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "M"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "M"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "M"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "月"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "월"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "月"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "月"
+          }
+        }
       }
     },
     "图标" : {
@@ -13385,48 +13554,48 @@
         }
       }
     },
-    "会随你而变" : {
+    "总累计" : {
       "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Verändert sich mit dir" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Evolves with you" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Cambia contigo" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Évolue avec toi" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "あなたと共に変わります" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "당신과 함께 변해요" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "會隨你而變" } }
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Gesamtsumme" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Total spent" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Total acumulado" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Total cumulé" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "総累計" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "총 누적" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "總累計" } }
       }
     },
-    "订阅多了 / 少了 / 偏好变了,你的人格也会跟着改变 —— 就跟你的 MBTI 会因人生阶段不同而不同一样,这是个会呼吸的标签。" : {
+    "人格会随你的订阅而变化" : {
       "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Subs added, removed, or shifted — your persona shifts too. Just like MBTI varies across life stages, this label is alive." } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "サブスクが増減すれば、あなたの人格も変わります。MBTI がライフステージで変わるように、これは呼吸するラベルです。" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "구독이 늘거나 줄거나 취향이 바뀌면 당신의 인격도 같이 변합니다. MBTI 가 인생 단계에 따라 다르듯, 이 라벨은 살아 있어요." } },
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Abos kommen, gehen, verschieben sich — deine Persönlichkeit auch. Wie der MBTI in verschiedenen Lebensphasen unterschiedlich ist, ist dieses Label lebendig." } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Si añades, quitas o cambias suscripciones, tu personalidad también cambia. Como el MBTI varía con cada etapa, esta etiqueta respira." } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Tu ajoutes, supprimes ou changes d’abos, ta personnalité aussi. Comme le MBTI varie selon les étapes de vie, ce label est vivant." } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "訂閱多了 / 少了 / 偏好變了,你的人格也會跟著改變 —— 就跟你的 MBTI 會因人生階段不同而不同一樣,這是個會呼吸的標籤。" } }
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Persönlichkeit ändert sich mit deinen Abos" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Your persona shifts as your subs change" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Tu personalidad cambia con tus suscripciones" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Ta perso évolue avec tes abonnements" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "人格はあなたのサブスクと共に変わります" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "당신의 구독에 따라 인격도 변해요" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "人格會隨你的訂閱而變化" } }
       }
     },
-    "费用从高到低" : {
+    "%@ × %lld 次" : {
       "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Kosten hoch → niedrig" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Cost: high to low" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Coste de mayor a menor" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Coût décroissant" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "費用が高い順" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "비용 높은 순" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "費用從高到低" } }
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "%@ × %lld" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "%@ × %lld" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "%@ × %lld" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "%@ × %lld" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "%@ × %lld 回" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "%@ × %lld회" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "%@ × %lld 次" } }
       }
     },
-    "费用从低到高" : {
+    "还没有产生过实际扣费" : {
       "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Kosten niedrig → hoch" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Cost: low to high" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Coste de menor a mayor" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Coût croissant" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "費用が安い順" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "비용 낮은 순" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "費用從低到高" } }
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Bisher keine tatsächlichen Abbuchungen" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "No actual charges yet" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Aún no se han hecho cargos" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Aucun prélèvement réel pour l’instant" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "まだ実際の請求はありません" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "아직 실제 결제가 없어요" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "還沒有產生過實際扣費" } }
       }
     },
     "汇率已更新" : {
@@ -16762,6 +16931,52 @@
         }
       }
     },
+    "订阅多了 / 少了 / 偏好变了,你的人格也会跟着改变 —— 就跟你的 MBTI 会因人生阶段不同而不同一样,这是个会呼吸的标签。" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abos kommen, gehen, verschieben sich — deine Persönlichkeit auch. Wie der MBTI in verschiedenen Lebensphasen unterschiedlich ist, ist dieses Label lebendig."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Subs added, removed, or shifted — your persona shifts too. Just like MBTI varies across life stages, this label is alive."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Si añades, quitas o cambias suscripciones, tu personalidad también cambia. Como el MBTI varía con cada etapa, esta etiqueta respira."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu ajoutes, supprimes ou changes d’abos, ta personnalité aussi. Comme le MBTI varie selon les étapes de vie, ce label est vivant."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "サブスクが増減すれば、あなたの人格も変わります。MBTI がライフステージで変わるように、これは呼吸するラベルです。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "구독이 늘거나 줄거나 취향이 바뀌면 당신의 인격도 같이 변합니다. MBTI 가 인생 단계에 따라 다르듯, 이 라벨은 살아 있어요."
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "訂閱多了 / 少了 / 偏好變了,你的人格也會跟著改變 —— 就跟你的 MBTI 會因人生階段不同而不同一樣,這是個會呼吸的標籤。"
+          }
+        }
+      }
+    },
     "订阅管理 · 多币种 · 每日汇率" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -17528,6 +17743,100 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "통화"
+          }
+        }
+      }
+    },
+    "费用从低到高" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kosten niedrig → hoch"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cost: low to high"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Coste de menor a mayor"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Coût croissant"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "費用が安い順"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "비용 낮은 순"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "費用從低到高"
+          }
+        }
+      }
+    },
+    "费用从高到低" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kosten hoch → niedrig"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cost: high to low"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Coste de mayor a menor"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Coût décroissant"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "費用が高い順"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "비용 높은 순"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "費用從高到低"
           }
         }
       }

@@ -144,36 +144,20 @@ struct PersonalityView: View {
 
     // MARK: - "会随订阅变化"提示
     //
-    // 用户要求显式提醒:你的订阅一变,人格也会跟着变,就像真正的 MBTI 在不同
-    // 人生阶段会不一样。一个温和的小卡片放在描述下面、免责声明上面。
+    // 一行小字,纯灰,不抢戏。之前用大色卡 + 加粗标题太重,现在调成"脚注"质感:
+    // 一个小图标 + 一句轻描淡写的解释,信息传达到了即可。
 
     @ViewBuilder
     private var evolutionHint: some View {
-        HStack(alignment: .top, spacing: 10) {
+        HStack(spacing: 6) {
             Image(systemName: "arrow.triangle.2.circlepath")
-                .font(.subheadline.weight(.bold))
-                .foregroundStyle(type.tint)
-                .padding(.top, 2)
-            VStack(alignment: .leading, spacing: 4) {
-                Text("会随你而变")
-                    .font(.subheadline.weight(.bold))
-                    .foregroundStyle(AppTheme.ink)
-                Text("订阅多了 / 少了 / 偏好变了,你的人格也会跟着改变 —— 就跟你的 MBTI 会因人生阶段不同而不同一样,这是个会呼吸的标签。")
-                    .font(.caption)
-                    .foregroundStyle(AppTheme.secondary)
-                    .lineSpacing(2)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-            Spacer(minLength: 0)
+                .font(.caption2)
+            Text("人格会随你的订阅而变化")  // 短一句脚注;译文表里已配 8 国语种
+                .font(.caption)
         }
-        .padding(AppTheme.Space.m)
-        .background(type.tint.opacity(0.10), in: RoundedRectangle(cornerRadius: AppTheme.radius))
-        .overlay(
-            RoundedRectangle(cornerRadius: AppTheme.radius)
-                .stroke(type.tint.opacity(0.22), lineWidth: 1)
-        )
+        .foregroundStyle(AppTheme.tertiary)
+        .padding(.top, AppTheme.Space.s)
         .opacity(hintAppeared ? 1 : 0)
-        .offset(y: hintAppeared ? 0 : 14)
     }
 
     // MARK: - 免责声明

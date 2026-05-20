@@ -129,19 +129,26 @@ struct SubscriptionsView: View {
 
             Spacer()
 
-            // 视图模式切换 —— list <-> grid。点一下立刻切,带轻微缩放过渡。
-            Button {
+            // 视图模式切换 —— list <-> grid。
+            // 之前点不到的根本原因:`.glassEffect` 在 iOS 26 跟 `.buttonStyle(.plain)`
+            // 配合时,gesture 会被 glass 层吃掉。换成 ZStack + 显式 onTapGesture +
+            // contentShape(Capsule()),把整块胶囊都做成 hit area,稳得多。
+            // 同时图标也换成"目的地"语义更强的一对:list.bullet ↔ square.grid.2x2,
+            // 一眼能看出"点了会变成什么"。
+            ZStack {
+                Image(systemName: viewMode == .list ? "square.grid.2x2" : "list.bullet")
+                    .font(.subheadline.weight(.bold))
+                    .foregroundStyle(AppTheme.ink)
+                    .contentTransition(.symbolEffect(.replace))
+            }
+            .frame(width: 40, height: 40)
+            .glassEffect(.regular, in: Capsule())
+            .contentShape(Capsule())
+            .onTapGesture {
                 withAnimation(.spring(response: 0.32, dampingFraction: 0.85)) {
                     viewMode = (viewMode == .list) ? .grid : .list
                 }
-            } label: {
-                Image(systemName: viewMode == .list ? "square.grid.2x2" : "rectangle.grid.1x2")
-                    .font(.subheadline.weight(.bold))
-                    .foregroundStyle(AppTheme.ink)
-                    .frame(width: 40, height: 40)
-                    .glassEffect(.regular, in: Capsule())
             }
-            .buttonStyle(.plain)
 
             Menu {
                 // 普通几种排序方式 —— Picker 风格,选中态由 .pickerStyle(.inline) 自动打勾
