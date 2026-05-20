@@ -26,10 +26,9 @@ struct SubscriptionsView: View {
     @State private var heavyTick: Int = 0
     @State private var launchTick: Int = 0
 
-    private let pullCoordSpace = "subs-pull-space"
-    /// 触发发射所需的下拉距离(pt)。比标准 pull-to-refresh 稍长一点,让用户察觉
-    /// 这是一个"游戏式"的彩蛋而不是普通刷新。
-    private let pullThreshold: CGFloat = 130
+    /// 触发发射所需的下拉距离(pt)。略大于标准 pull-to-refresh 触发点(80pt),
+    /// 但又不至于"使劲拉半天"。
+    private let pullThreshold: CGFloat = 100
     /// 阶段触觉的两个中间分位,基于 progress (0..1) 划分。
     private let stage1: CGFloat = 0.45
     private let stage2: CGFloat = 0.85
@@ -57,48 +56,46 @@ struct SubscriptionsView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(spacing: 0) {
-                    // 0 高 sensor —— 它的 minY 在 coordinate space 里直接 = "下拉了多少 pt"。
-                    Color.clear
-                        .frame(height: 0)
-                        .reportPullOffset(in: pullCoordSpace)
+                VStack(spacing: AppTheme.Space.l) {
+                    // 搜索框跟随页面滚动,不再吸顶 —— 仅在用户主动滚回顶部
+                    // 才看得到,避免占住固定可视区。
+                    searchBar.reveal(0)
 
-                    VStack(spacing: AppTheme.Space.l) {
-                        // 搜索框跟随页面滚动,不再吸顶 —— 仅在用户主动滚回顶部
-                        // 才看得到,避免占住固定可视区。
-                        searchBar.reveal(0)
-
-                        if rows.isEmpty {
-                            VStack(spacing: AppTheme.Space.m) {
-                                Image(systemName: "rectangle.stack").font(.system(size: 40, weight: .light))
-                                    .foregroundStyle(AppTheme.tertiary)
-                                Text(search.isEmpty ? "还没有订阅" : "没有匹配的订阅")
-                                    .font(.headline).foregroundStyle(AppTheme.ink)
-                            }.frame(maxWidth: .infinity).padding(.top, 100).reveal(1)
-                        } else {
-                            LazyVStack(spacing: AppTheme.Space.m) {
-                                ForEach(Array(rows.enumerated()), id: \.element.id) { i, sub in
-                                    Button { editing = sub } label: {
-                                        Row(
-                                            subscription: sub,
-                                            viewPeriod: viewPeriod,
-                                            onArchive: { store.archive(ids: [sub.id]) },
-                                            onDelete: { store.delete(ids: [sub.id]) }
-                                        )
-                                    }
-                                    .buttonStyle(.plain).reveal(i + 1)
+                    if rows.isEmpty {
+                        VStack(spacing: AppTheme.Space.m) {
+                            Image(systemName: "rectangle.stack").font(.system(size: 40, weight: .light))
+                                .foregroundStyle(AppTheme.tertiary)
+                            Text(search.isEmpty ? "还没有订阅" : "没有匹配的订阅")
+                                .font(.headline).foregroundStyle(AppTheme.ink)
+                        }.frame(maxWidth: .infinity).padding(.top, 100).reveal(1)
+                    } else {
+                        LazyVStack(spacing: AppTheme.Space.m) {
+                            ForEach(Array(rows.enumerated()), id: \.element.id) { i, sub in
+                                Button { editing = sub } label: {
+                                    Row(
+                                        subscription: sub,
+                                        viewPeriod: viewPeriod,
+                                        onArchive: { store.archive(ids: [sub.id]) },
+                                        onDelete: { store.delete(ids: [sub.id]) }
+                                    )
                                 }
+                                .buttonStyle(.plain).reveal(i + 1)
                             }
                         }
                     }
-                    .padding(.horizontal, AppTheme.Space.xl)
-                    .padding(.top, AppTheme.Space.m)
-                    .padding(.bottom, AppTheme.dockClearance)
                 }
+                .padding(.horizontal, AppTheme.Space.xl)
+                .padding(.top, AppTheme.Space.m)
+                .padding(.bottom, AppTheme.dockClearance)
             }
-            .coordinateSpace(name: pullCoordSpace)
-            .onPreferenceChange(PullOffsetKey.self) { y in
-                handlePullOffset(y)
+            // iOS 18+ 原生的"看到 ScrollView 的几何变化"接口。比之前用 PreferenceKey
+            // 测自定义 sensor 的 minY 靠谱得多 —— contentOffset.y 在自然 top 时就是 0,
+            // 用户下拉超出 top 时为负数,负多少 = 拉了多少 pt。不受 safeAreaInset 干扰。
+            .onScrollGeometryChange(for: CGFloat.self) { geo in
+                geo.contentOffset.y
+            } action: { _, newValue in
+                let pullAmount = max(0, -newValue)
+                handlePullOffset(pullAmount)
             }
             .scrollDismissesKeyboard(.interactively)
             .background(AppTheme.canvas.ignoresSafeArea())
@@ -147,9 +144,8 @@ struct SubscriptionsView: View {
 
     // MARK: - Pull handling
 
-    /// 收到 sensor 上报的"我现在在 scroll coord 下的 Y 坐标"。
-    /// y > 0 = 用户把内容拉到了顶之上多少 pt。
-    private func handlePullOffset(_ y: CGFloat) {
+    /// 收到 `onScrollGeometryChange` 推过来的"下拉 pt 数"(正值,自然 top = 0)。
+    private func handlePullOffset(_ pull: CGFloat) {
         // 没订阅 = 没有这个玩具。空列表也不能"喷"。
         guard !store.activeSubscriptions.isEmpty else {
             if pullProgress != 0 { pullProgress = 0 }
@@ -163,8 +159,7 @@ struct SubscriptionsView: View {
             return
         }
 
-        let raw = max(0, y)
-        let progress = raw / pullThreshold
+        let progress = pull / pullThreshold
         let prev = pullProgress
         pullProgress = progress
 

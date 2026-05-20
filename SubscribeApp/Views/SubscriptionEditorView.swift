@@ -16,6 +16,9 @@ struct SubscriptionEditorView: View {
         self.isNew = subscription == nil
         // 新建订阅:默认字母 tile,颜色每次随机从 8 个 monogram 预设里挑一个。
         // 这样空名字也有视觉存在感,且每次打开都不一样。
+        // 默认"开始时间"= 今天的 00:00(用 startOfDay 抹掉时分秒,DatePicker 不会
+        // 出现"今天 03:47"这种凌乱显示)。 之前默认成 "今天 + 7" 是早期
+        // "下次扣费"语义留下的脏值,这里跟着字段重命名一起回归本意。
         let initial = subscription ?? Subscription(
             name: "",
             plan: "",
@@ -24,7 +27,7 @@ struct SubscriptionEditorView: View {
             currency: .cny,
             billingCycle: .monthly,
             customCycleDays: 30,
-            nextBillingDate: Calendar.current.date(byAdding: .day, value: 7, to: .now) ?? .now,
+            nextBillingDate: Calendar.current.startOfDay(for: .now),
             reminderDaysBefore: 3,
             status: .active,
             paymentMethod: "",
