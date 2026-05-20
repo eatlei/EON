@@ -694,26 +694,24 @@ private struct Settings: Codable {
     }
 }
 
-/// 三个小彩蛋的开关合在一个 Codable 结构里,跟 Settings 一起持久化。
+/// 彩蛋开关合在一个 Codable 结构里,跟 Settings 一起持久化。
 /// 新增彩蛋时只要往这里加字段就够了,不会影响老数据(decodeIfPresent fall back)。
+/// 老的 `dragToArchive` 字段被移除了(整个左滑归档功能撤了) —— 老数据里如果
+/// 仍存有这个 key,Codable 默认会安静忽略多余 key,不需要做额外迁移。
 struct EasterEggPrefs: Codable, Equatable {
     var shakeSpotlight: Bool
     var dailyWelcomeConfetti: Bool
-    var dragToArchive: Bool
 
     init(shakeSpotlight: Bool = true,
-         dailyWelcomeConfetti: Bool = true,
-         dragToArchive: Bool = true) {
+         dailyWelcomeConfetti: Bool = true) {
         self.shakeSpotlight = shakeSpotlight
         self.dailyWelcomeConfetti = dailyWelcomeConfetti
-        self.dragToArchive = dragToArchive
     }
 
     init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
         shakeSpotlight = try c.decodeIfPresent(Bool.self, forKey: .shakeSpotlight) ?? true
         dailyWelcomeConfetti = try c.decodeIfPresent(Bool.self, forKey: .dailyWelcomeConfetti) ?? true
-        dragToArchive = try c.decodeIfPresent(Bool.self, forKey: .dragToArchive) ?? true
     }
 }
 

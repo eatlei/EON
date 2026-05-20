@@ -33,19 +33,6 @@ struct EasterEggSettingsView: View {
                 Text("每天第一次回到\"总览\"页时,你最贵的几个订阅图标会像小彩带一样从上方飘下来。一天最多一次,1.5 秒结束,只是打个招呼。")
             }
 
-            // 3. 拖拽归档
-            Section {
-                Toggle(isOn: $store.easterEggs.dragToArchive) {
-                    eggHeader(
-                        symbol: "hand.draw",
-                        title: "拖拽归档",
-                        trigger: "在订阅列表里把卡片往左拉"
-                    )
-                }
-            } footer: {
-                Text("在订阅列表里把任意一张卡片往左拉过一半,松手即可归档,顶部会弹出\"撤销\"按钮 4 秒。关闭后只能从卡片右侧菜单里归档。")
-            }
-
             Section {
                 EmptyView()
             } footer: {

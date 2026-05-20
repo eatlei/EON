@@ -6285,6 +6285,100 @@
         }
       }
     },
+    "已同步到 iCloud" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mit iCloud synchronisiert"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Synced to iCloud"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sincronizado con iCloud"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Synchronisé avec iCloud"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud に同期済み"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud 에 동기화됨"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已同步到 iCloud"
+          }
+        }
+      }
+    },
+    "已复制到剪贴板" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In die Zwischenablage kopiert"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copied to clipboard"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copiado al portapapeles"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copié dans le presse-papier"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "クリップボードにコピーしました"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "클립보드에 복사됨"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已複製到剪貼簿"
+          }
+        }
+      }
+    },
     "已归档「%@」" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -6330,39 +6424,6 @@
             "value" : "已歸檔「%@」"
           }
         }
-      }
-    },
-    "已复制到剪贴板" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "In die Zwischenablage kopiert" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Copied to clipboard" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Copiado al portapapeles" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Copié dans le presse-papier" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "クリップボードにコピーしました" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "클립보드에 복사됨" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "已複製到剪貼簿" } }
-      }
-    },
-    "已同步到 iCloud" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Mit iCloud synchronisiert" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Synced to iCloud" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Sincronizado con iCloud" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Synchronisé avec iCloud" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "iCloud に同期済み" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "iCloud 에 동기화됨" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "已同步到 iCloud" } }
-      }
-    },
-    "汇率已更新" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Wechselkurse aktualisiert" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Exchange rates updated" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Tipos de cambio actualizados" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Taux de change mis à jour" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "為替レートを更新しました" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "환율이 업데이트됨" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "匯率已更新" } }
       }
     },
     "已扣 %lld 次" : {
@@ -11477,6 +11538,53 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "환율"
+          }
+        }
+      }
+    },
+    "汇率已更新" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wechselkurse aktualisiert"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exchange rates updated"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tipos de cambio actualizados"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Taux de change mis à jour"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "為替レートを更新しました"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "환율이 업데이트됨"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "匯率已更新"
           }
         }
       }

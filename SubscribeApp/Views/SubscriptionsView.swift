@@ -8,14 +8,6 @@ struct SubscriptionsView: View {
     /// 视图换算口径:把所有订阅的金额换算到这个周期下展示(月/季/年)。
     /// 例:年付订阅 ¥120 在"按月"下显示 ¥10/月,在"按季"下显示 ¥30/季。
     @State private var viewPeriod: ViewPeriod = .monthly
-    /// 拖拽归档刚发生 → 顶部弹一个 "归档了 · 撤销" toast。
-    /// 4 秒内点撤销可以恢复;过了就消失。
-    @State private var recentlyArchived: Subscription?
-    @State private var archiveHapticTick: Int = 0
-
-    /// 阶段触觉的两个中间分位,基于 progress (0..1) 划分。
-    private let stage1: CGFloat = 0.45
-    private let stage2: CGFloat = 0.85
 
     private var rows: [Subscription] {
         let f = store.subscriptions.filter { sub in
@@ -55,17 +47,15 @@ struct SubscriptionsView: View {
                     } else {
                         LazyVStack(spacing: AppTheme.Space.m) {
                             ForEach(Array(rows.enumerated()), id: \.element.id) { i, sub in
-                                // 不再外包一层 Button —— Row 自己用 .onTapGesture
-                                // 处理点击,因为它内部已经把 DragGesture 接管掉了
-                                // (按钮 + 拖拽手势会互相打架,左拉的时候会被按钮
-                                // 误触发"点击")。
-                                Row(
-                                    subscription: sub,
-                                    viewPeriod: viewPeriod,
-                                    onTap: { editing = sub },
-                                    onArchive: { archiveByDrag(sub) },
-                                    onDelete: { store.delete(ids: [sub.id]) }
-                                )
+                                Button { editing = sub } label: {
+                                    Row(
+                                        subscription: sub,
+                                        viewPeriod: viewPeriod,
+                                        onArchive: { store.archive(ids: [sub.id]) },
+                                        onDelete: { store.delete(ids: [sub.id]) }
+                                    )
+                                }
+                                .buttonStyle(.plain)
                                 .reveal(i + 1)
                             }
                         }
@@ -86,71 +76,7 @@ struct SubscriptionsView: View {
             }
             .toolbar(.hidden, for: .navigationBar)
             .sheet(item: $editing) { SubscriptionEditorView(subscription: $0) }
-            // 拖拽归档后的 toast,4 秒内可撤销。挂在底部 safeAreaInset 上,不挡
-            // 列表头部的吸顶按钮。
-            .safeAreaInset(edge: .bottom, spacing: 0) {
-                if let archived = recentlyArchived {
-                    archiveToast(for: archived)
-                        .padding(.horizontal, AppTheme.Space.xl)
-                        .padding(.bottom, AppTheme.Space.s)
-                        .transition(.move(edge: .bottom).combined(with: .opacity))
-                }
-            }
-            .animation(.spring(response: 0.4, dampingFraction: 0.85), value: recentlyArchived?.id)
-            .sensoryFeedback(.impact(weight: .heavy), trigger: archiveHapticTick)
         }
-    }
-
-    // MARK: - Drag-to-archive plumbing
-
-    /// 拖拽到位置后执行归档,记一次 toast 状态,4 秒后自动清除。
-    private func archiveByDrag(_ sub: Subscription) {
-        store.archive(ids: [sub.id])
-        archiveHapticTick &+= 1
-        recentlyArchived = sub
-        Task { @MainActor in
-            try? await Task.sleep(nanoseconds: 4_000_000_000)
-            // 只清自己,不要把后续可能弹出的新 toast 顺手抹掉
-            if recentlyArchived?.id == sub.id {
-                recentlyArchived = nil
-            }
-        }
-    }
-
-    /// 撤销 toast 卡片 —— 浮在底部 TabBar 上方,左侧 archive 图标 + 文字,右侧
-    /// "撤销" 按钮。
-    @ViewBuilder
-    private func archiveToast(for sub: Subscription) -> some View {
-        HStack(spacing: AppTheme.Space.m) {
-            Image(systemName: "archivebox.fill")
-                .font(.subheadline.weight(.bold))
-                .foregroundStyle(AppTheme.accent)
-            VStack(alignment: .leading, spacing: 1) {
-                Text(String(localized: "已归档「\(sub.name)」"))
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(AppTheme.ink)
-                    .lineLimit(1)
-                Text("4 秒内可撤销")
-                    .font(.caption2)
-                    .foregroundStyle(AppTheme.tertiary)
-            }
-            Spacer()
-            Button {
-                store.restore(ids: [sub.id])
-                recentlyArchived = nil
-            } label: {
-                Text("撤销")
-                    .font(.subheadline.weight(.bold))
-                    .foregroundStyle(AppTheme.accent)
-                    .padding(.horizontal, 14).padding(.vertical, 6)
-                    .background(AppTheme.accent.opacity(0.14), in: Capsule())
-            }
-            .buttonStyle(.plain)
-        }
-        .padding(.horizontal, AppTheme.Space.m)
-        .padding(.vertical, 10)
-        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: AppTheme.radius))
-        .overlay(RoundedRectangle(cornerRadius: AppTheme.radius).stroke(AppTheme.hairline, lineWidth: 0.5))
     }
 
     /// 吸顶部分:仅 月/季/年 胶囊 + 排序圆按钮,没有底板。
@@ -253,31 +179,11 @@ private struct Row: View {
     @Environment(\.colorScheme) private var colorScheme
     let subscription: Subscription
     let viewPeriod: ViewPeriod
-    let onTap: () -> Void
     let onArchive: () -> Void
     let onDelete: () -> Void
 
     private var colored: Bool { store.coloredSubscriptionCards }
     private var isDark: Bool { colorScheme == .dark }
-
-    // MARK: - Drag-to-archive state
-    //
-    // 用户左拉卡片,过了 60% 宽度松手就归档。dragX 跟手指实时同步:< 0 = 拖向
-    // 左边;红色 archive 背景的透明度按这个值线性变浓,松手时若过阈值则:
-    //  1) onArchive 通知父层
-    //  2) 卡片飞出屏幕(动画到 -screenWidth)
-    // 否则弹回原位。
-
-    /// 当前 X 位移。负值 = 往左拉。
-    @State private var dragX: CGFloat = 0
-    /// 是否已经触发了归档(避免动画/手势竞态导致重复触发)。
-    @State private var isArchivedLocally = false
-    /// 拖拽过半时给一次轻微的 tick,提示"已经过阈值,松手就执行"。
-    @State private var thresholdTick: Int = 0
-    /// 直接用绝对像素阈值代替 "卡片宽度 × 比例"。这样 Row 不再需要 GeometryReader
-    /// 来测自身宽,在 LazyVStack 里几十张卡片同时存在时,滚动 / 拖拽性能显著好得多
-    /// —— 之前每行都会跑一次 layout 测量,拖一下就触发几十次重排。
-    private let archiveThresholdPoints: CGFloat = 130
 
     /// 卡片底色:.tile 取色号,.image 取图像平均色,均回退分类色(自定义优先)。
     private var cardColor: Color {
@@ -305,90 +211,6 @@ private struct Row: View {
     }
 
     var body: some View {
-        let threshold = archiveThresholdPoints
-        let passedThreshold = -dragX >= threshold
-
-        ZStack(alignment: .trailing) {
-            // accent 色"归档"背景层 —— 卡片往左滑时跟着露出来,过阈值后变成实心
-            archiveBackground(passedThreshold: passedThreshold,
-                              progress: min(1, -dragX / threshold))
-
-            // 真正的卡片 —— 沿 X 平移;触发归档后会被父层从列表里删掉,我们也
-            // 让它一次性飞出屏幕左侧。彩蛋关掉的时候完全不挂 DragGesture,
-            // 卡片只剩点击 → 编辑的原行为。
-            if store.easterEggs.dragToArchive {
-                cardContent
-                    .offset(x: dragX)
-                    .gesture(
-                        DragGesture(minimumDistance: 12)
-                            .onChanged { value in
-                                guard !isArchivedLocally else { return }
-                                // 只响应向左的拖拽;向右拖一律忽略,免得跟系统 swipe-back 冲突
-                                if value.translation.width > 0 {
-                                    if dragX != 0 { dragX = 0 }
-                                    return
-                                }
-                                let prev = dragX
-                                dragX = value.translation.width
-                                // 跨阈值瞬间一次中度震感,给"已上膛"的反馈
-                                if -prev < threshold && -dragX >= threshold {
-                                    thresholdTick &+= 1
-                                }
-                            }
-                            .onEnded { value in
-                                guard !isArchivedLocally else { return }
-                                if -value.translation.width >= threshold {
-                                    // 飞出屏幕 + 通知父层。-600 足够覆盖任何 iPhone 宽度。
-                                    isArchivedLocally = true
-                                    withAnimation(.easeIn(duration: 0.22)) {
-                                        dragX = -600
-                                    }
-                                    Task { @MainActor in
-                                        try? await Task.sleep(nanoseconds: 180_000_000)
-                                        onArchive()
-                                    }
-                                } else {
-                                    // 弹回原位
-                                    withAnimation(.spring(response: 0.35, dampingFraction: 0.75)) {
-                                        dragX = 0
-                                    }
-                                }
-                            }
-                    )
-                    .onTapGesture(perform: onTap)
-            } else {
-                cardContent.onTapGesture(perform: onTap)
-            }
-        }
-        .sensoryFeedback(.impact(weight: .medium), trigger: thresholdTick)
-    }
-
-    /// 右侧露出来的"归档"背景。底色跟随主题(AppTheme.accent),过阈值变实心。
-    /// 之前用纯红色,跟主题切换割裂,看起来像系统警告;改成 accent 后语义是
-    /// "你即将归档" 而不是"危险操作"。
-    @ViewBuilder
-    private func archiveBackground(passedThreshold: Bool, progress: CGFloat) -> some View {
-        RoundedRectangle(cornerRadius: AppTheme.radius)
-            .fill(AppTheme.accent.opacity(passedThreshold ? 0.95 : 0.55))
-            .overlay(alignment: .trailing) {
-                HStack(spacing: 8) {
-                    Image(systemName: "archivebox.fill")
-                        .font(.subheadline.weight(.bold))
-                    Text(passedThreshold ? "松手归档" : "归档")
-                        .font(.subheadline.weight(.semibold))
-                        .contentTransition(.opacity)
-                }
-                .foregroundStyle(.white)
-                .padding(.trailing, AppTheme.Space.l)
-                .opacity(min(1, progress * 1.5))
-                .scaleEffect(passedThreshold ? 1.08 : 1.0)
-                .animation(.spring(response: 0.3, dampingFraction: 0.7), value: passedThreshold)
-            }
-    }
-
-    /// 原本的卡片内容 —— 跟拖拽机制无关,逻辑全在这里面。
-    @ViewBuilder
-    private var cardContent: some View {
         HStack(spacing: AppTheme.Space.m) {
             CategoryGlyph(subscription: subscription, size: 44)
                 .shadow(color: colored ? .black.opacity(isDark ? 0.25 : 0.10) : .clear,
