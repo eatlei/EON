@@ -31,6 +31,7 @@
 		81EFDBC0D53F6C4CDD5DBD68 /* PaymentMethodsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18249F1BDF27876BC795427 /* PaymentMethodsView.swift */; };
 		91B4CADF7E9ABE9F1AA38641 /* AppearanceSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E326D177E55F0830811DA8 /* AppearanceSettingsView.swift */; };
 		97C0DA795C10287CF73F8C15 /* AppTheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ECFF1B53B3302FE53141D65 /* AppTheme.swift */; };
+		9B848F4CCD77B6A204D3D2F6 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE86960227F0CF15441A869 /* Toast.swift */; };
 		9E33482B494895D9981618F5 /* IconStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E64A9893062485E4E3DD9FD /* IconStore.swift */; };
 		C27ABAC774BB186CFA0496F6 /* LLMExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D75247CB3B2D0B30F64A187A /* LLMExporter.swift */; };
 		C82EC5D3AA16B65ABBFE635D /* NotificationScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C474BE951C367D83194A7B /* NotificationScheduler.swift */; };
@@ -44,6 +45,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0BE86960227F0CF15441A869 /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
 		0CC03432ABBED16209C01940 /* DailyWelcomeConfetti.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyWelcomeConfetti.swift; sourceTree = "<group>"; };
 		10A3F11D2D1B4CFE31C07A34 /* SubscribeApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SubscribeApp.entitlements; sourceTree = "<group>"; };
 		278E1A85DA8D02D3694C43DD /* SubscriptionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionStore.swift; sourceTree = "<group>"; };
@@ -131,6 +133,7 @@
 				57A000AE363FDB1ADBCB23F5 /* SubscriptionEditorView.swift */,
 				EF2B1A4EE8C71CFEC125E8C6 /* SubscriptionsView.swift */,
 				ABA05720A891C34355A2A203 /* TipSheet.swift */,
+				0BE86960227F0CF15441A869 /* Toast.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -286,6 +289,7 @@
 				669A6F80B5B67437D8692262 /* SubscriptionsView.swift in Sources */,
 				5964F4F0877646452D849F50 /* TipSheet.swift in Sources */,
 				0A324C0CCAE7EBF5319717F7 /* TipStore.swift in Sources */,
+				9B848F4CCD77B6A204D3D2F6 /* Toast.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

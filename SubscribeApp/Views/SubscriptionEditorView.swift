@@ -245,15 +245,19 @@ struct SubscriptionEditorView: View {
                 }
             }
             .toolbar {
+                // 取消:ghost 按钮 —— 半透明黑色胶囊垫底 + 白字。在任何 tile 色上
+                // 都能读出,但视觉上不抢"保存"的主操作位。
                 ToolbarItem(placement: .cancellationAction) {
                     Button { dismiss() } label: {
                         Text("取消")
                             .font(.subheadline.weight(.semibold))
                             .foregroundStyle(.white)
                             .padding(.horizontal, 14).padding(.vertical, 7)
-                            .glassEffect(.regular, in: Capsule())
+                            .background(Color.black.opacity(0.32), in: Capsule())
                     }
                 }
+                // 保存:实色主操作按钮 —— accent 填充 + 白字。一眼能看出是当前
+                // 页面的主操作,跟取消形成主 / 次的清晰区分。
                 ToolbarItem(placement: .confirmationAction) {
                     Button {
                         focused = nil
@@ -268,10 +272,13 @@ struct SubscriptionEditorView: View {
                         dismiss()
                     } label: {
                         Text("保存")
-                            .font(.subheadline.weight(.heavy))
-                            .foregroundStyle(canSave ? .white : .white.opacity(0.45))
+                            .font(.subheadline.weight(.bold))
+                            .foregroundStyle(.white)
                             .padding(.horizontal, 14).padding(.vertical, 7)
-                            .glassEffect(.regular, in: Capsule())
+                            .background(
+                                (canSave ? AppTheme.accent : AppTheme.accent.opacity(0.45)),
+                                in: Capsule()
+                            )
                     }
                     .disabled(!canSave)
                 }

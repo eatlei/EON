@@ -274,7 +274,10 @@ private struct Row: View {
     @State private var isArchivedLocally = false
     /// 拖拽过半时给一次轻微的 tick,提示"已经过阈值,松手就执行"。
     @State private var thresholdTick: Int = 0
-    private let archiveThresholdRatio: CGFloat = 0.45  // 拖过卡片宽度的 45% 就算到位
+    /// 直接用绝对像素阈值代替 "卡片宽度 × 比例"。这样 Row 不再需要 GeometryReader
+    /// 来测自身宽,在 LazyVStack 里几十张卡片同时存在时,滚动 / 拖拽性能显著好得多
+    /// —— 之前每行都会跑一次 layout 测量,拖一下就触发几十次重排。
+    private let archiveThresholdPoints: CGFloat = 130
 
     /// 卡片底色:.tile 取色号,.image 取图像平均色,均回退分类色(自定义优先)。
     private var cardColor: Color {
@@ -302,67 +305,62 @@ private struct Row: View {
     }
 
     var body: some View {
-        GeometryReader { proxy in
-            let cardWidth = proxy.size.width
-            let threshold = cardWidth * archiveThresholdRatio
-            let passedThreshold = -dragX >= threshold
+        let threshold = archiveThresholdPoints
+        let passedThreshold = -dragX >= threshold
 
-            ZStack(alignment: .trailing) {
-                // 红色"归档"背景层 —— 卡片往左滑时跟着露出来,过阈值后变成实心
-                archiveBackground(passedThreshold: passedThreshold, progress: min(1, -dragX / threshold))
+        ZStack(alignment: .trailing) {
+            // accent 色"归档"背景层 —— 卡片往左滑时跟着露出来,过阈值后变成实心
+            archiveBackground(passedThreshold: passedThreshold,
+                              progress: min(1, -dragX / threshold))
 
-                // 真正的卡片 —— 沿 X 平移;触发归档后会被父层从列表里删掉,我们也
-                // 让它一次性飞出屏幕左侧。彩蛋关掉的时候完全不挂 DragGesture,
-                // 卡片只剩点击 → 编辑的原行为。
-                if store.easterEggs.dragToArchive {
-                    cardContent
-                        .offset(x: dragX)
-                        .gesture(
-                            DragGesture(minimumDistance: 12)
-                                .onChanged { value in
-                                    guard !isArchivedLocally else { return }
-                                    // 只响应向左的拖拽;向右拖一律忽略,免得跟系统 swipe-back 冲突
-                                    if value.translation.width > 0 {
+            // 真正的卡片 —— 沿 X 平移;触发归档后会被父层从列表里删掉,我们也
+            // 让它一次性飞出屏幕左侧。彩蛋关掉的时候完全不挂 DragGesture,
+            // 卡片只剩点击 → 编辑的原行为。
+            if store.easterEggs.dragToArchive {
+                cardContent
+                    .offset(x: dragX)
+                    .gesture(
+                        DragGesture(minimumDistance: 12)
+                            .onChanged { value in
+                                guard !isArchivedLocally else { return }
+                                // 只响应向左的拖拽;向右拖一律忽略,免得跟系统 swipe-back 冲突
+                                if value.translation.width > 0 {
+                                    if dragX != 0 { dragX = 0 }
+                                    return
+                                }
+                                let prev = dragX
+                                dragX = value.translation.width
+                                // 跨阈值瞬间一次中度震感,给"已上膛"的反馈
+                                if -prev < threshold && -dragX >= threshold {
+                                    thresholdTick &+= 1
+                                }
+                            }
+                            .onEnded { value in
+                                guard !isArchivedLocally else { return }
+                                if -value.translation.width >= threshold {
+                                    // 飞出屏幕 + 通知父层。-600 足够覆盖任何 iPhone 宽度。
+                                    isArchivedLocally = true
+                                    withAnimation(.easeIn(duration: 0.22)) {
+                                        dragX = -600
+                                    }
+                                    Task { @MainActor in
+                                        try? await Task.sleep(nanoseconds: 180_000_000)
+                                        onArchive()
+                                    }
+                                } else {
+                                    // 弹回原位
+                                    withAnimation(.spring(response: 0.35, dampingFraction: 0.75)) {
                                         dragX = 0
-                                        return
-                                    }
-                                    let prev = dragX
-                                    dragX = value.translation.width
-                                    // 跨阈值瞬间一次中度震感,给"已上膛"的反馈
-                                    if -prev < threshold && -dragX >= threshold {
-                                        thresholdTick &+= 1
                                     }
                                 }
-                                .onEnded { value in
-                                    guard !isArchivedLocally else { return }
-                                    if -value.translation.width >= threshold {
-                                        // 飞出屏幕 + 通知父层
-                                        isArchivedLocally = true
-                                        withAnimation(.easeIn(duration: 0.22)) {
-                                            dragX = -cardWidth - 60
-                                        }
-                                        Task { @MainActor in
-                                            try? await Task.sleep(nanoseconds: 180_000_000)
-                                            onArchive()
-                                        }
-                                    } else {
-                                        // 弹回原位
-                                        withAnimation(.spring(response: 0.35, dampingFraction: 0.75)) {
-                                            dragX = 0
-                                        }
-                                    }
-                                }
-                        )
-                        .onTapGesture(perform: onTap)
-                } else {
-                    cardContent.onTapGesture(perform: onTap)
-                }
+                            }
+                    )
+                    .onTapGesture(perform: onTap)
+            } else {
+                cardContent.onTapGesture(perform: onTap)
             }
-            .sensoryFeedback(.impact(weight: .medium), trigger: thresholdTick)
         }
-        // GeometryReader 没有 intrinsic size,要给一个 minHeight 才能在 LazyVStack 里
-        // 自然撑开;实际高度由卡片内容决定。
-        .frame(minHeight: 76)
+        .sensoryFeedback(.impact(weight: .medium), trigger: thresholdTick)
     }
 
     /// 右侧露出来的"归档"背景。底色跟随主题(AppTheme.accent),过阈值变实心。

@@ -3,6 +3,7 @@ import SwiftUI
 struct CurrencySettingsView: View {
     @EnvironmentObject private var store: SubscriptionStore
     @State private var refreshing = false
+    @State private var refreshedToastShown = false
 
     private var sortedCurrencies: [CurrencyCode] {
         CurrencyCode.allCases.sorted { $0.rawValue < $1.rawValue }
@@ -62,7 +63,10 @@ struct CurrencySettingsView: View {
                         if elapsed < minSpin {
                             try? await Task.sleep(nanoseconds: UInt64((minSpin - elapsed) * 1_000_000_000))
                         }
-                        await MainActor.run { refreshing = false }
+                        await MainActor.run {
+                            refreshing = false
+                            refreshedToastShown = true
+                        }
                     }
                 } label: {
                     HStack(spacing: 12) {
@@ -90,6 +94,7 @@ struct CurrencySettingsView: View {
         .navigationTitle("货币")
         .navigationBarTitleDisplayMode(.inline)
         .task { await store.refreshRatesIfStale() }
+        .toast($refreshedToastShown, text: "汇率已更新")
     }
 
     private var rateUpdatedText: String {

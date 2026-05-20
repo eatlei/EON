@@ -891,6 +891,7 @@
       }
     },
     "3 秒后送达" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -1220,6 +1221,52 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "EON 피드백"
+          }
+        }
+      }
+    },
+    "EON 当前没有通知权限,可以在 iOS 设置里手动打开。" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "EON hat keine Benachrichtigungserlaubnis. In den iOS-Einstellungen kannst du sie aktivieren."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "EON doesn’t have notification permission. You can enable it in iOS Settings."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "EON no tiene permiso para enviar notificaciones. Puedes activarlo en Ajustes de iOS."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "EON n’a pas l’autorisation d’envoyer des notifications. Tu peux l’activer dans Réglages iOS."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "EON は通知権限を持っていません。iOS 設定で許可できます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "EON 에 알림 권한이 없어요. iOS 설정에서 켤 수 있어요."
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "EON 當前沒有通知權限,可以在 iOS 設定裡手動打開。"
           }
         }
       }
@@ -1814,6 +1861,52 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "不客氣啦"
+          }
+        }
+      }
+    },
+    "不计入" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "nicht zählend"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Excluded"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Excluida"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exclu"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "対象外"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "제외"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不計入"
           }
         }
       }
@@ -2776,7 +2869,6 @@
       }
     },
     "保存" : {
-      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -4003,6 +4095,53 @@
         }
       }
     },
+    "前往 iOS 设置" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zu den iOS-Einstellungen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open iOS Settings"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ir a Ajustes de iOS"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvrir Réglages iOS"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iOS 設定を開く"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iOS 설정 열기"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "前往 iOS 設定"
+          }
+        }
+      }
+    },
     "加元" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -4330,7 +4469,6 @@
       }
     },
     "取消" : {
-      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -4582,6 +4720,53 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "이름 (예: Huabei)"
+          }
+        }
+      }
+    },
+    "名称,如 花呗 / 招行信用卡" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name, z. B. Apple Card"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name, e.g. Apple Card"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nombre, p. ej. Visa"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nom, ex. Apple Card"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "名称、例:楽天カード"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이름, 예: 카카오페이"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "名稱,如 花唄 / 招行信用卡"
           }
         }
       }
@@ -5000,6 +5185,99 @@
         }
       }
     },
+    "在订阅列表里把任意一张卡片往左拉过一半,松手即可归档,顶部会弹出\"撤销\"按钮 4 秒。关闭后只能从卡片右侧菜单里归档。" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Karte über die Hälfte nach links ziehen archiviert sie; 4 s lang erscheint ein 'Rückgängig'-Knopf. Aus → Archivieren nur über das Karten-Menü."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drag any card past halfway to the left in the list to archive it; an 'Undo' button shows up for 4s. With this off, archiving only works through the card menu."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arrastra una tarjeta a la izquierda más allá de la mitad para archivar; aparece un botón 'Deshacer' durante 4 s. Desactivado, sólo se archiva desde el menú."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glisse une carte au-delà de la moitié vers la gauche pour l’archiver ; un bouton « Annuler » apparaît 4 s. Désactivé, l’archivage passe par le menu."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "リストでカードを半分以上左にスワイプすればアーカイブ。上に 4 秒間「取消」が表示されます。オフにするとカードのメニューからのみ操作可能。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "카드를 절반 넘게 왼쪽으로 끌면 보관됩니다. 상단에 4초 동안 '취소' 버튼이 떠요. 끄면 카드 메뉴에서만 보관 가능."
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在訂閱列表裡把任意一張卡片往左拉過一半,鬆手即可歸檔,頂部會彈出「撤銷」按鈕 4 秒。關閉後只能從卡片右側選單裡歸檔。"
+          }
+        }
+      }
+    },
+    "在订阅列表里把卡片往左拉" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Karten in der Liste nach links ziehen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Drag a card left in the list"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arrastra una tarjeta a la izquierda"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glisser une carte vers la gauche"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "リストでカードを左にスワイプ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "목록에서 카드를 왼쪽으로 드래그"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在訂閱列表裡把卡片往左拉"
+          }
+        }
+      }
+    },
     "基础" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -5239,6 +5517,53 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "일"
+          }
+        }
+      }
+    },
+    "失败,稍后重试" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fehler, später erneut versuchen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Failed, try again"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Falló, vuelve a intentarlo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Échec, réessayer"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "失敗、再試行"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "실패, 다시 시도"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "失敗,稍後重試"
           }
         }
       }
@@ -6007,268 +6332,37 @@
         }
       }
     },
-    "彩蛋" : {
+    "已复制到剪贴板" : {
       "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Easter Eggs" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Easter eggs" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Sorpresas" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Easter eggs" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "イースターエッグ" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "이스터에그" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "彩蛋" } }
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "In die Zwischenablage kopiert" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Copied to clipboard" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Copiado al portapapeles" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Copié dans le presse-papier" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "クリップボードにコピーしました" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "클립보드에 복사됨" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "已複製到剪貼簿" } }
       }
     },
-    "摇一摇 · 聚焦订阅" : {
+    "已同步到 iCloud" : {
       "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Schütteln · Abo-Spotlight" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Shake · subscription spotlight" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Sacudir · destacar suscripción" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Secouer · spotlight d’abonnement" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "シェイク · サブスクのスポットライト" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "흔들기 · 구독 스포트라이트" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "搖一搖 · 聚焦訂閱" } }
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Mit iCloud synchronisiert" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Synced to iCloud" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Sincronizado con iCloud" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Synchronisé avec iCloud" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "iCloud に同期済み" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "iCloud 에 동기화됨" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "已同步到 iCloud" } }
       }
     },
-    "摇手机" : {
+    "汇率已更新" : {
       "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Telefon schütteln" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Shake the phone" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Agita el teléfono" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Secouer le téléphone" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "端末を振る" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "기기 흔들기" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "搖手機" } }
-      }
-    },
-    "每日首启 · 订阅彩带" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Tagesstart · Abo-Konfetti" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Daily start · subscription confetti" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Inicio diario · confeti de suscripciones" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Premier lancement du jour · confetti d’abos" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "1 日の始まり · サブスク紙吹雪" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "하루 첫 시작 · 구독 컨페티" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "每日首啟 · 訂閱彩帶" } }
-      }
-    },
-    "每天第一次打开总览" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Erste Übersicht am Tag" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "First Overview open each day" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Primera apertura del resumen del día" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Première ouverture d’Aperçu du jour" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "1 日最初の総覧を開いた時" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "하루 첫 개요 열기" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "每天第一次打開總覽" } }
-      }
-    },
-    "拖拽归档" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Wischen zum Archivieren" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Swipe to archive" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Deslizar para archivar" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Glisser pour archiver" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "スワイプでアーカイブ" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "스와이프로 보관" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "拖拽歸檔" } }
-      }
-    },
-    "在订阅列表里把卡片往左拉" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Karten in der Liste nach links ziehen" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Drag a card left in the list" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Arrastra una tarjeta a la izquierda" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Glisser une carte vers la gauche" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "リストでカードを左にスワイプ" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "목록에서 카드를 왼쪽으로 드래그" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "在訂閱列表裡把卡片往左拉" } }
-      }
-    },
-    "摇一下手机,从活跃订阅里随机抽一个出来,弹出一张大卡片,用来快速决策\"这个我还要不要\"。配合震动反馈,有翻牌仪式感。" : {
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Shake the phone to pull a random active subscription as a full card. Helps you decide 'do I still want this?' in seconds, with haptic feedback for that card-flip feel." } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "端末を振るとアクティブなサブスクから 1 つランダムに引き当て、大きなカードでスポットライト。「これ、まだ要る?」を瞬時に判断できます。" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "기기를 흔들면 활성 구독 중 무작위 하나를 큰 카드로 띄워줍니다. '아직 필요할까?' 결정을 도와요. 진동 피드백 포함." } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Sacude el teléfono para destacar una suscripción al azar en una tarjeta grande. Te ayuda a decidir '¿la quiero o no?' rápido, con vibración incluida." } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Secoue le téléphone pour tirer au sort un abo dans une grande carte. Aide à décider « je garde ou pas ? » en quelques secondes, avec retour haptique." } },
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Schütteln zieht ein zufälliges Abo als große Karte hervor. Hilft bei 'Will ich das noch?' — mit haptischem Feedback." } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "搖一下手機,從活躍訂閱裡隨機抽一個出來,彈出一張大卡片,用來快速決策「這個我還要不要」。配合震動反饋,有翻牌儀式感。" } }
-      }
-    },
-    "每天第一次回到\"总览\"页时,你最贵的几个订阅图标会像小彩带一样从上方飘下来。一天最多一次,1.5 秒结束,只是打个招呼。" : {
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "First time you open Overview each day, your priciest subscription icons rain down like confetti. Once per day, ~1.5s, just a friendly hello." } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "1 日に最初に「総覧」を開いた時、月額が高い数件のサブスクアイコンが紙吹雪のように降ってきます。1 日 1 回、1.5 秒で終わるご挨拶です。" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "하루 처음 '개요'를 열 때 가장 비싼 구독 아이콘들이 컨페티처럼 흩날립니다. 하루 한 번, 약 1.5초, 가벼운 인사." } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "La primera vez que abres Resumen cada día, los iconos de tus suscripciones más caras caen como confeti. Una vez al día, ~1.5 s, solo para saludar." } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "À la première ouverture d’Aperçu chaque jour, les icônes de tes abos les plus chers tombent comme des confettis. Une fois par jour, ~1,5 s, juste un bonjour." } },
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Beim ersten Öffnen der Übersicht jeden Tag rieseln die teuersten Abo-Icons wie Konfetti herab. Einmal pro Tag, ~1,5 s, einfach nur Hallo." } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "每天第一次回到「總覽」頁時,你最貴的幾個訂閱圖標會像小彩帶一樣從上方飄下來。一天最多一次,1.5 秒結束,只是打個招呼。" } }
-      }
-    },
-    "在订阅列表里把任意一张卡片往左拉过一半,松手即可归档,顶部会弹出\"撤销\"按钮 4 秒。关闭后只能从卡片右侧菜单里归档。" : {
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Drag any card past halfway to the left in the list to archive it; an 'Undo' button shows up for 4s. With this off, archiving only works through the card menu." } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "リストでカードを半分以上左にスワイプすればアーカイブ。上に 4 秒間「取消」が表示されます。オフにするとカードのメニューからのみ操作可能。" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "카드를 절반 넘게 왼쪽으로 끌면 보관됩니다. 상단에 4초 동안 '취소' 버튼이 떠요. 끄면 카드 메뉴에서만 보관 가능." } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Arrastra una tarjeta a la izquierda más allá de la mitad para archivar; aparece un botón 'Deshacer' durante 4 s. Desactivado, sólo se archiva desde el menú." } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Glisse une carte au-delà de la moitié vers la gauche pour l’archiver ; un bouton « Annuler » apparaît 4 s. Désactivé, l’archivage passe par le menu." } },
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Karte über die Hälfte nach links ziehen archiviert sie; 4 s lang erscheint ein 'Rückgängig'-Knopf. Aus → Archivieren nur über das Karten-Menü." } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "在訂閱列表裡把任意一張卡片往左拉過一半,鬆手即可歸檔,頂部會彈出「撤銷」按鈕 4 秒。關閉後只能從卡片右側選單裡歸檔。" } }
-      }
-    },
-    "彩蛋只是小玩具,不影响任何统计或数据。觉得碍事关掉就行。" : {
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Easter eggs are just for fun — they don’t affect any stats or data. Turn them off any time you’d like." } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "イースターエッグは遊び要素のみ。統計やデータには一切影響しません。煩わしければいつでも OFF に。" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "이스터에그는 그냥 재미용이에요. 통계나 데이터에는 전혀 영향이 없으니, 거슬리면 언제든 꺼도 됩니다." } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Las sorpresas son sólo diversión: no afectan estadísticas ni datos. Desactívalas cuando quieras." } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Les easter eggs ne sont que pour le fun — aucune influence sur les stats ou les données. Désactive quand tu veux." } },
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Easter Eggs sind reine Spielerei — sie beeinflussen weder Statistiken noch Daten. Bei Bedarf abschalten." } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "彩蛋只是小玩具,不影響任何統計或數據。覺得礙事關掉就行。" } }
-      }
-    },
-    "统计" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Statistik" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Statistics" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Estadísticas" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Statistiques" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "統計" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "통계" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "統計" } }
-      }
-    },
-    "计入支出统计" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "In Statistik einbeziehen" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Count toward statistics" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Contar en estadísticas" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Inclure dans les stats" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "支出統計に含める" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "지출 통계에 포함" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "計入支出統計" } }
-      }
-    },
-    "适合\"公司报销\"、\"家人共享\"、\"给客户买的\"等情况:订阅照常运行、日历照常显示,但不算进你的个人支出总额、分类饼图、累计支付里。" : {
-      "localizations" : {
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Good for things like 'reimbursed by work', 'shared with family', or 'paid on behalf of a client': the subscription still runs and shows in the calendar, but it won't count toward your personal total, category pie, or lifetime spend." } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "会社の経費精算、家族とのシェア、クライアントへの立替え払いなどに最適:サブスクは通常通り動作しカレンダーにも表示されますが、個人の合計、カテゴリーグラフ、累計支払いには含まれません。" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "회사 경비, 가족 공유, 고객 대납 등에 적합:구독은 평소대로 운영되고 캘린더에도 표시되지만, 개인 합계 · 카테고리 차트 · 누적 결제에는 포함되지 않습니다." } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Ideal para 'gasto reembolsado', 'compartido con familia', o 'pagado por un cliente': la suscripción sigue activa y aparece en el calendario, pero no se suma a tu total personal, gráfico de categorías ni gasto acumulado." } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Idéal pour « remboursé par l’entreprise », « partagé en famille » ou « pour un client » : l’abo reste actif et apparaît dans le calendrier, mais n’est pas compté dans ton total perso, ton camembert ou ton cumul payé." } },
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Ideal für 'firmlich erstattet', 'mit Familie geteilt' oder 'für den Kunden gekauft': Das Abo läuft weiter und erscheint im Kalender, zählt aber nicht in deine persönliche Gesamtsumme, das Kategoriendiagramm oder die Lebenszeit-Ausgaben." } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "適合「公司報銷」、「家人共享」、「給客戶買的」等情況:訂閱照常運行、日曆照常顯示,但不算進你的個人支出總額、分類圓餅圖、累計支付裡。" } }
-      }
-    },
-    "不计入" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "nicht zählend" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Excluded" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Excluida" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Exclu" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "対象外" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "제외" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "不計入" } }
-      }
-    },
-    "已添加" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Hinzugefügt" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Added" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Añadidas" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Ajoutés" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "追加済み" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "추가됨" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "已添加" } }
-      }
-    },
-    "添加新方式" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Neue Methode hinzufügen" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Add a new method" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Añadir nuevo método" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Ajouter une nouvelle méthode" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "新しい方法を追加" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "새 결제 수단 추가" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "添加新方式" } }
-      }
-    },
-    "已经有同名的支付方式啦。" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Diese Zahlungsmethode gibt’s schon." } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "A payment method with this name already exists." } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Ya existe un método con ese nombre." } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Un mode de paiement avec ce nom existe déjà." } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "同名の支払い方法がすでにあります。" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "같은 이름의 결제 수단이 이미 있어요." } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "已經有同名的支付方式啦。" } }
-      }
-    },
-    "名称,如 花呗 / 招行信用卡" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Name, z. B. Apple Card" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Name, e.g. Apple Card" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Nombre, p. ej. Visa" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Nom, ex. Apple Card" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "名称、例:楽天カード" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "이름, 예: 카카오페이" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "名稱,如 花唄 / 招行信用卡" } }
-      }
-    },
-    "通知被关闭了" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Benachrichtigungen sind aus" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Notifications are off" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Las notificaciones están desactivadas" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Notifications désactivées" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "通知がオフです" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "알림이 꺼져 있어요" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "通知被關閉了" } }
-      }
-    },
-    "EON 当前没有通知权限,可以在 iOS 设置里手动打开。" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "EON hat keine Benachrichtigungserlaubnis. In den iOS-Einstellungen kannst du sie aktivieren." } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "EON doesn’t have notification permission. You can enable it in iOS Settings." } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "EON no tiene permiso para enviar notificaciones. Puedes activarlo en Ajustes de iOS." } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "EON n’a pas l’autorisation d’envoyer des notifications. Tu peux l’activer dans Réglages iOS." } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "EON は通知権限を持っていません。iOS 設定で許可できます。" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "EON 에 알림 권한이 없어요. iOS 설정에서 켤 수 있어요." } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "EON 當前沒有通知權限,可以在 iOS 設定裡手動打開。" } }
-      }
-    },
-    "前往 iOS 设置" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Zu den iOS-Einstellungen" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Open iOS Settings" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Ir a Ajustes de iOS" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Ouvrir Réglages iOS" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "iOS 設定を開く" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "iOS 설정 열기" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "前往 iOS 設定" } }
-      }
-    },
-    "失败,稍后重试" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Fehler, später erneut versuchen" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Failed, try again" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Falló, vuelve a intentarlo" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Échec, réessayer" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "失敗、再試行" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "실패, 다시 시도" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "失敗,稍後重試" } }
-      }
-    },
-    "首次开启会弹一个权限请求,允许后才能收到提醒。" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Beim ersten Einschalten wird die Berechtigung abgefragt; nach Zustimmung kommen die Erinnerungen." } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Turning this on for the first time triggers a permission prompt; you'll receive reminders once granted." } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Al activarlo por primera vez aparece la solicitud de permisos; los recordatorios llegarán al concederlos." } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Le premier activation déclenche une demande d’autorisation ; les rappels arrivent une fois accordée." } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "初回オン時に権限ダイアログが表示されます。許可するとリマインダーが届きます。" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "처음 켤 때 권한 요청이 표시됩니다. 허용해야 알림이 와요." } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "首次開啟會彈一個權限請求,允許後才能收到提醒。" } }
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Wechselkurse aktualisiert" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Exchange rates updated" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Tipos de cambio actualizados" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Taux de change mis à jour" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "為替レートを更新しました" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "환율이 업데이트됨" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "匯率已更新" } }
       }
     },
     "已扣 %lld 次" : {
@@ -6406,6 +6500,52 @@
         }
       }
     },
+    "已添加" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hinzugefügt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Added"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Añadidas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajoutés"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "追加済み"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "추가됨"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已添加"
+          }
+        }
+      }
+    },
     "已经是稳定营收人 💸" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -6449,6 +6589,52 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "已經是穩定營收人 💸"
+          }
+        }
+      }
+    },
+    "已经有同名的支付方式啦。" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese Zahlungsmethode gibt’s schon."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A payment method with this name already exists."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ya existe un método con ese nombre."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un mode de paiement avec ce nom existe déjà."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "同名の支払い方法がすでにあります。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "같은 이름의 결제 수단이 이미 있어요."
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已經有同名的支付方式啦。"
           }
         }
       }
@@ -7360,6 +7546,98 @@
         }
       }
     },
+    "彩蛋" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Easter Eggs"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Easter eggs"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sorpresas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Easter eggs"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "イースターエッグ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이스터에그"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "彩蛋"
+          }
+        }
+      }
+    },
+    "彩蛋只是小玩具,不影响任何统计或数据。觉得碍事关掉就行。" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Easter Eggs sind reine Spielerei — sie beeinflussen weder Statistiken noch Daten. Bei Bedarf abschalten."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Easter eggs are just for fun — they don’t affect any stats or data. Turn them off any time you’d like."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las sorpresas son sólo diversión: no afectan estadísticas ni datos. Desactívalas cuando quieras."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les easter eggs ne sont que pour le fun — aucune influence sur les stats ou les données. Désactive quand tu veux."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "イースターエッグは遊び要素のみ。統計やデータには一切影響しません。煩わしければいつでも OFF に。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이스터에그는 그냥 재미용이에요. 통계나 데이터에는 전혀 영향이 없으니, 거슬리면 언제든 꺼도 됩니다."
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "彩蛋只是小玩具,不影響任何統計或數據。覺得礙事關掉就行。"
+          }
+        }
+      }
+    },
     "影音" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -7945,6 +8223,53 @@
         }
       }
     },
+    "拖拽归档" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wischen zum Archivieren"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Swipe to archive"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deslizar para archivar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glisser pour archiver"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "スワイプでアーカイブ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "스와이프로 보관"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "拖拽歸檔"
+          }
+        }
+      }
+    },
     "按名称" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -8233,6 +8558,7 @@
       }
     },
     "授权并同步提醒" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -8514,6 +8840,146 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "검색 실패. 네트워크를 확인한 뒤 다시 시도하세요"
+          }
+        }
+      }
+    },
+    "摇一下手机,从活跃订阅里随机抽一个出来,弹出一张大卡片,用来快速决策\"这个我还要不要\"。配合震动反馈,有翻牌仪式感。" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schütteln zieht ein zufälliges Abo als große Karte hervor. Hilft bei 'Will ich das noch?' — mit haptischem Feedback."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shake the phone to pull a random active subscription as a full card. Helps you decide 'do I still want this?' in seconds, with haptic feedback for that card-flip feel."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sacude el teléfono para destacar una suscripción al azar en una tarjeta grande. Te ayuda a decidir '¿la quiero o no?' rápido, con vibración incluida."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Secoue le téléphone pour tirer au sort un abo dans une grande carte. Aide à décider « je garde ou pas ? » en quelques secondes, avec retour haptique."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "端末を振るとアクティブなサブスクから 1 つランダムに引き当て、大きなカードでスポットライト。「これ、まだ要る?」を瞬時に判断できます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기기를 흔들면 활성 구독 중 무작위 하나를 큰 카드로 띄워줍니다. '아직 필요할까?' 결정을 도와요. 진동 피드백 포함."
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "搖一下手機,從活躍訂閱裡隨機抽一個出來,彈出一張大卡片,用來快速決策「這個我還要不要」。配合震動反饋,有翻牌儀式感。"
+          }
+        }
+      }
+    },
+    "摇一摇 · 聚焦订阅" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schütteln · Abo-Spotlight"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shake · subscription spotlight"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sacudir · destacar suscripción"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Secouer · spotlight d’abonnement"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "シェイク · サブスクのスポットライト"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "흔들기 · 구독 스포트라이트"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "搖一搖 · 聚焦訂閱"
+          }
+        }
+      }
+    },
+    "摇手机" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Telefon schütteln"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shake the phone"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agita el teléfono"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Secouer le téléphone"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "端末を振る"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기기 흔들기"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "搖手機"
           }
         }
       }
@@ -10548,6 +11014,99 @@
         }
       }
     },
+    "每天第一次回到\"总览\"页时,你最贵的几个订阅图标会像小彩带一样从上方飘下来。一天最多一次,1.5 秒结束,只是打个招呼。" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beim ersten Öffnen der Übersicht jeden Tag rieseln die teuersten Abo-Icons wie Konfetti herab. Einmal pro Tag, ~1,5 s, einfach nur Hallo."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "First time you open Overview each day, your priciest subscription icons rain down like confetti. Once per day, ~1.5s, just a friendly hello."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La primera vez que abres Resumen cada día, los iconos de tus suscripciones más caras caen como confeti. Una vez al día, ~1.5 s, solo para saludar."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "À la première ouverture d’Aperçu chaque jour, les icônes de tes abos les plus chers tombent comme des confettis. Une fois par jour, ~1,5 s, juste un bonjour."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 日に最初に「総覧」を開いた時、月額が高い数件のサブスクアイコンが紙吹雪のように降ってきます。1 日 1 回、1.5 秒で終わるご挨拶です。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "하루 처음 '개요'를 열 때 가장 비싼 구독 아이콘들이 컨페티처럼 흩날립니다. 하루 한 번, 약 1.5초, 가벼운 인사."
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "每天第一次回到「總覽」頁時,你最貴的幾個訂閱圖標會像小彩帶一樣從上方飄下來。一天最多一次,1.5 秒結束,只是打個招呼。"
+          }
+        }
+      }
+    },
+    "每天第一次打开总览" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erste Übersicht am Tag"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "First Overview open each day"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Primera apertura del resumen del día"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Première ouverture d’Aperçu du jour"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 日最初の総覧を開いた時"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "하루 첫 개요 열기"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "每天第一次打開總覽"
+          }
+        }
+      }
+    },
     "每天自动同步最新汇率,订阅价格会跟着浮动。" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -10707,6 +11266,53 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "매년"
+          }
+        }
+      }
+    },
+    "每日首启 · 订阅彩带" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tagesstart · Abo-Konfetti"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daily start · subscription confetti"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inicio diario · confeti de suscripciones"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Premier lancement du jour · confetti d’abos"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 日の始まり · サブスク紙吹雪"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "하루 첫 시작 · 구독 컨페티"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "每日首啟 · 訂閱彩帶"
           }
         }
       }
@@ -11284,7 +11890,6 @@
       }
     },
     "添加" : {
-      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -11446,6 +12051,7 @@
       }
     },
     "添加后可在新增/编辑订阅时选择。" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -11526,6 +12132,52 @@
         }
       }
     },
+    "添加新方式" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neue Methode hinzufügen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add a new method"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Añadir nuevo método"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter une nouvelle méthode"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新しい方法を追加"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "새 결제 수단 추가"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "添加新方式"
+          }
+        }
+      }
+    },
     "添加订阅" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -11568,6 +12220,7 @@
       }
     },
     "添加订阅时可以从这个列表里选支付方式。删除不会影响已经填好的订阅。" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -11606,6 +12259,9 @@
           }
         }
       }
+    },
+    "添加订阅时可以从这里挑支付方式;左滑或点上方编辑可以删除/排序。删除不会影响已经填好的订阅。" : {
+
     },
     "港币" : {
       "extractionState" : "stale",
@@ -12818,6 +13474,53 @@
         }
       }
     },
+    "统计" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Statistik"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Statistics"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Estadísticas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Statistiques"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "統計"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "통계"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "統計"
+          }
+        }
+      }
+    },
     "继续往下拉…" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -13517,6 +14220,52 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "覆蓋 %lld 個訂閱 · 共 %lld 筆扣費"
+          }
+        }
+      }
+    },
+    "计入支出统计" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In Statistik einbeziehen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Count toward statistics"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contar en estadísticas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inclure dans les stats"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "支出統計に含める"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "지출 통계에 포함"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "計入支出統計"
           }
         }
       }
@@ -14696,6 +15445,52 @@
         }
       }
     },
+    "适合\"公司报销\"、\"家人共享\"、\"给客户买的\"等情况:订阅照常运行、日历照常显示,但不算进你的个人支出总额、分类饼图、累计支付里。" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ideal für 'firmlich erstattet', 'mit Familie geteilt' oder 'für den Kunden gekauft': Das Abo läuft weiter und erscheint im Kalender, zählt aber nicht in deine persönliche Gesamtsumme, das Kategoriendiagramm oder die Lebenszeit-Ausgaben."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Good for things like 'reimbursed by work', 'shared with family', or 'paid on behalf of a client': the subscription still runs and shows in the calendar, but it won't count toward your personal total, category pie, or lifetime spend."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ideal para 'gasto reembolsado', 'compartido con familia', o 'pagado por un cliente': la suscripción sigue activa y aparece en el calendario, pero no se suma a tu total personal, gráfico de categorías ni gasto acumulado."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Idéal pour « remboursé par l’entreprise », « partagé en famille » ou « pour un client » : l’abo reste actif et apparaît dans le calendrier, mais n’est pas compté dans ton total perso, ton camembert ou ton cumul payé."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "会社の経費精算、家族とのシェア、クライアントへの立替え払いなどに最適:サブスクは通常通り動作しカレンダーにも表示されますが、個人の合計、カテゴリーグラフ、累計支払いには含まれません。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "회사 경비, 가족 공유, 고객 대납 등에 적합:구독은 평소대로 운영되고 캘린더에도 표시되지만, 개인 합계 · 카테고리 차트 · 누적 결제에는 포함되지 않습니다."
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "適合「公司報銷」、「家人共享」、「給客戶買的」等情況:訂閱照常運行、日曆照常顯示,但不算進你的個人支出總額、分類圓餅圖、累計支付裡。"
+          }
+        }
+      }
+    },
     "选择图标" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -14937,6 +15732,53 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "알림 권한 상태를 알 수 없습니다."
+          }
+        }
+      }
+    },
+    "通知被关闭了" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Benachrichtigungen sind aus"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notifications are off"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las notificaciones están desactivadas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notifications désactivées"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "通知がオフです"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "알림이 꺼져 있어요"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "通知被關閉了"
           }
         }
       }
@@ -15777,6 +16619,53 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "이니셜 색상"
+          }
+        }
+      }
+    },
+    "首次开启会弹一个权限请求,允许后才能收到提醒。" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beim ersten Einschalten wird die Berechtigung abgefragt; nach Zustimmung kommen die Erinnerungen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Turning this on for the first time triggers a permission prompt; you'll receive reminders once granted."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Al activarlo por primera vez aparece la solicitud de permisos; los recordatorios llegarán al concederlos."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le premier activation déclenche une demande d’autorisation ; les rappels arrivent une fois accordée."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "初回オン時に権限ダイアログが表示されます。許可するとリマインダーが届きます。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "처음 켤 때 권한 요청이 표시됩니다. 허용해야 알림이 와요."
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "首次開啟會彈一個權限請求,允許後才能收到提醒。"
           }
         }
       }

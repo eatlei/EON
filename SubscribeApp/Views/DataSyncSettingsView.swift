@@ -5,6 +5,7 @@ struct DataSyncSettingsView: View {
     @EnvironmentObject private var store: SubscriptionStore
     @State private var syncing = false
     @State private var copyConfirmed = false
+    @State private var syncedToastShown = false
     @State private var markdownFileURL: URL? = nil
     @State private var jsonFileURL: URL? = nil
 
@@ -48,7 +49,10 @@ struct DataSyncSettingsView: View {
                         if elapsed < minSpin {
                             try? await Task.sleep(nanoseconds: UInt64((minSpin - elapsed) * 1_000_000_000))
                         }
-                        await MainActor.run { syncing = false }
+                        await MainActor.run {
+                            syncing = false
+                            syncedToastShown = true
+                        }
                     }
                 } label: {
                     HStack(spacing: 12) {
@@ -91,7 +95,6 @@ struct DataSyncSettingsView: View {
                         SettingsIcon(name: "doc.on.clipboard")
                         Text("复制（含 AI 提示词）").foregroundStyle(AppTheme.ink)
                         Spacer()
-                        if copyConfirmed { Image(systemName: "checkmark").foregroundStyle(.secondary) }
                     }
                 }
                 .buttonStyle(.plain)
@@ -108,11 +111,10 @@ struct DataSyncSettingsView: View {
             markdownFileURL = LLMExporter.writeMarkdownTempFile(store: store)
             jsonFileURL     = LLMExporter.writeJSONTempFile(store: store)
         }
-        .onChange(of: copyConfirmed) { _, v in
-            if v {
-                Task { try? await Task.sleep(nanoseconds: 1_500_000_000); copyConfirmed = false }
-            }
-        }
+        // 两个明确反馈的 toast,分别给"复制"和"同步成功"用。位置在页面最顶,
+        // 跨越 List 区域显示。
+        .toast($copyConfirmed, text: "已复制到剪贴板")
+        .toast($syncedToastShown, text: "已同步到 iCloud")
     }
 
     private var syncEnabled: Bool { store.iCloudSyncEnabled && iCloudAvailable }
