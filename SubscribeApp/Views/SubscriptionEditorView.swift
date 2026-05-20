@@ -14,6 +14,8 @@ struct SubscriptionEditorView: View {
 
     init(subscription: Subscription?) {
         self.isNew = subscription == nil
+        // 新建订阅:默认字母 tile,颜色每次随机从 8 个 monogram 预设里挑一个。
+        // 这样空名字也有视觉存在感,且每次打开都不一样。
         let initial = subscription ?? Subscription(
             name: "",
             plan: "",
@@ -25,7 +27,8 @@ struct SubscriptionEditorView: View {
             nextBillingDate: Calendar.current.date(byAdding: .day, value: 7, to: .now) ?? .now,
             reminderDaysBefore: 3,
             status: .active,
-            paymentMethod: ""
+            paymentMethod: "",
+            icon: .tile(glyph: .letter, colorHex: AppTheme.monogramColors.randomElement())
         )
         _draft = State(initialValue: initial)
         _priceText = State(initialValue: Self.formatPriceForInput(initial.price))

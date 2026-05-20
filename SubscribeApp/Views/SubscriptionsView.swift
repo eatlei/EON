@@ -109,31 +109,52 @@ private struct Row: View {
     let subscription: Subscription
     let onArchive: () -> Void
     let onDelete: () -> Void
+
+    private var colored: Bool { store.coloredSubscriptionCards }
+
+    /// 卡片底色:.tile 取色号,.image 取图像平均色,均回退分类色。
+    private var cardColor: Color {
+        switch subscription.icon {
+        case .tile(_, let hex):
+            return hex.map { Color(hexString: $0) } ?? subscription.category.color
+        case .image(let id):
+            if let ui = IconStore.averageColor(id) { return Color(uiColor: ui) }
+            return subscription.category.color
+        }
+    }
+
     var body: some View {
         HStack(spacing: AppTheme.Space.m) {
             CategoryGlyph(subscription: subscription, size: 44)
             VStack(alignment: .leading, spacing: 3) {
                 HStack(spacing: 6) {
                     Text(subscription.name).font(.subheadline.weight(.semibold))
-                        .foregroundStyle(AppTheme.ink)
+                        .foregroundStyle(colored ? Color.white : AppTheme.ink)
                     if subscription.status == .trial {
                         Text("试用").font(.caption2.weight(.bold))
                             .padding(.horizontal, 6).padding(.vertical, 2)
-                            .background(AppTheme.accent.opacity(0.14), in: Capsule())
-                            .foregroundStyle(AppTheme.accent)
+                            .background(
+                                colored ? Color.white.opacity(0.22) : AppTheme.accent.opacity(0.14),
+                                in: Capsule()
+                            )
+                            .foregroundStyle(colored ? Color.white : AppTheme.accent)
                     }
                 }
                 Text("\(subscription.plan) · \(subscription.category.title) · \(subscription.billingCycle.title)")
-                    .font(.caption).foregroundStyle(AppTheme.secondary).lineLimit(1)
+                    .font(.caption)
+                    .foregroundStyle(colored ? Color.white.opacity(0.75) : AppTheme.secondary)
+                    .lineLimit(1)
             }
             Spacer(minLength: AppTheme.Space.s)
             VStack(alignment: .trailing, spacing: 3) {
                 Text(store.converter.format(
                     subscription.monthlyCost(in: store.baseCurrency, converter: store.converter),
                     currency: store.baseCurrency))
-                    .font(.amountSmall()).foregroundStyle(AppTheme.ink)
+                    .font(.amountSmall())
+                    .foregroundStyle(colored ? Color.white : AppTheme.ink)
                 Text(subscription.nextBillingDate.formatted(.dateTime.month().day()))
-                    .font(.caption2).foregroundStyle(AppTheme.tertiary)
+                    .font(.caption2)
+                    .foregroundStyle(colored ? Color.white.opacity(0.7) : AppTheme.tertiary)
             }
             Menu {
                 Button { onArchive() } label: {
@@ -146,12 +167,33 @@ private struct Row: View {
                 .tint(.red)
             } label: {
                 Image(systemName: "ellipsis").font(.subheadline.weight(.bold))
-                    .foregroundStyle(AppTheme.tertiary).frame(width: 28, height: 36)
+                    .foregroundStyle(colored ? Color.white.opacity(0.7) : AppTheme.tertiary)
+                    .frame(width: 28, height: 36)
             }
         }
         .padding(AppTheme.Space.l)
-        .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: AppTheme.radius))
-        .overlay(RoundedRectangle(cornerRadius: AppTheme.radius).stroke(AppTheme.hairline, lineWidth: 0.5))
+        .background(
+            Group {
+                if colored {
+                    // 底色 + 35% 黑色压暗,让 CategoryGlyph(图标本色)
+                    // 在卡片上仍能凸显;同时保证白色文字对比稳定。
+                    ZStack {
+                        cardColor
+                        Color.black.opacity(0.35)
+                    }
+                } else {
+                    AppTheme.surface
+                }
+            }
+            .clipShape(RoundedRectangle(cornerRadius: AppTheme.radius))
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: AppTheme.radius)
+                .stroke(
+                    colored ? Color.white.opacity(0.10) : AppTheme.hairline,
+                    lineWidth: 0.5
+                )
+        )
         .opacity(subscription.isActive ? 1 : 0.5)
     }
 }

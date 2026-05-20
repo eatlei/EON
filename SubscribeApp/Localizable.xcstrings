@@ -2054,6 +2054,26 @@
         }
       }
     },
+    "彩色订阅卡片": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Colourful Cards"
+          }
+        }
+      }
+    },
+    "开启后,订阅列表中每张卡片会按图标颜色填充背景;关闭则使用默认浅色卡片。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "When on, each subscription card is filled with the icon's colour. When off, cards use the default light surface."
+          }
+        }
+      }
+    },
     "新建订阅默认提前 %lld 天提醒": {
       "localizations": {
         "en": {

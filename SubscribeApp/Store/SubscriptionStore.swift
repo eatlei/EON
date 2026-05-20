@@ -49,6 +49,10 @@ final class SubscriptionStore: ObservableObject {
         didSet { saveSettings() }
     }
 
+    @Published var coloredSubscriptionCards: Bool = true {
+        didSet { saveSettings() }
+    }
+
     @Published private(set) var cnyRates: [CurrencyCode: Double] = CurrencyConverter.builtin
     @Published private(set) var ratesUpdatedAt: Date?
     var converter: CurrencyConverter { CurrencyConverter(cnyRates: cnyRates) }
@@ -80,6 +84,7 @@ final class SubscriptionStore: ObservableObject {
             paymentMethods = settings.paymentMethods
             accentTheme = settings.accentTheme
             defaultReminderDays = settings.defaultReminderDays
+            coloredSubscriptionCards = settings.coloredSubscriptionCards
         } else {
             baseCurrency = .cny
             remindersEnabled = true
@@ -408,7 +413,8 @@ final class SubscriptionStore: ObservableObject {
             appearance: appearance,
             paymentMethods: paymentMethods,
             accentTheme: accentTheme,
-            defaultReminderDays: defaultReminderDays
+            defaultReminderDays: defaultReminderDays,
+            coloredSubscriptionCards: coloredSubscriptionCards
         )
         if let data = try? JSONEncoder().encode(settings) {
             UserDefaults.standard.set(data, forKey: settingsKey)
@@ -455,12 +461,13 @@ private struct Settings: Codable {
     var paymentMethods: [String]
     var accentTheme: AccentTheme
     var defaultReminderDays: Int
+    var coloredSubscriptionCards: Bool
 
     static let defaultPaymentMethods = ["支付宝", "微信支付", "Apple Pay", "Visa", "Mastercard", "银联", "PayPal"]
 
     init(baseCurrency: CurrencyCode, remindersEnabled: Bool, iCloudSyncEnabled: Bool,
          appearance: AppAppearance, paymentMethods: [String], accentTheme: AccentTheme,
-         defaultReminderDays: Int) {
+         defaultReminderDays: Int, coloredSubscriptionCards: Bool) {
         self.baseCurrency = baseCurrency
         self.remindersEnabled = remindersEnabled
         self.iCloudSyncEnabled = iCloudSyncEnabled
@@ -468,6 +475,7 @@ private struct Settings: Codable {
         self.paymentMethods = paymentMethods
         self.accentTheme = accentTheme
         self.defaultReminderDays = defaultReminderDays
+        self.coloredSubscriptionCards = coloredSubscriptionCards
     }
 
     init(from decoder: Decoder) throws {
@@ -480,6 +488,7 @@ private struct Settings: Codable {
         paymentMethods = pm.isEmpty ? Settings.defaultPaymentMethods : pm
         accentTheme = try c.decodeIfPresent(AccentTheme.self, forKey: .accentTheme) ?? .blue
         defaultReminderDays = try c.decodeIfPresent(Int.self, forKey: .defaultReminderDays) ?? 3
+        coloredSubscriptionCards = try c.decodeIfPresent(Bool.self, forKey: .coloredSubscriptionCards) ?? true
     }
 }
 
