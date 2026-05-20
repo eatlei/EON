@@ -60,12 +60,15 @@ enum LLMExporter {
             lines.append("")
             lines.append("---")
             lines.append("")
-            lines.append("## Suggested prompts (edit & paste to your AI assistant)")
-            lines.append("- 帮我找出可以削减或合并的订阅，估算每月可省多少。")
-            lines.append("- 把我的月费控制在 ¥200 以内，建议砍掉哪些？")
-            lines.append("- 按性价比/使用频率打分排序，并指出哪些非必要。")
-            lines.append("- 预测未来 60 天的实际扣费日期与总额。")
-            lines.append("- 检查是否有功能重复的订阅（例如多个视频/音乐服务）。")
+            // 提示词跟 App 当前语言走 —— 用户把 App 切到英文就出英文提示词,
+            // 拷给 ChatGPT / Claude 不会出现"中英混杂"。基础币种用本地符号
+            // 替换"¥",让"控制在 200 以内"的预算建议也对得上用户语言/口径。
+            lines.append("## " + String(localized: "AI 提示词参考(可编辑后粘贴到 AI)"))
+            lines.append("- " + String(localized: "帮我找出可以削减或合并的订阅,估算每月可省多少。"))
+            lines.append("- " + String(localized: "把我的月费控制在 \(base.symbol)200 以内,建议砍掉哪些?"))
+            lines.append("- " + String(localized: "按性价比/使用频率打分排序,并指出哪些非必要。"))
+            lines.append("- " + String(localized: "预测未来 60 天的实际扣费日期与总额。"))
+            lines.append("- " + String(localized: "检查是否有功能重复的订阅(例如多个视频/音乐服务)。"))
         }
         return lines.joined(separator: "\n") + "\n"
     }

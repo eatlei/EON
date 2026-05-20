@@ -10292,6 +10292,66 @@
         "ko" : { "stringUnit" : { "state" : "translated", "value" : "년" } }
       }
     },
+    "AI 提示词参考(可编辑后粘贴到 AI)" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "KI-Prompts (bearbeiten und in den KI-Assistenten einfügen)" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Suggested prompts (edit & paste to your AI assistant)" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Prompts sugeridos (edítalos y pégalos en tu IA)" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Prompts suggérés (à modifier puis coller dans votre IA)" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "AI 用プロンプト案(編集してから AI に貼り付け)" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "AI 프롬프트 (편집 후 AI에 붙여넣기)" } }
+      }
+    },
+    "帮我找出可以削减或合并的订阅,估算每月可省多少。" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Finde Abos, die ich kürzen oder zusammenlegen kann, und schätze die monatliche Ersparnis." } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Help me find subscriptions I can cut or consolidate, and estimate the monthly savings." } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Ayúdame a encontrar suscripciones que pueda cancelar o combinar, y estima el ahorro mensual." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Aide-moi à repérer les abonnements à supprimer ou regrouper, et estime l’économie mensuelle." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "削減または統合できるサブスクを見つけて、月いくら節約できるか見積もって。" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "줄이거나 통합할 수 있는 구독을 찾고, 월간 절약액을 추정해 줘." } }
+      }
+    },
+    "把我的月费控制在 %@200 以内,建议砍掉哪些?" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Halte meine monatlichen Kosten unter %@200 — welche Abos sollte ich streichen?" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Keep my monthly spend under %@200 — which subscriptions should I drop?" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Mantén mi gasto mensual por debajo de %@200: ¿cuáles cancelo?" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Garde mes dépenses mensuelles sous %@200 : lesquels supprimer ?" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "月額を %@200 以内に抑えるとして、どれを解約すべき?" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "월 지출을 %@200 이하로 유지하려면 어떤 걸 해지해야 해?" } }
+      }
+    },
+    "按性价比/使用频率打分排序,并指出哪些非必要。" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Bewerte die Abos nach Preis-Leistung und Nutzungshäufigkeit und markiere die unnötigen." } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Rank them by value-for-money and how often I use them, and flag the non-essential ones." } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Califícalas por relación calidad-precio y frecuencia de uso, y señala las prescindibles." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Classe-les par rapport qualité-prix et fréquence d’usage, puis indique celles qui ne sont pas essentielles." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "コスパと利用頻度でランク付けし、必須でないものを指摘して。" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "가성비와 사용 빈도로 순위를 매기고, 비필수 항목을 표시해 줘." } }
+      }
+    },
+    "预测未来 60 天的实际扣费日期与总额。" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Prognostiziere die tatsächlichen Abbuchungstermine und Gesamtsumme der nächsten 60 Tage." } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Forecast the actual charge dates and total amount for the next 60 days." } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Predice las fechas reales de cobro y el total de los próximos 60 días." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Prévois les dates réelles de prélèvement et le montant total sur 60 jours." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "今後 60 日間の実際の請求日と合計金額を予測して。" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "앞으로 60일 동안 실제 청구일과 총액을 예측해 줘." } }
+      }
+    },
+    "检查是否有功能重复的订阅(例如多个视频/音乐服务)。" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Prüfe, ob Abos funktional überlappen (z. B. mehrere Video- oder Musikdienste)." } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Check for overlapping subscriptions (e.g. multiple video or music services)." } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Detecta suscripciones con funciones que se solapan (p. ej. varios servicios de vídeo o música)." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Identifie les abonnements qui se chevauchent (ex. plusieurs services vidéo ou musique)." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "機能が重複しているサブスク(動画や音楽サービスの重複など)をチェックして。" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "기능이 겹치는 구독(여러 동영상/음악 서비스 등)이 있는지 확인해 줘." } }
+      }
+    },
     "内置分类" : {
       "localizations" : {
         "de" : { "stringUnit" : { "state" : "translated", "value" : "Vorgegebene Kategorien" } },
