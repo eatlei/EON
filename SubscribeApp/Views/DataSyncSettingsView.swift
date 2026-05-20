@@ -38,16 +38,30 @@ struct DataSyncSettingsView: View {
                 Button {
                     guard !syncing else { return }
                     syncing = true
+                    let start = Date()
                     Task {
                         await store.performManualICloudSync()
+                        // 同步操作秒回也常见(只 push KVS),给图标至少 0.9s 转一圈
+                        // 才退出 loading 态 —— 否则用户感觉"什么都没发生"。
+                        let elapsed = Date().timeIntervalSince(start)
+                        let minSpin: TimeInterval = 0.9
+                        if elapsed < minSpin {
+                            try? await Task.sleep(nanoseconds: UInt64((minSpin - elapsed) * 1_000_000_000))
+                        }
                         await MainActor.run { syncing = false }
                     }
                 } label: {
                     HStack(spacing: 12) {
                         SettingsIcon(name: "arrow.triangle.2.circlepath")
+                            .rotationEffect(.degrees(syncing ? 360 : 0))
+                            .animation(
+                                syncing
+                                    ? .linear(duration: 0.9).repeatForever(autoreverses: false)
+                                    : .default,
+                                value: syncing
+                            )
                         Text("立即同步").foregroundStyle(syncEnabled ? AppTheme.ink : AppTheme.tertiary)
                         Spacer()
-                        if syncing { ProgressView() }
                     }
                 }
                 .disabled(!syncEnabled)

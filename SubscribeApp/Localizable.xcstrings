@@ -367,6 +367,16 @@
         }
       }
     },
+    "%@ / %@" : {
+      "localizations" : {
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ / %2$@"
+          }
+        }
+      }
+    },
     "%@ 将在 %lld 天后续费。" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -803,6 +813,47 @@
         }
       }
     },
+    "AI 提示词参考(可编辑后粘贴到 AI)" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "KI-Prompts (bearbeiten und in den KI-Assistenten einfügen)"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suggested prompts (edit & paste to your AI assistant)"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prompts sugeridos (edítalos y pégalos en tu IA)"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prompts suggérés (à modifier puis coller dans votre IA)"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI 用プロンプト案(編集してから AI に貼り付け)"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI 프롬프트 (편집 후 AI에 붙여넣기)"
+          }
+        }
+      }
+    },
     "App Store" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -924,6 +975,46 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "iCloud"
+          }
+        }
+      }
+    },
+    "iCloud 与数据" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud & Daten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud & Data"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud y datos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud et données"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud とデータ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud 및 데이터"
           }
         }
       }
@@ -2479,6 +2570,46 @@
         }
       }
     },
+    "内置分类" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorgegebene Kategorien"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Built-in"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Predefinidas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Intégrées"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ビルトイン"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기본"
+          }
+        }
+      }
+    },
     "最贵的订阅" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -2717,6 +2848,47 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "분류"
+          }
+        }
+      }
+    },
+    "分类名称" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kategoriename"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Category name"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nombre de categoría"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nom de la catégorie"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "カテゴリー名"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "카테고리 이름"
           }
         }
       }
@@ -3130,7 +3302,6 @@
       }
     },
     "名称" : {
-      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3209,6 +3380,36 @@
             "value" : "이름 (예: Huabei)"
           }
         }
+      }
+    },
+    "周期·季" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Q" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Q" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "T" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "T" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "季" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "분" } }
+      }
+    },
+    "周期·年" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "J" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Y" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "A" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "A" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "年" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "년" } }
+      }
+    },
+    "周期·月" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "M" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "M" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "M" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "M" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "月" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "월" } }
       }
     },
     "图标" : {
@@ -4352,6 +4553,47 @@
         }
       }
     },
+    "帮我找出可以削减或合并的订阅,估算每月可省多少。" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Finde Abos, die ich kürzen oder zusammenlegen kann, und schätze die monatliche Ersparnis."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Help me find subscriptions I can cut or consolidate, and estimate the monthly savings."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ayúdame a encontrar suscripciones que pueda cancelar o combinar, y estima el ahorro mensual."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aide-moi à repérer les abonnements à supprimer ou regrouper, et estime l’économie mensuelle."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "削減または統合できるサブスクを見つけて、月いくら節約できるか見積もって。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "줄이거나 통합할 수 있는 구독을 찾고, 월간 절약액을 추정해 줘."
+          }
+        }
+      }
+    },
     "平均每个" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -5453,6 +5695,47 @@
         }
       }
     },
+    "把我的月费控制在 %@200 以内,建议砍掉哪些?" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Halte meine monatlichen Kosten unter %@200 — welche Abos sollte ich streichen?"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keep my monthly spend under %@200 — which subscriptions should I drop?"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mantén mi gasto mensual por debajo de %@200: ¿cuáles cancelo?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Garde mes dépenses mensuelles sous %@200 : lesquels supprimer ?"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "月額を %@200 以内に抑えるとして、どれを解約すべき?"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "월 지출을 %@200 이하로 유지하려면 어떤 걸 해지해야 해?"
+          }
+        }
+      }
+    },
     "按名称" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -5531,6 +5814,47 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "주기 길이순"
+          }
+        }
+      }
+    },
+    "按性价比/使用频率打分排序,并指出哪些非必要。" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bewerte die Abos nach Preis-Leistung und Nutzungshäufigkeit und markiere die unnötigen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rank them by value-for-money and how often I use them, and flag the non-essential ones."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Califícalas por relación calidad-precio y frecuencia de uso, y señala las prescindibles."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Classe-les par rapport qualité-prix et fréquence d’usage, puis indique celles qui ne sont pas essentielles."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "コスパと利用頻度でランク付けし、必須でないものを指摘して。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "가성비와 사용 빈도로 순위를 매기고, 비필수 항목을 표시해 줘."
           }
         }
       }
@@ -6311,6 +6635,7 @@
       }
     },
     "数据" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -6591,6 +6916,47 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "새 구독"
+          }
+        }
+      }
+    },
+    "新建分类" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neue Kategorie"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New category"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nueva categoría"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nouvelle catégorie"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "新規カテゴリー"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "새 카테고리"
           }
         }
       }
@@ -7405,6 +7771,47 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "이번 기간 결제할 구독이 없습니다"
+          }
+        }
+      }
+    },
+    "检查是否有功能重复的订阅(例如多个视频/音乐服务)。" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prüfe, ob Abos funktional überlappen (z. B. mehrere Video- oder Musikdienste)."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Check for overlapping subscriptions (e.g. multiple video or music services)."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Detecta suscripciones con funciones que se solapan (p. ej. varios servicios de vídeo o música)."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Identifie les abonnements qui se chevauchent (ex. plusieurs services vidéo ou musique)."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "機能が重複しているサブスク(動画や音楽サービスの重複など)をチェックして。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "기능이 겹치는 구독(여러 동영상/음악 서비스 등)이 있는지 확인해 줘."
           }
         }
       }
@@ -8389,6 +8796,46 @@
         }
       }
     },
+    "添加分类" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kategorie hinzufügen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add category"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Añadir categoría"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter une catégorie"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "カテゴリーを追加"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "카테고리 추가"
+          }
+        }
+      }
+    },
     "添加后可在新增/编辑订阅时选择。" : {
       "localizations" : {
         "de" : {
@@ -8634,6 +9081,7 @@
       }
     },
     "点一下任意分类可以改名。颜色和原名固定不变,改名只影响显示。" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -8709,6 +9157,46 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "구독을 탭하면 정보를 확인하고 복원할 수 있습니다. 복원하면 구독 목록에 다시 나타납니다."
+          }
+        }
+      }
+    },
+    "点一下可以改名。颜色固定,不能删除。" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tippen zum Umbenennen. Farben fest, nicht löschbar."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap to rename. Color is fixed and these can’t be deleted."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Toca para renombrar. Color fijo y no se pueden eliminar."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Touchez pour renommer. Couleur fixe, non supprimable."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タップで改名。色は固定、削除不可。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "탭하여 이름 변경. 색상 고정, 삭제 불가."
           }
         }
       }
@@ -9488,6 +9976,47 @@
         }
       }
     },
+    "编辑分类" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kategorie bearbeiten"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit category"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Editar categoría"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modifier la catégorie"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "カテゴリーを編集"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "카테고리 편집"
+          }
+        }
+      }
+    },
     "美元" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -9688,6 +10217,90 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "사용자 지정"
+          }
+        }
+      }
+    },
+    "自定义分类" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eigene Kategorien"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Custom"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Personalizadas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Personnalisées"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "カスタム"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "사용자 지정"
+          }
+        }
+      }
+    },
+    "自定义分类最多 %@ 个。删除一个分类后,引用它的订阅会回到原始内置分类显示。左滑可删除。" : {
+
+    },
+    "自定义分类最多 %lld 个。删除一个分类后,引用它的订阅会回到原始内置分类显示。左滑可删除。" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maximal %lld eigene Kategorien. Beim Löschen werden alle damit verknüpften Abos auf die Originalkategorie zurückgesetzt. Zum Löschen nach links wischen."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Up to %lld custom categories. Deleting one moves linked subscriptions back to their built-in fallback. Swipe left to delete."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hasta %lld categorías personalizadas. Al eliminar una, las suscripciones vinculadas vuelven a su categoría integrada. Desliza para eliminar."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jusqu’à %lld catégories. Supprimer une catégorie ramène ses abonnements à leur catégorie intégrée. Glissez pour supprimer."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "最大 %lld 個まで。削除するとそのカテゴリーを使う登録は元の組み込みカテゴリーに戻ります。左スワイプで削除。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최대 %lld개. 삭제 시 해당 카테고리를 쓰던 구독은 원래의 기본 카테고리로 돌아갑니다. 왼쪽으로 밀어 삭제."
           }
         }
       }
@@ -10262,216 +10875,6 @@
         }
       }
     },
-    "周期·月" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Mon." } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Mo" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Mes" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Mois" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "月" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "월" } }
-      }
-    },
-    "周期·季" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Qrt." } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Qtr" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Trim" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Trim" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "季" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "분기" } }
-      }
-    },
-    "周期·年" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Jahr" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Yr" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Año" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "An" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "年" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "년" } }
-      }
-    },
-    "AI 提示词参考(可编辑后粘贴到 AI)" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "KI-Prompts (bearbeiten und in den KI-Assistenten einfügen)" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Suggested prompts (edit & paste to your AI assistant)" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Prompts sugeridos (edítalos y pégalos en tu IA)" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Prompts suggérés (à modifier puis coller dans votre IA)" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "AI 用プロンプト案(編集してから AI に貼り付け)" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "AI 프롬프트 (편집 후 AI에 붙여넣기)" } }
-      }
-    },
-    "帮我找出可以削减或合并的订阅,估算每月可省多少。" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Finde Abos, die ich kürzen oder zusammenlegen kann, und schätze die monatliche Ersparnis." } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Help me find subscriptions I can cut or consolidate, and estimate the monthly savings." } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Ayúdame a encontrar suscripciones que pueda cancelar o combinar, y estima el ahorro mensual." } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Aide-moi à repérer les abonnements à supprimer ou regrouper, et estime l’économie mensuelle." } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "削減または統合できるサブスクを見つけて、月いくら節約できるか見積もって。" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "줄이거나 통합할 수 있는 구독을 찾고, 월간 절약액을 추정해 줘." } }
-      }
-    },
-    "把我的月费控制在 %@200 以内,建议砍掉哪些?" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Halte meine monatlichen Kosten unter %@200 — welche Abos sollte ich streichen?" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Keep my monthly spend under %@200 — which subscriptions should I drop?" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Mantén mi gasto mensual por debajo de %@200: ¿cuáles cancelo?" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Garde mes dépenses mensuelles sous %@200 : lesquels supprimer ?" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "月額を %@200 以内に抑えるとして、どれを解約すべき?" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "월 지출을 %@200 이하로 유지하려면 어떤 걸 해지해야 해?" } }
-      }
-    },
-    "按性价比/使用频率打分排序,并指出哪些非必要。" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Bewerte die Abos nach Preis-Leistung und Nutzungshäufigkeit und markiere die unnötigen." } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Rank them by value-for-money and how often I use them, and flag the non-essential ones." } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Califícalas por relación calidad-precio y frecuencia de uso, y señala las prescindibles." } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Classe-les par rapport qualité-prix et fréquence d’usage, puis indique celles qui ne sont pas essentielles." } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "コスパと利用頻度でランク付けし、必須でないものを指摘して。" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "가성비와 사용 빈도로 순위를 매기고, 비필수 항목을 표시해 줘." } }
-      }
-    },
-    "预测未来 60 天的实际扣费日期与总额。" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Prognostiziere die tatsächlichen Abbuchungstermine und Gesamtsumme der nächsten 60 Tage." } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Forecast the actual charge dates and total amount for the next 60 days." } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Predice las fechas reales de cobro y el total de los próximos 60 días." } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Prévois les dates réelles de prélèvement et le montant total sur 60 jours." } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "今後 60 日間の実際の請求日と合計金額を予測して。" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "앞으로 60일 동안 실제 청구일과 총액을 예측해 줘." } }
-      }
-    },
-    "检查是否有功能重复的订阅(例如多个视频/音乐服务)。" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Prüfe, ob Abos funktional überlappen (z. B. mehrere Video- oder Musikdienste)." } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Check for overlapping subscriptions (e.g. multiple video or music services)." } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Detecta suscripciones con funciones que se solapan (p. ej. varios servicios de vídeo o música)." } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Identifie les abonnements qui se chevauchent (ex. plusieurs services vidéo ou musique)." } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "機能が重複しているサブスク(動画や音楽サービスの重複など)をチェックして。" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "기능이 겹치는 구독(여러 동영상/음악 서비스 등)이 있는지 확인해 줘." } }
-      }
-    },
-    "内置分类" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Vorgegebene Kategorien" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Built-in" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Predefinidas" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Intégrées" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "ビルトイン" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "기본" } }
-      }
-    },
-    "自定义分类" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Eigene Kategorien" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Custom" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Personalizadas" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Personnalisées" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "カスタム" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "사용자 지정" } }
-      }
-    },
-    "添加分类" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Kategorie hinzufügen" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Add category" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Añadir categoría" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Ajouter une catégorie" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "カテゴリーを追加" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "카테고리 추가" } }
-      }
-    },
-    "新建分类" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Neue Kategorie" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "New category" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Nueva categoría" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Nouvelle catégorie" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "新規カテゴリー" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "새 카테고리" } }
-      }
-    },
-    "编辑分类" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Kategorie bearbeiten" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Edit category" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Editar categoría" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Modifier la catégorie" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "カテゴリーを編集" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "카테고리 편집" } }
-      }
-    },
-    "分类名称" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Kategoriename" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Category name" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Nombre de categoría" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Nom de la catégorie" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "カテゴリー名" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "카테고리 이름" } }
-      }
-    },
-    "颜色" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Farbe" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Color" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Color" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Couleur" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "カラー" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "색상" } }
-      }
-    },
-    "预览" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Vorschau" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Preview" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Vista previa" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Aperçu" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "プレビュー" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "미리보기" } }
-      }
-    },
-    "还没有自定义分类" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Noch keine eigene Kategorie" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "No custom categories yet" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Aún no hay categorías" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Aucune catégorie personnalisée" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "カスタムカテゴリーはまだありません" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "아직 사용자 지정 카테고리가 없습니다" } }
-      }
-    },
-    "自定义分类最多 %lld 个。删除一个分类后,引用它的订阅会回到原始内置分类显示。左滑可删除。" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Maximal %lld eigene Kategorien. Beim Löschen werden alle damit verknüpften Abos auf die Originalkategorie zurückgesetzt. Zum Löschen nach links wischen." } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Up to %lld custom categories. Deleting one moves linked subscriptions back to their built-in fallback. Swipe left to delete." } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Hasta %lld categorías personalizadas. Al eliminar una, las suscripciones vinculadas vuelven a su categoría integrada. Desliza para eliminar." } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Jusqu’à %lld catégories. Supprimer une catégorie ramène ses abonnements à leur catégorie intégrée. Glissez pour supprimer." } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "最大 %lld 個まで。削除するとそのカテゴリーを使う登録は元の組み込みカテゴリーに戻ります。左スワイプで削除。" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "최대 %lld개. 삭제 시 해당 카테고리를 쓰던 구독은 원래의 기본 카테고리로 돌아갑니다. 왼쪽으로 밀어 삭제." } }
-      }
-    },
-    "点一下可以改名。颜色固定,不能删除。" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Tippen zum Umbenennen. Farben fest, nicht löschbar." } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Tap to rename. Color is fixed and these can’t be deleted." } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Toca para renombrar. Color fijo y no se pueden eliminar." } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Touchez pour renommer. Couleur fixe, non supprimable." } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "タップで改名。色は固定、削除不可。" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "탭하여 이름 변경. 색상 고정, 삭제 불가." } }
-      }
-    },
-    "iCloud 与数据" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "iCloud & Daten" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "iCloud & Data" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "iCloud y datos" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "iCloud et données" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "iCloud とデータ" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "iCloud 및 데이터" } }
-      }
-    },
     "试用倒计时" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -10957,6 +11360,46 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "알림이 아직 켜져 있지 않습니다. 위 버튼을 눌러 권한을 요청하세요."
+          }
+        }
+      }
+    },
+    "还没有自定义分类" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Noch keine eigene Kategorie"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No custom categories yet"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aún no hay categorías"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune catégorie personnalisée"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "カスタムカテゴリーはまだありません"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "아직 사용자 지정 카테고리가 없습니다"
           }
         }
       }
@@ -11690,6 +12133,87 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "대한민국 원"
+          }
+        }
+      }
+    },
+    "预测未来 60 天的实际扣费日期与总额。" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prognostiziere die tatsächlichen Abbuchungstermine und Gesamtsumme der nächsten 60 Tage."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Forecast the actual charge dates and total amount for the next 60 days."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Predice las fechas reales de cobro y el total de los próximos 60 días."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prévois les dates réelles de prélèvement et le montant total sur 60 jours."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今後 60 日間の実際の請求日と合計金額を予測して。"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "앞으로 60일 동안 실제 청구일과 총액을 예측해 줘."
+          }
+        }
+      }
+    },
+    "预览" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vorschau"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preview"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vista previa"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aperçu"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "プレビュー"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "미리보기"
           }
         }
       }

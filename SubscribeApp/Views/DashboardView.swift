@@ -354,23 +354,32 @@ private struct CalendarPanel: View {
                                     selectedDay = (selectedDay == day) ? nil : day
                                 }
                             } label: {
-                                VStack(spacing: 1) {  // 圆点贴近数字下方,更紧凑
-                                    // iOS Calendar 风格 —— 今天是一颗实心 accent 圆,圈住数字,
-                                    // 其他状态全部走单元格底色,不会跟"今天"撞色。
+                                VStack(spacing: 0) {  // 圆点紧贴数字
+                                    // iOS Calendar 风格 —— 今天用主题色实心圆 + 白色数字,
+                                    // 圆稍大(30pt)+ 字加粗,远远扫一眼就能找到"今天"。
                                     ZStack {
                                         if isToday {
                                             Circle()
                                                 .fill(AppTheme.accent)
-                                                .frame(width: 26, height: 26)
+                                                .frame(width: 30, height: 30)
+                                                .shadow(color: AppTheme.accent.opacity(0.35),
+                                                        radius: 4, x: 0, y: 1)
                                         }
                                         Text("\(day)")
-                                            .font(.caption.monospacedDigit().weight(isToday || !cs.isEmpty ? .bold : .regular))
+                                            .font(
+                                                .system(
+                                                    size: isToday ? 15 : 13,
+                                                    weight: isToday ? .heavy
+                                                            : (cs.isEmpty ? .regular : .bold),
+                                                    design: .rounded
+                                                ).monospacedDigit()
+                                            )
                                             .foregroundStyle(
-                                                isToday ? .white
+                                                isToday ? Color.white
                                                 : (cs.isEmpty ? AppTheme.tertiary : AppTheme.ink)
                                             )
                                     }
-                                    .frame(width: 26, height: 26)
+                                    .frame(width: 30, height: 30)
 
                                     // 圆点占位高度固定为 5,即便没有扣费也保留位
                                     // 子,所有单元格高度一致,网格不会跳。
@@ -380,7 +389,7 @@ private struct CalendarPanel: View {
                                         }
                                     }.frame(height: 5)
                                 }
-                                .frame(height: 38).frame(maxWidth: .infinity)
+                                .frame(height: 40).frame(maxWidth: .infinity)
                                 .background(
                                     isSelected && !isToday ? AppTheme.accent.opacity(0.30)
                                     : (!cs.isEmpty && !isToday ? AppTheme.accent.opacity(0.14) : .clear),

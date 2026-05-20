@@ -52,15 +52,22 @@ struct CurrencySettingsView: View {
                 Button {
                     guard !refreshing else { return }
                     refreshing = true
+                    let start = Date()
                     Task {
                         await store.refreshRates()
+                        // 即便后台请求秒回,也保证图标至少转完一整圈,
+                        // 让用户看得到"我点了它"的视觉反馈。
+                        let elapsed = Date().timeIntervalSince(start)
+                        let minSpin: TimeInterval = 0.9
+                        if elapsed < minSpin {
+                            try? await Task.sleep(nanoseconds: UInt64((minSpin - elapsed) * 1_000_000_000))
+                        }
                         await MainActor.run { refreshing = false }
                     }
                 } label: {
                     HStack(spacing: 12) {
-                        // 左侧刷新图标在请求进行时连续旋转,跑完后停在原位 —— 一个
-                        // .linear.repeatForever 动画绑在 refreshing 状态上,通过修改
-                        // rotation 触发,Swift 6 不需要写 onChange/Timer。
+                        // 旋转角度只跟 refreshing 翻转,配合 0.9s 节奏的 repeatForever。
+                        // 短请求会被上面的 sleep 拉到 0.9s,所以肉眼一定能看到一圈。
                         SettingsIcon(name: "arrow.clockwise")
                             .rotationEffect(.degrees(refreshing ? 360 : 0))
                             .animation(
