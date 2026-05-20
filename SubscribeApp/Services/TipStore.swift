@@ -3,10 +3,12 @@ import SwiftUI
 
 @MainActor
 final class TipStore: ObservableObject {
+    // 这三个 Product ID 必须和 App Store Connect 里新建 In-App Purchase 用的
+    // "Product ID"逐字一致。bundle id (com.leon.eon) 是惯例前缀,后面接 tip.<档>。
     static let productIDs = [
-        "com.codex.SubscribeApp.tip.coffee",
-        "com.codex.SubscribeApp.tip.snack",
-        "com.codex.SubscribeApp.tip.meal"
+        "com.leon.eon.tip.coffee",
+        "com.leon.eon.tip.snack",
+        "com.leon.eon.tip.meal"
     ]
 
     @Published private(set) var products: [Product] = []

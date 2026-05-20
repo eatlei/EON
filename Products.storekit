@@ -7,7 +7,7 @@
       "familyShareable" : false,
       "internalID" : "11111111-0000-0000-0000-000000000001",
       "localizations" : [ { "description" : "A small thank-you", "displayName" : "Tip $1", "locale" : "en_US" } ],
-      "productID" : "com.codex.SubscribeApp.tip.coffee",
+      "productID" : "com.leon.eon.tip.coffee",
       "referenceName" : "Tip 1",
       "type" : "Consumable"
     },
@@ -16,7 +16,7 @@
       "familyShareable" : false,
       "internalID" : "11111111-0000-0000-0000-000000000002",
       "localizations" : [ { "description" : "A nice tip", "displayName" : "Tip $3", "locale" : "en_US" } ],
-      "productID" : "com.codex.SubscribeApp.tip.snack",
+      "productID" : "com.leon.eon.tip.snack",
       "referenceName" : "Tip 3",
       "type" : "Consumable"
     },
@@ -25,7 +25,7 @@
       "familyShareable" : false,
       "internalID" : "11111111-0000-0000-0000-000000000003",
       "localizations" : [ { "description" : "A generous tip", "displayName" : "Tip $5", "locale" : "en_US" } ],
-      "productID" : "com.codex.SubscribeApp.tip.meal",
+      "productID" : "com.leon.eon.tip.meal",
       "referenceName" : "Tip 5",
       "type" : "Consumable"
     }
