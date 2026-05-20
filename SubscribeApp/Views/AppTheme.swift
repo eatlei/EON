@@ -148,6 +148,34 @@ struct AppScreen<Content: View>: View {
     }
 }
 
+/// 玻璃材质 Panel — 用于 immersive 背景上的表单分组。
+/// `.regularMaterial` 会自动适配底色亮度,保证文字始终可读。
+struct MaterialPanel<Content: View>: View {
+    var title: LocalizedStringKey? = nil
+    @ViewBuilder var content: Content
+    init(title: LocalizedStringKey? = nil, @ViewBuilder content: () -> Content) {
+        self.title = title
+        self.content = content()
+    }
+    var body: some View {
+        VStack(alignment: .leading, spacing: AppTheme.Space.m) {
+            if let title {
+                Text(title)
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(.primary)
+            }
+            content
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(AppTheme.Space.l)
+        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: AppTheme.radius))
+        .overlay(
+            RoundedRectangle(cornerRadius: AppTheme.radius)
+                .stroke(.white.opacity(0.14), lineWidth: 1)
+        )
+    }
+}
+
 struct Panel<Content: View>: View {
     var title: LocalizedStringKey? = nil
     @ViewBuilder var content: Content

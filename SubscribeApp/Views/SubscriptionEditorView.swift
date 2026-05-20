@@ -44,120 +44,158 @@ struct SubscriptionEditorView: View {
 
     var body: some View {
         NavigationStack {
-            AppScreen(bottomPadding: AppTheme.Space.l) {
-                VStack(spacing: AppTheme.Space.l) {
-                    EditorHero(subscription: draft) { showIconPicker = true }
-                        // Break out of AppScreen's horizontal padding so the hero is edge-to-edge.
-                        .padding(.horizontal, -AppTheme.Space.xl)
-                        // Pull up under the navbar a touch so the hero hugs the top.
-                        .padding(.top, -AppTheme.Space.m)
+            ZStack {
+                ImmersiveBackground(subscription: draft)
 
-                    Panel(title: "基础") {
-                        FieldRow("名称") {
-                            TextField("如 ChatGPT", text: $draft.name)
-                                .multilineTextAlignment(.trailing)
-                                .textInputAutocapitalization(.words)
-                                .autocorrectionDisabled()
-                                .submitLabel(.next)
-                                .focused($focused, equals: .name)
-                                .onSubmit { focused = .plan }
-                        }
-                        Hairline()
-                        FieldRow("套餐") {
-                            TextField("如 Plus", text: $draft.plan)
-                                .multilineTextAlignment(.trailing)
-                                .textInputAutocapitalization(.words)
-                                .autocorrectionDisabled()
-                                .submitLabel(.next)
-                                .focused($focused, equals: .plan)
-                                .onSubmit { focused = .price }
-                        }
-                        Hairline()
-                        FieldRow("分类") {
-                            Picker("", selection: $draft.category) {
-                                ForEach(SubscriptionCategory.allCases) { Text($0.title).tag($0) }
-                            }.labelsHidden().tint(AppTheme.ink)
-                        }
-                        Hairline()
-                        FieldRow("状态") {
-                            Picker("", selection: $draft.status) {
-                                ForEach(RenewalStatus.allCases) { Text($0.title).tag($0) }
-                            }.labelsHidden().tint(AppTheme.ink)
-                        }
-                    }
+                ScrollView {
+                    VStack(spacing: AppTheme.Space.l) {
+                        HeroIcon(subscription: draft) { showIconPicker = true }
+                            .padding(.top, AppTheme.Space.s)
 
-                    Panel(title: "价格与周期") {
-                        FieldRow("金额") {
-                            TextField("0", text: $priceText)
-                                .keyboardType(.decimalPad)
-                                .multilineTextAlignment(.trailing)
-                                .focused($focused, equals: .price)
-                                .onChange(of: priceText) { _, newValue in
-                                    let sanitized = Self.sanitizePriceInput(newValue)
-                                    if sanitized != newValue {
-                                        priceText = sanitized
-                                        return // onChange will fire again with the sanitized value
-                                    }
-                                    draft.price = Double(sanitized) ?? 0
-                                }
-                        }
-                        Hairline()
-                        FieldRow("币种") {
-                            Picker("", selection: $draft.currency) {
-                                ForEach(CurrencyCode.allCases) { Text($0.rawValue).tag($0) }
-                            }.labelsHidden().tint(AppTheme.ink)
-                        }
-                        Hairline()
-                        FieldRow("扣费周期") {
-                            Picker("", selection: $draft.billingCycle) {
-                                ForEach(BillingCycle.allCases) { Text($0.title).tag($0) }
-                            }.labelsHidden().tint(AppTheme.ink)
-                        }
-                        if draft.billingCycle == .custom {
+                        MaterialPanel(title: "基础") {
+                            FieldRow("名称") {
+                                TextField("如 ChatGPT", text: $draft.name)
+                                    .multilineTextAlignment(.trailing)
+                                    .textInputAutocapitalization(.words)
+                                    .autocorrectionDisabled()
+                                    .submitLabel(.next)
+                                    .focused($focused, equals: .name)
+                                    .onSubmit { focused = .plan }
+                            }
                             Hairline()
-                            FieldRow("自定义天数") {
-                                Stepper(String(localized: "\(draft.customCycleDays) 天"), value: $draft.customCycleDays, in: 1...730)
+                            FieldRow("套餐") {
+                                TextField("如 Plus", text: $draft.plan)
+                                    .multilineTextAlignment(.trailing)
+                                    .textInputAutocapitalization(.words)
+                                    .autocorrectionDisabled()
+                                    .submitLabel(.next)
+                                    .focused($focused, equals: .plan)
+                                    .onSubmit { focused = .price }
+                            }
+                            Hairline()
+                            FieldRow("分类") {
+                                MenuPickerLabel(text: draft.category.title) {
+                                    ForEach(SubscriptionCategory.allCases) { c in
+                                        Button { draft.category = c } label: {
+                                            if draft.category == c {
+                                                Label(c.title, systemImage: "checkmark")
+                                            } else { Text(c.title) }
+                                        }
+                                    }
+                                }
+                            }
+                            Hairline()
+                            FieldRow("状态") {
+                                MenuPickerLabel(text: draft.status.title) {
+                                    ForEach(RenewalStatus.allCases) { s in
+                                        Button { draft.status = s } label: {
+                                            if draft.status == s {
+                                                Label(s.title, systemImage: "checkmark")
+                                            } else { Text(s.title) }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        MaterialPanel(title: "价格与周期") {
+                            FieldRow("金额") {
+                                TextField("0", text: $priceText)
+                                    .keyboardType(.decimalPad)
+                                    .multilineTextAlignment(.trailing)
+                                    .focused($focused, equals: .price)
+                                    .onChange(of: priceText) { _, newValue in
+                                        let sanitized = Self.sanitizePriceInput(newValue)
+                                        if sanitized != newValue {
+                                            priceText = sanitized
+                                            return
+                                        }
+                                        draft.price = Double(sanitized) ?? 0
+                                    }
+                            }
+                            Hairline()
+                            FieldRow("币种") {
+                                MenuPickerLabel(text: draft.currency.rawValue) {
+                                    ForEach(CurrencyCode.allCases.sorted { $0.rawValue < $1.rawValue }) { c in
+                                        Button { draft.currency = c } label: {
+                                            if draft.currency == c {
+                                                Label("\(c.rawValue) · \(c.title)", systemImage: "checkmark")
+                                            } else { Text("\(c.rawValue) · \(c.title)") }
+                                        }
+                                    }
+                                }
+                            }
+                            Hairline()
+                            FieldRow("扣费周期") {
+                                MenuPickerLabel(text: draft.billingCycle.title) {
+                                    ForEach(BillingCycle.allCases) { b in
+                                        Button { draft.billingCycle = b } label: {
+                                            if draft.billingCycle == b {
+                                                Label(b.title, systemImage: "checkmark")
+                                            } else { Text(b.title) }
+                                        }
+                                    }
+                                }
+                            }
+                            if draft.billingCycle == .custom {
+                                Hairline()
+                                FieldRow("自定义天数") {
+                                    Stepper(String(localized: "\(draft.customCycleDays) 天"), value: $draft.customCycleDays, in: 1...730)
+                                        .fixedSize()
+                                }
+                            }
+                            Hairline()
+                            FieldRow("开始时间") {
+                                DatePicker("", selection: $draft.nextBillingDate, displayedComponents: .date)
+                                    .labelsHidden()
+                                    .tint(.primary)
+                            }
+                            Hairline()
+                            FieldRow("提前提醒") {
+                                Stepper(String(localized: "\(draft.reminderDaysBefore) 天"), value: $draft.reminderDaysBefore, in: 0...30)
                                     .fixedSize()
                             }
                         }
-                        Hairline()
-                        FieldRow("开始时间") {
-                            DatePicker("", selection: $draft.nextBillingDate, displayedComponents: .date)
-                                .labelsHidden()
-                                .tint(AppTheme.ink)
-                        }
-                        Hairline()
-                        FieldRow("提前提醒") {
-                            Stepper(String(localized: "\(draft.reminderDaysBefore) 天"), value: $draft.reminderDaysBefore, in: 0...30)
-                                .fixedSize()
-                        }
-                    }
 
-                    Panel(title: "支付") {
-                        FieldRow("支付方式") {
-                            Picker("", selection: $draft.paymentMethod) {
-                                Text("无").tag("")
-                                ForEach(paymentOptions, id: \.self) { Text($0).tag($0) }
+                        MaterialPanel(title: "支付") {
+                            FieldRow("支付方式") {
+                                MenuPickerLabel(text: draft.paymentMethod.isEmpty ? String(localized: "无") : draft.paymentMethod) {
+                                    Button { draft.paymentMethod = "" } label: {
+                                        if draft.paymentMethod.isEmpty {
+                                            Label(String(localized: "无"), systemImage: "checkmark")
+                                        } else { Text("无") }
+                                    }
+                                    ForEach(paymentOptions, id: \.self) { p in
+                                        Button { draft.paymentMethod = p } label: {
+                                            if draft.paymentMethod == p {
+                                                Label(p, systemImage: "checkmark")
+                                            } else { Text(p) }
+                                        }
+                                    }
+                                }
                             }
-                            .labelsHidden()
-                            .tint(AppTheme.ink)
                         }
                     }
+                    .padding(.horizontal, AppTheme.Space.xl)
+                    .padding(.bottom, AppTheme.Space.xxl)
+                    .contentShape(Rectangle())
+                    .onTapGesture { focused = nil }
                 }
-                // Tap outside any field dismisses the keyboard.
-                .contentShape(Rectangle())
-                .onTapGesture { focused = nil }
+                .scrollDismissesKeyboard(.interactively)
             }
-            .navigationTitle(draft.name.isEmpty ? String(localized: "新增订阅") : draft.name)
+            .navigationTitle(isNew ? String(localized: "新增订阅") : String(localized: "编辑订阅"))
             .navigationBarTitleDisplayMode(.inline)
+            // Let the immersive bg show through the toolbar; force light glyphs so
+            // they read on any tile color (top of the bg has a dim gradient to help).
+            .toolbarBackground(.hidden, for: .navigationBar)
+            .toolbarColorScheme(.dark, for: .navigationBar)
             .onAppear {
                 if isNew && !didApplyDefaults {
                     draft.reminderDaysBefore = store.defaultReminderDays
                     didApplyDefaults = true
                 }
             }
-            // "0" 在金额框中是默认值,用户聚焦时清空,失焦后若为空则补回 "0"。
-            // 这样无需按删除就能直接输入数字替换。
+            // 默认显示 "0",聚焦时清空让用户直接输入;失焦后若为空则补回 "0"。
             .onChange(of: focused) { _, newFocus in
                 if newFocus == .price && priceText == "0" {
                     priceText = ""
@@ -168,7 +206,7 @@ struct SubscriptionEditorView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("取消") { dismiss() }.tint(AppTheme.secondary)
+                    Button("取消") { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("保存") {
@@ -177,10 +215,10 @@ struct SubscriptionEditorView: View {
                         store.upsert(draft)
                         dismiss()
                     }
-                    .tint(AppTheme.accent).disabled(!canSave)
+                    .fontWeight(.semibold)
+                    .disabled(!canSave)
                 }
-                // Keyboard toolbar — works for every keyboard type (including .decimalPad
-                // which has no return key) so the user can always dismiss in one tap.
+                // 键盘工具栏:任何键盘都能一键收起(decimal pad 没有 return)。
                 ToolbarItemGroup(placement: .keyboard) {
                     Spacer()
                     Button(String(localized: "完成")) { focused = nil }
@@ -195,7 +233,6 @@ struct SubscriptionEditorView: View {
 
     // MARK: - Price input helpers
 
-    /// Strip everything except digits and one decimal point.
     private static func sanitizePriceInput(_ raw: String) -> String {
         let filtered = raw.filter { $0.isNumber || $0 == "." }
         guard let firstDot = filtered.firstIndex(of: ".") else { return filtered }
@@ -204,8 +241,6 @@ struct SubscriptionEditorView: View {
         return String(head) + "." + tail
     }
 
-    /// Display the existing price as natural input text. 0 → "0" (visible
-    /// default; cleared on focus so typing replaces it).
     private static func formatPriceForInput(_ value: Double) -> String {
         guard value != 0 else { return "0" }
         let f = NumberFormatter()
@@ -217,91 +252,123 @@ struct SubscriptionEditorView: View {
     }
 }
 
-// MARK: - Hero header (Apple Music-style immersive icon backdrop)
+// MARK: - Hero icon (sits on top of the immersive background)
 
-private struct EditorHero: View {
+private struct HeroIcon: View {
     let subscription: Subscription
     let onTapIcon: () -> Void
 
     var body: some View {
-        ZStack {
-            background
-            // Bottom shade so the title stays legible over light gradients.
-            LinearGradient(
-                colors: [.clear, .black.opacity(0.28)],
-                startPoint: .center, endPoint: .bottom
-            )
-
-            VStack(spacing: AppTheme.Space.m) {
-                Button(action: onTapIcon) {
-                    CategoryGlyph(subscription: subscription, size: 96)
-                        .shadow(color: .black.opacity(0.35), radius: 22, y: 10)
-                        .overlay(alignment: .bottomTrailing) {
-                            // Edit affordance — hints the icon is tappable.
-                            Image(systemName: "pencil.circle.fill")
-                                .font(.title3)
-                                .symbolRenderingMode(.palette)
-                                .foregroundStyle(.white, .black.opacity(0.5))
-                                .offset(x: 4, y: 4)
-                        }
-                }
-                .buttonStyle(.plain)
-
-                if !subscription.name.isEmpty {
-                    Text(subscription.name)
-                        .font(.title3.weight(.heavy))
-                        .foregroundStyle(.white)
-                        .shadow(color: .black.opacity(0.55), radius: 6, y: 2)
-                        .lineLimit(1)
-                        .padding(.horizontal, AppTheme.Space.l)
-                        .transition(.opacity.combined(with: .scale(scale: 0.92)))
-                }
+        VStack(spacing: AppTheme.Space.m) {
+            Button(action: onTapIcon) {
+                CategoryGlyph(subscription: subscription, size: 112)
+                    .shadow(color: .black.opacity(0.4), radius: 24, y: 12)
+                    .overlay(alignment: .bottomTrailing) {
+                        // Edit affordance — hints the icon is tappable.
+                        Image(systemName: "pencil.circle.fill")
+                            .font(.title3)
+                            .symbolRenderingMode(.palette)
+                            .foregroundStyle(.white, .black.opacity(0.55))
+                            .offset(x: 6, y: 6)
+                    }
             }
-            .padding(.vertical, AppTheme.Space.xl)
+            .buttonStyle(.plain)
+
+            if !subscription.name.isEmpty {
+                Text(subscription.name)
+                    .font(.title2.weight(.heavy))
+                    .foregroundStyle(.white)
+                    .shadow(color: .black.opacity(0.55), radius: 6, y: 2)
+                    .lineLimit(1)
+                    .padding(.horizontal, AppTheme.Space.l)
+                    .transition(.opacity.combined(with: .scale(scale: 0.92)))
+            }
         }
         .frame(maxWidth: .infinity)
-        .frame(height: 240)
-        .clipped()
+        .padding(.vertical, AppTheme.Space.m)
+        .animation(.smooth(duration: 0.3), value: subscription.name.isEmpty)
         .animation(.smooth(duration: 0.4), value: subscription.icon)
-        .animation(.smooth(duration: 0.25), value: subscription.name.isEmpty)
+    }
+}
+
+// MARK: - Immersive background (full-screen, derived from the icon)
+
+private struct ImmersiveBackground: View {
+    let subscription: Subscription
+
+    var body: some View {
+        ZStack {
+            baseLayer
+
+            // Localized darkening: top (so toolbar glyphs read) + bottom (so the
+            // glass form panels keep contrast). Middle stays at full intensity so
+            // the hero icon "owns" the visual.
+            LinearGradient(
+                stops: [
+                    .init(color: .black.opacity(0.22), location: 0.00),
+                    .init(color: .black.opacity(0.00), location: 0.16),
+                    .init(color: .black.opacity(0.00), location: 0.45),
+                    .init(color: .black.opacity(0.18), location: 1.00),
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+        }
+        .ignoresSafeArea()
+        .animation(.smooth(duration: 0.4), value: subscription.icon)
     }
 
-    /// Apple Music trick: when the icon is an image, scale it up and blur it
-    /// heavily — same artwork = same color palette. For tile glyphs, use the
-    /// tile's color (or category color) with a soft radial highlight.
     @ViewBuilder
-    private var background: some View {
+    private var baseLayer: some View {
         switch subscription.icon {
         case .image(let id):
             if let ui = IconStore.loadUIImage(id) {
-                Color.clear.overlay(
-                    Image(uiImage: ui)
-                        .resizable()
-                        .scaledToFill()
-                        .blur(radius: 50)
-                        .saturation(1.35)
-                )
-                .clipped()
+                // Apple Music trick: same artwork = same colors. Blur fills.
+                Image(uiImage: ui)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .blur(radius: 60)
+                    .saturation(1.35)
+                    .clipped()
             } else {
-                tileBackground(subscription.category.color)
+                tileLayer(subscription.category.color)
             }
         case .tile(_, let hex):
-            tileBackground(hex.map { Color(hexString: $0) } ?? subscription.category.color)
+            tileLayer(hex.map { Color(hexString: $0) } ?? subscription.category.color)
         }
     }
 
-    private func tileBackground(_ color: Color) -> some View {
+    private func tileLayer(_ color: Color) -> some View {
         ZStack {
             color
-            LinearGradient(
-                colors: [color.opacity(0.0), color.opacity(0.35)],
-                startPoint: .top, endPoint: .bottom
-            )
             RadialGradient(
                 colors: [.white.opacity(0.30), .clear],
-                center: UnitPoint(x: 0.28, y: 0.22),
-                startRadius: 0, endRadius: 220
+                center: UnitPoint(x: 0.30, y: 0.15),
+                startRadius: 0, endRadius: 420
             )
+        }
+    }
+}
+
+// MARK: - Menu picker label
+// Replaces `Picker(.menu)` which forces the displayed value to render in the
+// accent colour (terrible contrast on a tinted Material panel). This uses a
+// plain Menu, and the visible label uses `.primary` so it adapts to the
+// underlying material brightness automatically.
+private struct MenuPickerLabel<Items: View>: View {
+    let text: String
+    @ViewBuilder var items: Items
+    var body: some View {
+        Menu {
+            items
+        } label: {
+            HStack(spacing: 4) {
+                Text(text).foregroundStyle(.primary)
+                Image(systemName: "chevron.up.chevron.down")
+                    .font(.caption2.weight(.semibold))
+                    .foregroundStyle(.secondary)
+            }
+            .contentShape(Rectangle())
         }
     }
 }
@@ -319,11 +386,11 @@ private struct FieldRow<Trailing: View>: View {
         HStack(spacing: AppTheme.Space.m) {
             Text(label)
                 .font(.subheadline.weight(.medium))
-                .foregroundStyle(AppTheme.secondary)
+                .foregroundStyle(.secondary)
             Spacer(minLength: AppTheme.Space.m)
             trailing
                 .font(.subheadline.weight(.semibold))
-                .foregroundStyle(AppTheme.ink)
+                .foregroundStyle(.primary)
         }
         .padding(.vertical, AppTheme.Space.s)
     }
