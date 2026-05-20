@@ -246,6 +246,12 @@ struct Subscription: Identifiable, Codable, Hashable {
     /// 把日期往后挪躲过一笔),startDate 也保持不变,代表"我从这天开始订的"。
     /// 旧数据没有这个字段:decodeIfPresent 返回 nil,fall back 到 nextBillingDate。
     var startDate: Date? = nil
+    /// 是否计入"金额统计"。关掉之后:
+    ///   - 这个订阅仍然出现在订阅列表 / 日历 / 即将扣费里(它该续费还续费)
+    ///   - 但 monthlyTotal / annualTotal / categorySpend / 累计支付 等聚合
+    ///     都会跳过它,不打入"我个人的开销"
+    /// 适用场景:公司报销的订阅、家人共享的、给客户买的等等。默认 true。
+    var includeInStatistics: Bool = true
     var isArchived: Bool = false
 
     var isActive: Bool {
@@ -344,7 +350,7 @@ extension Subscription {
     private enum CodingKeys: String, CodingKey {
         case id, name, plan, category, price, currency, billingCycle,
              customCycleDays, nextBillingDate, reminderDaysBefore, status, paymentMethod, icon, isArchived,
-             customCategoryID, startDate
+             customCategoryID, startDate, includeInStatistics
     }
 
     init(from decoder: Decoder) throws {
@@ -365,6 +371,7 @@ extension Subscription {
         isArchived = try c.decodeIfPresent(Bool.self, forKey: .isArchived) ?? false
         customCategoryID = try c.decodeIfPresent(UUID.self, forKey: .customCategoryID)
         startDate = try c.decodeIfPresent(Date.self, forKey: .startDate)
+        includeInStatistics = try c.decodeIfPresent(Bool.self, forKey: .includeInStatistics) ?? true
     }
 }
 

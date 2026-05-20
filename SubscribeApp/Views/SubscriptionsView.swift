@@ -312,46 +312,51 @@ private struct Row: View {
                 archiveBackground(passedThreshold: passedThreshold, progress: min(1, -dragX / threshold))
 
                 // 真正的卡片 —— 沿 X 平移;触发归档后会被父层从列表里删掉,我们也
-                // 让它一次性飞出屏幕左侧。
-                cardContent
-                    .offset(x: dragX)
-                    .gesture(
-                        DragGesture(minimumDistance: 12)
-                            .onChanged { value in
-                                guard !isArchivedLocally else { return }
-                                // 只响应向左的拖拽;向右拖一律忽略,免得跟系统 swipe-back 冲突
-                                if value.translation.width > 0 {
-                                    dragX = 0
-                                    return
-                                }
-                                let prev = dragX
-                                dragX = value.translation.width
-                                // 跨阈值瞬间一次中度震感,给"已上膛"的反馈
-                                if -prev < threshold && -dragX >= threshold {
-                                    thresholdTick &+= 1
-                                }
-                            }
-                            .onEnded { value in
-                                guard !isArchivedLocally else { return }
-                                if -value.translation.width >= threshold {
-                                    // 飞出屏幕 + 通知父层
-                                    isArchivedLocally = true
-                                    withAnimation(.easeIn(duration: 0.22)) {
-                                        dragX = -cardWidth - 60
-                                    }
-                                    Task { @MainActor in
-                                        try? await Task.sleep(nanoseconds: 180_000_000)
-                                        onArchive()
-                                    }
-                                } else {
-                                    // 弹回原位
-                                    withAnimation(.spring(response: 0.35, dampingFraction: 0.75)) {
+                // 让它一次性飞出屏幕左侧。彩蛋关掉的时候完全不挂 DragGesture,
+                // 卡片只剩点击 → 编辑的原行为。
+                if store.easterEggs.dragToArchive {
+                    cardContent
+                        .offset(x: dragX)
+                        .gesture(
+                            DragGesture(minimumDistance: 12)
+                                .onChanged { value in
+                                    guard !isArchivedLocally else { return }
+                                    // 只响应向左的拖拽;向右拖一律忽略,免得跟系统 swipe-back 冲突
+                                    if value.translation.width > 0 {
                                         dragX = 0
+                                        return
+                                    }
+                                    let prev = dragX
+                                    dragX = value.translation.width
+                                    // 跨阈值瞬间一次中度震感,给"已上膛"的反馈
+                                    if -prev < threshold && -dragX >= threshold {
+                                        thresholdTick &+= 1
                                     }
                                 }
-                            }
-                    )
-                    .onTapGesture(perform: onTap)
+                                .onEnded { value in
+                                    guard !isArchivedLocally else { return }
+                                    if -value.translation.width >= threshold {
+                                        // 飞出屏幕 + 通知父层
+                                        isArchivedLocally = true
+                                        withAnimation(.easeIn(duration: 0.22)) {
+                                            dragX = -cardWidth - 60
+                                        }
+                                        Task { @MainActor in
+                                            try? await Task.sleep(nanoseconds: 180_000_000)
+                                            onArchive()
+                                        }
+                                    } else {
+                                        // 弹回原位
+                                        withAnimation(.spring(response: 0.35, dampingFraction: 0.75)) {
+                                            dragX = 0
+                                        }
+                                    }
+                                }
+                        )
+                        .onTapGesture(perform: onTap)
+                } else {
+                    cardContent.onTapGesture(perform: onTap)
+                }
             }
             .sensoryFeedback(.impact(weight: .medium), trigger: thresholdTick)
         }
@@ -360,12 +365,13 @@ private struct Row: View {
         .frame(minHeight: 76)
     }
 
-    /// 右侧露出来的红色 archive 背景。passedThreshold = true 时变实心 + 文字加粗
-    /// 提示 "松手归档"。
+    /// 右侧露出来的"归档"背景。底色跟随主题(AppTheme.accent),过阈值变实心。
+    /// 之前用纯红色,跟主题切换割裂,看起来像系统警告;改成 accent 后语义是
+    /// "你即将归档" 而不是"危险操作"。
     @ViewBuilder
     private func archiveBackground(passedThreshold: Bool, progress: CGFloat) -> some View {
         RoundedRectangle(cornerRadius: AppTheme.radius)
-            .fill(Color.red.opacity(passedThreshold ? 0.95 : 0.55))
+            .fill(AppTheme.accent.opacity(passedThreshold ? 0.95 : 0.55))
             .overlay(alignment: .trailing) {
                 HStack(spacing: 8) {
                     Image(systemName: "archivebox.fill")
@@ -398,6 +404,15 @@ private struct Row: View {
                             .padding(.horizontal, 6).padding(.vertical, 2)
                             .background(AppTheme.accent.opacity(0.14), in: Capsule())
                             .foregroundStyle(AppTheme.accent)
+                    }
+                    // 用户明确关闭了"计入统计" → 用一个低调灰色徽章告诉他,
+                    // 免得回头看着 Hero 总额对不上发懵。
+                    if !subscription.includeInStatistics {
+                        Text("不计入")
+                            .font(.caption2.weight(.bold))
+                            .padding(.horizontal, 6).padding(.vertical, 2)
+                            .background(AppTheme.tertiary.opacity(0.18), in: Capsule())
+                            .foregroundStyle(AppTheme.secondary)
                     }
                 }
                 Text(subtitle)

@@ -87,8 +87,10 @@ struct DashboardView: View {
                 }
             }
             .onAppear {
-                // 一天一次,空订阅页面跳过。
-                if !DailyWelcomeTracker.hasShownToday() && !store.activeSubscriptions.isEmpty {
+                // 一天一次,空订阅页面跳过,设置里关掉了也跳过。
+                if store.easterEggs.dailyWelcomeConfetti
+                   && !DailyWelcomeTracker.hasShownToday()
+                   && !store.activeSubscriptions.isEmpty {
                     showDailyWelcome = true
                     DailyWelcomeTracker.markShownToday()
                     // 1.8 秒后自动撤掉粒子层(粒子动画本身 ~2s 渐隐,层 1.8s 删,正好衔接)

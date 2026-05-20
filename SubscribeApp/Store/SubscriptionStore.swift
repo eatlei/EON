@@ -72,6 +72,11 @@ final class SubscriptionStore: ObservableObject {
         }
     }
 
+    /// 三个小彩蛋的开关。默认全开,用户可以在"设置 → 彩蛋"里独立关闭其中任意一个。
+    @Published var easterEggs: EasterEggPrefs = EasterEggPrefs() {
+        didSet { saveSettings() }
+    }
+
     @Published private(set) var cnyRates: [CurrencyCode: Double] = CurrencyConverter.builtin
     @Published private(set) var ratesUpdatedAt: Date?
     var converter: CurrencyConverter { CurrencyConverter(cnyRates: cnyRates) }
@@ -106,6 +111,7 @@ final class SubscriptionStore: ObservableObject {
             coloredSubscriptionCards = settings.coloredSubscriptionCards
             categoryNameOverrides = settings.categoryNameOverrides
             customCategories = settings.customCategories
+            easterEggs = settings.easterEggs
         } else {
             baseCurrency = .cny
             remindersEnabled = true
@@ -150,8 +156,16 @@ final class SubscriptionStore: ObservableObject {
         subscriptions.filter(\.isArchived)
     }
 
+    /// 进入"金额聚合"的子集 —— 活跃 + 未归档 + 用户没把 includeInStatistics 关掉。
+    /// 几乎所有 ¥ 数字的来源(monthlyTotal / categorySpend / lifetimeSpend / 各种
+    /// 图表)都走这个,而不是 activeSubscriptions。展示用的列表 / 日历 / 提醒还是
+    /// 用 activeSubscriptions —— 关闭统计不代表关闭这个订阅。
+    var statisticsCountableSubscriptions: [Subscription] {
+        activeSubscriptions.filter { $0.includeInStatistics }
+    }
+
     var monthlyTotal: Double {
-        activeSubscriptions.reduce(0) {
+        statisticsCountableSubscriptions.reduce(0) {
             $0 + $1.monthlyCost(in: baseCurrency, converter: converter)
         }
     }
@@ -168,18 +182,19 @@ final class SubscriptionStore: ObservableObject {
     }
 
     func total(for category: SubscriptionCategory) -> Double {
-        activeSubscriptions
+        statisticsCountableSubscriptions
             .filter { $0.category == category && $0.customCategoryID == nil }
             .reduce(0) { $0 + $1.monthlyCost(in: baseCurrency, converter: converter) }
     }
 
     /// 按"displayCategoryID"分桶聚合金额 —— 自定义分类有自己的桶,内置分类
     /// 走 enum.rawValue。每个桶顺便带上展示标题 / 颜色,饼图直接消费。
+    /// 只统计 includeInStatistics 为 true 的订阅。
     var categorySpend: [CategorySpend] {
         let total = monthlyTotal
         var buckets: [String: Double] = [:]
         var meta: [String: (title: String, color: Color)] = [:]
-        for sub in activeSubscriptions {
+        for sub in statisticsCountableSubscriptions {
             let id = sub.displayCategoryID
             buckets[id, default: 0] += sub.monthlyCost(in: baseCurrency, converter: converter)
             if meta[id] == nil {
@@ -200,8 +215,9 @@ final class SubscriptionStore: ObservableObject {
     // MARK: - Lifetime spend (cumulative billing)
 
     /// 整个活跃订阅集合"从各自起始日累计扣过的钱"之和(基础币种)。
+    /// 用统计口径(includeInStatistics)。
     var totalLifetimeSpend: Double {
-        activeSubscriptions.reduce(0) { acc, sub in
+        statisticsCountableSubscriptions.reduce(0) { acc, sub in
             acc + sub.lifetimeSpend(in: baseCurrency, converter: converter)
         }
     }
@@ -209,12 +225,12 @@ final class SubscriptionStore: ObservableObject {
     /// 总扣费次数 —— 跟 totalLifetimeSpend 同口径,用作"已经为这些订阅付过 N 笔"
     /// 的一行文案。
     var totalLifetimeChargeCount: Int {
-        activeSubscriptions.reduce(0) { $0 + $1.billingCountElapsed() }
+        statisticsCountableSubscriptions.reduce(0) { $0 + $1.billingCountElapsed() }
     }
 
     /// 按累计支付金额排序的活跃订阅 —— Overview 的 Lifetime 面板用来挑 top N。
     func subscriptionsByLifetimeSpend(limit: Int = 3) -> [Subscription] {
-        activeSubscriptions
+        statisticsCountableSubscriptions
             .sorted {
                 $0.lifetimeSpend(in: baseCurrency, converter: converter) >
                 $1.lifetimeSpend(in: baseCurrency, converter: converter)
@@ -266,7 +282,8 @@ final class SubscriptionStore: ObservableObject {
 
     func charges(in period: SpendPeriod) -> [RenewalCharge] {
         let interval = interval(for: period)
-        return activeSubscriptions.flatMap { subscription in
+        // 进金额聚合的口径 —— 关掉"计入统计"的订阅不在这里出现
+        return statisticsCountableSubscriptions.flatMap { subscription in
             projectedCharges(for: subscription, from: interval.start, to: interval.end)
         }
         .sorted { $0.date < $1.date }
@@ -282,9 +299,10 @@ final class SubscriptionStore: ObservableObject {
     }
 
     /// 整个周期内的全部扣费（含本期已扣，双向推算）——用于首页总额。
+    /// 只统计 includeInStatistics 为 true 的订阅。
     func fullCharges(in period: SpendPeriod) -> [RenewalCharge] {
         let iv = interval(for: period)
-        return activeSubscriptions
+        return statisticsCountableSubscriptions
             .flatMap { projectedChargesBidirectional(for: $0, from: iv.start, to: iv.end) }
             .sorted { $0.date < $1.date }
     }
@@ -383,7 +401,7 @@ final class SubscriptionStore: ObservableObject {
     func monthTotal(_ monthAnchor: Date) -> Double {
         let cal = Calendar.current
         guard let iv = cal.dateInterval(of: .month, for: monthAnchor) else { return 0 }
-        return activeSubscriptions
+        return statisticsCountableSubscriptions
             .flatMap { projectedChargesBidirectional(for: $0, from: iv.start, to: iv.end) }
             .reduce(0) { $0 + $1.amount }
     }
@@ -414,7 +432,7 @@ final class SubscriptionStore: ObservableObject {
     func dailyTotalsForCurrentYear() -> [(date: Date, amount: Double)] {
         let cal = Calendar.current
         let iv = interval(for: .year)
-        let all = activeSubscriptions
+        let all = statisticsCountableSubscriptions
             .flatMap { projectedChargesBidirectional(for: $0, from: iv.start, to: iv.end) }
         // 把扣费按"当日 startOfDay"聚合
         var bucket: [Date: Double] = [:]
@@ -440,7 +458,8 @@ final class SubscriptionStore: ObservableObject {
         return (0..<12).map { offset in
             let month = calendar.date(byAdding: .month, value: offset, to: yearStart) ?? yearStart
             let nextMonth = calendar.date(byAdding: .month, value: 1, to: month) ?? month
-            let amount = activeSubscriptions.flatMap {
+            // 年柱图按统计口径,不包含被排除的订阅
+            let amount = statisticsCountableSubscriptions.flatMap {
                 projectedCharges(for: $0, from: month, to: nextMonth)
             }
             .reduce(0) { $0 + $1.amount }
@@ -584,7 +603,8 @@ final class SubscriptionStore: ObservableObject {
             defaultReminderDays: defaultReminderDays,
             coloredSubscriptionCards: coloredSubscriptionCards,
             categoryNameOverrides: categoryNameOverrides,
-            customCategories: customCategories
+            customCategories: customCategories,
+            easterEggs: easterEggs
         )
         if let data = try? JSONEncoder().encode(settings) {
             UserDefaults.standard.set(data, forKey: settingsKey)
@@ -634,6 +654,7 @@ private struct Settings: Codable {
     var coloredSubscriptionCards: Bool
     var categoryNameOverrides: [String: String]
     var customCategories: [CustomCategory]
+    var easterEggs: EasterEggPrefs
 
     static let defaultPaymentMethods = ["支付宝", "微信支付", "Apple Pay", "Visa", "Mastercard", "银联", "PayPal"]
 
@@ -641,7 +662,8 @@ private struct Settings: Codable {
          appearance: AppAppearance, paymentMethods: [String], accentTheme: AccentTheme,
          defaultReminderDays: Int, coloredSubscriptionCards: Bool,
          categoryNameOverrides: [String: String],
-         customCategories: [CustomCategory]) {
+         customCategories: [CustomCategory],
+         easterEggs: EasterEggPrefs) {
         self.baseCurrency = baseCurrency
         self.remindersEnabled = remindersEnabled
         self.iCloudSyncEnabled = iCloudSyncEnabled
@@ -652,6 +674,7 @@ private struct Settings: Codable {
         self.coloredSubscriptionCards = coloredSubscriptionCards
         self.categoryNameOverrides = categoryNameOverrides
         self.customCategories = customCategories
+        self.easterEggs = easterEggs
     }
 
     init(from decoder: Decoder) throws {
@@ -667,6 +690,30 @@ private struct Settings: Codable {
         coloredSubscriptionCards = try c.decodeIfPresent(Bool.self, forKey: .coloredSubscriptionCards) ?? true
         categoryNameOverrides = try c.decodeIfPresent([String: String].self, forKey: .categoryNameOverrides) ?? [:]
         customCategories = try c.decodeIfPresent([CustomCategory].self, forKey: .customCategories) ?? []
+        easterEggs = try c.decodeIfPresent(EasterEggPrefs.self, forKey: .easterEggs) ?? EasterEggPrefs()
+    }
+}
+
+/// 三个小彩蛋的开关合在一个 Codable 结构里,跟 Settings 一起持久化。
+/// 新增彩蛋时只要往这里加字段就够了,不会影响老数据(decodeIfPresent fall back)。
+struct EasterEggPrefs: Codable, Equatable {
+    var shakeSpotlight: Bool
+    var dailyWelcomeConfetti: Bool
+    var dragToArchive: Bool
+
+    init(shakeSpotlight: Bool = true,
+         dailyWelcomeConfetti: Bool = true,
+         dragToArchive: Bool = true) {
+        self.shakeSpotlight = shakeSpotlight
+        self.dailyWelcomeConfetti = dailyWelcomeConfetti
+        self.dragToArchive = dragToArchive
+    }
+
+    init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        shakeSpotlight = try c.decodeIfPresent(Bool.self, forKey: .shakeSpotlight) ?? true
+        dailyWelcomeConfetti = try c.decodeIfPresent(Bool.self, forKey: .dailyWelcomeConfetti) ?? true
+        dragToArchive = try c.decodeIfPresent(Bool.self, forKey: .dragToArchive) ?? true
     }
 }
 

@@ -199,6 +199,23 @@ struct SubscriptionEditorView: View {
                                 }
                             }
                         }
+
+                        // "计入统计"开关:默认打开,关掉之后这笔订阅就不进
+                        // monthlyTotal / 饼图 / 累计支付等聚合。日历 / 即将扣费
+                        // 等"展示信息"还会保留。
+                        MaterialPanel(title: "统计") {
+                            VStack(alignment: .leading, spacing: AppTheme.Space.s) {
+                                Toggle(isOn: $draft.includeInStatistics) {
+                                    Text("计入支出统计")
+                                        .foregroundStyle(.white)
+                                }
+                                .tint(AppTheme.accent)
+                                Text("适合\"公司报销\"、\"家人共享\"、\"给客户买的\"等情况:订阅照常运行、日历照常显示,但不算进你的个人支出总额、分类饼图、累计支付里。")
+                                    .font(.caption)
+                                    .foregroundStyle(.white.opacity(0.75))
+                                    .fixedSize(horizontal: false, vertical: true)
+                            }
+                        }
                     }
                     .padding(.horizontal, AppTheme.Space.xl)
                     .padding(.bottom, AppTheme.Space.xxl)
@@ -209,12 +226,9 @@ struct SubscriptionEditorView: View {
             }
             .navigationTitle(isNew ? String(localized: "新增订阅") : String(localized: "编辑订阅"))
             .navigationBarTitleDisplayMode(.inline)
-            // 之前是隐藏 toolbar 背景 + 强行白字,在浅色 tile(比如 Netflix 红、苹果黄)
-            // 顶部就会出现"取消 / 保存"字几乎透明读不清的情况。改成 ultraThinMaterial
-            // 给 navigation bar 加一层薄玻璃,toolbarColorScheme 留给系统按背景自动适配:
-            // 任何 tile 色下,按钮都能稳定看清。
-            .toolbarBackground(.ultraThinMaterial, for: .navigationBar)
-            .toolbarBackground(.visible, for: .navigationBar)
+            // 整个 navigation bar 的底板隐藏 —— 让 ImmersiveBackground 直接顶到屏幕顶
+            // 端;按钮自身用 .glassEffect 胶囊保证在任何背景色下都能稳定读出。
+            .toolbarBackground(.hidden, for: .navigationBar)
             .onAppear {
                 if isNew && !didApplyDefaults {
                     draft.reminderDaysBefore = store.defaultReminderDays
@@ -232,10 +246,16 @@ struct SubscriptionEditorView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("取消") { dismiss() }
+                    Button { dismiss() } label: {
+                        Text("取消")
+                            .font(.subheadline.weight(.semibold))
+                            .foregroundStyle(.white)
+                            .padding(.horizontal, 14).padding(.vertical, 7)
+                            .glassEffect(.regular, in: Capsule())
+                    }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("保存") {
+                    Button {
                         focused = nil
                         draft.price = Double(priceText) ?? 0
                         // 新订阅首次保存时把 startDate 固定下来 = 当时的 nextBillingDate。
@@ -246,8 +266,13 @@ struct SubscriptionEditorView: View {
                         }
                         store.upsert(draft)
                         dismiss()
+                    } label: {
+                        Text("保存")
+                            .font(.subheadline.weight(.heavy))
+                            .foregroundStyle(canSave ? .white : .white.opacity(0.45))
+                            .padding(.horizontal, 14).padding(.vertical, 7)
+                            .glassEffect(.regular, in: Capsule())
                     }
-                    .fontWeight(.semibold)
                     .disabled(!canSave)
                 }
                 // 键盘工具栏:任何键盘都能一键收起(decimal pad 没有 return)。

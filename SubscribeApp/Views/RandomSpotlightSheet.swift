@@ -11,6 +11,9 @@ struct RandomSpotlightSheet: View {
     @State private var spotlight: Subscription
     /// 触发 SensoryFeedback 的计数器,每次重新抽 +1。
     @State private var shuffleTick: Int = 0
+    /// 进场瞬间 +1,给一个 success 反馈 —— 跟 ContentView 上的 shake heavy
+    /// haptic 接力,形成"摇到了!"的双段触觉。
+    @State private var appearTick: Int = 0
 
     init(initial: Subscription) {
         _spotlight = State(initialValue: initial)
@@ -63,6 +66,8 @@ struct RandomSpotlightSheet: View {
                 }
             }
             .sensoryFeedback(.impact(weight: .medium), trigger: shuffleTick)
+            .sensoryFeedback(.success, trigger: appearTick)
+            .onAppear { appearTick &+= 1 }
         }
     }
 

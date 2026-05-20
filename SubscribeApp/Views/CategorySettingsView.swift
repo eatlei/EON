@@ -145,25 +145,29 @@ struct CategorySettingsView: View {
             }
         }
 
-        // 新建自定义分类 —— 把"除我之外都已用掉"的色号传进去禁用
+        // 新建自定义分类 —— 把"内置 8 色 + 其他 custom 用掉的"都传进去禁用,
+        // 避免新建出来的分类跟任何已存在的颜色撞,影响饼图 / 卡片可辨识度。
         .sheet(isPresented: $showingNewCustom) {
             CustomCategoryEditorSheet(
                 category: nil,
-                usedColors: Set(store.customCategories.map { $0.colorHex.lowercased() })
+                usedColors: CustomCategory.builtInOccupiedHexes
+                    .union(store.customCategories.map { $0.colorHex.lowercased() })
             ) { name, hex in
                 store.addCustomCategory(name: name, colorHex: hex)
             }
         }
 
-        // 编辑已有自定义分类 —— 用掉的色号是 "其他 custom 用掉的",自己原来的色仍可选
+        // 编辑已有自定义分类 —— 用掉的色号包括"内置 8 色 + 其他 custom 用掉的",
+        // 自己原来的色不在 used 集里所以仍可选。
         .sheet(item: $editingCustom) { existing in
             CustomCategoryEditorSheet(
                 category: existing,
-                usedColors: Set(
-                    store.customCategories
-                        .filter { $0.id != existing.id }
-                        .map { $0.colorHex.lowercased() }
-                )
+                usedColors: CustomCategory.builtInOccupiedHexes
+                    .union(
+                        store.customCategories
+                            .filter { $0.id != existing.id }
+                            .map { $0.colorHex.lowercased() }
+                    )
             ) { name, hex in
                 store.updateCustomCategory(
                     CustomCategory(id: existing.id, name: name, colorHex: hex)

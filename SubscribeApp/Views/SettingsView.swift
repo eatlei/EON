@@ -20,6 +20,12 @@ struct SettingsView: View {
                             Text("外观与语言")
                         }
                     }
+                    NavigationLink { EasterEggSettingsView() } label: {
+                        HStack(spacing: 12) {
+                            SettingsIcon(name: "sparkles")
+                            Text("彩蛋")
+                        }
+                    }
                 } header: {
                     Text("偏好")
                 }
