@@ -58,6 +58,10 @@ struct CurrencySettingsView: View {
                         Text("立即刷新汇率").foregroundStyle(AppTheme.ink)
                         Spacer()
                     }
+                    // 整行 hit area —— SwiftUI Button 默认 hit area 是文本内容包围盒,
+                    // List 里那一行剩下的灰区点不到。给 label 内 HStack 加 contentShape
+                    // 后,整行宽度都吃点击事件。下文每个 Button.label 都用同一个套路。
+                    .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
             } footer: {

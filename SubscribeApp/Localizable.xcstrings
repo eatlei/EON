@@ -423,6 +423,53 @@
         }
       }
     },
+    "%@ × %lld 次" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ × %lld"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ × %lld"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ × %lld"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ × %lld"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ × %lld 回"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ × %lld회"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ × %lld 次"
+          }
+        }
+      }
+    },
     "%@ 将在 %lld 天后续费。" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -2632,6 +2679,52 @@
         }
       }
     },
+    "人格会随你的订阅而变化" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Persönlichkeit ändert sich mit deinen Abos"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your persona shifts as your subs change"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu personalidad cambia con tus suscripciones"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ta perso évolue avec tes abonnements"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "人格はあなたのサブスクと共に変わります"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "당신의 구독에 따라 인격도 변해요"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "人格會隨你的訂閱而變化"
+          }
+        }
+      }
+    },
     "人民币" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -3222,6 +3315,7 @@
       }
     },
     "会随你而变" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -9371,6 +9465,52 @@
         }
       }
     },
+    "总累计" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gesamtsumme"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Total spent"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Total acumulado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Total cumulé"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "総累計"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "총 누적"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "總累計"
+          }
+        }
+      }
+    },
     "总览" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -13554,50 +13694,6 @@
         }
       }
     },
-    "总累计" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Gesamtsumme" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Total spent" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Total acumulado" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Total cumulé" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "総累計" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "총 누적" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "總累計" } }
-      }
-    },
-    "人格会随你的订阅而变化" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Persönlichkeit ändert sich mit deinen Abos" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Your persona shifts as your subs change" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Tu personalidad cambia con tus suscripciones" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Ta perso évolue avec tes abonnements" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "人格はあなたのサブスクと共に変わります" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "당신의 구독에 따라 인격도 변해요" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "人格會隨你的訂閱而變化" } }
-      }
-    },
-    "%@ × %lld 次" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "%@ × %lld" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "%@ × %lld" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "%@ × %lld" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "%@ × %lld" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "%@ × %lld 回" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "%@ × %lld회" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "%@ × %lld 次" } }
-      }
-    },
-    "还没有产生过实际扣费" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Bisher keine tatsächlichen Abbuchungen" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "No actual charges yet" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Aún no se han hecho cargos" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Aucun prélèvement réel pour l’instant" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "まだ実際の請求はありません" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "아직 실제 결제가 없어요" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "還沒有產生過實際扣費" } }
-      }
-    },
     "汇率已更新" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -15741,7 +15837,6 @@
       }
     },
     "累计支付" : {
-      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -16932,6 +17027,7 @@
       }
     },
     "订阅多了 / 少了 / 偏好变了,你的人格也会跟着改变 —— 就跟你的 MBTI 会因人生阶段不同而不同一样,这是个会呼吸的标签。" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -18047,6 +18143,52 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "%lld일 후"
+          }
+        }
+      }
+    },
+    "还没有产生过实际扣费" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bisher keine tatsächlichen Abbuchungen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No actual charges yet"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aún no se han hecho cargos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucun prélèvement réel pour l’instant"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "まだ実際の請求はありません"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "아직 실제 결제가 없어요"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "還沒有產生過實際扣費"
           }
         }
       }

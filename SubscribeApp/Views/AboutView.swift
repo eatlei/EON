@@ -106,7 +106,9 @@ struct AboutView: View {
                     HStack(spacing: 12) {
                         SettingsIcon(name: "star.bubble")
                         Text("给 EON 打个分").foregroundStyle(AppTheme.ink)
+                        Spacer()
                     }
+                    .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
                 ShareLink(item: AppLinks.appStoreShareURL) {
@@ -126,7 +128,9 @@ struct AboutView: View {
                     HStack(spacing: 12) {
                         SettingsIcon(name: "envelope")
                         Text("发送反馈").foregroundStyle(AppTheme.ink)
+                        Spacer()
                     }
+                    .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
                 Button {
@@ -135,7 +139,9 @@ struct AboutView: View {
                     HStack(spacing: 12) {
                         SettingsIcon(name: "heart")
                         Text("支持开发者").foregroundStyle(AppTheme.ink)
+                        Spacer()
                     }
+                    .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
             } header: {

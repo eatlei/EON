@@ -342,20 +342,32 @@ private struct Row: View {
                     // "不计入"徽章从这一行移走了 —— 跟订阅名抢同一行会挤,
                     // 改放到整张卡片的左上角(见 body 末尾的 .overlay)。
                 }
-                Text(subtitle)
-                    .font(.caption)
-                    .foregroundStyle(AppTheme.secondary)
-                    .lineLimit(1)
+                HStack(spacing: 4) {
+                    Text(subtitle)
+                        .font(.caption)
+                        .foregroundStyle(AppTheme.secondary)
+                        .lineLimit(1)
+                    // 不计入徽章紧跟在副标题后面,做成"角标"形态:小号字 + 灰胶囊。
+                    // 之前放卡片左上角的 overlay 会盖到图标边角,改成 inline 跟分类
+                    // 信息排成一行,视觉上更整齐。
+                    if !subscription.includeInStatistics {
+                        Text("不计入")
+                            .font(.system(size: 9, weight: .bold))
+                            .padding(.horizontal, 5).padding(.vertical, 1)
+                            .background(AppTheme.tertiary.opacity(0.18), in: Capsule())
+                            .foregroundStyle(AppTheme.secondary)
+                    }
+                }
             }
             Spacer(minLength: AppTheme.Space.s)
             VStack(alignment: .trailing, spacing: 4) {
                 // 不再展示 /月 /季 /年 后缀 —— 整页顶部的视图切换已经表明了口径,
                 // 在每张卡片上再写一次是冗余。
                 Text(store.converter.format(displayedAmount, currency: store.baseCurrency))
-                    .font(.system(size: 19, weight: .bold, design: .rounded))
+                    .font(.system(size: 22, weight: .heavy, design: .rounded))
                     .foregroundStyle(AppTheme.ink)
                     .lineLimit(1)
-                    .minimumScaleFactor(0.7)
+                    .minimumScaleFactor(0.65)
                 // "已扣 N 次"小徽章 —— 默默告诉用户这笔订阅累计已经付过几次费,
                 // 跟下方的下次扣费日叠在一起,垂直空间也不太挤。
                 let billed = subscription.billingCountElapsed()
@@ -387,19 +399,6 @@ private struct Row: View {
         .background(coloredCardBackground)
         .glassBorder()
         .opacity(subscription.isActive ? 1 : 0.5)
-        // "不计入"徽章定位到整张卡片的左上角。原先和订阅名共享一行,长名字
-        // 会被挤掉一截;这里独立一层,跟内容互不影响。
-        .overlay(alignment: .topLeading) {
-            if !subscription.includeInStatistics {
-                Text("不计入")
-                    .font(.system(size: 9, weight: .bold))
-                    .padding(.horizontal, 6).padding(.vertical, 2)
-                    .background(AppTheme.tertiary.opacity(0.18), in: Capsule())
-                    .foregroundStyle(AppTheme.secondary)
-                    .padding(.leading, 10)
-                    .padding(.top, 8)
-            }
-        }
     }
 
     /// 卡片底色 = AppTheme.surface(自动适配明暗模式)+ icon 主色径向光晕。
@@ -504,21 +503,29 @@ private struct GridCard: View {
                     // 卡片宽度小,长名字让它换行而不是截断,这样卡片高度变化形成瀑布流。
                     .lineLimit(2)
                     .fixedSize(horizontal: false, vertical: true)
-                Text(subscription.displayCategoryTitle)
-                    .font(.caption2)
-                    .foregroundStyle(AppTheme.secondary)
-                    .lineLimit(1)
+                HStack(spacing: 4) {
+                    Text(subscription.displayCategoryTitle)
+                        .font(.caption2)
+                        .foregroundStyle(AppTheme.secondary)
+                        .lineLimit(1)
+                    if !subscription.includeInStatistics {
+                        Text("不计入")
+                            .font(.system(size: 8, weight: .bold))
+                            .padding(.horizontal, 4).padding(.vertical, 1)
+                            .background(AppTheme.tertiary.opacity(0.18), in: Capsule())
+                            .foregroundStyle(AppTheme.secondary)
+                    }
+                }
             }
 
             HStack(alignment: .firstTextBaseline) {
                 Text(store.converter.format(displayedAmount, currency: store.baseCurrency))
-                    .font(.system(size: 16, weight: .bold, design: .rounded))
+                    .font(.system(size: 20, weight: .heavy, design: .rounded))
                     .foregroundStyle(AppTheme.ink)
                     .lineLimit(1)
-                    .minimumScaleFactor(0.7)
+                    .minimumScaleFactor(0.65)
                 Spacer(minLength: 4)
             }
-            // 不计入徽章不再放底部金额行,统一挪到卡片左上角(见 .overlay)。
             Text(subscription.nextBillingDate.formatted(.dateTime.month().day()))
                 .font(.caption2)
                 .foregroundStyle(AppTheme.tertiary)
@@ -528,17 +535,6 @@ private struct GridCard: View {
         .background(gridCardBackground)
         .glassBorder()
         .opacity(subscription.isActive ? 1 : 0.5)
-        .overlay(alignment: .topLeading) {
-            if !subscription.includeInStatistics {
-                Text("不计入")
-                    .font(.system(size: 9, weight: .bold))
-                    .padding(.horizontal, 5).padding(.vertical, 2)
-                    .background(AppTheme.tertiary.opacity(0.18), in: Capsule())
-                    .foregroundStyle(AppTheme.secondary)
-                    .padding(.leading, 8)
-                    .padding(.top, 8)
-            }
-        }
     }
 
     @ViewBuilder

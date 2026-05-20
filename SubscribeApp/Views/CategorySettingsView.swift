@@ -103,6 +103,7 @@ struct CategorySettingsView: View {
                             .font(.caption.monospacedDigit())
                             .foregroundStyle(.secondary)
                     }
+                    .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
                 .disabled(store.customCategorySlotsLeft == 0)

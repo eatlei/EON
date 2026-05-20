@@ -214,7 +214,9 @@ private struct LanguagePickerSheet: View {
                         HStack(spacing: 12) {
                             SettingsIcon(name: "gear")
                             Text("在 iOS 设置里更改…").foregroundStyle(.primary)
+                            Spacer()
                         }
+                        .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
                 }

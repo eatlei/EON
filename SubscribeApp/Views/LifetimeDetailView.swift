@@ -36,6 +36,8 @@ struct LifetimeDetailView: View {
         .background(AppTheme.canvas.ignoresSafeArea())
         .navigationTitle("累计支付")
         .navigationBarTitleDisplayMode(.inline)
+        // 二级页隐掉底部 TabBar,避免占视区。
+        .toolbar(.hidden, for: .tabBar)
     }
 
     // MARK: - 顶部总额卡

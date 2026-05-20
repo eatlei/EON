@@ -388,6 +388,14 @@ private struct LifetimePanel: View {
     private var total: Double { store.totalLifetimeSpend }
     private var totalCount: Int { store.totalLifetimeChargeCount }
     private var top: [Subscription] { store.subscriptionsByLifetimeSpend(limit: 3) }
+    /// 真正"贡献过累计金额"的订阅数。等于 LifetimeDetailView 列表里展示的那批
+    /// (计入统计 + 至少已经扣过 1 次费)。原来用 activeSubscriptions.count 会
+    /// 把"不计入统计"或者"还没扣过费"的订阅也算进去,跟二级页对不上。
+    private var contributingSubsCount: Int {
+        store.statisticsCountableSubscriptions
+            .filter { $0.billingCountElapsed() > 0 }
+            .count
+    }
 
     var body: some View {
         // 没真正扣过费(全是未来的)就不显示这个面板,免得空展示 ¥0。
@@ -413,7 +421,7 @@ private struct LifetimePanel: View {
                             .foregroundStyle(AppTheme.ink)
                             .contentTransition(.numericText())
                             .lineLimit(1).minimumScaleFactor(0.6)
-                        Text(String(localized: "覆盖 \(store.activeSubscriptions.count) 个订阅 · 共 \(totalCount) 笔扣费"))
+                        Text(String(localized: "覆盖 \(contributingSubsCount) 个订阅 · 共 \(totalCount) 笔扣费"))
                             .font(.caption)
                             .foregroundStyle(AppTheme.secondary)
                     }

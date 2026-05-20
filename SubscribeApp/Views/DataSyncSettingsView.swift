@@ -60,6 +60,7 @@ struct DataSyncSettingsView: View {
                         Text("立即同步").foregroundStyle(syncEnabled ? AppTheme.ink : AppTheme.tertiary)
                         Spacer()
                     }
+                    .contentShape(Rectangle())  // 整行可点
                 }
                 .disabled(!syncEnabled)
                 .buttonStyle(.plain)
@@ -89,6 +90,7 @@ struct DataSyncSettingsView: View {
                         Text("复制（含 AI 提示词）").foregroundStyle(AppTheme.ink)
                         Spacer()
                     }
+                    .contentShape(Rectangle())  // 整行可点
                 }
                 .buttonStyle(.plain)
             } header: { Text("导出") } footer: {

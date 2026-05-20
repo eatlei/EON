@@ -88,6 +88,7 @@ struct NotificationSettingsView: View {
                             Text(badge.text).font(.caption).foregroundStyle(badge.color)
                         }
                     }
+                    .contentShape(Rectangle())  // 整行可点
                 }
                 .buttonStyle(.plain)
             } footer: {
