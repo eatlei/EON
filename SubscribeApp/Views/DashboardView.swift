@@ -250,7 +250,10 @@ private struct CalendarPanel: View {
                 }
 
                 HStack {
-                    ForEach(symbols, id: \.self) { s in
+                    // veryShortStandaloneWeekdaySymbols repeats letters (S/M/T/W/T/F/S),
+                    // so we can't use `id: \.self` — SwiftUI dedupes and the columns
+                    // collapse. Pair each symbol with its index for a unique ID.
+                    ForEach(Array(symbols.enumerated()), id: \.offset) { _, s in
                         Text(s).font(.caption2.weight(.semibold))
                             .foregroundStyle(AppTheme.tertiary).frame(maxWidth: .infinity)
                     }
