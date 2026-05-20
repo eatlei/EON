@@ -4,10 +4,14 @@ struct SubscriptionsView: View {
     @EnvironmentObject private var store: SubscriptionStore
     @State private var editing: Subscription?
     @State private var search = ""
-    @State private var sort: SortOption = .renewalDate
+    @State private var sort: SortOption = .addedNewest
     /// 视图换算口径:把所有订阅的金额换算到这个周期下展示(月/季/年)。
     /// 例:年付订阅 ¥120 在"按月"下显示 ¥10/月,在"按季"下显示 ¥30/季。
     @State private var viewPeriod: ViewPeriod = .monthly
+    /// 随机排序用的盐。用户每次在菜单里点"随机",这个值就换一遍 → 同 sort 选项
+    /// 但订阅顺序刷新。.sorted 的对象是 hash("\(id)-\(seed)"),所以同一 seed
+    /// 下排序是稳定的(每次 view 重渲不会跳)。
+    @State private var randomSeed: Int = 0
 
     private var rows: [Subscription] {
         let f = store.subscriptions.filter { sub in
@@ -19,13 +23,33 @@ struct SubscriptionsView: View {
                 || sub.category.rawValue.localizedCaseInsensitiveContains(search)
         }
         switch sort {
-        case .renewalDate: return f.sorted { $0.nextBillingDate < $1.nextBillingDate }
-        case .duration: return f.sorted {
-            $0.billingCycle.days(customDays: $0.customCycleDays) > $1.billingCycle.days(customDays: $1.customCycleDays) }
-        case .cost: return f.sorted {
-            $0.monthlyCost(in: store.baseCurrency, converter: store.converter)
-            > $1.monthlyCost(in: store.baseCurrency, converter: store.converter) }
-        case .name: return f.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+        case .addedNewest:
+            // 最新加的排最上;老数据没 startDate 的退到 nextBillingDate 当替身。
+            return f.sorted { $0.effectiveStartDate > $1.effectiveStartDate }
+        case .duration:
+            return f.sorted {
+                $0.billingCycle.days(customDays: $0.customCycleDays)
+                > $1.billingCycle.days(customDays: $1.customCycleDays)
+            }
+        case .costHighLow:
+            return f.sorted {
+                $0.monthlyCost(in: store.baseCurrency, converter: store.converter)
+                > $1.monthlyCost(in: store.baseCurrency, converter: store.converter)
+            }
+        case .costLowHigh:
+            return f.sorted {
+                $0.monthlyCost(in: store.baseCurrency, converter: store.converter)
+                < $1.monthlyCost(in: store.baseCurrency, converter: store.converter)
+            }
+        case .name:
+            return f.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+        case .random:
+            // 哈希盐稳定 + 同 seed 下顺序不抖。换 seed 才会出新顺序。
+            let seed = randomSeed
+            return f.sorted {
+                "\($0.id.uuidString)-\(seed)".hashValue
+                < "\($1.id.uuidString)-\(seed)".hashValue
+            }
         }
     }
 
@@ -92,10 +116,29 @@ struct SubscriptionsView: View {
             Spacer()
 
             Menu {
-                Picker("", selection: $sort) {
-                    ForEach(SortOption.allCases) {
-                        Label($0.title, systemImage: $0.icon).tag($0)
+                // 普通几种排序方式 —— Picker 风格,选中态由 .pickerStyle(.inline) 自动打勾
+                Picker(selection: $sort) {
+                    ForEach(SortOption.allCases.filter { $0 != .random }) { opt in
+                        Label(opt.title, systemImage: opt.icon).tag(opt)
                     }
+                } label: { EmptyView() }
+                .pickerStyle(.inline)
+
+                Divider()
+
+                // 随机排序单独一个按钮 —— 点一下就刷新 randomSeed,即便当前
+                // 已经选中 random 也能"再随机一次"(Picker 模式下重复点同
+                // 一选项不会触发任何事件,这里走 Button 路径绕开它)。
+                Button {
+                    randomSeed = Int.random(in: Int.min...Int.max)
+                    sort = .random
+                } label: {
+                    Label(
+                        sort == .random
+                            ? String(localized: "再随机一次")
+                            : SortOption.random.title,
+                        systemImage: SortOption.random.icon
+                    )
                 }
             } label: {
                 Image(systemName: "arrow.up.arrow.down")
@@ -128,18 +171,42 @@ struct SubscriptionsView: View {
 }
 
 private enum SortOption: String, CaseIterable, Identifiable {
-    case renewalDate, duration, cost, name
+    /// 按添加时间(startDate)倒序 —— 最新加的在最上。之前叫 renewalDate
+    /// 是按 nextBillingDate 排,语义偏 "下次扣费",改名 + 改字段后更直观。
+    case addedNewest
+    /// 按周期长度从长到短(周付 < 月付 < 季付 < 年付,这里反向显示 → 最长在前)
+    case duration
+    /// 按月费高到低
+    case costHighLow
+    /// 按月费低到高
+    case costLowHigh
+    /// 按名称 A → Z
+    case name
+    /// 完全随机 —— 用 randomSeed 当哈希盐,每次"重新随机"时换种子,
+    /// 同一批订阅在用户保持 .random 期间排序稳定。
+    case random
+
     var id: String { rawValue }
+
     var title: String {
         switch self {
-        case .renewalDate: String(localized: "按时间"); case .duration: String(localized: "按周期长度")
-        case .cost: String(localized: "按费用"); case .name: String(localized: "按名称")
+        case .addedNewest: String(localized: "按添加时间")
+        case .duration:    String(localized: "按周期长度")
+        case .costHighLow: String(localized: "按费用 · 高 → 低")
+        case .costLowHigh: String(localized: "按费用 · 低 → 高")
+        case .name:        String(localized: "按名称")
+        case .random:      String(localized: "随机")
         }
     }
+
     var icon: String {
         switch self {
-        case .renewalDate: "calendar"; case .duration: "timer"
-        case .cost: "banknote"; case .name: "textformat"
+        case .addedNewest: "calendar.badge.plus"
+        case .duration:    "timer"
+        case .costHighLow: "arrow.down.to.line"
+        case .costLowHigh: "arrow.up.to.line"
+        case .name:        "textformat"
+        case .random:      "shuffle"
         }
     }
 }

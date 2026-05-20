@@ -43,7 +43,6 @@ struct DashboardView: View {
                                 Group {
                                     if period == .year {
                                         YearPanel()
-                                        YearHeatmapPanel()
                                     } else {
                                         CalendarPanel(scrollProxy: proxy)
                                     }
@@ -196,7 +195,10 @@ private struct HeroTotal: View {
                     .font(.amountHero())
                     .foregroundStyle(AppTheme.ink)
                     .lineLimit(1).minimumScaleFactor(0.5)
-                    .contentTransition(.numericText())
+                // 之前用 .contentTransition(.numericText()) 让数字滚动切换,
+                // 副作用是切 period 时数字宽度变化会顺带把 Hero / QuickStats
+                // 卡片的宽度也插值一下 —— 这就是用户反复反映的"年 tab 拉伸"。
+                // 拿掉之后切换瞬间完成,代价是失去数字滚动的小动效,值得。
             }
             // "共 N 笔订阅 · 文案":先把数量说清楚,后面挂一段根据数量变化的彩蛋
             // 小尾巴,让 Hero 既有信息量又有情绪。
@@ -705,9 +707,13 @@ private struct YearPanel: View {
     @EnvironmentObject private var store: SubscriptionStore
     var body: some View {
         Panel(title: "全年扣费分布") {
+            // BarMark 默认会撑满 Chart 的可用宽度,12 根柱子被拉得又粗又胖看着
+            // 很突兀。给一个固定宽度 = 16pt × 12 月 + 间隔,Chart 加 .chartPlotStyle
+            // 控制 plot 区域宽度,整体收一收更精致。同时高度也降一点(128 → 96)。
             Chart(store.monthTotalsForCurrentYear()) { p in
                 BarMark(x: .value("月", p.month, unit: .month),
-                        y: .value("金额", p.amount))
+                        y: .value("金额", p.amount),
+                        width: .fixed(16))
                     .foregroundStyle(
                         Calendar.current.compare(p.month, to: .now, toGranularity: .month) == .orderedAscending
                             ? AppTheme.tertiary : AppTheme.accent
@@ -715,9 +721,11 @@ private struct YearPanel: View {
                     .cornerRadius(4)
             }
             .chartXAxis { AxisMarks(values: .stride(by: .month)) { _ in
-                AxisValueLabel(format: .dateTime.month(.narrow)) } }
+                AxisValueLabel(format: .dateTime.month(.narrow))
+            } }
             .chartYAxis(.hidden)
-            .frame(height: 128)
+            .frame(height: 96)
+            .frame(maxWidth: .infinity)
         }
     }
 }
@@ -929,7 +937,8 @@ private struct StatCard: View {
                 .font(.system(size: 20, weight: .bold, design: .rounded))
                 .foregroundStyle(AppTheme.ink)
                 .lineLimit(1).minimumScaleFactor(0.55)
-                .contentTransition(.numericText())
+            // 不挂 contentTransition:切 period 时数字宽度变化会让卡片宽度
+            // 也跟着插值,视觉上是 "Overview 在拉伸" —— 用户多次反馈的现象。
             if let hint {
                 Text(hint)
                     .font(.caption2)
@@ -1139,118 +1148,6 @@ private struct _DeprecatedSpendTrendPanel: View {
     }
 }
 #endif
-
-// MARK: - 全年扣费热力图
-
-/// 12 行 × 31 列,每格 = 当年某一天的总扣费金额。颜色按 max 归一化到 accent,
-/// 让用户一眼看到全年里钱最集中的那几天 / 那几周。空白(无该日 / 该月没这天 31)
-/// 用极淡的灰色,避免视觉断层。
-private struct YearHeatmapPanel: View {
-    @EnvironmentObject private var store: SubscriptionStore
-    @Environment(\.colorScheme) private var colorScheme
-
-    private struct Cell: Identifiable {
-        let id: String       // "month-day"
-        let month: Int       // 1...12
-        let day: Int         // 1...31
-        let amount: Double   // 0 = 无扣费
-        let inMonth: Bool    // 该月有这天吗(2/30 = false)
-    }
-
-    private var grid: [Cell] {
-        let cal = Calendar.current
-        let daily = store.dailyTotalsForCurrentYear()
-        // 按 (month, day) 索引
-        var byKey: [String: Double] = [:]
-        for (date, amount) in daily where amount > 0 {
-            let m = cal.component(.month, from: date)
-            let d = cal.component(.day, from: date)
-            byKey["\(m)-\(d)"] = amount
-        }
-        // 当年的月份长度
-        let year = cal.component(.year, from: .now)
-        var cells: [Cell] = []
-        for m in 1...12 {
-            let dateOfMonth = cal.date(from: DateComponents(year: year, month: m, day: 1)) ?? .now
-            let range = cal.range(of: .day, in: .month, for: dateOfMonth)?.count ?? 31
-            for d in 1...31 {
-                let key = "\(m)-\(d)"
-                cells.append(Cell(
-                    id: key, month: m, day: d,
-                    amount: byKey[key] ?? 0,
-                    inMonth: d <= range
-                ))
-            }
-        }
-        return cells
-    }
-
-    private var maxAmount: Double { grid.map(\.amount).max() ?? 0 }
-
-    private func color(for c: Cell) -> Color {
-        guard c.inMonth else { return Color.clear }
-        guard maxAmount > 0, c.amount > 0 else {
-            return colorScheme == .dark ? Color.white.opacity(0.06) : Color.black.opacity(0.05)
-        }
-        // 5 档浓度,跟 GitHub heatmap 同款的"逐级染色"。
-        let ratio = c.amount / maxAmount
-        let opacity: Double
-        switch ratio {
-        case 0..<0.20:  opacity = 0.22
-        case 0.20..<0.45: opacity = 0.40
-        case 0.45..<0.70: opacity = 0.62
-        case 0.70..<0.90: opacity = 0.82
-        default:          opacity = 1.00
-        }
-        return AppTheme.accent.opacity(opacity)
-    }
-
-    private let columns = Array(repeating: GridItem(.flexible(), spacing: 2), count: 31)
-    private let monthSymbols = Calendar.current.veryShortStandaloneMonthSymbols
-
-    var body: some View {
-        Panel(title: "全年扣费热力图") {
-            VStack(alignment: .leading, spacing: AppTheme.Space.s) {
-                // 月份(行标签) + 31 格热力图。月份标签在最左,占独立一列。
-                HStack(alignment: .top, spacing: AppTheme.Space.s) {
-                    VStack(spacing: 2) {
-                        ForEach(1...12, id: \.self) { m in
-                            Text(monthSymbols[m - 1])
-                                .font(.system(size: 9, weight: .semibold))
-                                .foregroundStyle(AppTheme.tertiary)
-                                .frame(height: 12)
-                        }
-                    }
-                    LazyVGrid(columns: columns, alignment: .leading, spacing: 2) {
-                        ForEach(grid) { c in
-                            RoundedRectangle(cornerRadius: 2)
-                                .fill(color(for: c))
-                                .frame(height: 12)
-                        }
-                    }
-                }
-
-                // 图例:从浅到深 5 档,跟 GitHub 一样
-                HStack(spacing: 4) {
-                    Text(String(localized: "少"))
-                        .font(.caption2).foregroundStyle(AppTheme.tertiary)
-                    ForEach([0.22, 0.40, 0.62, 0.82, 1.00], id: \.self) { o in
-                        RoundedRectangle(cornerRadius: 2)
-                            .fill(AppTheme.accent.opacity(o))
-                            .frame(width: 12, height: 12)
-                    }
-                    Text(String(localized: "多"))
-                        .font(.caption2).foregroundStyle(AppTheme.tertiary)
-                    Spacer()
-                    if maxAmount > 0 {
-                        Text(String(localized: "峰值 \(store.converter.format(maxAmount, currency: store.baseCurrency))"))
-                            .font(.caption2).foregroundStyle(AppTheme.secondary)
-                    }
-                }
-            }
-        }
-    }
-}
 
 private struct EmptyDashboard: View {
     let onAdd: () -> Void

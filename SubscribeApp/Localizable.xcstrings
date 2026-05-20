@@ -851,6 +851,7 @@
       }
     },
     "1 %@ = %.4f CNY" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -3031,6 +3032,53 @@
         }
       }
     },
+    "全方位的数字生活配置" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rundum ausgestattetes digitales Leben"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A well-rounded digital life setup"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Una configuración digital muy completa"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Une configuration numérique bien complète"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全方位のデジタルライフ装備"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "전방위 디지털 라이프 셋업"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "全方位的數字生活配置"
+          }
+        }
+      }
+    },
     "全部" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -4097,6 +4145,53 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "切換後,所有訂閱金額會按最新匯率換算到這個幣種展示。"
+          }
+        }
+      }
+    },
+    "刚刚启程,慢慢添置" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frisch gestartet, Schritt für Schritt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Just starting out, taking it slow"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Empezando con calma, paso a paso"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tout début, on prend son temps"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "始まったばかり、ゆっくり揃えていこう"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이제 시작, 천천히 갖춰가는 중"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "剛剛啟程,慢慢添置"
           }
         }
       }
@@ -9046,6 +9141,53 @@
         }
       }
     },
+    "搭得挺完整的工具栈" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ein ziemlich kompletter Tool-Stack"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A pretty complete toolkit"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un conjunto de herramientas bastante completo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Une boîte à outils plutôt complète"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "なかなか完成度の高い装備"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "꽤 짜임새 있는 툴 스택"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "搭得挺完整的工具棧"
+          }
+        }
+      }
+    },
     "摇一下手机,从活跃订阅里随机抽一个出来,弹出一张大卡片,用来快速决策\"这个我还要不要\"。配合震动反馈,有翻牌仪式感。" : {
       "localizations" : {
         "de" : {
@@ -11684,103 +11826,59 @@
         }
       }
     },
-    "刚刚启程,慢慢添置" : {
+    "按添加时间" : {
       "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Frisch gestartet, Schritt für Schritt" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Just starting out, taking it slow" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Empezando con calma, paso a paso" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Tout début, on prend son temps" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "始まったばかり、ゆっくり揃えていこう" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "이제 시작, 천천히 갖춰가는 중" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "剛剛啟程,慢慢添置" } }
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Nach Hinzugefügt-Datum" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "By added date" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Por fecha de añadido" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Par date d’ajout" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "追加日順" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "추가한 날짜순" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "按添加時間" } }
       }
     },
-    "精挑细选,够用就好" : {
+    "按费用 · 高 → 低" : {
       "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Sorgfältig ausgewählt, genau richtig" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Carefully chosen, just enough" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Bien elegidas, lo justo y necesario" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Choisis avec soin, juste ce qu’il faut" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "厳選した、ちょうどいい数" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "엄선한, 딱 필요한 만큼" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "精挑細選,夠用就好" } }
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Kosten · hoch → niedrig" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "By cost · high → low" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Por coste · alto → bajo" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Coût · élevé → bas" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "費用 · 高 → 低" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "비용 · 높음 → 낮음" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "按費用 · 高 → 低" } }
       }
     },
-    "覆盖了大部分日常需要" : {
+    "按费用 · 低 → 高" : {
       "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Deckt den Alltag gut ab" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Covers most of your daily needs" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Cubre la mayoría del día a día" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Couvre l’essentiel du quotidien" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "日常のほとんどをカバー" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "일상의 대부분을 커버" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "覆蓋了大部分日常需要" } }
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Kosten · niedrig → hoch" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "By cost · low → high" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Por coste · bajo → alto" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Coût · bas → élevé" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "費用 · 低 → 高" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "비용 · 낮음 → 높음" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "按費用 · 低 → 高" } }
       }
     },
-    "搭得挺完整的工具栈" : {
+    "随机" : {
       "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Ein ziemlich kompletter Tool-Stack" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "A pretty complete toolkit" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Un conjunto de herramientas bastante completo" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Une boîte à outils plutôt complète" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "なかなか完成度の高い装備" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "꽤 짜임새 있는 툴 스택" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "搭得挺完整的工具棧" } }
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Zufällig" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Random" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Aleatorio" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Aléatoire" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "ランダム" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "랜덤" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "隨機" } }
       }
     },
-    "全方位的数字生活配置" : {
+    "再随机一次" : {
       "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Rundum ausgestattetes digitales Leben" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "A well-rounded digital life setup" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Una configuración digital muy completa" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Une configuration numérique bien complète" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "全方位のデジタルライフ装備" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "전방위 디지털 라이프 셋업" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "全方位的數字生活配置" } }
-      }
-    },
-    "重度数字工作者的标配 ⚙️" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Standardausstattung für Power-User ⚙️" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "The standard kit for power users ⚙️" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "El equipo estándar de un power user ⚙️" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "L’équipement type d’un power user ⚙️" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "ヘビーユーザーの標準装備 ⚙️" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "헤비 유저의 표준 셋업 ⚙️" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "重度數字工作者的標配 ⚙️" } }
-      }
-    },
-    "韩国" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Korea" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Korea" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Corea" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Corée" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "韓国" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "한국" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "韓國" } }
-      }
-    },
-    "法国" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Frankreich" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "France" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Francia" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "France" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "フランス" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "프랑스" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "法國" } }
-      }
-    },
-    "西班牙" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Spanien" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Spain" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "España" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Espagne" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "スペイン" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "스페인" } },
-        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "西班牙" } }
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Erneut mischen" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Shuffle again" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Mezclar otra vez" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Remélanger" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "もう一度シャッフル" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "다시 섞기" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "再隨機一次" } }
       }
     },
     "汇率已更新" : {
@@ -11831,6 +11929,7 @@
       }
     },
     "汇率明细" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -12030,6 +12129,53 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "관련 앱을 찾을 수 없습니다"
+          }
+        }
+      }
+    },
+    "法国" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Frankreich"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "France"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Francia"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "France"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "フランス"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "프랑스"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "法國"
           }
         }
       }
@@ -13525,6 +13671,53 @@
         }
       }
     },
+    "精挑细选,够用就好" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sorgfältig ausgewählt, genau richtig"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Carefully chosen, just enough"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bien elegidas, lo justo y necesario"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisis avec soin, juste ce qu’il faut"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "厳選した、ちょうどいい数"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "엄선한, 딱 필요한 만큼"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "精挑細選,夠用就好"
+          }
+        }
+      }
+    },
     "系统通知已授权，按每个订阅的提前天数提醒。" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -14526,6 +14719,53 @@
         }
       }
     },
+    "西班牙" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spanien"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spain"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "España"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Espagne"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "スペイン"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "스페인"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "西班牙"
+          }
+        }
+      }
+    },
     "覆盖 %lld 个订阅 · 共 %lld 笔扣费" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -14569,6 +14809,53 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "覆蓋 %lld 個訂閱 · 共 %lld 筆扣費"
+          }
+        }
+      }
+    },
+    "覆盖了大部分日常需要" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deckt den Alltag gut ab"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Covers most of your daily needs"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cubre la mayoría del día a día"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Couvre l’essentiel du quotidien"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "日常のほとんどをカバー"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "일상의 대부분을 커버"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "覆蓋了大部分日常需要"
           }
         }
       }
@@ -16343,6 +16630,53 @@
         }
       }
     },
+    "重度数字工作者的标配 ⚙️" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Standardausstattung für Power-User ⚙️"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The standard kit for power users ⚙️"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El equipo estándar de un power user ⚙️"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’équipement type d’un power user ⚙️"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ヘビーユーザーの標準装備 ⚙️"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "헤비 유저의 표준 셋업 ⚙️"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重度數字工作者的標配 ⚙️"
+          }
+        }
+      }
+    },
     "重新打开 EON 后生效。" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -16719,6 +17053,53 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "대한민국 원"
+          }
+        }
+      }
+    },
+    "韩国" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Korea"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Korea"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Corea"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Corée"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "韓国"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "한국"
+          }
+        },
+        "zh-Hant" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "韓國"
           }
         }
       }

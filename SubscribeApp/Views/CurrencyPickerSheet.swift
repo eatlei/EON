@@ -23,11 +23,15 @@ struct CurrencyPickerSheet: View {
                                 dismiss()
                             } label: {
                                 HStack(spacing: 12) {
-                                    // 16pt 圆字标,跟 SettingsIcon 同款方寸感
+                                    // 符号列宽 56pt(原来 30pt 太窄,Rp / kr / NT$ / R$
+                                    // 这种 2–3 字符的货币符号会被 wrap 成两行)。leading
+                                    // 对齐看起来比 center 整齐,各行符号左侧对齐。
                                     Text(c.symbol)
                                         .font(.system(size: 16, weight: .bold, design: .rounded))
                                         .foregroundStyle(AppTheme.secondary)
-                                        .frame(width: 30, alignment: .center)
+                                        .lineLimit(1)
+                                        .minimumScaleFactor(0.7)
+                                        .frame(width: 56, alignment: .leading)
                                     VStack(alignment: .leading, spacing: 2) {
                                         Text(c.rawValue)
                                             .font(.subheadline.weight(.semibold))
