@@ -43,6 +43,8 @@ final class SubscriptionStore: ObservableObject {
         didSet { saveSettings() }
     }
 
+    @Published private(set) var lastSyncedAt: Date? = nil
+
     @Published var defaultReminderDays: Int = 3 {
         didSet { saveSettings() }
     }
@@ -59,6 +61,7 @@ final class SubscriptionStore: ObservableObject {
     private let settingsKey = "settings.v1"
     private let iCloudSubscriptionsKey = "icloud.subscriptions.v1"
     private let ratesKey = "rates.v1"
+    private let lastSyncedAtKey = "icloud.lastSyncedAt.v1"
 
     init() {
         if let data = UserDefaults.standard.data(forKey: subscriptionsKey),
@@ -84,6 +87,10 @@ final class SubscriptionStore: ObservableObject {
         }
 
         AppTheme.accentTheme = accentTheme
+
+        if let d = UserDefaults.standard.object(forKey: lastSyncedAtKey) as? Date {
+            lastSyncedAt = d
+        }
 
         if iCloudSyncEnabled {
             syncFromICloud()
@@ -313,6 +320,8 @@ final class SubscriptionStore: ObservableObject {
 
         NSUbiquitousKeyValueStore.default.set(data, forKey: iCloudSubscriptionsKey)
         NSUbiquitousKeyValueStore.default.synchronize()
+        lastSyncedAt = Date()
+        saveLastSyncedAt()
     }
 
     func syncFromICloud() {
@@ -328,6 +337,20 @@ final class SubscriptionStore: ObservableObject {
         isApplyingRemote = true
         subscriptions = decoded
         isApplyingRemote = false
+        lastSyncedAt = Date()
+        saveLastSyncedAt()
+    }
+
+    /// 用户在数据页点"立即同步"时调用。先拉云端、再推本地；任一环节失败也不抛出。
+    func performManualICloudSync() async {
+        syncFromICloud()
+        syncToICloud()
+        lastSyncedAt = Date()
+        saveLastSyncedAt()
+    }
+
+    private func saveLastSyncedAt() {
+        if let d = lastSyncedAt { UserDefaults.standard.set(d, forKey: lastSyncedAtKey) }
     }
 
     private func startSyncObservers() {

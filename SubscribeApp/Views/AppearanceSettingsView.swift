@@ -9,7 +9,10 @@ struct AppearanceSettingsView: View {
                 Picker(selection: $store.appearance) {
                     ForEach(AppAppearance.allCases) { Text($0.title).tag($0) }
                 } label: {
-                    Label("外观", systemImage: "circle.lefthalf.filled")
+                    HStack(spacing: 12) {
+                        SettingsIcon(name: "circle.lefthalf.filled")
+                        Text("外观")
+                    }
                 }
                 .pickerStyle(.menu)
 
@@ -40,9 +43,9 @@ struct AppearanceSettingsView: View {
                     }
                     .padding(.vertical, AppTheme.Space.s)
                 } label: {
-                    HStack {
-                        Label("主题色", systemImage: "paintpalette")
-                            .foregroundStyle(.primary)
+                    HStack(spacing: 12) {
+                        SettingsIcon(name: "paintpalette")
+                        Text("主题色")
                         Spacer()
                         Circle()
                             .fill(store.accentTheme.color)
@@ -55,7 +58,6 @@ struct AppearanceSettingsView: View {
         .scrollContentBackground(.visible)
         .navigationTitle("外观")
         .navigationBarTitleDisplayMode(.inline)
-        .labelStyle(.settings)
     }
 }
 

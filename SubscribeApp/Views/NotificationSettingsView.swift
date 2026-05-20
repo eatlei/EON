@@ -9,7 +9,10 @@ struct NotificationSettingsView: View {
         List {
             Section {
                 Toggle(isOn: $store.remindersEnabled) {
-                    Label("开启提醒", systemImage: "bell")
+                    HStack(spacing: 12) {
+                        SettingsIcon(name: "bell")
+                        Text("开启提醒")
+                    }
                 }
                 Button {
                     Task {
@@ -19,17 +22,22 @@ struct NotificationSettingsView: View {
                         await loadStatus()
                     }
                 } label: {
-                    Label("授权并同步提醒", systemImage: "bell.badge")
+                    HStack(spacing: 12) {
+                        SettingsIcon(name: "bell.badge")
+                        Text("授权并同步提醒").foregroundStyle(AppTheme.ink)
+                    }
                 }
-                .tint(AppTheme.accent)
+                .buttonStyle(.plain)
             } footer: {
                 Text(statusText)
             }
 
             Section {
                 Stepper(value: $store.defaultReminderDays, in: 0...30) {
-                    Label(String(localized: "新建订阅默认提前 \(store.defaultReminderDays) 天提醒"),
-                          systemImage: "calendar.badge.clock")
+                    HStack(spacing: 12) {
+                        SettingsIcon(name: "calendar.badge.clock")
+                        Text(String(localized: "新建订阅默认提前 \(store.defaultReminderDays) 天提醒"))
+                    }
                 }
             } footer: {
                 Text("决定新建订阅时默认提前几天提醒。")
@@ -39,7 +47,6 @@ struct NotificationSettingsView: View {
         .scrollContentBackground(.visible)
         .navigationTitle("通知")
         .navigationBarTitleDisplayMode(.inline)
-        .labelStyle(.settings)
         .task { await loadStatus() }
     }
 

@@ -263,3 +263,15 @@ struct SettingsLabelStyle: LabelStyle {
 extension LabelStyle where Self == SettingsLabelStyle {
     static var settings: SettingsLabelStyle { SettingsLabelStyle() }
 }
+
+/// 设置页通用前置图标：固定 16pt、灰色、22pt 居中框宽。任何 List 行都用这个，**不要**用 Label(..., systemImage:)。
+struct SettingsIcon: View {
+    let name: String
+    var body: some View {
+        Image(systemName: name)
+            .font(.system(size: 16, weight: .regular))
+            .symbolRenderingMode(.monochrome)
+            .foregroundStyle(AppTheme.secondary)
+            .frame(width: 22, alignment: .center)
+    }
+}

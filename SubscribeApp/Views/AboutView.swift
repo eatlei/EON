@@ -68,15 +68,24 @@ struct AboutView: View {
 
             Section {
                 Link(destination: AppLinks.privacyPolicy) {
-                    Label("隐私政策", systemImage: "hand.raised")
+                    HStack(spacing: 12) {
+                        SettingsIcon(name: "hand.raised")
+                        Text("隐私政策").foregroundStyle(AppTheme.ink)
+                    }
                 }
                 Link(destination: AppLinks.termsOfUse) {
-                    Label("使用条款", systemImage: "doc.text")
+                    HStack(spacing: 12) {
+                        SettingsIcon(name: "doc.text")
+                        Text("使用条款").foregroundStyle(AppTheme.ink)
+                    }
                 }
                 NavigationLink {
                     AcknowledgmentsView()
                 } label: {
-                    Label("致谢", systemImage: "heart.text.square")
+                    HStack(spacing: 12) {
+                        SettingsIcon(name: "heart.text.square")
+                        Text("致谢")
+                    }
                 }
             } header: {
                 Text("法律")
@@ -86,10 +95,17 @@ struct AboutView: View {
                 Button {
                     openURL(AppLinks.appStoreReviewURL)
                 } label: {
-                    Label("在 App Store 评分", systemImage: "star.bubble")
+                    HStack(spacing: 12) {
+                        SettingsIcon(name: "star.bubble")
+                        Text("在 App Store 评分").foregroundStyle(AppTheme.ink)
+                    }
                 }
+                .buttonStyle(.plain)
                 ShareLink(item: AppLinks.appStoreShareURL) {
-                    Label("分享 EON", systemImage: "square.and.arrow.up")
+                    HStack(spacing: 12) {
+                        SettingsIcon(name: "square.and.arrow.up")
+                        Text("分享 EON").foregroundStyle(AppTheme.ink)
+                    }
                 }
             } header: {
                 Text("应用商店")
@@ -99,15 +115,21 @@ struct AboutView: View {
                 Button {
                     openURL(feedbackMailURL())
                 } label: {
-                    Label("发送反馈", systemImage: "envelope")
+                    HStack(spacing: 12) {
+                        SettingsIcon(name: "envelope")
+                        Text("发送反馈").foregroundStyle(AppTheme.ink)
+                    }
                 }
-                .tint(AppTheme.accent)
+                .buttonStyle(.plain)
                 Button {
                     showTips = true
                 } label: {
-                    Label("支持开发者", systemImage: "heart")
+                    HStack(spacing: 12) {
+                        SettingsIcon(name: "heart")
+                        Text("支持开发者").foregroundStyle(AppTheme.ink)
+                    }
                 }
-                .tint(AppTheme.accent)
+                .buttonStyle(.plain)
             } header: {
                 Text("支持")
             }
@@ -116,7 +138,6 @@ struct AboutView: View {
         .scrollContentBackground(.visible)
         .navigationTitle("关于")
         .navigationBarTitleDisplayMode(.inline)
-        .labelStyle(.settings)
         .sheet(isPresented: $showTips) { TipSheet(tips: tips) }
         .task { await tips.load() }
     }

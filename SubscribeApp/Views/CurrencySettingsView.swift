@@ -43,7 +43,10 @@ struct CurrencySettingsView: View {
                         .font(.subheadline)
                     }
                 } label: {
-                    Label("汇率明细", systemImage: "chart.line.uptrend.xyaxis")
+                    HStack(spacing: 12) {
+                        SettingsIcon(name: "chart.line.uptrend.xyaxis")
+                        Text("汇率明细")
+                    }
                 }
 
                 Button {
@@ -54,13 +57,14 @@ struct CurrencySettingsView: View {
                         await MainActor.run { refreshing = false }
                     }
                 } label: {
-                    HStack {
-                        Label("立即刷新汇率", systemImage: "arrow.clockwise")
+                    HStack(spacing: 12) {
+                        SettingsIcon(name: "arrow.clockwise")
+                        Text("立即刷新汇率").foregroundStyle(AppTheme.ink)
                         Spacer()
                         if refreshing { ProgressView() }
                     }
                 }
-                .tint(AppTheme.accent)
+                .buttonStyle(.plain)
             } footer: {
                 Text("汇率每天自动刷新，可能导致订阅价格变动。\(rateUpdatedText)")
             }
@@ -69,7 +73,6 @@ struct CurrencySettingsView: View {
         .scrollContentBackground(.visible)
         .navigationTitle("货币")
         .navigationBarTitleDisplayMode(.inline)
-        .labelStyle(.settings)
         .task { await store.refreshRatesIfStale() }
     }
 

@@ -8,37 +8,54 @@ struct SettingsView: View {
             List {
                 Section {
                     NavigationLink { AppearanceSettingsView() } label: {
-                        Label("外观", systemImage: "paintpalette")
+                        HStack(spacing: 12) {
+                            SettingsIcon(name: "paintpalette")
+                            Text("外观")
+                        }
                     }
                     NavigationLink { CurrencySettingsView() } label: {
-                        HStack {
-                            Label("货币", systemImage: "dollarsign.circle")
+                        HStack(spacing: 12) {
+                            SettingsIcon(name: "dollarsign.circle")
+                            Text("货币")
                             Spacer()
                             Text(store.baseCurrency.rawValue).foregroundStyle(.secondary)
                         }
                     }
                     NavigationLink { NotificationSettingsView() } label: {
-                        Label("通知", systemImage: "bell")
+                        HStack(spacing: 12) {
+                            SettingsIcon(name: "bell")
+                            Text("通知")
+                        }
                     }
                 }
 
                 Section {
                     NavigationLink { PaymentMethodsView() } label: {
-                        Label("支付方式", systemImage: "creditcard")
+                        HStack(spacing: 12) {
+                            SettingsIcon(name: "creditcard")
+                            Text("支付方式")
+                        }
                     }
                     NavigationLink { ArchivedSubscriptionsView() } label: {
-                        Label("归档订阅", systemImage: "archivebox")
+                        HStack(spacing: 12) {
+                            SettingsIcon(name: "archivebox")
+                            Text("归档订阅")
+                        }
                     }
-                    Toggle(isOn: $store.iCloudSyncEnabled) {
-                        Label("通过 iCloud 同步订阅", systemImage: "icloud")
+                    NavigationLink { DataSyncSettingsView() } label: {
+                        HStack(spacing: 12) {
+                            SettingsIcon(name: "externaldrive")
+                            Text("数据")
+                        }
                     }
-                } footer: {
-                    Text("开启后自动同步：本机更改即时上传，其他设备的更改自动合并。真机需 Apple ID 与应用 iCloud 权限。")
                 }
 
                 Section {
                     NavigationLink { AboutView() } label: {
-                        Label("关于", systemImage: "info.circle")
+                        HStack(spacing: 12) {
+                            SettingsIcon(name: "info.circle")
+                            Text("关于")
+                        }
                     }
                 }
             }
@@ -46,7 +63,6 @@ struct SettingsView: View {
             .scrollContentBackground(.visible)
             .navigationTitle("设置")
             .navigationBarTitleDisplayMode(.inline)
-            .labelStyle(.settings)
         }
     }
 }

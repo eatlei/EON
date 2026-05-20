@@ -2273,6 +2273,136 @@
           }
         }
       }
+    },
+    "自动同步": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Auto Sync"
+          }
+        }
+      }
+    },
+    "iCloud 账户": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iCloud Account"
+          }
+        }
+      }
+    },
+    "可用": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Available"
+          }
+        }
+      }
+    },
+    "未登录": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not signed in"
+          }
+        }
+      }
+    },
+    "上次同步": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last sync"
+          }
+        }
+      }
+    },
+    "从未同步": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Never"
+          }
+        }
+      }
+    },
+    "立即同步": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sync now"
+          }
+        }
+      }
+    },
+    "导出": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Export"
+          }
+        }
+      }
+    },
+    "分享为 Markdown（适合 AI）": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share as Markdown (AI-friendly)"
+          }
+        }
+      }
+    },
+    "分享为 JSON": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share as JSON"
+          }
+        }
+      }
+    },
+    "复制（含 AI 提示词）": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Copy (with AI prompt)"
+          }
+        }
+      }
+    },
+    "开启后自动同步：本机更改即时上传，其他设备的更改自动合并。真机需登录 iCloud，模拟器/未登录设备此项不生效。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "When enabled, changes upload automatically and other devices' changes merge in. Requires an iCloud account on a real device — Simulators / signed-out devices won't sync."
+          }
+        }
+      }
+    },
+    "数据仅在你选择的目标 App 中传输，应用不会上传到任何服务器。Markdown 含一段建议提示词，复制后直接粘到 AI 助手即可分析。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Data flows only to the app you pick in the share sheet — nothing is uploaded to any server. The Markdown export includes a starter prompt you can paste straight into your AI assistant."
+          }
+        }
+      }
     }
   },
   "version": "1.0"
