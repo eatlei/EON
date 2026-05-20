@@ -31,14 +31,15 @@ enum LLMExporter {
         lines.append("### By category (monthly, in \(base.rawValue))")
         lines.append("| Category | Count | Monthly | Share |")
         lines.append("|---|---:|---:|---:|")
-        let byCat = Dictionary(grouping: active, by: { $0.category })
-        let catRows = byCat.map { (cat, subs) -> (SubscriptionCategory, Int, Double) in
+        // 按"显示分类标题"分桶 —— 内置和 custom 共用同一张表,跟 App 内饼图口径一致。
+        let byCat = Dictionary(grouping: active, by: { $0.displayCategoryTitle })
+        let catRows = byCat.map { (title, subs) -> (String, Int, Double) in
             let s = subs.reduce(0.0) { $0 + $1.monthlyCost(in: base, converter: conv) }
-            return (cat, subs.count, s)
+            return (title, subs.count, s)
         }.sorted { $0.2 > $1.2 }
-        for (cat, count, sum) in catRows {
+        for (title, count, sum) in catRows {
             let share = monthly == 0 ? 0 : (sum / monthly) * 100
-            lines.append("| \(cat.title) | \(count) | \(format(sum, base)) | \(String(format: "%.1f%%", share)) |")
+            lines.append("| \(title) | \(count) | \(format(sum, base)) | \(String(format: "%.1f%%", share)) |")
         }
         lines.append("")
         // Detail
@@ -53,7 +54,7 @@ enum LLMExporter {
             let m = s.monthlyCost(in: base, converter: conv)
             let payment = s.paymentMethod.isEmpty ? "—" : s.paymentMethod
             let plan = s.plan.isEmpty ? "—" : s.plan
-            lines.append("| \(s.name) | \(plan) | \(s.category.title) | \(priceNative) | \(cycle) | \(next) | \(s.status.title) | \(payment) | \(format(m, base)) |")
+            lines.append("| \(s.name) | \(plan) | \(s.displayCategoryTitle) | \(priceNative) | \(cycle) | \(next) | \(s.status.title) | \(payment) | \(format(m, base)) |")
         }
         if withPrompt {
             lines.append("")

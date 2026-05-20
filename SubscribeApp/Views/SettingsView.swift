@@ -83,7 +83,7 @@ struct SettingsView: View {
                     NavigationLink { DataSyncSettingsView() } label: {
                         HStack(spacing: 12) {
                             SettingsIcon(name: "externaldrive")
-                            Text("数据")
+                            Text("iCloud 与数据")
                         }
                     }
                 }

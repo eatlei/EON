@@ -63,6 +63,15 @@ final class SubscriptionStore: ObservableObject {
         }
     }
 
+    /// 用户自建的分类列表。改动会同步刷新 `Subscription.customLookup`,
+    /// 这样全 App 所有 `displayCategoryTitle/Color` 立刻跟进。
+    @Published var customCategories: [CustomCategory] = [] {
+        didSet {
+            Subscription.customLookup = Dictionary(uniqueKeysWithValues: customCategories.map { ($0.id, $0) })
+            saveSettings()
+        }
+    }
+
     @Published private(set) var cnyRates: [CurrencyCode: Double] = CurrencyConverter.builtin
     @Published private(set) var ratesUpdatedAt: Date?
     var converter: CurrencyConverter { CurrencyConverter(cnyRates: cnyRates) }
@@ -96,6 +105,7 @@ final class SubscriptionStore: ObservableObject {
             defaultReminderDays = settings.defaultReminderDays
             coloredSubscriptionCards = settings.coloredSubscriptionCards
             categoryNameOverrides = settings.categoryNameOverrides
+            customCategories = settings.customCategories
         } else {
             baseCurrency = .cny
             remindersEnabled = true
@@ -104,6 +114,7 @@ final class SubscriptionStore: ObservableObject {
         // Mirror category overrides into the enum's static lookup so every read
         // of SubscriptionCategory.title sees the user's customised names.
         SubscriptionCategory.nameOverrides = categoryNameOverrides
+        Subscription.customLookup = Dictionary(uniqueKeysWithValues: customCategories.map { ($0.id, $0) })
 
         AppTheme.accentTheme = accentTheme
 
@@ -158,17 +169,62 @@ final class SubscriptionStore: ObservableObject {
 
     func total(for category: SubscriptionCategory) -> Double {
         activeSubscriptions
-            .filter { $0.category == category }
+            .filter { $0.category == category && $0.customCategoryID == nil }
             .reduce(0) { $0 + $1.monthlyCost(in: baseCurrency, converter: converter) }
     }
 
+    /// 按"displayCategoryID"分桶聚合金额 —— 自定义分类有自己的桶,内置分类
+    /// 走 enum.rawValue。每个桶顺便带上展示标题 / 颜色,饼图直接消费。
     var categorySpend: [CategorySpend] {
-        SubscriptionCategory.allCases.compactMap { category in
-            let amount = total(for: category)
-            guard amount > 0 else { return nil }
-            return CategorySpend(category: category, amount: amount, share: monthlyTotal == 0 ? 0 : amount / monthlyTotal)
+        let total = monthlyTotal
+        var buckets: [String: Double] = [:]
+        var meta: [String: (title: String, color: Color)] = [:]
+        for sub in activeSubscriptions {
+            let id = sub.displayCategoryID
+            buckets[id, default: 0] += sub.monthlyCost(in: baseCurrency, converter: converter)
+            if meta[id] == nil {
+                meta[id] = (sub.displayCategoryTitle, sub.displayCategoryColor)
+            }
+        }
+        return buckets.compactMap { id, amount -> CategorySpend? in
+            guard amount > 0, let m = meta[id] else { return nil }
+            return CategorySpend(
+                id: id, title: m.title, color: m.color,
+                amount: amount,
+                share: total == 0 ? 0 : amount / total
+            )
         }
         .sorted { $0.amount > $1.amount }
+    }
+
+    // MARK: - Custom categories CRUD
+
+    /// 还能再加几个 custom 分类(达到上限就返回 0)。
+    var customCategorySlotsLeft: Int {
+        max(0, CustomCategory.maxCount - customCategories.count)
+    }
+
+    func addCustomCategory(name: String, colorHex: String) {
+        let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty, customCategorySlotsLeft > 0 else { return }
+        customCategories.append(CustomCategory(name: trimmed, colorHex: colorHex))
+    }
+
+    func updateCustomCategory(_ updated: CustomCategory) {
+        guard let i = customCategories.firstIndex(where: { $0.id == updated.id }) else { return }
+        customCategories[i] = updated
+    }
+
+    /// 删除一个 custom 分类。引用它的订阅会被自动解绑(customCategoryID 置 nil),
+    /// 它们会回到自己的内置 `category` 上显示。
+    func deleteCustomCategory(id: UUID) {
+        customCategories.removeAll { $0.id == id }
+        subscriptions = subscriptions.map { sub in
+            guard sub.customCategoryID == id else { return sub }
+            var s = sub
+            s.customCategoryID = nil
+            return s
+        }
     }
 
     func interval(for period: SpendPeriod) -> DateInterval {
@@ -501,7 +557,8 @@ final class SubscriptionStore: ObservableObject {
             accentTheme: accentTheme,
             defaultReminderDays: defaultReminderDays,
             coloredSubscriptionCards: coloredSubscriptionCards,
-            categoryNameOverrides: categoryNameOverrides
+            categoryNameOverrides: categoryNameOverrides,
+            customCategories: customCategories
         )
         if let data = try? JSONEncoder().encode(settings) {
             UserDefaults.standard.set(data, forKey: settingsKey)
@@ -550,13 +607,15 @@ private struct Settings: Codable {
     var defaultReminderDays: Int
     var coloredSubscriptionCards: Bool
     var categoryNameOverrides: [String: String]
+    var customCategories: [CustomCategory]
 
     static let defaultPaymentMethods = ["支付宝", "微信支付", "Apple Pay", "Visa", "Mastercard", "银联", "PayPal"]
 
     init(baseCurrency: CurrencyCode, remindersEnabled: Bool, iCloudSyncEnabled: Bool,
          appearance: AppAppearance, paymentMethods: [String], accentTheme: AccentTheme,
          defaultReminderDays: Int, coloredSubscriptionCards: Bool,
-         categoryNameOverrides: [String: String]) {
+         categoryNameOverrides: [String: String],
+         customCategories: [CustomCategory]) {
         self.baseCurrency = baseCurrency
         self.remindersEnabled = remindersEnabled
         self.iCloudSyncEnabled = iCloudSyncEnabled
@@ -566,6 +625,7 @@ private struct Settings: Codable {
         self.defaultReminderDays = defaultReminderDays
         self.coloredSubscriptionCards = coloredSubscriptionCards
         self.categoryNameOverrides = categoryNameOverrides
+        self.customCategories = customCategories
     }
 
     init(from decoder: Decoder) throws {
@@ -580,6 +640,7 @@ private struct Settings: Codable {
         defaultReminderDays = try c.decodeIfPresent(Int.self, forKey: .defaultReminderDays) ?? 3
         coloredSubscriptionCards = try c.decodeIfPresent(Bool.self, forKey: .coloredSubscriptionCards) ?? true
         categoryNameOverrides = try c.decodeIfPresent([String: String].self, forKey: .categoryNameOverrides) ?? [:]
+        customCategories = try c.decodeIfPresent([CustomCategory].self, forKey: .customCategories) ?? []
     }
 }
 

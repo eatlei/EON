@@ -23,7 +23,7 @@ struct ArchivedSubscriptionsView: View {
                                     Text(sub.name)
                                         .font(.subheadline.weight(.semibold))
                                         .foregroundStyle(AppTheme.ink)
-                                    Text("\(sub.plan) · \(sub.category.title) · \(sub.billingCycle.title)")
+                                    Text("\(sub.plan) · \(sub.displayCategoryTitle) · \(sub.billingCycle.title)")
                                         .font(.caption)
                                         .foregroundStyle(AppTheme.secondary)
                                         .lineLimit(1)
@@ -66,7 +66,7 @@ private struct RestoreConfirmView: View {
                 Section {
                     row("名称", subscription.name)
                     row("套餐", subscription.plan.isEmpty ? String(localized: "无") : subscription.plan)
-                    row("分类", subscription.category.title)
+                    row("分类", subscription.displayCategoryTitle)
                     row("价格", store.converter.format(subscription.price, currency: subscription.currency))
                     row("扣费周期", subscription.billingCycle.title)
                     row("开始时间", subscription.nextBillingDate.formatted(.dateTime.year().month().day()))

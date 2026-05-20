@@ -58,10 +58,19 @@ struct CurrencySettingsView: View {
                     }
                 } label: {
                     HStack(spacing: 12) {
+                        // 左侧刷新图标在请求进行时连续旋转,跑完后停在原位 —— 一个
+                        // .linear.repeatForever 动画绑在 refreshing 状态上,通过修改
+                        // rotation 触发,Swift 6 不需要写 onChange/Timer。
                         SettingsIcon(name: "arrow.clockwise")
+                            .rotationEffect(.degrees(refreshing ? 360 : 0))
+                            .animation(
+                                refreshing
+                                    ? .linear(duration: 0.9).repeatForever(autoreverses: false)
+                                    : .default,
+                                value: refreshing
+                            )
                         Text("立即刷新汇率").foregroundStyle(AppTheme.ink)
                         Spacer()
-                        if refreshing { ProgressView() }
                     }
                 }
                 .buttonStyle(.plain)

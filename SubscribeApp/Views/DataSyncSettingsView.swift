@@ -87,7 +87,7 @@ struct DataSyncSettingsView: View {
         }
         .listStyle(.insetGrouped)
         .scrollContentBackground(.visible)
-        .navigationTitle("数据")
+        .navigationTitle("iCloud 与数据")
         .navigationBarTitleDisplayMode(.inline)
         .task {
             // Generate the export files once when this view appears so ShareLink has stable URLs.

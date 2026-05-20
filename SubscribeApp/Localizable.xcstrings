@@ -4,6 +4,9 @@
     " " : {
 
     },
+    "·" : {
+
+    },
     "（暂用内置汇率）" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1047,6 +1050,47 @@
         }
       }
     },
+    "上月无支出" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "kein Ausgaben im Vormonat"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "no spending last month"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "sin gastos el mes pasado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "aucune dépense le mois dernier"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "先月は支出なし"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "지난달 지출 없음"
+          }
+        }
+      }
+    },
     "上次同步" : {
       "localizations" : {
         "de" : {
@@ -1206,6 +1250,47 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "다운로드 실패, 다시 시도"
+          }
+        }
+      }
+    },
+    "与上月持平" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "wie im Vormonat"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "same as last month"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "igual que el mes pasado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "comme le mois dernier"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "先月と同じ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "지난달과 동일"
           }
         }
       }
@@ -1452,6 +1537,47 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "중국 위안"
+          }
+        }
+      }
+    },
+    "今天扣费" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Heute fällig"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Due today"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cobro hoy"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prélèvement aujourd’hui"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "本日請求"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "오늘 결제"
           }
         }
       }
@@ -2022,6 +2148,47 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "연간 결제 분포"
+          }
+        }
+      }
+    },
+    "全年扣费热力图" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jahres-Heatmap"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yearly heatmap"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mapa de calor anual"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Carte de chaleur annuelle"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "年間ヒートマップ"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "연간 히트맵"
           }
         }
       }
@@ -3409,6 +3576,88 @@
         }
       }
     },
+    "多" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "viel"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "More"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Más"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beaucoup"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "多"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "많음"
+          }
+        }
+      }
+    },
+    "天" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tage"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "days"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "días"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "jours"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "日"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "일"
+          }
+        }
+      }
+    },
     "套餐" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -3817,6 +4066,47 @@
         }
       }
     },
+    "少" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "wenig"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Less"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Menos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Peu"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "少"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "적음"
+          }
+        }
+      }
+    },
     "尚未请求系统通知权限。" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -3854,6 +4144,47 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "아직 알림 권한을 요청하지 않았습니다."
+          }
+        }
+      }
+    },
+    "峰值 %@" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spitze %@"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Peak %@"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pico %@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pic %@"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ピーク %@"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "최고 %@"
           }
         }
       }
@@ -5776,6 +6107,47 @@
         }
       }
     },
+    "支出趋势" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ausgabentrend"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spending trend"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tendencia de gasto"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tendance des dépenses"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "支出トレンド"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "지출 추이"
+          }
+        }
+      }
+    },
     "支持" : {
       "localizations" : {
         "de" : {
@@ -6467,6 +6839,47 @@
         }
       }
     },
+    "明天扣费" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Morgen fällig"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Due tomorrow"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cobro mañana"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prélèvement demain"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "明日請求"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "내일 결제"
+          }
+        }
+      }
+    },
     "暂无即将扣费" : {
       "localizations" : {
         "de" : {
@@ -6751,6 +7164,47 @@
         }
       }
     },
+    "本季总额" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gesamt dieses Quartal"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Total this quarter"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Total del trimestre"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Total du trimestre"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今四半期の合計"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "이번 분기 총액"
+          }
+        }
+      }
+    },
     "本月" : {
       "localizations" : {
         "de" : {
@@ -6871,286 +7325,6 @@
             "value" : "이번 달 총액"
           }
         }
-      }
-    },
-    "本季总额" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gesamt dieses Quartal"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Total this quarter"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Total del trimestre"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Total du trimestre"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "今四半期の合計"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "이번 분기 총액"
-          }
-        }
-      }
-    },
-    "今天扣费" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Heute fällig"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Due today"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cobro hoy"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Prélèvement aujourd’hui"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "本日請求"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "오늘 결제"
-          }
-        }
-      }
-    },
-    "明天扣费" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Morgen fällig"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Due tomorrow"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cobro mañana"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Prélèvement demain"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "明日請求"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "내일 결제"
-          }
-        }
-      }
-    },
-    "还有 %lld 天" : {
-      "localizations" : {
-        "de" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "in %lld Tagen"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "in %lld days"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "en %lld días"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "dans %lld jours"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "あと %lld 日"
-          }
-        },
-        "ko" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld일 후"
-          }
-        }
-      }
-    },
-    "试用倒计时" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Testphase-Countdown" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Trial countdown" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Cuenta atrás de prueba" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Compte à rebours d’essai" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "試用期間カウントダウン" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "체험 카운트다운" } }
-      }
-    },
-    "首次扣费" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Erste Abrechnung" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "First charge" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Primer cobro" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Premier prélèvement" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "初回請求" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "첫 결제" } }
-      }
-    },
-    "天" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Tage" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "days" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "días" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "jours" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "日" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "일" } }
-      }
-    },
-    "支出趋势" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Ausgabentrend" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Spending trend" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Tendencia de gasto" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Tendance des dépenses" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "支出トレンド" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "지출 추이" } }
-      }
-    },
-    "比上月多" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "mehr als im Vormonat" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "more than last month" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "más que el mes pasado" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "de plus que le mois dernier" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "先月より多い" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "지난달보다 많음" } }
-      }
-    },
-    "比上月少" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "weniger als im Vormonat" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "less than last month" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "menos que el mes pasado" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "de moins que le mois dernier" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "先月より少ない" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "지난달보다 적음" } }
-      }
-    },
-    "与上月持平" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "wie im Vormonat" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "same as last month" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "igual que el mes pasado" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "comme le mois dernier" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "先月と同じ" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "지난달과 동일" } }
-      }
-    },
-    "上月无支出" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "kein Ausgaben im Vormonat" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "no spending last month" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "sin gastos el mes pasado" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "aucune dépense le mois dernier" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "先月は支出なし" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "지난달 지출 없음" } }
-      }
-    },
-    "全年扣费热力图" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Jahres-Heatmap" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Yearly heatmap" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Mapa de calor anual" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Carte de chaleur annuelle" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "年間ヒートマップ" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "연간 히트맵" } }
-      }
-    },
-    "少" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "wenig" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Less" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Menos" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Peu" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "少" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "적음" } }
-      }
-    },
-    "多" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "viel" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "More" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Más" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Beaucoup" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "多" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "많음" } }
-      }
-    },
-    "峰值 %@" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "Spitze %@" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Peak %@" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Pico %@" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Pic %@" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "ピーク %@" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "최고 %@" } }
       }
     },
     "本期" : {
@@ -7558,6 +7732,88 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "매월"
+          }
+        }
+      }
+    },
+    "比上月多" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "mehr als im Vormonat"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "more than last month"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "más que el mes pasado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "de plus que le mois dernier"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "先月より多い"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "지난달보다 많음"
+          }
+        }
+      }
+    },
+    "比上月少" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "weniger als im Vormonat"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "less than last month"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "menos que el mes pasado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "de moins que le mois dernier"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "先月より少ない"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "지난달보다 적음"
           }
         }
       }
@@ -10006,6 +10262,197 @@
         }
       }
     },
+    "周期·月" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Mon." } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Mo" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Mes" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Mois" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "月" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "월" } }
+      }
+    },
+    "周期·季" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Qrt." } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Qtr" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Trim" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Trim" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "季" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "분기" } }
+      }
+    },
+    "周期·年" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Jahr" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Yr" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Año" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "An" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "年" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "년" } }
+      }
+    },
+    "内置分类" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Vorgegebene Kategorien" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Built-in" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Predefinidas" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Intégrées" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "ビルトイン" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "기본" } }
+      }
+    },
+    "自定义分类" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Eigene Kategorien" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Custom" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Personalizadas" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Personnalisées" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "カスタム" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "사용자 지정" } }
+      }
+    },
+    "添加分类" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Kategorie hinzufügen" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Add category" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Añadir categoría" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Ajouter une catégorie" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "カテゴリーを追加" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "카테고리 추가" } }
+      }
+    },
+    "新建分类" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Neue Kategorie" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "New category" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Nueva categoría" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Nouvelle catégorie" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "新規カテゴリー" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "새 카테고리" } }
+      }
+    },
+    "编辑分类" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Kategorie bearbeiten" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Edit category" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Editar categoría" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Modifier la catégorie" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "カテゴリーを編集" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "카테고리 편집" } }
+      }
+    },
+    "分类名称" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Kategoriename" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Category name" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Nombre de categoría" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Nom de la catégorie" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "カテゴリー名" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "카테고리 이름" } }
+      }
+    },
+    "颜色" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Farbe" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Color" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Color" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Couleur" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "カラー" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "색상" } }
+      }
+    },
+    "预览" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Vorschau" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Preview" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Vista previa" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Aperçu" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "プレビュー" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "미리보기" } }
+      }
+    },
+    "还没有自定义分类" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Noch keine eigene Kategorie" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "No custom categories yet" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Aún no hay categorías" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Aucune catégorie personnalisée" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "カスタムカテゴリーはまだありません" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "아직 사용자 지정 카테고리가 없습니다" } }
+      }
+    },
+    "自定义分类最多 %lld 个。删除一个分类后,引用它的订阅会回到原始内置分类显示。左滑可删除。" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Maximal %lld eigene Kategorien. Beim Löschen werden alle damit verknüpften Abos auf die Originalkategorie zurückgesetzt. Zum Löschen nach links wischen." } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Up to %lld custom categories. Deleting one moves linked subscriptions back to their built-in fallback. Swipe left to delete." } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Hasta %lld categorías personalizadas. Al eliminar una, las suscripciones vinculadas vuelven a su categoría integrada. Desliza para eliminar." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Jusqu’à %lld catégories. Supprimer une catégorie ramène ses abonnements à leur catégorie intégrée. Glissez pour supprimer." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "最大 %lld 個まで。削除するとそのカテゴリーを使う登録は元の組み込みカテゴリーに戻ります。左スワイプで削除。" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "최대 %lld개. 삭제 시 해당 카테고리를 쓰던 구독은 원래의 기본 카테고리로 돌아갑니다. 왼쪽으로 밀어 삭제." } }
+      }
+    },
+    "点一下可以改名。颜色固定,不能删除。" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Tippen zum Umbenennen. Farben fest, nicht löschbar." } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Tap to rename. Color is fixed and these can’t be deleted." } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Toca para renombrar. Color fijo y no se pueden eliminar." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Touchez pour renommer. Couleur fixe, non supprimable." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "タップで改名。色は固定、削除不可。" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "탭하여 이름 변경. 색상 고정, 삭제 불가." } }
+      }
+    },
+    "iCloud 与数据" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "iCloud & Daten" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "iCloud & Data" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "iCloud y datos" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "iCloud et données" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "iCloud とデータ" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "iCloud 및 데이터" } }
+      }
+    },
+    "试用倒计时" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Testphase-Countdown"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trial countdown"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cuenta atrás de prueba"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compte à rebours d’essai"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "試用期間カウントダウン"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "체험 카운트다운"
+          }
+        }
+      }
+    },
     "试用期" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -10368,6 +10815,47 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "이름을 입력하고 검색을 누르세요"
+          }
+        }
+      }
+    },
+    "还有 %lld 天" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "in %lld Tagen"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "in %lld days"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "en %lld días"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "dans %lld jours"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "あと %lld 日"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld일 후"
           }
         }
       }
@@ -11223,6 +11711,47 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "이니셜 색상"
+          }
+        }
+      }
+    },
+    "首次扣费" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erste Abrechnung"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "First charge"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Primer cobro"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Premier prélèvement"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "初回請求"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "첫 결제"
           }
         }
       }

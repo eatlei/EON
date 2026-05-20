@@ -299,10 +299,10 @@ struct CategoryGlyph: View {
                 if let ui = IconStore.loadUIImage(id) {
                     Image(uiImage: ui).resizable().scaledToFill()
                 } else {
-                    glyphTile(.letter, color: subscription.category.color)
+                    glyphTile(.letter, color: subscription.displayCategoryColor)
                 }
             case .tile(let glyph, let colorHex):
-                let bg = colorHex.map { Color(hexString: $0) } ?? subscription.category.color
+                let bg = colorHex.map { Color(hexString: $0) } ?? subscription.displayCategoryColor
                 glyphTile(glyph, color: bg)
             }
         }

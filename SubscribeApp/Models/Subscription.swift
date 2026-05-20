@@ -237,6 +237,10 @@ struct Subscription: Identifiable, Codable, Hashable {
     var status: RenewalStatus
     var paymentMethod: String
     var icon: SubscriptionIcon = .default
+    /// 用户自定义分类的 ID。当 `Subscription.customLookup` 包含这个 ID 时,
+    /// 显示用 custom 的 name / color;否则回退到内置 `category` 的 title / color。
+    /// 删除自定义分类时,所有引用它的订阅会被自动解绑(置为 nil)。
+    var customCategoryID: UUID? = nil
     var isArchived: Bool = false
 
     var isActive: Bool {
@@ -334,7 +338,8 @@ extension SubscriptionIcon: Codable {
 extension Subscription {
     private enum CodingKeys: String, CodingKey {
         case id, name, plan, category, price, currency, billingCycle,
-             customCycleDays, nextBillingDate, reminderDaysBefore, status, paymentMethod, icon, isArchived
+             customCycleDays, nextBillingDate, reminderDaysBefore, status, paymentMethod, icon, isArchived,
+             customCategoryID
     }
 
     init(from decoder: Decoder) throws {
@@ -353,5 +358,40 @@ extension Subscription {
         paymentMethod = try c.decode(String.self, forKey: .paymentMethod)
         icon = (try? c.decode(SubscriptionIcon.self, forKey: .icon)) ?? .default
         isArchived = try c.decodeIfPresent(Bool.self, forKey: .isArchived) ?? false
+        customCategoryID = try c.decodeIfPresent(UUID.self, forKey: .customCategoryID)
+    }
+}
+
+// MARK: - Display helpers that know about custom categories
+//
+// 全 App 所有需要展示订阅"分类名 / 分类色"的地方都该走这两个属性,而不是直接读
+// `.category.title`/`.category.color`。当订阅持有 `customCategoryID` 且 store 已
+// 把它注入到 `Subscription.customLookup` 时,这里返回 custom 的名字 / 色号。
+extension Subscription {
+    /// SubscriptionStore 启动时 / customCategories 变化时 mirror 进来。
+    /// 因为读写都在 MainActor 上,Swift 6 用 `nonisolated(unsafe)` 安全。
+    nonisolated(unsafe) static var customLookup: [UUID: CustomCategory] = [:]
+
+    var customCategory: CustomCategory? {
+        guard let id = customCategoryID else { return nil }
+        return Self.customLookup[id]
+    }
+
+    /// 用于卡片标题、列表副文等所有"看起来像分类名"的地方。
+    var displayCategoryTitle: String {
+        customCategory?.name ?? category.title
+    }
+
+    /// 用于卡片光晕、字母牌底色、分类点等所有"看起来像分类色"的地方。
+    var displayCategoryColor: Color {
+        if let custom = customCategory { return custom.color }
+        return category.color
+    }
+
+    /// 用作分组 / 图表分桶的稳定字符串 ID。
+    /// 内置:enum.rawValue;自定义:"custom-<UUID>"。
+    var displayCategoryID: String {
+        if let id = customCategoryID { return "custom-\(id.uuidString)" }
+        return category.rawValue
     }
 }

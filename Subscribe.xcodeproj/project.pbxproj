@@ -13,6 +13,7 @@
 		0CF5EC4B2B674B91FF1A13C2 /* AppStoreIconService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74E278F7CFCB689EC870BCC0 /* AppStoreIconService.swift */; };
 		1140D25072B7C49C22068519 /* SubscriptionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 278E1A85DA8D02D3694C43DD /* SubscriptionStore.swift */; };
 		1BFE8BB89ECF18CDCF938BB0 /* CurrencySettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BDB097D8CE722AF0DF25156 /* CurrencySettingsView.swift */; };
+		270C8B830E689DAC6DB890C3 /* CustomCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC5D6BFC6D29F5A5966683F9 /* CustomCategory.swift */; };
 		2B249D94308F325B4A5D1D10 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BFDBF0EB309BC18707263B5 /* DashboardView.swift */; };
 		2BDCDD1205A9EB3291AA9B76 /* NotificationSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF4459274422611AF74E573 /* NotificationSettingsView.swift */; };
 		30C303CE675D5C2C8B55932B /* AboutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D50004C111F68A7196F305 /* AboutView.swift */; };
@@ -59,6 +60,7 @@
 		93B5C073856DE1A2860C1956 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		93C9229073710C354E367927 /* SubscribeApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = SubscribeApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABA05720A891C34355A2A203 /* TipSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipSheet.swift; sourceTree = "<group>"; };
+		AC5D6BFC6D29F5A5966683F9 /* CustomCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCategory.swift; sourceTree = "<group>"; };
 		B29BFA91E21DE23CF88DCAC7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		CD93304A76F63734E76AB1E8 /* CategorySettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySettingsView.swift; sourceTree = "<group>"; };
 		D75247CB3B2D0B30F64A187A /* LLMExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LLMExporter.swift; sourceTree = "<group>"; };
@@ -125,6 +127,7 @@
 			isa = PBXGroup;
 			children = (
 				8AE6FA193D4BB0398F41AF83 /* Analytics.swift */,
+				AC5D6BFC6D29F5A5966683F9 /* CustomCategory.swift */,
 				5499976ECD845C44C8FBD8CB /* Subscription.swift */,
 			);
 			path = Models;
@@ -247,6 +250,7 @@
 				3EEDDC6F9C5830300F761A24 /* ContentView.swift in Sources */,
 				074CC1EEA56829295A038A34 /* CurrencyConverter.swift in Sources */,
 				1BFE8BB89ECF18CDCF938BB0 /* CurrencySettingsView.swift in Sources */,
+				270C8B830E689DAC6DB890C3 /* CustomCategory.swift in Sources */,
 				2B249D94308F325B4A5D1D10 /* DashboardView.swift in Sources */,
 				F4D243320C3F978CCD1A413C /* DataSyncSettingsView.swift in Sources */,
 				597F4F5AA13C2526CFC82C1B /* ExchangeRateService.swift in Sources */,

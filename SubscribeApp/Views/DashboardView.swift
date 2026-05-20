@@ -18,21 +18,21 @@ struct DashboardView: View {
                     ScrollViewReader { proxy in
                         ScrollView {
                             VStack(spacing: AppTheme.Space.xl) {
-                                // 只有当用户标了试用订阅时才出现 —— 提醒
-                                // 首次正式扣费倒计时,免得免费试用悄悄转成付费。
-                                TrialPanel().reveal(0)
-                                HeroTotal(period: period).reveal(1)
+                                HeroTotal(period: period).reveal(0)
+                                // 试用面板紧跟在总额下面,只有当用户标了试用
+                                // 订阅时才出现 —— 提醒首次正式扣费倒计时,
+                                // 免得免费试用悄悄转成付费。
+                                TrialPanel().reveal(1)
                                 QuickStatsPanel(period: period).reveal(2)
                                 UpcomingPanel().reveal(3)
                                 CategoryPanel().reveal(4)
-                                SpendTrendPanel().reveal(5)
                                 if period == .year {
-                                    YearPanel().reveal(6)
-                                    YearHeatmapPanel().reveal(7)
+                                    YearPanel().reveal(5)
+                                    YearHeatmapPanel().reveal(6)
                                 } else {
                                     // 月 + 季 都用日历(季模式下日历仍然只
                                     // 显示当前月,因为日历本来就是月维度的)。
-                                    CalendarPanel(scrollProxy: proxy).reveal(6)
+                                    CalendarPanel(scrollProxy: proxy).reveal(5)
                                 }
                             }
                             .padding(.horizontal, AppTheme.Space.xl)
@@ -46,11 +46,12 @@ struct DashboardView: View {
             }
             .safeAreaInset(edge: .top, spacing: 0) {
                 if !store.activeSubscriptions.isEmpty {
+                    // 吸顶 Header:不加任何底板,只保留按钮悬浮。胶囊本身已
+                    // 有 .glassEffect 玻璃质感,内容滚到下面会自然透出。
                     DashboardHeader(period: $period)
                         .padding(.horizontal, AppTheme.Space.xl)
                         .padding(.top, AppTheme.Space.s)
-                        .padding(.bottom, AppTheme.Space.m)
-                        .background(.thinMaterial)
+                        .padding(.bottom, AppTheme.Space.s)
                 }
             }
             .toolbar(.hidden, for: .navigationBar)
@@ -188,13 +189,12 @@ private struct UpcomingPanel: View {
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(AppTheme.ink)
                 HStack(spacing: 4) {
-                    Text(daysCaption(days))
-                        .font(.caption.weight(.bold))
-                        .foregroundStyle(AppTheme.accent)
-                    Text("·")
-                        .font(.caption).foregroundStyle(AppTheme.tertiary)
-                    Text(formatDate(c.date))
-                        .font(.caption).foregroundStyle(AppTheme.secondary)
+                    // ≤ 7 天才标红提醒,超过这个窗口的扣费用普通文字展示日期就够,
+                    // 不然首页满屏都是红色失去突出作用。
+                    let isUrgent = days <= 7
+                    Text(isUrgent ? daysCaption(days) : formatDate(c.date))
+                        .font(.caption.weight(isUrgent ? .bold : .semibold))
+                        .foregroundStyle(isUrgent ? Color.red : AppTheme.secondary)
                     if !c.subscription.plan.isEmpty {
                         Text("·")
                             .font(.caption).foregroundStyle(AppTheme.tertiary)
@@ -220,15 +220,15 @@ private struct CategoryPanel: View {
                 Chart(store.categorySpend) { item in
                     SectorMark(angle: .value("金额", item.amount),
                                innerRadius: .ratio(0.68), angularInset: 1.5)
-                        .foregroundStyle(item.category.color)
+                        .foregroundStyle(item.color)
                 }
                 .frame(width: 116, height: 116)
 
                 VStack(spacing: AppTheme.Space.s) {
                     ForEach(store.categorySpend.prefix(5)) { item in
                         HStack(spacing: AppTheme.Space.s) {
-                            Circle().fill(item.category.color).frame(width: 7, height: 7)
-                            Text(item.category.title)
+                            Circle().fill(item.color).frame(width: 7, height: 7)
+                            Text(item.title)
                                 .font(.caption.weight(.semibold)).foregroundStyle(AppTheme.ink)
                             Spacer()
                             Text("\(Int((item.share * 100).rounded()))%")
@@ -345,10 +345,16 @@ private struct CalendarPanel: View {
                             let cs = byDay[day] ?? []
                             let isToday = todayInVisibleMonth == day
                             let isSelected = selectedDay == day
+                            // 没有扣费的日子点了不会选中(否则会出现"空选中态
+                            // 闪一下又恢复"的残影);有扣费的日子才允许 toggle。
+                            let isInteractive = !cs.isEmpty
                             Button {
-                                selectedDay = (selectedDay == day) ? nil : day
+                                guard isInteractive else { return }
+                                withAnimation(AppTheme.spring) {
+                                    selectedDay = (selectedDay == day) ? nil : day
+                                }
                             } label: {
-                                VStack(spacing: 3) {
+                                VStack(spacing: 1) {  // 圆点贴近数字下方,更紧凑
                                     // iOS Calendar 风格 —— 今天是一颗实心 accent 圆,圈住数字,
                                     // 其他状态全部走单元格底色,不会跟"今天"撞色。
                                     ZStack {
@@ -366,11 +372,13 @@ private struct CalendarPanel: View {
                                     }
                                     .frame(width: 26, height: 26)
 
+                                    // 圆点占位高度固定为 5,即便没有扣费也保留位
+                                    // 子,所有单元格高度一致,网格不会跳。
                                     HStack(spacing: 2) {
                                         ForEach(cs.prefix(3)) { c in
-                                            Circle().fill(c.subscription.category.color).frame(width: 4, height: 4)
+                                            Circle().fill(c.subscription.displayCategoryColor).frame(width: 4, height: 4)
                                         }
-                                    }.frame(height: 4)
+                                    }.frame(height: 5)
                                 }
                                 .frame(height: 38).frame(maxWidth: .infinity)
                                 .background(
@@ -381,6 +389,7 @@ private struct CalendarPanel: View {
                                 .contentShape(Rectangle())
                             }
                             .buttonStyle(.plain)
+                            .disabled(!isInteractive)
                         } else {
                             Color.clear.frame(height: 38)
                         }
@@ -396,14 +405,16 @@ private struct CalendarPanel: View {
                    let charges = byDay[day], !charges.isEmpty {
                     detailCard(dayDate: dayDate, charges: charges)
                         .id(detailID)
-                        .transition(.opacity.combined(with: .move(edge: .top)))
+                        // 只用 opacity 过渡 —— 之前的 .move(edge: .top) 在收起
+                        // 时会把视图从顶部"滑走"造成短暂残影,纯 opacity 干净。
+                        .transition(.opacity)
                 }
             }
             .animation(AppTheme.spring, value: monthAnchor)
-            .animation(AppTheme.spring, value: selectedDay)
-            .onChange(of: monthAnchor) { _, _ in selectedDay = nil }
+            .onChange(of: monthAnchor) { _, _ in
+                withAnimation(AppTheme.spring) { selectedDay = nil }
+            }
             .onChange(of: selectedDay) { _, newValue in
-                // 点中一个有扣费的日期才滚动,避免取消选中也滚一下。
                 guard newValue != nil else { return }
                 withAnimation(AppTheme.spring) {
                     scrollProxy.scrollTo(detailID, anchor: .center)
@@ -466,8 +477,8 @@ private struct CalendarPanel: View {
                                 .font(.subheadline.weight(.semibold))
                                 .foregroundStyle(AppTheme.ink)
                             HStack(spacing: 4) {
-                                Circle().fill(c.subscription.category.color).frame(width: 6, height: 6)
-                                Text(c.subscription.category.title)
+                                Circle().fill(c.subscription.displayCategoryColor).frame(width: 6, height: 6)
+                                Text(c.subscription.displayCategoryTitle)
                                     .font(.caption)
                                     .foregroundStyle(AppTheme.secondary)
                                 if !c.subscription.plan.isEmpty {
@@ -766,11 +777,13 @@ private struct TrialPanel: View {
     }
 }
 
-// MARK: - 支出趋势(同比/环比 + 6 个月迷你折线)
+// MARK: - 支出趋势(占位,已下线)
+//
+// 早期的 SpendTrendPanel 在用户反馈"看不懂"后整块下线,不再渲染。
+// 留下相关 store 方法(recentMonthTotals / monthTotal)备未来重新启用。
 
-/// 本月跟上月对比的"涨/跌"卡片,加最近 6 个月的迷你折线。让用户看到"花销
-/// 是不是在悄悄爬升",哪怕没有具体改任何订阅,价格调整也会被显出来。
-private struct SpendTrendPanel: View {
+#if false
+private struct _DeprecatedSpendTrendPanel: View {
     @EnvironmentObject private var store: SubscriptionStore
 
     private var history: [ForecastMonth] { store.recentMonthTotals(6) }
@@ -885,6 +898,7 @@ private struct SpendTrendPanel: View {
         return String(localized: "与上月持平")
     }
 }
+#endif
 
 // MARK: - 全年扣费热力图
 

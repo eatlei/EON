@@ -15,6 +15,7 @@ struct SubscriptionsView: View {
             return search.isEmpty
                 || sub.name.localizedCaseInsensitiveContains(search)
                 || sub.plan.localizedCaseInsensitiveContains(search)
+                || sub.displayCategoryTitle.localizedCaseInsensitiveContains(search)
                 || sub.category.rawValue.localizedCaseInsensitiveContains(search)
         }
         switch sort {
@@ -32,13 +33,17 @@ struct SubscriptionsView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: AppTheme.Space.l) {
+                    // 搜索框跟随页面滚动,不再吸顶 —— 仅在用户主动滚回顶部
+                    // 才看得到,避免占住固定可视区。
+                    searchBar.reveal(0)
+
                     if rows.isEmpty {
                         VStack(spacing: AppTheme.Space.m) {
                             Image(systemName: "rectangle.stack").font(.system(size: 40, weight: .light))
                                 .foregroundStyle(AppTheme.tertiary)
                             Text(search.isEmpty ? "还没有订阅" : "没有匹配的订阅")
                                 .font(.headline).foregroundStyle(AppTheme.ink)
-                        }.frame(maxWidth: .infinity).padding(.top, 100).reveal(0)
+                        }.frame(maxWidth: .infinity).padding(.top, 100).reveal(1)
                     } else {
                         LazyVStack(spacing: AppTheme.Space.m) {
                             ForEach(Array(rows.enumerated()), id: \.element.id) { i, sub in
@@ -50,7 +55,7 @@ struct SubscriptionsView: View {
                                         onDelete: { store.delete(ids: [sub.id]) }
                                     )
                                 }
-                                .buttonStyle(.plain).reveal(i)
+                                .buttonStyle(.plain).reveal(i + 1)
                             }
                         }
                     }
@@ -62,57 +67,62 @@ struct SubscriptionsView: View {
             .scrollDismissesKeyboard(.interactively)
             .background(AppTheme.canvas.ignoresSafeArea())
             .safeAreaInset(edge: .top, spacing: 0) {
-                header
+                // 吸顶只保留 月/季/年 + 排序按钮,不带底板,跟 Overview 一致。
+                stickyHeader
                     .padding(.horizontal, AppTheme.Space.xl)
                     .padding(.top, AppTheme.Space.s)
-                    .padding(.bottom, AppTheme.Space.m)
-                    .background(.thinMaterial)
+                    .padding(.bottom, AppTheme.Space.s)
             }
             .toolbar(.hidden, for: .navigationBar)
             .sheet(item: $editing) { SubscriptionEditorView(subscription: $0) }
         }
     }
 
-    /// 吸顶 Header:第一行 月/季/年 + 排序按钮,第二行搜索框。
-    /// 跟 Overview 的 Header 同款 Liquid Glass 风,统一观感。
+    /// 吸顶部分:仅 月/季/年 胶囊 + 排序圆按钮,没有底板。
     @ViewBuilder
-    private var header: some View {
-        VStack(spacing: AppTheme.Space.s) {
-            HStack(spacing: AppTheme.Space.m) {
-                SegmentedPill(
-                    selection: $viewPeriod,
-                    items: ViewPeriod.allCases.map { ($0, $0.title) }
-                )
+    private var stickyHeader: some View {
+        HStack(spacing: AppTheme.Space.m) {
+            SegmentedPill(
+                selection: $viewPeriod,
+                items: ViewPeriod.allCases.map { ($0, $0.title) }
+            )
+            .frame(maxWidth: 200)   // 跟 Overview 同款最小宽度
 
-                Menu {
-                    Picker("", selection: $sort) {
-                        ForEach(SortOption.allCases) {
-                            Label($0.title, systemImage: $0.icon).tag($0)
-                        }
+            Spacer()
+
+            Menu {
+                Picker("", selection: $sort) {
+                    ForEach(SortOption.allCases) {
+                        Label($0.title, systemImage: $0.icon).tag($0)
                     }
-                } label: {
-                    Image(systemName: "arrow.up.arrow.down")
-                        .font(.subheadline.weight(.bold))
-                        .foregroundStyle(AppTheme.ink)
-                        .frame(width: 40, height: 40)
-                        .glassEffect(.regular, in: Capsule())
                 }
+            } label: {
+                Image(systemName: "arrow.up.arrow.down")
+                    .font(.subheadline.weight(.bold))
+                    .foregroundStyle(AppTheme.ink)
+                    .frame(width: 40, height: 40)
+                    .glassEffect(.regular, in: Capsule())
             }
-
-            HStack(spacing: AppTheme.Space.s) {
-                Image(systemName: "magnifyingglass").foregroundStyle(AppTheme.tertiary)
-                TextField("搜索名称、套餐或分类", text: $search)
-                    .textInputAutocapitalization(.never)
-                if !search.isEmpty {
-                    Button { search = "" } label: {
-                        Image(systemName: "xmark.circle.fill").foregroundStyle(AppTheme.tertiary)
-                    }.buttonStyle(.plain)
-                }
-            }
-            .padding(.horizontal, AppTheme.Space.m)
-            .padding(.vertical, 10)
-            .glassEffect(.regular, in: Capsule())
         }
+    }
+
+    /// 搜索框 —— 跟着内容滚动,顶部初始可见,滚下去就消失。
+    @ViewBuilder
+    private var searchBar: some View {
+        HStack(spacing: AppTheme.Space.s) {
+            Image(systemName: "magnifyingglass").foregroundStyle(AppTheme.tertiary)
+            TextField("搜索名称、套餐或分类", text: $search)
+                .textInputAutocapitalization(.never)
+            if !search.isEmpty {
+                Button { search = "" } label: {
+                    Image(systemName: "xmark.circle.fill").foregroundStyle(AppTheme.tertiary)
+                }.buttonStyle(.plain)
+            }
+        }
+        .padding(.horizontal, AppTheme.Space.m)
+        .padding(.vertical, 10)
+        .background(AppTheme.surface, in: Capsule())
+        .overlay(Capsule().stroke(AppTheme.hairline, lineWidth: 0.5))
     }
 }
 
@@ -137,11 +147,12 @@ private enum SortOption: String, CaseIterable, Identifiable {
 enum ViewPeriod: String, CaseIterable, Identifiable, Hashable {
     case monthly, quarterly, yearly
     var id: String { rawValue }
+    /// 用 "周期·X" 短 key,跟 Overview 的 SpendPeriod 共享缩写翻译,胶囊宽度一致。
     var title: String {
         switch self {
-        case .monthly:   String(localized: "每月")
-        case .quarterly: String(localized: "每季度")
-        case .yearly:    String(localized: "每年")
+        case .monthly:   String(localized: "周期·月")
+        case .quarterly: String(localized: "周期·季")
+        case .yearly:    String(localized: "周期·年")
         }
     }
     /// 月费乘上这个系数 = 该周期对应金额。
@@ -173,14 +184,14 @@ private struct Row: View {
     private var colored: Bool { store.coloredSubscriptionCards }
     private var isDark: Bool { colorScheme == .dark }
 
-    /// 卡片底色:.tile 取色号,.image 取图像平均色,均回退分类色。
+    /// 卡片底色:.tile 取色号,.image 取图像平均色,均回退分类色(自定义优先)。
     private var cardColor: Color {
         switch subscription.icon {
         case .tile(_, let hex):
-            return hex.map { Color(hexString: $0) } ?? subscription.category.color
+            return hex.map { Color(hexString: $0) } ?? subscription.displayCategoryColor
         case .image(let id):
             if let ui = IconStore.averageColor(id) { return Color(uiColor: ui) }
-            return subscription.category.color
+            return subscription.displayCategoryColor
         }
     }
 
@@ -194,8 +205,8 @@ private struct Row: View {
     /// 周期不再展示在这里,因为整页已经统一了换算口径(/月 /季 /年)。
     private var subtitle: String {
         let plan = subscription.plan.trimmingCharacters(in: .whitespaces)
-        if plan.isEmpty { return subscription.category.title }
-        return "\(plan) · \(subscription.category.title)"
+        if plan.isEmpty { return subscription.displayCategoryTitle }
+        return "\(plan) · \(subscription.displayCategoryTitle)"
     }
 
     var body: some View {

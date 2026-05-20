@@ -77,12 +77,30 @@ struct SubscriptionEditorView: View {
                             }
                             Hairline()
                             FieldRow("分类") {
-                                MenuPickerLabel(text: draft.category.title) {
-                                    ForEach(SubscriptionCategory.allCases) { c in
-                                        Button { draft.category = c } label: {
-                                            if draft.category == c {
-                                                Label(c.title, systemImage: "checkmark")
-                                            } else { Text(c.title) }
+                                MenuPickerLabel(text: draft.displayCategoryTitle) {
+                                    // 内置分类:点中 → 解绑 customCategoryID
+                                    Section {
+                                        ForEach(SubscriptionCategory.allCases) { c in
+                                            Button {
+                                                draft.category = c
+                                                draft.customCategoryID = nil
+                                            } label: {
+                                                if draft.category == c && draft.customCategoryID == nil {
+                                                    Label(c.title, systemImage: "checkmark")
+                                                } else { Text(c.title) }
+                                            }
+                                        }
+                                    }
+                                    // 自定义分类:点中 → 绑定 ID,category 保留作为 fallback
+                                    if !store.customCategories.isEmpty {
+                                        Section(String(localized: "自定义分类")) {
+                                            ForEach(store.customCategories) { cc in
+                                                Button { draft.customCategoryID = cc.id } label: {
+                                                    if draft.customCategoryID == cc.id {
+                                                        Label(cc.name, systemImage: "checkmark")
+                                                    } else { Text(cc.name) }
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -343,10 +361,10 @@ private struct ImmersiveBackground: View {
                         .clipped()
                 }
             } else {
-                tileLayer(subscription.category.color)
+                tileLayer(subscription.displayCategoryColor)
             }
         case .tile(_, let hex):
-            tileLayer(hex.map { Color(hexString: $0) } ?? subscription.category.color)
+            tileLayer(hex.map { Color(hexString: $0) } ?? subscription.displayCategoryColor)
         }
     }
 
