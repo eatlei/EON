@@ -44,6 +44,7 @@ struct ArchivedSubscriptionsView: View {
         .listStyle(.insetGrouped)
         .navigationTitle("归档订阅")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar(.hidden, for: .tabBar)
         .tint(AppTheme.accent)
         .sheet(item: $restoring) { sub in
             RestoreConfirmView(subscription: sub) {

@@ -108,6 +108,7 @@ struct AppearanceSettingsView: View {
         .scrollContentBackground(.visible)
         .navigationTitle("外观")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar(.hidden, for: .tabBar)
         // 之前用 confirmationDialog 在 iPad / 大屏上会渲染成带气泡指针的 popover,
         // 但 row 上根本没有 anchor view,指针指向乱飞。改成 .sheet + 自定义列表,
         // 跨设备表现一致,语言选项也能滚动显示。

@@ -78,6 +78,7 @@ struct PaymentMethodsView: View {
         .listStyle(.insetGrouped)
         .navigationTitle("支付方式")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar(.hidden, for: .tabBar)
         .tint(AppTheme.accent)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) { EditButton() }
