@@ -5,8 +5,11 @@ struct SubscriptionEditorView: View {
     @EnvironmentObject private var store: SubscriptionStore
     @State private var draft: Subscription
     @State private var showIconPicker = false
+    private let isNew: Bool
+    @State private var didApplyDefaults = false
 
     init(subscription: Subscription?) {
+        self.isNew = subscription == nil
         _draft = State(initialValue: subscription ?? Subscription(
             name: "",
             plan: "",
@@ -122,6 +125,12 @@ struct SubscriptionEditorView: View {
             }
             .navigationTitle(draft.name.isEmpty ? String(localized: "新增订阅") : draft.name)
             .navigationBarTitleDisplayMode(.inline)
+            .onAppear {
+                if isNew && !didApplyDefaults {
+                    draft.reminderDaysBefore = store.defaultReminderDays
+                    didApplyDefaults = true
+                }
+            }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("取消") { dismiss() }.tint(AppTheme.secondary)

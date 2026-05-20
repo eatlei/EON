@@ -1,6 +1,17 @@
 {
   "sourceLanguage": "zh-Hans",
   "strings": {
+    "（暂用内置汇率）": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "(using built-in rates)"
+          }
+        }
+      }
+    },
     "%@": {},
     "%@ · %@": {
       "localizations": {
@@ -122,17 +133,6 @@
         }
       }
     },
-    "Subscribe 反馈": {
-      "extractionState": "stale",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Subscribe Feedback"
-          }
-        }
-      }
-    },
     "iCloud": {
       "extractionState": "stale",
       "localizations": {
@@ -140,6 +140,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "iCloud"
+          }
+        }
+      }
+    },
+    "Subscribe 反馈": {
+      "extractionState": "stale",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Subscribe Feedback"
           }
         }
       }
@@ -1177,6 +1188,7 @@
       }
     },
     "本期没有待扣费订阅": {
+      "extractionState": "stale",
       "localizations": {
         "en": {
           "stringUnit": {
@@ -1532,17 +1544,6 @@
         }
       }
     },
-    "紫": {
-      "extractionState": "manual",
-      "localizations": {
-        "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Purple"
-          }
-        }
-      }
-    },
     "红": {
       "extractionState": "manual",
       "localizations": {
@@ -1550,6 +1551,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Red"
+          }
+        }
+      }
+    },
+    "紫": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Purple"
           }
         }
       }
@@ -1942,13 +1954,322 @@
         }
       }
     },
-    "（暂用内置汇率）": {
-      "extractionState": "stale",
+    "隐私政策": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "(using built-in rates)"
+            "value": "Privacy Policy"
+          }
+        }
+      }
+    },
+    "使用条款": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Terms of Use"
+          }
+        }
+      }
+    },
+    "致谢": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Acknowledgments"
+          }
+        }
+      }
+    },
+    "暂无第三方依赖。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No third-party dependencies."
+          }
+        }
+      }
+    },
+    "在 App Store 评分": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Rate on App Store"
+          }
+        }
+      }
+    },
+    "分享 EON": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Share EON"
+          }
+        }
+      }
+    },
+    "法律": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Legal"
+          }
+        }
+      }
+    },
+    "应用商店": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App Store"
+          }
+        }
+      }
+    },
+    "支持": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Support"
+          }
+        }
+      }
+    },
+    "货币": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Currency"
+          }
+        }
+      }
+    },
+    "新建订阅默认提前 %lld 天提醒": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Remind %lld days before for new subscriptions"
+          }
+        }
+      }
+    },
+    "决定新建订阅时默认提前几天提醒。": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Default reminder offset applied to new subscriptions."
+          }
+        }
+      }
+    },
+    "澳元": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Australian Dollar"
+          }
+        }
+      }
+    },
+    "加元": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Canadian Dollar"
+          }
+        }
+      }
+    },
+    "瑞士法郎": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Swiss Franc"
+          }
+        }
+      }
+    },
+    "韩元": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "South Korean Won"
+          }
+        }
+      }
+    },
+    "新加坡元": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Singapore Dollar"
+          }
+        }
+      }
+    },
+    "新台币": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New Taiwan Dollar"
+          }
+        }
+      }
+    },
+    "印度卢比": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Indian Rupee"
+          }
+        }
+      }
+    },
+    "巴西雷亚尔": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Brazilian Real"
+          }
+        }
+      }
+    },
+    "墨西哥比索": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mexican Peso"
+          }
+        }
+      }
+    },
+    "泰铢": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thai Baht"
+          }
+        }
+      }
+    },
+    "新西兰元": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "New Zealand Dollar"
+          }
+        }
+      }
+    },
+    "瑞典克朗": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Swedish Krona"
+          }
+        }
+      }
+    },
+    "挪威克朗": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Norwegian Krone"
+          }
+        }
+      }
+    },
+    "丹麦克朗": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Danish Krone"
+          }
+        }
+      }
+    },
+    "土耳其里拉": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Turkish Lira"
+          }
+        }
+      }
+    },
+    "阿联酋迪拉姆": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "UAE Dirham"
+          }
+        }
+      }
+    },
+    "马来西亚林吉特": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Malaysian Ringgit"
+          }
+        }
+      }
+    },
+    "菲律宾比索": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Philippine Peso"
+          }
+        }
+      }
+    },
+    "越南盾": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vietnamese Dong"
+          }
+        }
+      }
+    },
+    "印尼盾": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Indonesian Rupiah"
           }
         }
       }

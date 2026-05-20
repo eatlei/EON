@@ -43,6 +43,10 @@ final class SubscriptionStore: ObservableObject {
         didSet { saveSettings() }
     }
 
+    @Published var defaultReminderDays: Int = 3 {
+        didSet { saveSettings() }
+    }
+
     @Published private(set) var cnyRates: [CurrencyCode: Double] = CurrencyConverter.builtin
     @Published private(set) var ratesUpdatedAt: Date?
     var converter: CurrencyConverter { CurrencyConverter(cnyRates: cnyRates) }
@@ -72,6 +76,7 @@ final class SubscriptionStore: ObservableObject {
             appearance = settings.appearance
             paymentMethods = settings.paymentMethods
             accentTheme = settings.accentTheme
+            defaultReminderDays = settings.defaultReminderDays
         } else {
             baseCurrency = .cny
             remindersEnabled = true
@@ -379,7 +384,8 @@ final class SubscriptionStore: ObservableObject {
             iCloudSyncEnabled: iCloudSyncEnabled,
             appearance: appearance,
             paymentMethods: paymentMethods,
-            accentTheme: accentTheme
+            accentTheme: accentTheme,
+            defaultReminderDays: defaultReminderDays
         )
         if let data = try? JSONEncoder().encode(settings) {
             UserDefaults.standard.set(data, forKey: settingsKey)
@@ -425,17 +431,20 @@ private struct Settings: Codable {
     var appearance: AppAppearance
     var paymentMethods: [String]
     var accentTheme: AccentTheme
+    var defaultReminderDays: Int
 
     static let defaultPaymentMethods = ["支付宝", "微信支付", "Apple Pay", "Visa", "Mastercard", "银联", "PayPal"]
 
     init(baseCurrency: CurrencyCode, remindersEnabled: Bool, iCloudSyncEnabled: Bool,
-         appearance: AppAppearance, paymentMethods: [String], accentTheme: AccentTheme) {
+         appearance: AppAppearance, paymentMethods: [String], accentTheme: AccentTheme,
+         defaultReminderDays: Int) {
         self.baseCurrency = baseCurrency
         self.remindersEnabled = remindersEnabled
         self.iCloudSyncEnabled = iCloudSyncEnabled
         self.appearance = appearance
         self.paymentMethods = paymentMethods
         self.accentTheme = accentTheme
+        self.defaultReminderDays = defaultReminderDays
     }
 
     init(from decoder: Decoder) throws {
@@ -447,6 +456,7 @@ private struct Settings: Codable {
         let pm = try c.decodeIfPresent([String].self, forKey: .paymentMethods) ?? Settings.defaultPaymentMethods
         paymentMethods = pm.isEmpty ? Settings.defaultPaymentMethods : pm
         accentTheme = try c.decodeIfPresent(AccentTheme.self, forKey: .accentTheme) ?? .blue
+        defaultReminderDays = try c.decodeIfPresent(Int.self, forKey: .defaultReminderDays) ?? 3
     }
 }
 

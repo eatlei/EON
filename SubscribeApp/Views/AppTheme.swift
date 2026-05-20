@@ -246,3 +246,20 @@ struct RevealModifier: ViewModifier {
 extension View {
     func reveal(_ index: Int) -> some View { modifier(RevealModifier(index: index)) }
 }
+
+struct SettingsLabelStyle: LabelStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        HStack(spacing: 12) {
+            configuration.icon
+                .font(.system(size: 16, weight: .regular))
+                .foregroundStyle(AppTheme.secondary)
+                .frame(width: 22, alignment: .center)
+            configuration.title
+                .foregroundStyle(AppTheme.ink)
+        }
+    }
+}
+
+extension LabelStyle where Self == SettingsLabelStyle {
+    static var settings: SettingsLabelStyle { SettingsLabelStyle() }
+}

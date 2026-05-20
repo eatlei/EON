@@ -8,6 +8,26 @@ enum CurrencyCode: String, CaseIterable, Codable, Identifiable {
     case jpy = "JPY"
     case gbp = "GBP"
     case hkd = "HKD"
+    case aud = "AUD"
+    case cad = "CAD"
+    case chf = "CHF"
+    case krw = "KRW"
+    case sgd = "SGD"
+    case twd = "TWD"
+    case inr = "INR"
+    case brl = "BRL"
+    case mxn = "MXN"
+    case thb = "THB"
+    case nzd = "NZD"
+    case sek = "SEK"
+    case nok = "NOK"
+    case dkk = "DKK"
+    case `try` = "TRY"
+    case aed = "AED"
+    case myr = "MYR"
+    case php = "PHP"
+    case vnd = "VND"
+    case idr = "IDR"
 
     var id: String { rawValue }
 
@@ -19,6 +39,26 @@ enum CurrencyCode: String, CaseIterable, Codable, Identifiable {
         case .jpy: String(localized: "日元")
         case .gbp: String(localized: "英镑")
         case .hkd: String(localized: "港币")
+        case .aud: String(localized: "澳元")
+        case .cad: String(localized: "加元")
+        case .chf: String(localized: "瑞士法郎")
+        case .krw: String(localized: "韩元")
+        case .sgd: String(localized: "新加坡元")
+        case .twd: String(localized: "新台币")
+        case .inr: String(localized: "印度卢比")
+        case .brl: String(localized: "巴西雷亚尔")
+        case .mxn: String(localized: "墨西哥比索")
+        case .thb: String(localized: "泰铢")
+        case .nzd: String(localized: "新西兰元")
+        case .sek: String(localized: "瑞典克朗")
+        case .nok: String(localized: "挪威克朗")
+        case .dkk: String(localized: "丹麦克朗")
+        case .`try`: String(localized: "土耳其里拉")
+        case .aed: String(localized: "阿联酋迪拉姆")
+        case .myr: String(localized: "马来西亚林吉特")
+        case .php: String(localized: "菲律宾比索")
+        case .vnd: String(localized: "越南盾")
+        case .idr: String(localized: "印尼盾")
         }
     }
 
@@ -30,6 +70,26 @@ enum CurrencyCode: String, CaseIterable, Codable, Identifiable {
         case .jpy: "¥"
         case .gbp: "£"
         case .hkd: "HK$"
+        case .aud: "A$"
+        case .cad: "C$"
+        case .chf: "CHF"
+        case .krw: "₩"
+        case .sgd: "S$"
+        case .twd: "NT$"
+        case .inr: "₹"
+        case .brl: "R$"
+        case .mxn: "Mex$"
+        case .thb: "฿"
+        case .nzd: "NZ$"
+        case .sek: "kr"
+        case .nok: "kr"
+        case .dkk: "kr"
+        case .`try`: "₺"
+        case .aed: "AED"
+        case .myr: "RM"
+        case .php: "₱"
+        case .vnd: "₫"
+        case .idr: "Rp"
         }
     }
 }
