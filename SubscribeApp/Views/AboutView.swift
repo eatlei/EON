@@ -152,7 +152,7 @@ struct AboutView: View {
         .scrollContentBackground(.visible)
         .navigationTitle("关于")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar(.hidden, for: .tabBar)
+        .toolbarVisibility(.hidden, for: .tabBar)
         .sheet(isPresented: $showTips) { TipSheet(tips: tips) }
         .task { await tips.load() }
     }
@@ -208,7 +208,7 @@ struct AcknowledgmentsView: View {
         .scrollContentBackground(.visible)
         .navigationTitle("致谢")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar(.hidden, for: .tabBar)
+        .toolbarVisibility(.hidden, for: .tabBar)
     }
 }
 

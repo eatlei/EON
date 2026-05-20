@@ -45,7 +45,7 @@ struct EasterEggSettingsView: View {
         .scrollContentBackground(.visible)
         .navigationTitle("彩蛋")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar(.hidden, for: .tabBar)
+        .toolbarVisibility(.hidden, for: .tabBar)
     }
 
     /// 每个彩蛋的标题行 = SF Symbol + 名字 + 触发方式徽章

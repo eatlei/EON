@@ -58,7 +58,7 @@ struct CategoryDetailView: View {
         .navigationTitle("支出分类")
         .navigationBarTitleDisplayMode(.inline)
         // 二级页隐掉底部 TabBar,避免遮住内容 + 让用户更专注。
-        .toolbar(.hidden, for: .tabBar)
+        .toolbarVisibility(.hidden, for: .tabBar)
     }
 
     @ViewBuilder
