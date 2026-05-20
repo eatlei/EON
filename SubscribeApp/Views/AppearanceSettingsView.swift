@@ -153,6 +153,7 @@ struct AppearanceSettingsView: View {
     /// EON 当前支持的展示语言。需要跟 project.yml 的 CFBundleLocalizations 保持一致。
     fileprivate static let supportedLanguages: [(code: String, name: String)] = [
         ("zh-Hans", "简体中文"),
+        ("zh-Hant", "繁體中文"),
         ("en",      "English"),
         ("ja",      "日本語"),
         ("ko",      "한국어"),

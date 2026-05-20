@@ -26,14 +26,21 @@ struct DashboardView: View {
                                 QuickStatsPanel(period: period).reveal(2)
                                 UpcomingPanel().reveal(3)
                                 CategoryPanel().reveal(4)
-                                if period == .year {
-                                    YearPanel().reveal(5)
-                                    YearHeatmapPanel().reveal(6)
-                                } else {
-                                    // 月 + 季 都用日历(季模式下日历仍然只
-                                    // 显示当前月,因为日历本来就是月维度的)。
-                                    CalendarPanel(scrollProxy: proxy).reveal(5)
+                                // 切换 period 时,这里的视图结构会变(日历换成柱图+热力图),
+                                // 没有显式 transaction 的话 SwiftUI 会插值新旧布局的高度差,
+                                // 整个页面看上去会"拉伸一下"。手动清掉 animation 让结构切换
+                                // 瞬时完成,只保留数字 contentTransition 的滚动效果。
+                                Group {
+                                    if period == .year {
+                                        YearPanel().reveal(5)
+                                        YearHeatmapPanel().reveal(6)
+                                    } else {
+                                        // 月 + 季 都用日历(季模式下日历仍然只
+                                        // 显示当前月,因为日历本来就是月维度的)。
+                                        CalendarPanel(scrollProxy: proxy).reveal(5)
+                                    }
                                 }
+                                .transaction { $0.animation = nil }
                             }
                             .padding(.horizontal, AppTheme.Space.xl)
                             .padding(.top, AppTheme.Space.m)
@@ -113,7 +120,10 @@ private struct HeroTotal: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.vertical, AppTheme.Space.s)
-        .animation(AppTheme.spring, value: period)
+        // 不在这里挂 .animation(AppTheme.spring, value: period):隐式动画会
+        // 让整个 Overview 切换 month/quarter/year 时被插值,YearHeatmapPanel
+        // 出场也会被一起拉伸。.contentTransition(.numericText()) 已经在 Text
+        // 上单独配了数字滚动效果,够用了。
     }
     private var subtitle: String {
         let n = store.fullDueCount(in: period)
@@ -645,43 +655,89 @@ private struct MonthPickerSheet: View {
     }
 }
 
-// MARK: - Quick stats (2×2 数字面板)
-
-/// 把"活跃订阅数 / 本月总额 / 今年总额 / 平均"4 个最常看的数字摆在一起,
-/// 让用户翻开 Overview 第一眼就能掌握全局,不用扫所有卡片。
+// MARK: - Quick stats (1×3 数字面板)
+//
+// 三张并排的数字卡:活跃订阅数 / 当前周期的均摊金额 / 平均每个订阅。
+// "均摊金额"会跟 period 联动(月 → 月均、季 → 季均、年 → 年均),不再
+// 跟 Hero 顶部的总额 + 顶部切换器三重重复展示同一信息。
 private struct QuickStatsPanel: View {
     @EnvironmentObject private var store: SubscriptionStore
     let period: SpendPeriod
 
     private var activeCount: Int { store.activeSubscriptions.count }
+    private var archivedCount: Int { store.archivedSubscriptions.count }
     private var monthly: Double { store.monthlyTotal }
-    private var annual: Double { store.annualTotal }
+    /// 当前周期口径下的"全期总额"(月 = 月均、季 = 月均*3、年 = 年均)
+    private var periodicTotal: Double {
+        switch period {
+        case .month:   return monthly
+        case .quarter: return monthly * 3
+        case .year:    return monthly * 12
+        }
+    }
     private var averagePerSub: Double {
         guard activeCount > 0 else { return 0 }
-        return monthly / Double(activeCount)
+        return periodicTotal / Double(activeCount)
     }
     private var trialCount: Int {
         store.activeSubscriptions.filter { $0.status == .trial }.count
     }
+    private var autoCount: Int {
+        store.activeSubscriptions.filter { $0.status == .active }.count
+    }
+    private var manualCount: Int {
+        store.activeSubscriptions.filter { $0.status == .manual }.count
+    }
+
+    /// 周期均摊卡片的标题文案 —— 跟 Hero 的"本月 / 本季 / 今年"不冲突,
+    /// 用"摊到 X"这种更日常的口吻,提示这是一个 derived value。
+    private var periodicLabel: LocalizedStringKey {
+        switch period {
+        case .month:   "月均"
+        case .quarter: "季均"
+        case .year:    "年均"
+        }
+    }
+    private var periodicHint: String {
+        switch period {
+        case .month:   String(localized: "全部摊到每月")
+        case .quarter: String(localized: "全部摊到每季")
+        case .year:    String(localized: "全部摊到每年")
+        }
+    }
+    private var averageHint: String {
+        switch period {
+        case .month:   String(localized: "每个订阅·月")
+        case .quarter: String(localized: "每个订阅·季")
+        case .year:    String(localized: "每个订阅·年")
+        }
+    }
+    /// 活跃卡的副文本:有试用就提示试用数;否则展示自动 / 手动的拆分,
+    /// 没有的话再 fall back 到归档计数,总有一行有用信息可读。
+    private var activeHint: String {
+        if trialCount > 0 {
+            return String(localized: "含 \(trialCount) 个试用")
+        }
+        if autoCount > 0 && manualCount > 0 {
+            return String(localized: "\(autoCount) 自动 · \(manualCount) 手动")
+        }
+        if autoCount > 0 { return String(localized: "全部自动续费") }
+        if manualCount > 0 { return String(localized: "全部手动续费") }
+        if archivedCount > 0 { return String(localized: "另有 \(archivedCount) 个归档") }
+        return String(localized: "运行中")
+    }
 
     var body: some View {
-        LazyVGrid(
-            columns: [GridItem(.flexible(), spacing: AppTheme.Space.m),
-                      GridItem(.flexible(), spacing: AppTheme.Space.m)],
-            spacing: AppTheme.Space.m
-        ) {
+        HStack(spacing: AppTheme.Space.m) {
             StatCard(label: "活跃订阅",
                      value: "\(activeCount)",
-                     hint: trialCount > 0 ? String(localized: "\(trialCount) 个试用") : nil)
-            StatCard(label: "月均",
-                     value: store.converter.format(monthly, currency: store.baseCurrency),
-                     hint: String(localized: "全部摊到每月"))
-            StatCard(label: "年均",
-                     value: store.converter.format(annual, currency: store.baseCurrency),
-                     hint: String(localized: "全部摊到每年"))
+                     hint: activeHint)
+            StatCard(label: periodicLabel,
+                     value: store.converter.format(periodicTotal, currency: store.baseCurrency),
+                     hint: periodicHint)
             StatCard(label: "平均每个",
                      value: store.converter.format(averagePerSub, currency: store.baseCurrency),
-                     hint: String(localized: "按月"))
+                     hint: averageHint)
         }
     }
 }
@@ -697,13 +753,15 @@ private struct StatCard: View {
                 .font(.caption.weight(.medium))
                 .foregroundStyle(AppTheme.secondary)
             Text(value)
-                .font(.system(size: 22, weight: .bold, design: .rounded))
+                .font(.system(size: 20, weight: .bold, design: .rounded))
                 .foregroundStyle(AppTheme.ink)
-                .lineLimit(1).minimumScaleFactor(0.6)
+                .lineLimit(1).minimumScaleFactor(0.55)
+                .contentTransition(.numericText())
             if let hint {
                 Text(hint)
                     .font(.caption2)
                     .foregroundStyle(AppTheme.tertiary)
+                    .lineLimit(1).minimumScaleFactor(0.7)
             } else {
                 // 占位保高度统一,免得有 hint 的卡和没 hint 的卡高低不齐
                 Text(" ").font(.caption2)

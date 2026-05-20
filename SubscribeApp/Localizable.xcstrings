@@ -8233,6 +8233,46 @@
         }
       }
     },
+    "正在重启 EON…" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "EON wird neu gestartet…"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restarting EON…"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reiniciando EON…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Redémarrage d’EON…"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "EON を再起動中…"
+          }
+        },
+        "ko" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "EON 재시작 중…"
+          }
+        }
+      }
+    },
     "每周" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -12268,6 +12308,7 @@
       }
     },
     "重新打开 EON 后生效。" : {
+      "extractionState" : "stale",
       "localizations" : {
         "de" : {
           "stringUnit" : {
@@ -12673,16 +12714,6 @@
         }
       }
     },
-    "正在重启 EON…" : {
-      "localizations" : {
-        "de" : { "stringUnit" : { "state" : "translated", "value" : "EON wird neu gestartet…" } },
-        "en" : { "stringUnit" : { "state" : "translated", "value" : "Restarting EON…" } },
-        "es" : { "stringUnit" : { "state" : "translated", "value" : "Reiniciando EON…" } },
-        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Redémarrage d’EON…" } },
-        "ja" : { "stringUnit" : { "state" : "translated", "value" : "EON を再起動中…" } },
-        "ko" : { "stringUnit" : { "state" : "translated", "value" : "EON 재시작 중…" } }
-      }
-    },
     "颜色已被使用" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -13007,6 +13038,314 @@
             "value" : "기본 통화"
           }
         }
+      }
+    },
+    "请我喝一杯 ☕" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Spendier mir ’nen Kaffee ☕" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Buy me a coffee ☕" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Invítame a un café ☕" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Offre-moi un café ☕" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "コーヒーをご馳走 ☕" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "커피 한 잔 ☕" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "請我喝一杯 ☕" } }
+      }
+    },
+    "你养的不是订阅,是开发者" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Du finanzierst kein Abo — du finanzierst einen Indie-Entwickler" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "You’re not just paying for an app — you’re feeding an indie dev" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "No mantienes una app, mantienes a un dev independiente" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Tu ne finances pas une app, tu nourris un développeur indé" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "あなたが支えてるのはアプリじゃなくて、開発者本人です" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "구독이 아니라 개발자를 후원하고 있는 거예요" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "你養的不是訂閱,是開發者" } }
+      }
+    },
+    "如果 EON 帮你省下了一杯奶茶钱,要不要把那杯奶茶请给开发者?" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Wenn EON dir den Preis eines Lattes gespart hat — wie wär’s, den Latte mir auszugeben?" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "If EON saved you a boba-tea’s worth, how about sending that boba over here?" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Si EON te ahorró el precio de un café, ¿me invitas tú a ese café?" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Si EON t’a fait économiser un café, tu m’en offres un en retour ?" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "EON でタピオカ 1 杯分浮いたら、そのタピオカを開発者にも 1 杯どう?" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "EON 덕에 버블티 한 잔 값을 아꼈다면, 그 한 잔 개발자에게도 어떠세요?" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "如果 EON 幫你省下了一杯奶茶錢,要不要把那杯奶茶請給開發者?" } }
+      }
+    },
+    "请杯咖啡" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Ein Kaffee" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Coffee on me" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Un café" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Un café" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "コーヒー一杯" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "커피 한 잔" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "請杯咖啡" } }
+      }
+    },
+    "请顿便餐" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Ein Mittagessen" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "A quick meal" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Una comida" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Un repas" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "お弁当一個" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "간단한 한 끼" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "請頓便餐" } }
+      }
+    },
+    "请顿大餐" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Ein gutes Essen" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "A proper dinner" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Una buena cena" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Un bon dîner" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "豪華なご飯" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "근사한 한 끼" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "請頓大餐" } }
+      }
+    },
+    "一杯咖啡,开发者会笑出声" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Ein Kaffee — der Entwickler lacht laut auf" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "One coffee — the dev laughs out loud" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Un café y al dev se le escapa la risa" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Un café et le développeur sourit jusqu’aux oreilles" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "コーヒー 1 杯で開発者の口角がぐっと上がる" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "커피 한 잔이면 개발자가 입꼬리 올림" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "一杯咖啡,開發者會笑出聲" } }
+      }
+    },
+    "一顿外卖,Bug 被踩死三只" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Ein Lieferessen — drei Bugs werden zerquetscht" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "One delivery meal — three bugs squashed" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Una comida a domicilio = tres bugs aplastados" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Un repas livré = trois bugs écrasés" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "出前一回でバグが 3 つ成仏します" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "배달 한 번이면 버그 셋이 사라집니다" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "一頓外賣,Bug 被踩死三隻" } }
+      }
+    },
+    "一顿好的,深夜加班更带劲" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Ein richtiges Essen — die Nachtschicht läuft" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "A proper meal — the late-night coding flows" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Una buena cena = código nocturno con turbo" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Un bon repas et le code du soir prend feu" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "ちゃんとしたご飯で深夜作業が捗ります" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "든든한 한 끼면 야근이 두렵지 않아요" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "一頓好的,深夜加班更帶勁" } }
+      }
+    },
+    "你真的太好了 🥰" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Du bist echt der Beste 🥰" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "You are absolutely the best 🥰" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Eres lo mejor 🥰" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Tu es vraiment le meilleur 🥰" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "本当に最高です 🥰" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "정말 최고예요 🥰" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "你真的太好了 🥰" } }
+      }
+    },
+    "不客气啦" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Gern geschehen" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Anytime!" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "¡De nada!" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Avec plaisir !" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "どういたしまして" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "천만에요" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "不客氣啦" } }
+      }
+    },
+    "收到啦!这一杯/一顿我会真心实意地用来加班。" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Angekommen! Den Kaffee/das Essen verbrenn ich heute Nacht im Code." } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Got it! I’ll spend it on tonight’s coding session, promise." } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "¡Recibido! Lo gastaré en programar esta noche, palabra." } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Reçu ! Je le dépense ce soir en codant, promis." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "受け取りました!今夜の作業で大事に使います。" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "받았어요! 오늘 밤 코딩에 진심으로 쓸게요." } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "收到啦!這一杯/一頓我會真心實意地用來加班。" } }
+      }
+    },
+    "完全自愿 · 不解锁任何功能 · 100% 暖到开发者" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Freiwillig · schaltet nichts frei · macht den Entwickler glücklich" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Voluntary · unlocks nothing · 100% warm fuzzies for the dev" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Voluntario · no desbloquea nada · 100% cariño para el dev" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Volontaire · ne débloque rien · 100 % de bonheur pour le dev" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "完全任意 · 機能は何も解放されません · 開発者は 100% 喜びます" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "완전 자율 · 어떤 기능도 풀리지 않음 · 개발자에게 100% 사랑" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "完全自願 · 不解鎖任何功能 · 100% 暖到開發者" } }
+      }
+    },
+    "(不打赏也可以继续白嫖,我们做朋友 🤝)" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "(Auch ohne Trinkgeld bleiben wir Freunde 🤝)" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "(No tip needed — we’re still friends 🤝)" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "(Sin propina también seguimos siendo amigos 🤝)" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "(Sans pourboire on reste amis 🤝)" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "(投げ銭なしでも普通に友達です 🤝)" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "(후원 없어도 우리는 친구 🤝)" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "(不打賞也可以繼續白嫖,我們做朋友 🤝)" } }
+      }
+    },
+    "打赏暂时找不到货架,可能是网络的锅。稍后再试?" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Die Trinkgeld-Optionen sind gerade nicht erreichbar — wahrscheinlich das Netz. Später nochmal?" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Tip jar isn’t loading — probably the network. Try again in a bit?" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Las propinas no cargan, seguramente es la red. ¿Probamos luego?" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Le pot à pourboires ne charge pas, probablement le réseau. On réessaie ?" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "投げ銭の棚が見つかりません。ネットワークかも。あとでもう一度?" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "후원 옵션을 못 가져왔어요. 네트워크일 수도 있어요. 잠시 뒤 다시?" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "打賞暫時找不到貨架,可能是網路的鍋。稍後再試?" } }
+      }
+    },
+    "随心意" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Was du magst" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Whatever feels right" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Lo que sientas" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "À ta guise" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "お気持ちで" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "마음 가는 대로" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "隨心意" } }
+      }
+    },
+    "感谢任何形式的支持" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Danke für jede Art von Unterstützung" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Thanks for support in any form" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Gracias por cualquier forma de apoyo" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Merci pour toute forme de soutien" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "どんな形のサポートでも感謝です" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "어떤 형태의 응원이든 감사해요" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "感謝任何形式的支持" } }
+      }
+    },
+    "季均" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Quartal" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Quarterly" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Trimestre" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Trimestre" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "四半期" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "분기" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "季均" } }
+      }
+    },
+    "全部摊到每季" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Alles aufs Quartal verteilt" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "All amortized per quarter" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Todo por trimestre" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Tout réparti par trimestre" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "全部を四半期で按分" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "분기 기준 평균" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "全部攤到每季" } }
+      }
+    },
+    "每个订阅·月" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Pro Abo · Monat" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "per sub · month" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "por sub · mes" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "par abo · mois" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "1 件あたり·月" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "구독당 · 월" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "每個訂閱·月" } }
+      }
+    },
+    "每个订阅·季" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Pro Abo · Quartal" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "per sub · quarter" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "por sub · trimestre" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "par abo · trim." } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "1 件あたり·季" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "구독당 · 분기" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "每個訂閱·季" } }
+      }
+    },
+    "每个订阅·年" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Pro Abo · Jahr" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "per sub · year" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "por sub · año" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "par abo · an" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "1 件あたり·年" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "구독당 · 연" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "每個訂閱·年" } }
+      }
+    },
+    "运行中" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Aktiv" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Running" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "En marcha" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "En cours" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "稼働中" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "실행 중" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "運行中" } }
+      }
+    },
+    "全部自动续费" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Alle auto-erneuern" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "All auto-renewing" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Todas en renovación auto" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Toutes en renouv. auto" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "すべて自動更新" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "모두 자동 갱신" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "全部自動續訂" } }
+      }
+    },
+    "全部手动续费" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Alle manuell" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "All manual" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Todas manuales" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Toutes manuelles" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "すべて手動" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "모두 수동" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "全部手動續訂" } }
+      }
+    },
+    "含 %lld 个试用" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "%lld in der Testphase" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "%lld in trial" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "%lld en prueba" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "%lld en essai" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "試用中 %lld 件" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "체험 %lld개" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "含 %lld 個試用" } }
+      }
+    },
+    "%lld 自动 · %lld 手动" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "%lld auto · %lld manuell" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "%lld auto · %lld manual" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "%lld auto · %lld manual" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "%lld auto · %lld manuel" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "自動 %lld · 手動 %lld" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "자동 %lld · 수동 %lld" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "%lld 自動 · %lld 手動" } }
+      }
+    },
+    "另有 %lld 个归档" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "%lld archiviert" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "%lld archived" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "%lld archivadas" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "%lld archivés" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "アーカイブ %lld 件" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "보관 %lld개" } },
+        "zh-Hant" : { "stringUnit" : { "state" : "translated", "value" : "另有 %lld 個歸檔" } }
       }
     }
   },

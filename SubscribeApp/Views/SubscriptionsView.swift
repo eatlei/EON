@@ -26,9 +26,12 @@ struct SubscriptionsView: View {
     @State private var heavyTick: Int = 0
     @State private var launchTick: Int = 0
 
-    /// 触发发射所需的下拉距离(pt)。略大于标准 pull-to-refresh 触发点(80pt),
-    /// 但又不至于"使劲拉半天"。
-    private let pullThreshold: CGFloat = 100
+    /// 触发发射所需的下拉距离(pt)。比标准 pull-to-refresh 略高一截,让"想发射"
+    /// 跟"无意中拉一下"区分得开;但因为 iOS 的 rubber-band,手指实际位移要比这
+    /// 个再大一点点才到。
+    private let pullThreshold: CGFloat = 130
+    /// PullArea 高度上限 —— 拉过阈值之后再多拉一些也只增加 30pt,避免拉到天上去。
+    private var pullAreaMaxHeight: CGFloat { pullThreshold + 40 }
     /// 阶段触觉的两个中间分位,基于 progress (0..1) 划分。
     private let stage1: CGFloat = 0.45
     private let stage2: CGFloat = 0.85
@@ -56,42 +59,54 @@ struct SubscriptionsView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(spacing: AppTheme.Space.l) {
-                    // 搜索框跟随页面滚动,不再吸顶 —— 仅在用户主动滚回顶部
-                    // 才看得到,避免占住固定可视区。
-                    searchBar.reveal(0)
+                VStack(spacing: 0) {
+                    // PullArea 嵌在内容最顶端,高度跟 pullAmount 实时同步:用户拉
+                    // 多少,它就显多高。文案就在这块"刚刚拉出来的空间"里居中,而
+                    // 不是飘在按钮顶上的小气泡。空订阅时整块隐藏 —— 没东西可发射。
+                    if !store.activeSubscriptions.isEmpty {
+                        PullArea(
+                            pullAmount: min(pullProgress * pullThreshold, pullAreaMaxHeight),
+                            threshold: pullThreshold,
+                            armed: armed
+                        )
+                    }
 
-                    if rows.isEmpty {
-                        VStack(spacing: AppTheme.Space.m) {
-                            Image(systemName: "rectangle.stack").font(.system(size: 40, weight: .light))
-                                .foregroundStyle(AppTheme.tertiary)
-                            Text(search.isEmpty ? "还没有订阅" : "没有匹配的订阅")
-                                .font(.headline).foregroundStyle(AppTheme.ink)
-                        }.frame(maxWidth: .infinity).padding(.top, 100).reveal(1)
-                    } else {
-                        LazyVStack(spacing: AppTheme.Space.m) {
-                            ForEach(Array(rows.enumerated()), id: \.element.id) { i, sub in
-                                Button { editing = sub } label: {
-                                    Row(
-                                        subscription: sub,
-                                        viewPeriod: viewPeriod,
-                                        onArchive: { store.archive(ids: [sub.id]) },
-                                        onDelete: { store.delete(ids: [sub.id]) }
-                                    )
+                    VStack(spacing: AppTheme.Space.l) {
+                        // 搜索框跟随页面滚动,不再吸顶 —— 仅在用户主动滚回顶部
+                        // 才看得到,避免占住固定可视区。
+                        searchBar.reveal(0)
+
+                        if rows.isEmpty {
+                            VStack(spacing: AppTheme.Space.m) {
+                                Image(systemName: "rectangle.stack").font(.system(size: 40, weight: .light))
+                                    .foregroundStyle(AppTheme.tertiary)
+                                Text(search.isEmpty ? "还没有订阅" : "没有匹配的订阅")
+                                    .font(.headline).foregroundStyle(AppTheme.ink)
+                            }.frame(maxWidth: .infinity).padding(.top, 100).reveal(1)
+                        } else {
+                            LazyVStack(spacing: AppTheme.Space.m) {
+                                ForEach(Array(rows.enumerated()), id: \.element.id) { i, sub in
+                                    Button { editing = sub } label: {
+                                        Row(
+                                            subscription: sub,
+                                            viewPeriod: viewPeriod,
+                                            onArchive: { store.archive(ids: [sub.id]) },
+                                            onDelete: { store.delete(ids: [sub.id]) }
+                                        )
+                                    }
+                                    .buttonStyle(.plain).reveal(i + 1)
                                 }
-                                .buttonStyle(.plain).reveal(i + 1)
                             }
                         }
                     }
+                    .padding(.horizontal, AppTheme.Space.xl)
+                    .padding(.top, AppTheme.Space.m)
+                    .padding(.bottom, AppTheme.dockClearance)
                 }
-                .padding(.horizontal, AppTheme.Space.xl)
-                .padding(.top, AppTheme.Space.m)
-                .padding(.bottom, AppTheme.dockClearance)
             }
             // iOS 18+ 原生的 ScrollGeometry 监听 —— 把"用户拉过 natural top 多少
-            // pt"算出来。重点是要减掉 `contentInsets.top`:UIScrollView 在自然 top 时
-            // contentOffset.y = -contentInsets.top(不是 0)。之前没减,导致页面一加
-            // 载就被判定成"已经拉了 50pt",气泡直接显示,触觉也乱响。
+            // pt"算出来。要减掉 `contentInsets.top`:UIScrollView 在自然 top 时
+            // contentOffset.y = -contentInsets.top(不是 0)。
             //
             //   natural top: contentOffset.y == -contentInsets.top  → pull = 0
             //   下拉 30pt :  contentOffset.y == -contentInsets.top-30 → pull = 30
@@ -110,15 +125,6 @@ struct SubscriptionsView: View {
                     .padding(.top, AppTheme.Space.s)
                     .padding(.bottom, AppTheme.Space.s)
             }
-            // 下拉过程中浮在页面顶部的胶囊文案 —— 只在拉到 5% 以上 + 没在喷射时显示。
-            .overlay(alignment: .top) {
-                if pullProgress > 0.05 && particles.isEmpty && !store.activeSubscriptions.isEmpty {
-                    PullBanner(progress: pullProgress, armed: armed)
-                        .padding(.top, 6)
-                        .allowsHitTesting(false)
-                        .transition(.opacity)
-                }
-            }
             // 粒子层:盖在整个页面之上,不拦截事件。
             .overlay {
                 GeometryReader { geo in
@@ -126,9 +132,9 @@ struct SubscriptionsView: View {
                         ForEach(particles) { p in
                             LaunchParticleView(
                                 particle: p,
-                                // 原点放在顶部正中略下方 —— 喷出来才不像从屏幕外
-                                // 冒出来,有"从订阅页里炸出去"的感觉。
-                                origin: CGPoint(x: geo.size.width / 2, y: 90)
+                                // 原点放在 PullArea 大致中段:正中 + 距顶 110pt,
+                                // 看起来像粒子从"刚刚拉出来的那块空间"炸出来。
+                                origin: CGPoint(x: geo.size.width / 2, y: 110)
                             )
                         }
                     }
@@ -174,8 +180,10 @@ struct SubscriptionsView: View {
             heavyTick &+= 1
             armed = true
         }
-        // 松手判定:armed 状态下进度回落到 0.3 以下 = ScrollView 已经在回弹 = 发射!
-        if armed && progress < 0.3 {
+        // 松手判定:armed 状态下,只要进度比上一帧"明显下降",就视作用户已经
+        // 松手开始回弹 → 立刻发射。比之前的"进度 < 0.3 才发"更宽松,即便
+        // iOS rubber-band 把回弹跳得很快也能稳定触发。
+        if armed && progress < prev - 0.05 {
             armed = false
             fireConfetti()
         }

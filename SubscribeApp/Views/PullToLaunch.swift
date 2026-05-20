@@ -55,9 +55,9 @@ struct LaunchParticleView: View {
     @State private var phase: CGFloat = 0
 
     /// 单粒子飞行总时长(秒)。
-    private let duration: TimeInterval = 1.4
+    private let duration: TimeInterval = 1.6
     /// 伪重力(pt/s²,正值 = 向下加速)。
-    private let gravity: CGFloat = 1100
+    private let gravity: CGFloat = 900
 
     var body: some View {
         let rad = particle.angleDeg * .pi / 180
@@ -98,36 +98,63 @@ struct LaunchParticleView: View {
     }
 }
 
-// MARK: - Pull banner
+// MARK: - Pull area (in-content banner)
+//
+// 不再走悬浮气泡。一个嵌在 ScrollView 内容最顶端的"伸缩区域",高度跟随
+// 下拉量动态增长 —— 用户下拉时这个区域露出来,文案 + 图标就在区域里居中,
+// 看起来像"把订阅页拉出一段空间"才能看到的彩蛋,有"刮刮卡"那种期待感。
 
-/// 用户下拉时浮在页面顶部的小胶囊。文案 + 表情随进度切换,armed 状态下变主题色。
-struct PullBanner: View {
-    /// 0 = 刚开始拉;1 = 到达发射阈值;> 1 = 越过阈值。
-    let progress: CGFloat
+struct PullArea: View {
+    /// 当前下拉 pt 数(0 = 没拉)。也就是 area 的实际高度。
+    let pullAmount: CGFloat
+    /// 触发发射的阈值;过了这个值 armed = true。
+    let threshold: CGFloat
+    /// 已上膛 → 文案 / 配色变成"准备发射"。
     let armed: Bool
 
+    /// 文案随进度切换。armed 时变成 emoji + accent 高亮。
     private var text: LocalizedStringKey {
         if armed { return "松手发射 🚀" }
-        if progress < 0.5 { return "继续往下拉…" }
+        if pullAmount < threshold * 0.5 { return "继续往下拉…" }
         return "再来一点!"
     }
 
+    /// 进度 0..1,过阈值后继续增加(用于轻度过冲反馈)。
+    private var progress: CGFloat { min(2, pullAmount / max(threshold, 1)) }
+
     var body: some View {
-        HStack(spacing: 8) {
-            Image(systemName: "arrow.down.circle.fill")
-                .rotationEffect(.degrees(armed ? 180 : 0))
-                .foregroundStyle(armed ? AppTheme.accent : AppTheme.secondary)
-                .animation(AppTheme.spring, value: armed)
-            Text(text)
-                .font(.caption.weight(.semibold))
-                .foregroundStyle(armed ? AppTheme.accent : AppTheme.ink)
-                .contentTransition(.opacity)
+        ZStack {
+            // 背景:armed 后用 accent 渐变,平时是个淡淡的 surface 底
+            if armed {
+                LinearGradient(
+                    colors: [
+                        AppTheme.accent.opacity(0.22),
+                        AppTheme.accent.opacity(0.05)
+                    ],
+                    startPoint: .top, endPoint: .bottom
+                )
+            } else {
+                AppTheme.canvas.opacity(min(1, progress * 1.5))
+            }
+
+            VStack(spacing: 6) {
+                Image(systemName: armed ? "paperplane.fill" : "arrow.down.circle.fill")
+                    .font(.system(size: 22, weight: .bold))
+                    .foregroundStyle(armed ? AppTheme.accent : AppTheme.secondary)
+                    .rotationEffect(.degrees(armed ? -25 : 0))
+                    .scaleEffect(armed ? 1.15 : 1)
+                    .animation(.spring(response: 0.35, dampingFraction: 0.6), value: armed)
+                Text(text)
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(armed ? AppTheme.accent : AppTheme.ink)
+                    .contentTransition(.opacity)
+            }
+            // 整体 fade-in:头 20% 拉出来还看不清字,过了 30% 才完全可见
+            .opacity(min(1, progress * 3))
         }
-        .padding(.horizontal, 14).padding(.vertical, 8)
-        .background(.thinMaterial, in: Capsule())
-        .overlay(Capsule().stroke(AppTheme.hairline, lineWidth: 0.5))
-        .scaleEffect(0.85 + 0.2 * min(1.2, progress))
-        .opacity(min(1, progress * 2))
-        .animation(AppTheme.spring, value: armed)
+        .frame(maxWidth: .infinity)
+        // 高度直接等于 pull 量,自然吃掉下拉露出来的那段空间。
+        .frame(height: pullAmount)
+        .clipped()
     }
 }

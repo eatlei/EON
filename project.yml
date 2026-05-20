@@ -21,6 +21,7 @@ targets:
         CFBundleDevelopmentRegion: zh-Hans
         CFBundleLocalizations:
           - zh-Hans
+          - zh-Hant
           - en
           - ja
           - ko
