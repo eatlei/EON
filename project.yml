@@ -55,8 +55,10 @@ targets:
         # `com.apple.developer.ubiquity-kvstore-identifier`, which
         # SubscriptionStore uses to sync subscriptions across devices.
         CODE_SIGN_ENTITLEMENTS: SubscribeApp/SubscribeApp.entitlements
-        # TODO: 把下面这行的注释去掉, 改成你 Apple Developer 账号的 10 位 Team
-        #       Identifier (在 https://developer.apple.com/account → Membership
-        #       页面能查到). 设了之后 xcodebuild 命令行也能直接签名,无需在
-        #       Xcode GUI 里手工选 Team.
-        # DEVELOPMENT_TEAM: ABCDE12345
+        # 付费 Apple Developer Program 账号的 10 位 Team Identifier。
+        # 写在这里之后:
+        #   - xcodegen 每次重生成都会把它带回 pbxproj,Xcode GUI 不再
+        #     问"请选择 Team"
+        #   - xcodebuild 命令行也能直接签名
+        # 在 https://developer.apple.com/account → Membership 页面能查到。
+        DEVELOPMENT_TEAM: 56D3875D7U

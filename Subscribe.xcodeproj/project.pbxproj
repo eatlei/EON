@@ -206,6 +206,7 @@
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					8B7B793B12DC71F69EA8B6BC = {
+						DevelopmentTeam = 56D3875D7U;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -298,6 +299,7 @@
 				CODE_SIGN_ENTITLEMENTS = SubscribeApp/SubscribeApp.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 56D3875D7U;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = SubscribeApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -375,6 +377,7 @@
 				CODE_SIGN_ENTITLEMENTS = SubscribeApp/SubscribeApp.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 56D3875D7U;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = SubscribeApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
