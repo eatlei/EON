@@ -73,10 +73,10 @@ struct IconPickerView: View {
         NavigationStack {
             AppScreen(bottomPadding: AppTheme.Space.l) {
                 VStack(spacing: AppTheme.Space.l) {
-                    Picker("", selection: $mode) {
-                        ForEach(Mode.allCases) { Text($0.title).tag($0) }
-                    }
-                    .pickerStyle(.segmented)
+                    SegmentedPill(
+                        selection: $mode,
+                        items: Mode.allCases.map { ($0, $0.title) }
+                    )
 
                     if let commitError {
                         Text(commitError).font(.caption).foregroundStyle(AppTheme.secondary)

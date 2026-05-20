@@ -225,6 +225,38 @@ struct Hairline: View {
     }
 }
 
+/// 全 App 统一的分段切换控件 — 大圆角胶囊样式,选中项为 ink 底 + surface 文字。
+/// 用于 Overview 的 Month/Year、Subscriptions 的 月/季/年、IconPicker 的来源切换等。
+/// (底部 TabView 用系统原生,不在此组件管辖范围。)
+struct SegmentedPill<Tag: Hashable>: View {
+    @Binding var selection: Tag
+    let items: [(Tag, String)]
+
+    var body: some View {
+        HStack(spacing: 2) {
+            ForEach(items, id: \.0) { tag, title in
+                Button {
+                    withAnimation(AppTheme.spring) { selection = tag }
+                } label: {
+                    Text(title)
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(selection == tag ? AppTheme.surface : AppTheme.secondary)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 8)
+                        .background {
+                            if selection == tag { Capsule().fill(AppTheme.ink) }
+                        }
+                        .contentShape(Capsule())
+                }
+                .buttonStyle(.plain)
+            }
+        }
+        .padding(3)
+        .background(AppTheme.surface, in: Capsule())
+        .overlay(Capsule().stroke(AppTheme.hairline, lineWidth: 0.5))
+    }
+}
+
 /// 订阅图标：按 subscription.icon 渲染（默认分类色块首字母；可为 SF Symbol 或本地图片）
 struct CategoryGlyph: View {
     let subscription: Subscription

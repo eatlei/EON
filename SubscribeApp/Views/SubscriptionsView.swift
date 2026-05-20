@@ -63,13 +63,12 @@ struct SubscriptionsView: View {
                     }
                     .reveal(0)
 
-                    // 月/季/年 三档切换 — 整页所有金额按所选口径换算后再展示
-                    Picker("", selection: $viewPeriod) {
-                        ForEach(ViewPeriod.allCases) { p in
-                            Text(p.title).tag(p)
-                        }
-                    }
-                    .pickerStyle(.segmented)
+                    // 月/季/年 三档切换 — 整页所有金额按所选口径换算后再展示。
+                    // 跟首页 Month/Year 切换、图标库的来源切换共用 SegmentedPill 样式。
+                    SegmentedPill(
+                        selection: $viewPeriod,
+                        items: ViewPeriod.allCases.map { ($0, $0.title) }
+                    )
                     .reveal(1)
 
                     if rows.isEmpty {
@@ -209,17 +208,14 @@ private struct Row: View {
             }
             Spacer(minLength: AppTheme.Space.s)
             VStack(alignment: .trailing, spacing: 4) {
-                HStack(alignment: .firstTextBaseline, spacing: 1) {
-                    Text(store.converter.format(displayedAmount, currency: store.baseCurrency))
-                        .font(.system(size: 19, weight: .bold, design: .rounded))
-                        .foregroundStyle(colored ? Color.white : AppTheme.ink)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.7)
-                        .shadow(color: colored ? .black.opacity(0.30) : .clear, radius: 2, x: 0, y: 1)
-                    Text(viewPeriod.suffix)
-                        .font(.caption2.weight(.semibold))
-                        .foregroundStyle(colored ? Color.white.opacity(0.72) : AppTheme.secondary)
-                }
+                // 不再展示 /月 /季 /年 后缀 —— 整页顶部的视图切换已经表明了口径,
+                // 在每张卡片上再写一次是冗余。
+                Text(store.converter.format(displayedAmount, currency: store.baseCurrency))
+                    .font(.system(size: 19, weight: .bold, design: .rounded))
+                    .foregroundStyle(colored ? Color.white : AppTheme.ink)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
+                    .shadow(color: colored ? .black.opacity(0.30) : .clear, radius: 2, x: 0, y: 1)
                 Text(subscription.nextBillingDate.formatted(.dateTime.month().day()))
                     .font(.caption2)
                     .foregroundStyle(colored ? Color.white.opacity(0.72) : AppTheme.tertiary)

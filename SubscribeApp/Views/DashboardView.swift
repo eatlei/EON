@@ -39,30 +39,20 @@ private struct DashboardHeader: View {
     @Binding var period: SpendPeriod
     var body: some View {
         HStack(spacing: AppTheme.Space.m) {
-            HStack(spacing: 2) {
-                ForEach(SpendPeriod.allCases) { p in
-                    Button {
-                        withAnimation(AppTheme.spring) { period = p }
-                    } label: {
-                        Text(p.title)
-                            .font(.subheadline.weight(.bold))
-                            .foregroundStyle(period == p ? AppTheme.surface : AppTheme.secondary)
-                            .frame(maxWidth: .infinity).padding(.vertical, 8)
-                            .background(period == p ? AppTheme.ink : .clear,
-                                        in: RoundedRectangle(cornerRadius: AppTheme.radiusSmall))
-                    }.buttonStyle(.plain)
-                }
-            }
-            .padding(3)
-            .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: AppTheme.radius))
-            .overlay(RoundedRectangle(cornerRadius: AppTheme.radius).stroke(AppTheme.hairline, lineWidth: 0.5))
+            SegmentedPill(
+                selection: $period,
+                items: SpendPeriod.allCases.map { ($0, $0.title) }
+            )
             .frame(width: 132)
 
             Spacer()
 
             Menu {
+                // Alphabetical by ISO code — matches the order used in Settings → 货币.
                 Picker("", selection: $store.baseCurrency) {
-                    ForEach(CurrencyCode.allCases) { Text("\($0.rawValue) · \($0.title)").tag($0) }
+                    ForEach(CurrencyCode.allCases.sorted { $0.rawValue < $1.rawValue }) { c in
+                        Text("\(c.rawValue) · \(c.title)").tag(c)
+                    }
                 }
             } label: {
                 HStack(spacing: 6) {
@@ -71,8 +61,8 @@ private struct DashboardHeader: View {
                 }
                 .foregroundStyle(AppTheme.ink)
                 .padding(.horizontal, AppTheme.Space.m).padding(.vertical, AppTheme.Space.s)
-                .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: AppTheme.radiusSmall))
-                .overlay(RoundedRectangle(cornerRadius: AppTheme.radiusSmall).stroke(AppTheme.hairline, lineWidth: 0.5))
+                .background(AppTheme.surface, in: Capsule())
+                .overlay(Capsule().stroke(AppTheme.hairline, lineWidth: 0.5))
             }
         }
     }
@@ -109,16 +99,25 @@ private struct HeroTotal: View {
 
 private struct UpcomingPanel: View {
     @EnvironmentObject private var store: SubscriptionStore
-    private var charges: [RenewalCharge] { store.upcomingCharges() }
+    @State private var expanded = false
+
+    private let collapsedLimit = 3
+
+    private var allCharges: [RenewalCharge] { store.upcomingCharges(limit: 100) }
+    private var visibleCharges: [RenewalCharge] {
+        expanded ? allCharges : Array(allCharges.prefix(collapsedLimit))
+    }
+    private var hiddenCount: Int { max(0, allCharges.count - collapsedLimit) }
+
     var body: some View {
         Panel(title: "即将扣费") {
-            if charges.isEmpty {
+            if allCharges.isEmpty {
                 Text("暂无即将扣费")
                     .font(.subheadline).foregroundStyle(AppTheme.secondary)
                     .frame(maxWidth: .infinity, alignment: .leading).padding(.vertical, AppTheme.Space.s)
             } else {
                 VStack(spacing: 0) {
-                    ForEach(Array(charges.enumerated()), id: \.element.id) { i, c in
+                    ForEach(Array(visibleCharges.enumerated()), id: \.element.id) { i, c in
                         if i > 0 { Hairline() }
                         HStack(spacing: AppTheme.Space.m) {
                             CategoryGlyph(subscription: c.subscription)
@@ -133,6 +132,28 @@ private struct UpcomingPanel: View {
                                 .font(.amount()).foregroundStyle(AppTheme.ink)
                         }
                         .padding(.vertical, AppTheme.Space.m)
+                    }
+
+                    if hiddenCount > 0 {
+                        Hairline()
+                        Button {
+                            withAnimation(AppTheme.spring) { expanded.toggle() }
+                        } label: {
+                            HStack(spacing: 4) {
+                                Spacer()
+                                Text(expanded
+                                     ? String(localized: "收起")
+                                     : String(localized: "更多 \(hiddenCount) 项"))
+                                    .font(.caption.weight(.semibold))
+                                Image(systemName: expanded ? "chevron.up" : "chevron.down")
+                                    .font(.caption2.weight(.bold))
+                                Spacer()
+                            }
+                            .foregroundStyle(AppTheme.accent)
+                            .padding(.vertical, AppTheme.Space.m)
+                            .contentShape(Rectangle())
+                        }
+                        .buttonStyle(.plain)
                     }
                 }
             }
