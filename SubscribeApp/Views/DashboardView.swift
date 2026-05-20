@@ -5,6 +5,9 @@ struct DashboardView: View {
     @EnvironmentObject private var store: SubscriptionStore
     @State private var period: SpendPeriod = .month
     @State private var showAdd = false
+    /// 当天首次打开 Dashboard 时,放一阵小订阅图标飘下来 —— 每天最多一次,
+    /// 由 DailyWelcomeTracker 通过 UserDefaults 记录最后日期。
+    @State private var showDailyWelcome = false
 
     var body: some View {
         NavigationStack {
@@ -63,6 +66,38 @@ struct DashboardView: View {
                         .padding(.horizontal, AppTheme.Space.xl)
                         .padding(.top, AppTheme.Space.s)
                         .padding(.bottom, AppTheme.Space.s)
+                }
+            }
+            // 每日彩带:挂在 NavigationStack 上,盖在所有内容之上但不拦截手势。
+            // 1.8 秒后自动收起。空订阅时不放,避免对新用户莫名其妙地飘东西。
+            .overlay {
+                if showDailyWelcome && !store.activeSubscriptions.isEmpty {
+                    DailyWelcomeConfetti(
+                        // 取月费最高的 6 个当掉落素材 —— 跟 LifetimePanel top 3 同源
+                        subscriptions: store.activeSubscriptions
+                            .sorted {
+                                $0.monthlyCost(in: store.baseCurrency, converter: store.converter) >
+                                $1.monthlyCost(in: store.baseCurrency, converter: store.converter)
+                            }
+                            .prefix(6)
+                            .map { $0 }
+                    )
+                    .allowsHitTesting(false)
+                    .transition(.opacity)
+                }
+            }
+            .onAppear {
+                // 一天一次,空订阅页面跳过。
+                if !DailyWelcomeTracker.hasShownToday() && !store.activeSubscriptions.isEmpty {
+                    showDailyWelcome = true
+                    DailyWelcomeTracker.markShownToday()
+                    // 1.8 秒后自动撤掉粒子层(粒子动画本身 ~2s 渐隐,层 1.8s 删,正好衔接)
+                    Task { @MainActor in
+                        try? await Task.sleep(nanoseconds: 2_400_000_000)
+                        withAnimation(.easeOut(duration: 0.4)) {
+                            showDailyWelcome = false
+                        }
+                    }
                 }
             }
             .toolbar(.hidden, for: .navigationBar)

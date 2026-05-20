@@ -9,6 +9,9 @@ struct ContentView: View {
     @State private var tab: AppTab = .dashboard
     @State private var lastContentTab: AppTab = .dashboard
     @State private var showEditor = false
+    /// 摇一摇彩蛋:摇手机时随机抽一个活跃订阅 spotlight 出来。空列表 / 已开
+    /// 的话不重复弹。挂在最顶层是为了任何 tab 都能触发。
+    @State private var spotlightSubscription: Subscription?
 
     var body: some View {
         TabView(selection: $tab) {
@@ -36,6 +39,19 @@ struct ContentView: View {
         }
         .sheet(isPresented: $showEditor) {
             SubscriptionEditorView(subscription: nil)
+        }
+        // 摇一摇 spotlight。已经在弹层里 / 没订阅 / 当前在编辑器里都不重复触发。
+        .onShake {
+            guard spotlightSubscription == nil, !showEditor else { return }
+            if let picked = store.activeSubscriptions.randomElement() {
+                spotlightSubscription = picked
+            }
+        }
+        .sheet(item: $spotlightSubscription) { sub in
+            RandomSpotlightSheet(initial: sub)
+                .environmentObject(store)
+                .presentationDetents([.large])
+                .presentationDragIndicator(.visible)
         }
     }
 }
