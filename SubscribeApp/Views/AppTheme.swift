@@ -149,7 +149,11 @@ struct AppScreen<Content: View>: View {
 }
 
 /// 玻璃材质 Panel — 用于 immersive 背景上的表单分组。
-/// `.regularMaterial` 会自动适配底色亮度,保证文字始终可读。
+/// 关键:在 Material 之下垫一层固定的暗色 (`Color.black.opacity(0.36)`),
+/// 让面板永远是"暗色磨砂",不再依赖 Material 的 vibrancy 自动适配。
+/// 这样无论 immersive 背景是亮色、暗色、还是复杂图像(比如 Netflix LOGO 的
+/// 红色径向),面板里的白色文字都能稳定可读 —— 实测 vibrancy 在 Image 背景
+/// 上会把 .primary 折叠到几乎不可见。
 struct MaterialPanel<Content: View>: View {
     var title: LocalizedStringKey? = nil
     @ViewBuilder var content: Content
@@ -162,16 +166,23 @@ struct MaterialPanel<Content: View>: View {
             if let title {
                 Text(title)
                     .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(.primary)
+                    .foregroundStyle(.white)
             }
             content
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(AppTheme.Space.l)
-        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: AppTheme.radius))
+        .background(
+            ZStack {
+                RoundedRectangle(cornerRadius: AppTheme.radius)
+                    .fill(.black.opacity(0.36))
+                RoundedRectangle(cornerRadius: AppTheme.radius)
+                    .fill(.ultraThinMaterial)
+            }
+        )
         .overlay(
             RoundedRectangle(cornerRadius: AppTheme.radius)
-                .stroke(.white.opacity(0.14), lineWidth: 1)
+                .stroke(.white.opacity(0.12), lineWidth: 1)
         )
     }
 }

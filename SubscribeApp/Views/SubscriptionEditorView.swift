@@ -363,10 +363,10 @@ private struct MenuPickerLabel<Items: View>: View {
             items
         } label: {
             HStack(spacing: 4) {
-                Text(text).foregroundStyle(.primary)
+                Text(text).foregroundStyle(.white)
                 Image(systemName: "chevron.up.chevron.down")
                     .font(.caption2.weight(.semibold))
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(.white.opacity(0.6))
             }
             .contentShape(Rectangle())
         }
@@ -386,11 +386,12 @@ private struct FieldRow<Trailing: View>: View {
         HStack(spacing: AppTheme.Space.m) {
             Text(label)
                 .font(.subheadline.weight(.medium))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(.white.opacity(0.7))
             Spacer(minLength: AppTheme.Space.m)
             trailing
                 .font(.subheadline.weight(.semibold))
-                .foregroundStyle(.primary)
+                .foregroundStyle(.white)
+                .tint(.white)
         }
         .padding(.vertical, AppTheme.Space.s)
     }
