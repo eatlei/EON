@@ -295,6 +295,62 @@ final class SubscriptionStore: ObservableObject {
         .map { $0 }
     }
 
+    // MARK: - Spend trend (同比 / 环比 + 6 个月迷你折线)
+
+    /// 任意一个月份的全部扣费总额(基于该月起止双向推算,跟 Hero 数字保持一致)。
+    func monthTotal(_ monthAnchor: Date) -> Double {
+        let cal = Calendar.current
+        guard let iv = cal.dateInterval(of: .month, for: monthAnchor) else { return 0 }
+        return activeSubscriptions
+            .flatMap { projectedChargesBidirectional(for: $0, from: iv.start, to: iv.end) }
+            .reduce(0) { $0 + $1.amount }
+    }
+
+    /// 过去 `count` 个月(含本月)的逐月总额,按时间升序。供迷你折线图使用。
+    func recentMonthTotals(_ count: Int = 6) -> [ForecastMonth] {
+        let cal = Calendar.current
+        let thisMonthStart = cal.dateInterval(of: .month, for: .now)?.start ?? .now
+        return (0..<count).reversed().compactMap { offset -> ForecastMonth? in
+            guard let m = cal.date(byAdding: .month, value: -offset, to: thisMonthStart) else { return nil }
+            return ForecastMonth(month: m, amount: monthTotal(m))
+        }
+    }
+
+    // MARK: - Trial countdown
+
+    /// 当前所有试用中的订阅,按"距首次正式扣费的天数"升序。空数组 = 不显示面板。
+    var trialSubscriptions: [Subscription] {
+        activeSubscriptions
+            .filter { $0.status == .trial }
+            .sorted { $0.nextBillingDate < $1.nextBillingDate }
+    }
+
+    // MARK: - Yearly heatmap (366 days × amount)
+
+    /// 当年每一天的扣费总额(无扣费的日子值为 0)。日期 = 当地日历 00:00。
+    /// 用于 12×31 热力图。返回顺序按日期升序。
+    func dailyTotalsForCurrentYear() -> [(date: Date, amount: Double)] {
+        let cal = Calendar.current
+        let iv = interval(for: .year)
+        let all = activeSubscriptions
+            .flatMap { projectedChargesBidirectional(for: $0, from: iv.start, to: iv.end) }
+        // 把扣费按"当日 startOfDay"聚合
+        var bucket: [Date: Double] = [:]
+        for c in all {
+            let d = cal.startOfDay(for: c.date)
+            bucket[d, default: 0] += c.amount
+        }
+        // 遍历每一天产出 (date, amount)
+        var out: [(Date, Double)] = []
+        var cursor = iv.start
+        while cursor < iv.end {
+            out.append((cursor, bucket[cal.startOfDay(for: cursor)] ?? 0))
+            guard let next = cal.date(byAdding: .day, value: 1, to: cursor) else { break }
+            cursor = next
+        }
+        return out
+    }
+
     func monthTotalsForCurrentYear() -> [ForecastMonth] {
         let calendar = Calendar.current
         let yearStart = interval(for: .year).start

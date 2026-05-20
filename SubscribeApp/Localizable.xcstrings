@@ -7033,6 +7033,126 @@
         }
       }
     },
+    "试用倒计时" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Testphase-Countdown" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Trial countdown" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Cuenta atrás de prueba" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Compte à rebours d’essai" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "試用期間カウントダウン" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "체험 카운트다운" } }
+      }
+    },
+    "首次扣费" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Erste Abrechnung" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "First charge" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Primer cobro" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Premier prélèvement" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "初回請求" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "첫 결제" } }
+      }
+    },
+    "天" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Tage" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "days" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "días" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "jours" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "日" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "일" } }
+      }
+    },
+    "支出趋势" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Ausgabentrend" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Spending trend" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Tendencia de gasto" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Tendance des dépenses" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "支出トレンド" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "지출 추이" } }
+      }
+    },
+    "比上月多" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "mehr als im Vormonat" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "more than last month" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "más que el mes pasado" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "de plus que le mois dernier" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "先月より多い" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "지난달보다 많음" } }
+      }
+    },
+    "比上月少" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "weniger als im Vormonat" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "less than last month" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "menos que el mes pasado" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "de moins que le mois dernier" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "先月より少ない" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "지난달보다 적음" } }
+      }
+    },
+    "与上月持平" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "wie im Vormonat" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "same as last month" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "igual que el mes pasado" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "comme le mois dernier" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "先月と同じ" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "지난달과 동일" } }
+      }
+    },
+    "上月无支出" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "kein Ausgaben im Vormonat" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "no spending last month" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "sin gastos el mes pasado" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "aucune dépense le mois dernier" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "先月は支出なし" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "지난달 지출 없음" } }
+      }
+    },
+    "全年扣费热力图" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Jahres-Heatmap" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Yearly heatmap" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Mapa de calor anual" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Carte de chaleur annuelle" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "年間ヒートマップ" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "연간 히트맵" } }
+      }
+    },
+    "少" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "wenig" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Less" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Menos" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Peu" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "少" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "적음" } }
+      }
+    },
+    "多" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "viel" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "More" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Más" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Beaucoup" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "多" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "많음" } }
+      }
+    },
+    "峰值 %@" : {
+      "localizations" : {
+        "de" : { "stringUnit" : { "state" : "translated", "value" : "Spitze %@" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Peak %@" } },
+        "es" : { "stringUnit" : { "state" : "translated", "value" : "Pico %@" } },
+        "fr" : { "stringUnit" : { "state" : "translated", "value" : "Pic %@" } },
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "ピーク %@" } },
+        "ko" : { "stringUnit" : { "state" : "translated", "value" : "최고 %@" } }
+      }
+    },
     "本期" : {
       "extractionState" : "stale",
       "localizations" : {

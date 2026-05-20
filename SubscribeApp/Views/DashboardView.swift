@@ -18,16 +18,21 @@ struct DashboardView: View {
                     ScrollViewReader { proxy in
                         ScrollView {
                             VStack(spacing: AppTheme.Space.xl) {
-                                HeroTotal(period: period).reveal(0)
-                                QuickStatsPanel(period: period).reveal(1)
-                                UpcomingPanel().reveal(2)
-                                CategoryPanel().reveal(3)
+                                // 只有当用户标了试用订阅时才出现 —— 提醒
+                                // 首次正式扣费倒计时,免得免费试用悄悄转成付费。
+                                TrialPanel().reveal(0)
+                                HeroTotal(period: period).reveal(1)
+                                QuickStatsPanel(period: period).reveal(2)
+                                UpcomingPanel().reveal(3)
+                                CategoryPanel().reveal(4)
+                                SpendTrendPanel().reveal(5)
                                 if period == .year {
-                                    YearPanel().reveal(4)
+                                    YearPanel().reveal(6)
+                                    YearHeatmapPanel().reveal(7)
                                 } else {
                                     // 月 + 季 都用日历(季模式下日历仍然只
                                     // 显示当前月,因为日历本来就是月维度的)。
-                                    CalendarPanel(scrollProxy: proxy).reveal(4)
+                                    CalendarPanel(scrollProxy: proxy).reveal(6)
                                 }
                             }
                             .padding(.horizontal, AppTheme.Space.xl)
@@ -688,6 +693,308 @@ private struct StatCard: View {
         .padding(AppTheme.Space.m)
         .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: AppTheme.radiusSmall))
         .glassBorder(cornerRadius: AppTheme.radiusSmall)
+    }
+}
+
+// MARK: - 试用倒计时面板
+
+/// 只在用户至少有一个 `.trial` 订阅时显示;空则整个面板不渲染(连标题也不出)。
+/// 每行 = 一个试用订阅,大号"X 天"剩余、订阅名、首次正式扣费的金额和日期。
+private struct TrialPanel: View {
+    @EnvironmentObject private var store: SubscriptionStore
+
+    private var trials: [Subscription] { store.trialSubscriptions }
+
+    private func daysUntil(_ date: Date) -> Int {
+        let cal = Calendar.current
+        let today = cal.startOfDay(for: .now)
+        let target = cal.startOfDay(for: date)
+        return cal.dateComponents([.day], from: today, to: target).day ?? 0
+    }
+
+    var body: some View {
+        if !trials.isEmpty {
+            Panel(title: "试用倒计时") {
+                VStack(spacing: 0) {
+                    ForEach(Array(trials.enumerated()), id: \.element.id) { i, sub in
+                        if i > 0 { Hairline() }
+                        row(sub)
+                    }
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func row(_ sub: Subscription) -> some View {
+        let days = max(0, daysUntil(sub.nextBillingDate))
+        // 试用快到期或已过期,数字用红色突出
+        let isUrgent = days <= 3
+        let firstCharge = store.converter.convert(
+            sub.price, from: sub.currency, to: store.baseCurrency
+        )
+        HStack(spacing: AppTheme.Space.m) {
+            CategoryGlyph(subscription: sub, size: 40)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(sub.name)
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(AppTheme.ink)
+                HStack(spacing: 4) {
+                    Text(String(localized: "首次扣费"))
+                        .font(.caption).foregroundStyle(AppTheme.secondary)
+                    Text(store.converter.format(firstCharge, currency: store.baseCurrency))
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(AppTheme.ink)
+                    Text("·")
+                        .font(.caption).foregroundStyle(AppTheme.tertiary)
+                    Text(sub.nextBillingDate.formatted(.dateTime.month().day()))
+                        .font(.caption).foregroundStyle(AppTheme.secondary)
+                }
+            }
+            Spacer()
+            VStack(alignment: .trailing, spacing: 0) {
+                Text("\(days)")
+                    .font(.system(size: 24, weight: .heavy, design: .rounded).monospacedDigit())
+                    .foregroundStyle(isUrgent ? Color.red : AppTheme.accent)
+                    .contentTransition(.numericText())
+                Text(String(localized: "天"))
+                    .font(.caption2.weight(.semibold))
+                    .foregroundStyle(AppTheme.tertiary)
+            }
+        }
+        .padding(.vertical, AppTheme.Space.s)
+    }
+}
+
+// MARK: - 支出趋势(同比/环比 + 6 个月迷你折线)
+
+/// 本月跟上月对比的"涨/跌"卡片,加最近 6 个月的迷你折线。让用户看到"花销
+/// 是不是在悄悄爬升",哪怕没有具体改任何订阅,价格调整也会被显出来。
+private struct SpendTrendPanel: View {
+    @EnvironmentObject private var store: SubscriptionStore
+
+    private var history: [ForecastMonth] { store.recentMonthTotals(6) }
+    private var thisMonth: Double { history.last?.amount ?? 0 }
+    private var lastMonth: Double {
+        guard history.count >= 2 else { return 0 }
+        return history[history.count - 2].amount
+    }
+    private var delta: Double { thisMonth - lastMonth }
+    private var percent: Double {
+        guard lastMonth > 0 else { return 0 }
+        return delta / lastMonth
+    }
+    private var isUp: Bool { delta > 0.01 }
+    private var isDown: Bool { delta < -0.01 }
+    private var deltaColor: Color {
+        if isUp { return .red }   // 花得更多 = 警示色
+        if isDown { return .green }
+        return AppTheme.secondary
+    }
+    private var arrow: String {
+        if isUp { return "arrow.up.right" }
+        if isDown { return "arrow.down.right" }
+        return "minus"
+    }
+
+    var body: some View {
+        Panel(title: "支出趋势") {
+            VStack(alignment: .leading, spacing: AppTheme.Space.m) {
+                HStack(alignment: .firstTextBaseline, spacing: AppTheme.Space.s) {
+                    HStack(spacing: 4) {
+                        Image(systemName: arrow)
+                            .font(.caption.weight(.heavy))
+                        Text(deltaText)
+                            .font(.subheadline.weight(.bold).monospacedDigit())
+                    }
+                    .foregroundStyle(deltaColor)
+                    .padding(.horizontal, 10).padding(.vertical, 6)
+                    .background(deltaColor.opacity(0.14), in: Capsule())
+
+                    Text(comparisonText)
+                        .font(.caption)
+                        .foregroundStyle(AppTheme.secondary)
+                    Spacer()
+                }
+
+                // 迷你折线 + 当前点高亮
+                if history.count >= 2 {
+                    Chart(history) { p in
+                        LineMark(
+                            x: .value("month", p.month, unit: .month),
+                            y: .value("amount", p.amount)
+                        )
+                        .foregroundStyle(AppTheme.accent)
+                        .lineStyle(StrokeStyle(lineWidth: 2.4, lineCap: .round, lineJoin: .round))
+                        .interpolationMethod(.catmullRom)
+
+                        AreaMark(
+                            x: .value("month", p.month, unit: .month),
+                            y: .value("amount", p.amount)
+                        )
+                        .foregroundStyle(
+                            LinearGradient(
+                                colors: [AppTheme.accent.opacity(0.28), AppTheme.accent.opacity(0.0)],
+                                startPoint: .top, endPoint: .bottom
+                            )
+                        )
+                        .interpolationMethod(.catmullRom)
+
+                        if p.month == history.last?.month {
+                            PointMark(
+                                x: .value("month", p.month, unit: .month),
+                                y: .value("amount", p.amount)
+                            )
+                            .foregroundStyle(AppTheme.accent)
+                            .symbolSize(80)
+                        }
+                    }
+                    .chartXAxis {
+                        AxisMarks(values: .stride(by: .month)) { _ in
+                            AxisValueLabel(format: .dateTime.month(.narrow))
+                                .font(.caption2)
+                        }
+                    }
+                    .chartYAxis(.hidden)
+                    .frame(height: 90)
+                }
+            }
+        }
+    }
+
+    private var deltaText: String {
+        let sign = isUp ? "+" : (isDown ? "-" : "")
+        let absDelta = store.converter.format(abs(delta), currency: store.baseCurrency)
+        if lastMonth > 0 {
+            let pct = Int((abs(percent) * 100).rounded())
+            return "\(sign)\(absDelta) (\(sign)\(pct)%)"
+        }
+        return "\(sign)\(absDelta)"
+    }
+
+    private var comparisonText: String {
+        if lastMonth == 0 {
+            return String(localized: "上月无支出")
+        }
+        if isUp {
+            return String(localized: "比上月多")
+        }
+        if isDown {
+            return String(localized: "比上月少")
+        }
+        return String(localized: "与上月持平")
+    }
+}
+
+// MARK: - 全年扣费热力图
+
+/// 12 行 × 31 列,每格 = 当年某一天的总扣费金额。颜色按 max 归一化到 accent,
+/// 让用户一眼看到全年里钱最集中的那几天 / 那几周。空白(无该日 / 该月没这天 31)
+/// 用极淡的灰色,避免视觉断层。
+private struct YearHeatmapPanel: View {
+    @EnvironmentObject private var store: SubscriptionStore
+    @Environment(\.colorScheme) private var colorScheme
+
+    private struct Cell: Identifiable {
+        let id: String       // "month-day"
+        let month: Int       // 1...12
+        let day: Int         // 1...31
+        let amount: Double   // 0 = 无扣费
+        let inMonth: Bool    // 该月有这天吗(2/30 = false)
+    }
+
+    private var grid: [Cell] {
+        let cal = Calendar.current
+        let daily = store.dailyTotalsForCurrentYear()
+        // 按 (month, day) 索引
+        var byKey: [String: Double] = [:]
+        for (date, amount) in daily where amount > 0 {
+            let m = cal.component(.month, from: date)
+            let d = cal.component(.day, from: date)
+            byKey["\(m)-\(d)"] = amount
+        }
+        // 当年的月份长度
+        let year = cal.component(.year, from: .now)
+        var cells: [Cell] = []
+        for m in 1...12 {
+            let dateOfMonth = cal.date(from: DateComponents(year: year, month: m, day: 1)) ?? .now
+            let range = cal.range(of: .day, in: .month, for: dateOfMonth)?.count ?? 31
+            for d in 1...31 {
+                let key = "\(m)-\(d)"
+                cells.append(Cell(
+                    id: key, month: m, day: d,
+                    amount: byKey[key] ?? 0,
+                    inMonth: d <= range
+                ))
+            }
+        }
+        return cells
+    }
+
+    private var maxAmount: Double { grid.map(\.amount).max() ?? 0 }
+
+    private func color(for c: Cell) -> Color {
+        guard c.inMonth else { return Color.clear }
+        guard maxAmount > 0, c.amount > 0 else {
+            return colorScheme == .dark ? Color.white.opacity(0.06) : Color.black.opacity(0.05)
+        }
+        // 5 档浓度,跟 GitHub heatmap 同款的"逐级染色"。
+        let ratio = c.amount / maxAmount
+        let opacity: Double
+        switch ratio {
+        case 0..<0.20:  opacity = 0.22
+        case 0.20..<0.45: opacity = 0.40
+        case 0.45..<0.70: opacity = 0.62
+        case 0.70..<0.90: opacity = 0.82
+        default:          opacity = 1.00
+        }
+        return AppTheme.accent.opacity(opacity)
+    }
+
+    private let columns = Array(repeating: GridItem(.flexible(), spacing: 2), count: 31)
+    private let monthSymbols = Calendar.current.veryShortStandaloneMonthSymbols
+
+    var body: some View {
+        Panel(title: "全年扣费热力图") {
+            VStack(alignment: .leading, spacing: AppTheme.Space.s) {
+                // 月份(行标签) + 31 格热力图。月份标签在最左,占独立一列。
+                HStack(alignment: .top, spacing: AppTheme.Space.s) {
+                    VStack(spacing: 2) {
+                        ForEach(1...12, id: \.self) { m in
+                            Text(monthSymbols[m - 1])
+                                .font(.system(size: 9, weight: .semibold))
+                                .foregroundStyle(AppTheme.tertiary)
+                                .frame(height: 12)
+                        }
+                    }
+                    LazyVGrid(columns: columns, alignment: .leading, spacing: 2) {
+                        ForEach(grid) { c in
+                            RoundedRectangle(cornerRadius: 2)
+                                .fill(color(for: c))
+                                .frame(height: 12)
+                        }
+                    }
+                }
+
+                // 图例:从浅到深 5 档,跟 GitHub 一样
+                HStack(spacing: 4) {
+                    Text(String(localized: "少"))
+                        .font(.caption2).foregroundStyle(AppTheme.tertiary)
+                    ForEach([0.22, 0.40, 0.62, 0.82, 1.00], id: \.self) { o in
+                        RoundedRectangle(cornerRadius: 2)
+                            .fill(AppTheme.accent.opacity(o))
+                            .frame(width: 12, height: 12)
+                    }
+                    Text(String(localized: "多"))
+                        .font(.caption2).foregroundStyle(AppTheme.tertiary)
+                    Spacer()
+                    if maxAmount > 0 {
+                        Text(String(localized: "峰值 \(store.converter.format(maxAmount, currency: store.baseCurrency))"))
+                            .font(.caption2).foregroundStyle(AppTheme.secondary)
+                    }
+                }
+            }
+        }
     }
 }
 
