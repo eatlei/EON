@@ -219,12 +219,12 @@ struct AboutView: View {
         let subject = String(localized: "EON 反馈")
         var c = URLComponents()
         c.scheme = "mailto"
-        c.path = "eatpoc@gmail.com"
+        c.path = "leonguooct@gmail.com"
         c.queryItems = [
             URLQueryItem(name: "subject", value: subject),
             URLQueryItem(name: "body", value: body)
         ]
-        return c.url ?? URL(string: "mailto:eatpoc@gmail.com")!
+        return c.url ?? URL(string: "mailto:leonguooct@gmail.com")!
     }
 
     /// 功能需求建议 —— 跟反馈走同一个邮箱,只换主题 + 引导语,方便我把"想要的
@@ -243,12 +243,12 @@ struct AboutView: View {
         let subject = String(localized: "EON 功能建议")
         var c = URLComponents()
         c.scheme = "mailto"
-        c.path = "eatpoc@gmail.com"
+        c.path = "leonguooct@gmail.com"
         c.queryItems = [
             URLQueryItem(name: "subject", value: subject),
             URLQueryItem(name: "body", value: body)
         ]
-        return c.url ?? URL(string: "mailto:eatpoc@gmail.com")!
+        return c.url ?? URL(string: "mailto:leonguooct@gmail.com")!
     }
 }
 
