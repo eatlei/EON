@@ -40,7 +40,7 @@ struct EasterEggSettingsView: View {
                             trigger: "摇手机"
                         )
                     }
-                    .listRowBackground(glassRowBackground)
+                    .listRowBackground(glassRowBackground())
                 } footer: {
                     Text("摇一下手机,从活跃订阅里随机抽一个出来,弹出一张大卡片,用来快速决策\"这个我还要不要\"。配合震动反馈,有翻牌仪式感。")
                 }
@@ -54,7 +54,7 @@ struct EasterEggSettingsView: View {
                             trigger: "每天第一次打开总览"
                         )
                     }
-                    .listRowBackground(glassRowBackground)
+                    .listRowBackground(glassRowBackground())
                 } footer: {
                     Text("每天第一次回到\"总览\"页时,你最贵的几个订阅图标会像小彩带一样从上方飘下来。一天最多一次,1.5 秒结束,只是打个招呼。")
                 }
@@ -66,7 +66,8 @@ struct EasterEggSettingsView: View {
                         title: "彩蛋页 · 订阅小球",
                         trigger: "进入本页"
                     )
-                    .listRowBackground(glassRowBackground)
+                    // 同一 Section 两行:这行只圆上角,跟下面一行拼成一整块。
+                    .listRowBackground(glassRowBackground(top: true, bottom: false))
 
                     Toggle(isOn: $store.easterEggs.solidEmojiBalls) {
                         eggHeader(
@@ -75,7 +76,7 @@ struct EasterEggSettingsView: View {
                             trigger: "本页开关"
                         )
                     }
-                    .listRowBackground(glassRowBackground)
+                    .listRowBackground(glassRowBackground(top: false, bottom: true))
                 } footer: {
                     Text("现在屏幕下面那些小球,就是你所有活跃订阅的图标。手机歪一歪它们会滚,撞墙撞球都会有一点震动。订阅多的话只取前 \(EasterEggBallsView.ballCap) 个。开启「纯色表情球」后,小球会变成订阅主色 + 一个随机表情。")
                 }
@@ -97,16 +98,21 @@ struct EasterEggSettingsView: View {
         .navigationBarTitleDisplayMode(.inline)
     }
 
-    /// 单行的半透明卡片背景。之前用 `Color.clear.glassEffect` 在暗色模式下,因为
-    /// 背后没有足够亮的内容可"磨砂",会塌成一块纯黑方块,看起来像 bug。改用
-    /// `.regularMaterial`:两种模式下都渲染成正常的磨砂卡片,小球还能隐约透过来。
-    private var glassRowBackground: some View {
-        RoundedRectangle(cornerRadius: 14, style: .continuous)
+    /// 单行的半透明卡片背景。用 `.regularMaterial`(暗色下不会塌成纯黑块)。
+    /// top / bottom 控制只圆"分组外缘"的角:同一 Section 里的多行(上行只圆上角、
+    /// 下行只圆下角)能拼成一整块,而不是各自一个独立圆卡。
+    private func glassRowBackground(top: Bool = true, bottom: Bool = true) -> some View {
+        let r: CGFloat = 14
+        let shape = UnevenRoundedRectangle(
+            topLeadingRadius: top ? r : 0,
+            bottomLeadingRadius: bottom ? r : 0,
+            bottomTrailingRadius: bottom ? r : 0,
+            topTrailingRadius: top ? r : 0,
+            style: .continuous
+        )
+        return shape
             .fill(.regularMaterial)
-            .overlay(
-                RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .stroke(AppTheme.hairline, lineWidth: 0.5)
-            )
+            .overlay(shape.stroke(AppTheme.hairline, lineWidth: 0.5))
     }
 
     /// 每个彩蛋的标题行 = SF Symbol + 名字 + 触发方式徽章
