@@ -23,6 +23,18 @@ struct PersonalityView: View {
     /// 进场时的轻触反馈:大图弹到位时一下 medium impact,跟视觉的"啪"对上。
     @State private var revealTick = 0
 
+    /// 渲染好的分享卡片图(ImageRenderer 出图后填上,工具栏才出现分享按钮)。
+    @State private var cardImage: UIImage?
+
+    /// 分享卡片要展示的"隐私安全"数据:订阅数 + 分类数 + top 分类名(不含金额、
+    /// 不含具体服务名),足够有趣又不泄露敏感信息。
+    private var shareStats: PersonaShareStats {
+        let subs = store.activeSubscriptions
+        let cats = Set(subs.map { $0.displayCategoryID })
+        let top = store.categorySpend.prefix(3).map { $0.title }
+        return PersonaShareStats(count: subs.count, categoryCount: cats.count, topCategories: Array(top))
+    }
+
     var body: some View {
         // 主内容 = 大图 + 名字 + 标语 + 详情;放在可滚动区。
         // 辅助说明(随订阅变化 / 仅供娱乐)从滚动内容里拆出来,固定在弹窗底部,
@@ -52,9 +64,32 @@ struct PersonalityView: View {
         .navigationTitle("订阅人格")
         .navigationBarTitleDisplayMode(.inline)
         .sensoryFeedback(.impact(weight: .medium), trigger: revealTick)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                if let img = cardImage {
+                    ShareLink(
+                        item: Image(uiImage: img),
+                        preview: SharePreview(Text(verbatim: "EON · \(type.name)"),
+                                              image: Image(uiImage: img))
+                    ) {
+                        Image(systemName: "square.and.arrow.up")
+                    }
+                }
+            }
+        }
         .task {
+            renderShareCard()
             await playEntryAnimation()
         }
+    }
+
+    /// 用 ImageRenderer 把分享卡片烤成图。3x 保证清晰,出图后工具栏分享按钮才出现。
+    @MainActor
+    private func renderShareCard() {
+        let card = PersonalityShareCard(type: type, stats: shareStats)
+        let renderer = ImageRenderer(content: card)
+        renderer.scale = 3
+        cardImage = renderer.uiImage
     }
 
     /// 入场动画编排 —— 各元素错开节奏,跟一次 medium haptic 同步。
@@ -187,6 +222,136 @@ struct PersonalityView: View {
         }
         .padding(.top, AppTheme.Space.m)
         .opacity(disclaimerAppeared ? 1 : 0)
+    }
+}
+
+// MARK: - 分享卡片
+
+/// 卡片要展示的隐私安全数据。只放聚合数字 + 分类名,绝不含金额或具体服务名。
+struct PersonaShareStats {
+    let count: Int
+    let categoryCount: Int
+    let topCategories: [String]
+}
+
+/// 可分享的"订阅人格"卡片。用 ImageRenderer 烤成图后分享 / 存相册。
+/// 顶部露出 EON 图标 + 名称,中间是人格形象 + 名字 + 标语,下面是几枚数据胶囊。
+private struct PersonalityShareCard: View {
+    let type: PersonalityType
+    let stats: PersonaShareStats
+
+    private let width: CGFloat = 360
+
+    var body: some View {
+        VStack(spacing: AppTheme.Space.l) {
+            // 顶部品牌行
+            HStack(spacing: 8) {
+                brandIcon
+                Text(verbatim: "EON")
+                    .font(.system(size: 18, weight: .heavy, design: .rounded))
+                    .foregroundStyle(.white)
+                Spacer()
+                Text("订阅人格")
+                    .font(.caption.weight(.bold))
+                    .foregroundStyle(.white.opacity(0.85))
+                    .padding(.horizontal, 10).padding(.vertical, 4)
+                    .background(.white.opacity(0.18), in: Capsule())
+            }
+
+            // 人格形象
+            personaArt
+                .frame(width: 150, height: 150)
+                .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
+                .overlay(RoundedRectangle(cornerRadius: 28, style: .continuous)
+                    .stroke(.white.opacity(0.5), lineWidth: 1))
+                .shadow(color: .black.opacity(0.25), radius: 16, y: 8)
+
+            VStack(spacing: 6) {
+                Text(type.name)
+                    .font(.system(size: 26, weight: .heavy, design: .rounded))
+                    .foregroundStyle(.white)
+                    .multilineTextAlignment(.center)
+                Text(type.tagline)
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(.white.opacity(0.9))
+                    .multilineTextAlignment(.center)
+            }
+
+            // 数据胶囊(隐私安全:只有数量 + 分类名)
+            HStack(spacing: 8) {
+                statChip(value: "\(stats.count)", label: String(localized: "订阅"))
+                statChip(value: "\(stats.categoryCount)", label: String(localized: "分类"))
+            }
+            if !stats.topCategories.isEmpty {
+                Text(stats.topCategories.joined(separator: " · "))
+                    .font(.caption.weight(.semibold))
+                    .foregroundStyle(.white.opacity(0.9))
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 12).padding(.vertical, 6)
+                    .background(.white.opacity(0.15), in: Capsule())
+            }
+
+            Text("由 EON 生成 · 仅供娱乐")
+                .font(.caption2)
+                .foregroundStyle(.white.opacity(0.7))
+                .padding(.top, 2)
+        }
+        .padding(AppTheme.Space.xl)
+        .frame(width: width)
+        .background(
+            ZStack {
+                LinearGradient(
+                    colors: [type.tint, type.tint.opacity(0.65)],
+                    startPoint: .topLeading, endPoint: .bottomTrailing
+                )
+                RadialGradient(
+                    colors: [.white.opacity(0.25), .clear],
+                    center: UnitPoint(x: 0.2, y: 0.1), startRadius: 0, endRadius: 260
+                )
+            }
+        )
+    }
+
+    @ViewBuilder
+    private var brandIcon: some View {
+        if let ui = UIImage(named: "EONBrandIcon") {
+            Image(uiImage: ui).resizable().scaledToFill()
+                .frame(width: 30, height: 30)
+                .clipShape(RoundedRectangle(cornerRadius: 7, style: .continuous))
+        } else {
+            RoundedRectangle(cornerRadius: 7, style: .continuous)
+                .fill(.white.opacity(0.25))
+                .frame(width: 30, height: 30)
+                .overlay(Text(verbatim: "E").font(.system(size: 16, weight: .heavy, design: .rounded)).foregroundStyle(.white))
+        }
+    }
+
+    @ViewBuilder
+    private var personaArt: some View {
+        if UIImage(named: type.imageAssetName) != nil {
+            Image(type.imageAssetName).resizable().scaledToFill()
+        } else {
+            ZStack {
+                Color.white.opacity(0.16)
+                Image(systemName: type.fallbackSymbol)
+                    .font(.system(size: 64, weight: .bold))
+                    .foregroundStyle(.white)
+            }
+        }
+    }
+
+    private func statChip(value: String, label: String) -> some View {
+        VStack(spacing: 0) {
+            Text(value)
+                .font(.system(size: 22, weight: .heavy, design: .rounded).monospacedDigit())
+                .foregroundStyle(.white)
+            Text(label)
+                .font(.caption2.weight(.semibold))
+                .foregroundStyle(.white.opacity(0.8))
+        }
+        .frame(minWidth: 64)
+        .padding(.vertical, 8)
+        .background(.white.opacity(0.15), in: RoundedRectangle(cornerRadius: 12))
     }
 }
 

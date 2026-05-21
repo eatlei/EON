@@ -27,7 +27,6 @@ struct DashboardView: View {
                         ScrollView {
                             VStack(spacing: AppTheme.Space.xl) {
                                 HeroTotal(period: period).reveal(0)
-                                PersonalityEntry()
                                 // 试用面板紧跟在总额下面,只有当用户标了试用
                                 // 订阅时才出现 —— 提醒首次正式扣费倒计时,
                                 // 免得免费试用悄悄转成付费。
@@ -162,19 +161,19 @@ private struct DashboardHeader: View {
             .frame(maxWidth: 200)  // 三档,留点空间不要顶到右边
 
             Spacer()
-            // 订阅人格入口从这里挪走了 —— 不再常驻吸顶 Header。改成下方内容区的
-            // 一个文字按钮(PersonalityEntry),且只有"首次打开 / 人格变化"时才有
-            // 轻微动效提示。
+            // 订阅人格入口:回到右上角,但做成轻量文字按钮(非常驻胶囊)。
+            // 只有"从没打开过 / 人格变化了"时才高亮 + 脉动提示。
+            PersonalityEntry()
         }
     }
 }
 
-// MARK: - 订阅人格入口(内容区文字按钮)
+// MARK: - 订阅人格入口(右上角文字按钮)
 //
-// 需求:不常驻顶部;只有"用户从没打开过"或"人格自上次查看后又变了"时,入口
-// 才有一点点动效提示。看过之后(markViewed)动效立刻消失,直到人格再次变化。
-// 即便人格连变多次没看,只要看一次最新的就重置 —— 因为判定只看"当前 vs 上次
-// 查看的人格",跟变化次数无关。
+// 需求:放在 Overview 右上角,但不常驻成重胶囊 —— 做成轻量文字按钮。
+// 只有"用户从没打开过"或"人格自上次查看后又变了"时,入口才有一点点动效提示。
+// 看过之后(markViewed)动效立刻消失,直到人格再次变化。即便人格连变多次没看,
+// 只要看一次最新的就重置 —— 因为判定只看"当前 vs 上次查看的人格",跟变化次数无关。
 private struct PersonalityEntry: View {
     @EnvironmentObject private var store: SubscriptionStore
     @State private var showPersonality = false
@@ -186,28 +185,22 @@ private struct PersonalityEntry: View {
             Haptics.tap()
             showPersonality = true
         } label: {
-            HStack(spacing: 8) {
+            HStack(spacing: 4) {
                 Image(systemName: "sparkles")
-                    .font(.subheadline.weight(.bold))
+                    .font(.caption.weight(.bold))
                     .foregroundStyle(highlight ? AppTheme.accent : AppTheme.secondary)
-                    .scaleEffect(highlight && pulse ? 1.18 : 1)
-                Text("看看你的订阅人格")
+                    .scaleEffect(highlight && pulse ? 1.2 : 1)
+                Text("人格")
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(highlight ? AppTheme.ink : AppTheme.secondary)
                 // 有更新时挂一个小红点,跟动效一起提示"有新东西"。
                 if highlight {
                     Circle().fill(Color.red).frame(width: 6, height: 6)
                 }
-                Image(systemName: "chevron.right")
-                    .font(.caption2.weight(.bold))
-                    .foregroundStyle(AppTheme.tertiary)
             }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 10)
-            .background(
-                Capsule().fill(highlight ? AppTheme.accent.opacity(0.10) : Color.clear)
-            )
-            .contentShape(Capsule())
+            .padding(.horizontal, 8)
+            .padding(.vertical, 6)
+            .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
         .onAppear {
