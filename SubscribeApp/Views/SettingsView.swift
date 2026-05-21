@@ -33,7 +33,7 @@ struct SettingsView: View {
                     NavigationLink(value: SettingsRoute.easterEgg) {
                         HStack(spacing: 12) {
                             SettingsIcon(name: "sparkles")
-                            Text("彩蛋")
+                            Text("藏着的惊喜")
                         }
                     }
                 } header: {
