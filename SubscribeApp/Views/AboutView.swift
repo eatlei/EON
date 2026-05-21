@@ -98,6 +98,19 @@ struct AboutView: View {
             }
 
             Section {
+                NavigationLink {
+                    VersionHistoryView()
+                } label: {
+                    HStack(spacing: 12) {
+                        SettingsIcon(name: "clock.arrow.circlepath")
+                        Text("版本历史")
+                    }
+                }
+            } header: {
+                Text("更新")
+            }
+
+            Section {
                 Button {
                     // 直接在 App 内调起系统评分弹窗,不再跳出去 App Store。
                     // 系统会按自己的频控决定要不要真正展示,我们调用就完事。
@@ -128,6 +141,17 @@ struct AboutView: View {
                     HStack(spacing: 12) {
                         SettingsIcon(name: "envelope")
                         Text("发送反馈").foregroundStyle(AppTheme.ink)
+                        Spacer()
+                    }
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                Button {
+                    openURL(featureRequestMailURL())
+                } label: {
+                    HStack(spacing: 12) {
+                        SettingsIcon(name: "lightbulb")
+                        Text("功能需求建议").foregroundStyle(AppTheme.ink)
                         Spacer()
                     }
                     .contentShape(Rectangle())
@@ -184,6 +208,30 @@ struct AboutView: View {
         Device: \(model)
         """
         let subject = String(localized: "EON 反馈")
+        var c = URLComponents()
+        c.scheme = "mailto"
+        c.path = "eatpoc@gmail.com"
+        c.queryItems = [
+            URLQueryItem(name: "subject", value: subject),
+            URLQueryItem(name: "body", value: body)
+        ]
+        return c.url ?? URL(string: "mailto:eatpoc@gmail.com")!
+    }
+
+    /// 功能需求建议 —— 跟反馈走同一个邮箱,只换主题 + 引导语,方便我把"想要的
+    /// 新功能"和"问题报告"分开看。
+    private func featureRequestMailURL() -> URL {
+        let v = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
+        let b = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "1"
+        let intro = String(localized: "想要 EON 增加什么功能？在这里告诉我：")
+        let body = """
+        \(intro)
+
+
+        ——
+        App: EON v\(v) (\(b))
+        """
+        let subject = String(localized: "EON 功能建议")
         var c = URLComponents()
         c.scheme = "mailto"
         c.path = "eatpoc@gmail.com"

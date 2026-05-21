@@ -150,9 +150,18 @@ final class EasterEggBallsScene: SKScene, SKPhysicsContactDelegate {
 /// 把 SpriteView 当 ZStack 背景挂在彩蛋页里,List 走 Liquid Glass 行背景透出来。
 struct EasterEggBallsView: View {
     let subscriptions: [Subscription]
+    /// 纯色表情模式:开了之后球不画图标,改成"订阅主色纯色球 + 随机表情"。
+    var solidEmoji: Bool = false
     /// 安全上限。订阅数大于这个值时,只取前 N 个做球;再多 SpriteKit 也不卡,
     /// 但球互相挤会黏成一团没意思。
     static let ballCap = 24
+
+    /// 纯色模式用的表情池。按订阅 id 稳定取一个,不会每次重绘乱跳。
+    private static let emojiPool: [String] = [
+        "😀", "😎", "🤑", "🥳", "😴", "🤖", "👾", "🎉", "💎", "🔥",
+        "🌈", "🍩", "🐱", "🦊", "🐼", "🚀", "⭐️", "🍀", "🎈", "🍕",
+        "👻", "🤡", "🦄", "🍔"
+    ]
 
     @State private var scene: EasterEggBallsScene?
     @Environment(\.displayScale) private var displayScale
@@ -199,9 +208,19 @@ struct EasterEggBallsView: View {
         var out: [SKTexture] = []
         for sub in used {
             let view = ZStack {
-                CategoryGlyph(subscription: sub, size: renderSize)
+                // 球面本体:默认画订阅图标;纯色模式画"主色 + 表情"。
+                if solidEmoji {
+                    ZStack {
+                        Circle().fill(ballColor(sub))
+                        Text(emoji(for: sub))
+                            .font(.system(size: renderSize * 0.5))
+                    }
                     .frame(width: renderSize, height: renderSize)
-                    .clipShape(Circle())
+                } else {
+                    CategoryGlyph(subscription: sub, size: renderSize)
+                        .frame(width: renderSize, height: renderSize)
+                        .clipShape(Circle())
+                }
                 // 顶部偏左的高光 —— 一小撮 radial gradient,撑起"球面"的反光感,
                 // 让平的 icon 看起来真的像个抛了光的玻璃 / 弹珠球。
                 Circle()
@@ -232,5 +251,22 @@ struct EasterEggBallsView: View {
             }
         }
         return out
+    }
+
+    /// 订阅"主色":tile 取色号,image 取图像平均色,都回退分类色。跟订阅卡片同源。
+    private func ballColor(_ sub: Subscription) -> Color {
+        switch sub.icon {
+        case .tile(_, let hex):
+            return hex.map { Color(hexString: $0) } ?? sub.displayCategoryColor
+        case .image(let id):
+            if let ui = IconStore.averageColor(id) { return Color(uiColor: ui) }
+            return sub.displayCategoryColor
+        }
+    }
+
+    /// 由订阅 id 稳定取一个表情,保证同一订阅每次都是同一个脸。
+    private func emoji(for sub: Subscription) -> String {
+        let idx = abs(sub.id.uuidString.hashValue) % Self.emojiPool.count
+        return Self.emojiPool[idx]
     }
 }

@@ -20,9 +20,14 @@ struct EasterEggSettingsView: View {
             // 不出现,因为它们已经不算活跃数据。
             let ballSubs = store.subscriptions.filter { !$0.isArchived }
             if !ballSubs.isEmpty {
-                EasterEggBallsView(subscriptions: ballSubs)
-                    .ignoresSafeArea()
-                    .allowsHitTesting(false)
+                EasterEggBallsView(
+                    subscriptions: ballSubs,
+                    solidEmoji: store.easterEggs.solidEmojiBalls
+                )
+                .ignoresSafeArea()
+                .allowsHitTesting(false)
+                // 切换纯色模式时换 id → 整个物理场景重建,球以新样式重新掉一遍。
+                .id(store.easterEggs.solidEmojiBalls ? "solid" : "icon")
             }
 
             List {
@@ -54,8 +59,7 @@ struct EasterEggSettingsView: View {
                     Text("每天第一次回到\"总览\"页时,你最贵的几个订阅图标会像小彩带一样从上方飘下来。一天最多一次,1.5 秒结束,只是打个招呼。")
                 }
 
-                // 3. 彩蛋页·物理球(本页这个)。没有开关,只是个说明,
-                // 顺便让用户知道屏幕底下那一堆球是怎么回事。
+                // 3. 彩蛋页·物理球(本页这个)。说明 + 一个"纯色表情"开关。
                 Section {
                     eggHeader(
                         symbol: "circle.grid.3x3.fill",
@@ -63,8 +67,17 @@ struct EasterEggSettingsView: View {
                         trigger: "进入本页"
                     )
                     .listRowBackground(glassRowBackground)
+
+                    Toggle(isOn: $store.easterEggs.solidEmojiBalls) {
+                        eggHeader(
+                            symbol: "face.smiling",
+                            title: "纯色表情球",
+                            trigger: "本页开关"
+                        )
+                    }
+                    .listRowBackground(glassRowBackground)
                 } footer: {
-                    Text("现在屏幕下面那些小球,就是你所有活跃订阅的图标。手机歪一歪它们会滚,撞墙撞球都会有一点震动。订阅多的话只取前 \(EasterEggBallsView.ballCap) 个。")
+                    Text("现在屏幕下面那些小球,就是你所有活跃订阅的图标。手机歪一歪它们会滚,撞墙撞球都会有一点震动。订阅多的话只取前 \(EasterEggBallsView.ballCap) 个。开启「纯色表情球」后,小球会变成订阅主色 + 一个随机表情。")
                 }
 
                 Section {

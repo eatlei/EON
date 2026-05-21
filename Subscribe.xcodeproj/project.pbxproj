@@ -32,6 +32,7 @@
 		6A3529ED5CBF9D52D08375C4 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = FA4B32A05C5F9821174DE793 /* Localizable.xcstrings */; };
 		7E26F5C9A2784A91CFB7CA10 /* IconPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78326829449ABBC508F536A3 /* IconPickerView.swift */; };
 		7EC121F3AC0DE9CB43EF36E1 /* SubscriptionEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57A000AE363FDB1ADBCB23F5 /* SubscriptionEditorView.swift */; };
+		7F5F9071BAF7AC253AFAD936 /* VersionHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B9062DF84C42D3939D95DC0 /* VersionHistoryView.swift */; };
 		81EFDBC0D53F6C4CDD5DBD68 /* PaymentMethodsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F18249F1BDF27876BC795427 /* PaymentMethodsView.swift */; };
 		82BB1651BE2CC4EBB841454A /* EasterEggBallsScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0953D3BBAFF01058C05C4E00 /* EasterEggBallsScene.swift */; };
 		91B4CADF7E9ABE9F1AA38641 /* AppearanceSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E326D177E55F0830811DA8 /* AppearanceSettingsView.swift */; };
@@ -60,6 +61,7 @@
 		10A3F11D2D1B4CFE31C07A34 /* SubscribeApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SubscribeApp.entitlements; sourceTree = "<group>"; };
 		10A7DA4B5B98C499EBB2BC70 /* LifetimeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LifetimeDetailView.swift; sourceTree = "<group>"; };
 		1307B8977CD8A78BC957BB94 /* PersonalityType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalityType.swift; sourceTree = "<group>"; };
+		1B9062DF84C42D3939D95DC0 /* VersionHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionHistoryView.swift; sourceTree = "<group>"; };
 		278E1A85DA8D02D3694C43DD /* SubscriptionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionStore.swift; sourceTree = "<group>"; };
 		3BFDBF0EB309BC18707263B5 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		3CCFDEF22DB5A42364871F22 /* SubscriptionDetailSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionDetailSheet.swift; sourceTree = "<group>"; };
@@ -160,6 +162,7 @@
 				EF2B1A4EE8C71CFEC125E8C6 /* SubscriptionsView.swift */,
 				ABA05720A891C34355A2A203 /* TipSheet.swift */,
 				0BE86960227F0CF15441A869 /* Toast.swift */,
+				1B9062DF84C42D3939D95DC0 /* VersionHistoryView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -326,6 +329,7 @@
 				5964F4F0877646452D849F50 /* TipSheet.swift in Sources */,
 				0A324C0CCAE7EBF5319717F7 /* TipStore.swift in Sources */,
 				9B848F4CCD77B6A204D3D2F6 /* Toast.swift in Sources */,
+				7F5F9071BAF7AC253AFAD936 /* VersionHistoryView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

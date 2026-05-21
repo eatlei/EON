@@ -735,17 +735,23 @@ private struct Settings: Codable {
 struct EasterEggPrefs: Codable, Equatable {
     var shakeSpotlight: Bool
     var dailyWelcomeConfetti: Bool
+    /// 彩蛋页小球的"纯色表情"模式。开启后小球不再画订阅图标,而是用订阅的主色
+    /// 做成纯色球 + 一个随机表情。默认关(显示真实图标),纯属玩。
+    var solidEmojiBalls: Bool
 
     init(shakeSpotlight: Bool = true,
-         dailyWelcomeConfetti: Bool = true) {
+         dailyWelcomeConfetti: Bool = true,
+         solidEmojiBalls: Bool = false) {
         self.shakeSpotlight = shakeSpotlight
         self.dailyWelcomeConfetti = dailyWelcomeConfetti
+        self.solidEmojiBalls = solidEmojiBalls
     }
 
     init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
         shakeSpotlight = try c.decodeIfPresent(Bool.self, forKey: .shakeSpotlight) ?? true
         dailyWelcomeConfetti = try c.decodeIfPresent(Bool.self, forKey: .dailyWelcomeConfetti) ?? true
+        solidEmojiBalls = try c.decodeIfPresent(Bool.self, forKey: .solidEmojiBalls) ?? false
     }
 }
 
