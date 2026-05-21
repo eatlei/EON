@@ -1,5 +1,6 @@
 import SwiftUI
 import StoreKit
+import UIKit
 
 /// 打赏 sheet —— 跟"功能解锁"完全脱钩,纯爱心的"请开发者喝杯咖啡"。
 /// 设计偏游戏化:咖啡 emoji 卡 + 玩笑文案,把"花一笔小钱支持独立开发者"
@@ -84,7 +85,7 @@ struct TipSheet: View {
                         )
                     )
                     .frame(width: 180, height: 180)
-                Text("☕")
+                Text("💖")
                     .font(.system(size: 80))
                     .scaleEffect(heartBeat ? 1.08 : 0.95)
             }
@@ -107,6 +108,7 @@ struct TipSheet: View {
         VStack(spacing: AppTheme.Space.m) {
             ForEach(Array(tips.products.enumerated()), id: \.element.id) { idx, product in
                 TipCard(
+                    assetName: TipMeta.asset(idx),
                     emoji: TipMeta.emoji(idx),
                     title: TipMeta.title(idx),
                     flavor: TipMeta.flavor(idx),
@@ -156,6 +158,8 @@ struct TipSheet: View {
 // MARK: - Tip card
 
 private struct TipCard: View {
+    /// 该档对应的咖啡图标资源名(抠好背景的 PNG)。资源缺失时回退到 emoji。
+    let assetName: String
     let emoji: String
     let title: LocalizedStringKey
     let flavor: LocalizedStringKey
@@ -167,10 +171,18 @@ private struct TipCard: View {
     var body: some View {
         Button(action: onTap) {
             HStack(spacing: AppTheme.Space.l) {
-                Text(emoji)
-                    .font(.system(size: 44))
-                    .frame(width: 64, height: 64)
-                    .background(AppTheme.canvas, in: RoundedRectangle(cornerRadius: 18))
+                Group {
+                    if !assetName.isEmpty, UIImage(named: assetName) != nil {
+                        Image(assetName)
+                            .resizable()
+                            .scaledToFit()
+                            .padding(6)
+                    } else {
+                        Text(emoji).font(.system(size: 44))
+                    }
+                }
+                .frame(width: 64, height: 64)
+                .background(AppTheme.canvas, in: RoundedRectangle(cornerRadius: 18))
 
                 VStack(alignment: .leading, spacing: 4) {
                     Text(title)
@@ -323,6 +335,10 @@ private struct EmojiRain: View {
 // 速溶 < 冰美式 < 冷萃 < 顶级瑰夏手冲。
 
 private enum TipMeta {
+    /// 各档对应的咖啡图标资源名(抠好背景):速溶 / 冰美式 / 冷萃 / 瑰夏手冲。
+    static func asset(_ idx: Int) -> String {
+        ["TipInstant", "TipIced", "TipColdBrew", "TipGeisha"][safe: idx] ?? ""
+    }
     static func emoji(_ idx: Int) -> String {
         ["☕", "🥤", "🧊", "🏆"][safe: idx] ?? "💝"
     }
