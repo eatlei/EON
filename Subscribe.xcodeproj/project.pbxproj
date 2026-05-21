@@ -14,6 +14,7 @@
 		0FA4B2EF1DAA2206FDFA08DE /* PersonalityType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1307B8977CD8A78BC957BB94 /* PersonalityType.swift */; };
 		1140D25072B7C49C22068519 /* SubscriptionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 278E1A85DA8D02D3694C43DD /* SubscriptionStore.swift */; };
 		1BFE8BB89ECF18CDCF938BB0 /* CurrencySettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BDB097D8CE722AF0DF25156 /* CurrencySettingsView.swift */; };
+		263ECA499A514A0CF1077660 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = FA4B32A05C5F9821174DE793 /* Localizable.xcstrings */; };
 		270C8B830E689DAC6DB890C3 /* CustomCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC5D6BFC6D29F5A5966683F9 /* CustomCategory.swift */; };
 		2B249D94308F325B4A5D1D10 /* DashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BFDBF0EB309BC18707263B5 /* DashboardView.swift */; };
 		2BDCDD1205A9EB3291AA9B76 /* NotificationSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF4459274422611AF74E573 /* NotificationSettingsView.swift */; };
@@ -23,6 +24,7 @@
 		449118277B1D0591B951EEA5 /* MasonryGrid.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FECDF2B6EF79BCC0A033120 /* MasonryGrid.swift */; };
 		4BEB780CDCCBFB7E7CDA90E9 /* DailyWelcomeConfetti.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CC03432ABBED16209C01940 /* DailyWelcomeConfetti.swift */; };
 		4C64DDA41CC72F88E10CE6A4 /* EasterEggSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85D7F4A455AC9C81607B7E4C /* EasterEggSettingsView.swift */; };
+		4CEEEBDCBC45B4B1C41EBDAC /* WidgetShared.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7341B1392B9CEC9937D032CC /* WidgetShared.swift */; };
 		5939321A4C7E3D1ABC5C23C2 /* Subscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5499976ECD845C44C8FBD8CB /* Subscription.swift */; };
 		5964F4F0877646452D849F50 /* TipSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABA05720A891C34355A2A203 /* TipSheet.swift */; };
 		597F4F5AA13C2526CFC82C1B /* ExchangeRateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F48BEDC374CBD54A7C010158 /* ExchangeRateService.swift */; };
@@ -41,10 +43,14 @@
 		9B848F4CCD77B6A204D3D2F6 /* Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE86960227F0CF15441A869 /* Toast.swift */; };
 		9E33482B494895D9981618F5 /* IconStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6E64A9893062485E4E3DD9FD /* IconStore.swift */; };
 		9EA500F625140C79588C5CCC /* Haptics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E23BE9E7956151A360BE0C4 /* Haptics.swift */; };
+		A774840C982382E84D955FA1 /* WidgetShared.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7341B1392B9CEC9937D032CC /* WidgetShared.swift */; };
 		B7351B13740709B8DFE512C8 /* PersonalityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6FA51330054DE91B765C4C8 /* PersonalityView.swift */; };
 		C27ABAC774BB186CFA0496F6 /* LLMExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D75247CB3B2D0B30F64A187A /* LLMExporter.swift */; };
 		C82EC5D3AA16B65ABBFE635D /* NotificationScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C474BE951C367D83194A7B /* NotificationScheduler.swift */; };
+		CAE7E04EDD62415C5D513BFC /* ReceiptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E83A82BA57C51929AE2CBD16 /* ReceiptView.swift */; };
+		CC86EB8B754FD1A680AAA59A /* EONWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFF75136DF52DC35764FB7DC /* EONWidgets.swift */; };
 		CDC6F0408C0E9A364D17600A /* SubscriptionDetailSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CCFDEF22DB5A42364871F22 /* SubscriptionDetailSheet.swift */; };
+		CF605A61F7B415F76462B4C4 /* EONWidgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = FE916286BCEB94944FC8C18D /* EONWidgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		D4B7D72CFE9D15A3BCA812F1 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ECE824190F78DD3AD0B9A41 /* SettingsView.swift */; };
 		D61908DF7B850466890A7CB3 /* RandomSpotlightSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A27A1E1F038AAF41ECAE8CC9 /* RandomSpotlightSheet.swift */; };
 		D9D48496ECFA76951850FFA3 /* ArchivedSubscriptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD5797346C09EA8D743A297C /* ArchivedSubscriptionsView.swift */; };
@@ -57,6 +63,30 @@
 		F4D243320C3F978CCD1A413C /* DataSyncSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A685EDE27E39F3F2842793B /* DataSyncSettingsView.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		5388922848A2F50572D5B86D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 25E1861679C8E5CA89EA1FE9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 36C904ED2903245D17B11F12;
+			remoteInfo = EONWidgets;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		453B7B98B3ED68B149D8CA38 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				CF605A61F7B415F76462B4C4 /* EONWidgets.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		0953D3BBAFF01058C05C4E00 /* EasterEggBallsScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EasterEggBallsScene.swift; sourceTree = "<group>"; };
 		0BE86960227F0CF15441A869 /* Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toast.swift; sourceTree = "<group>"; };
@@ -67,8 +97,10 @@
 		1B9062DF84C42D3939D95DC0 /* VersionHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionHistoryView.swift; sourceTree = "<group>"; };
 		278E1A85DA8D02D3694C43DD /* SubscriptionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionStore.swift; sourceTree = "<group>"; };
 		2E23BE9E7956151A360BE0C4 /* Haptics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Haptics.swift; sourceTree = "<group>"; };
+		3717004A1E6B198A5663F31E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		3BFDBF0EB309BC18707263B5 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
 		3CCFDEF22DB5A42364871F22 /* SubscriptionDetailSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionDetailSheet.swift; sourceTree = "<group>"; };
+		47FDA8445D51D77EED18884C /* EONWidgets.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = EONWidgets.entitlements; sourceTree = "<group>"; };
 		5499976ECD845C44C8FBD8CB /* Subscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subscription.swift; sourceTree = "<group>"; };
 		55C474BE951C367D83194A7B /* NotificationScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationScheduler.swift; sourceTree = "<group>"; };
 		57A000AE363FDB1ADBCB23F5 /* SubscriptionEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionEditorView.swift; sourceTree = "<group>"; };
@@ -78,6 +110,7 @@
 		6A685EDE27E39F3F2842793B /* DataSyncSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSyncSettingsView.swift; sourceTree = "<group>"; };
 		6BDB097D8CE722AF0DF25156 /* CurrencySettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencySettingsView.swift; sourceTree = "<group>"; };
 		6E64A9893062485E4E3DD9FD /* IconStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconStore.swift; sourceTree = "<group>"; };
+		7341B1392B9CEC9937D032CC /* WidgetShared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetShared.swift; sourceTree = "<group>"; };
 		74E278F7CFCB689EC870BCC0 /* AppStoreIconService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStoreIconService.swift; sourceTree = "<group>"; };
 		78326829449ABBC508F536A3 /* IconPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconPickerView.swift; sourceTree = "<group>"; };
 		7ECFF1B53B3302FE53141D65 /* AppTheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTheme.swift; sourceTree = "<group>"; };
@@ -94,12 +127,14 @@
 		AC5D6BFC6D29F5A5966683F9 /* CustomCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCategory.swift; sourceTree = "<group>"; };
 		B29BFA91E21DE23CF88DCAC7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		B6FA51330054DE91B765C4C8 /* PersonalityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalityView.swift; sourceTree = "<group>"; };
+		BFF75136DF52DC35764FB7DC /* EONWidgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EONWidgets.swift; sourceTree = "<group>"; };
 		CD93304A76F63734E76AB1E8 /* CategorySettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySettingsView.swift; sourceTree = "<group>"; };
 		D75247CB3B2D0B30F64A187A /* LLMExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LLMExporter.swift; sourceTree = "<group>"; };
 		D9CA153951B96AEB8859C0B8 /* SubscribeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscribeApp.swift; sourceTree = "<group>"; };
 		DA7D0201FA943AD4E0AA3BA8 /* NotificationIconRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationIconRenderer.swift; sourceTree = "<group>"; };
 		DB3757917818B820ACD482C2 /* ShakeDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShakeDetector.swift; sourceTree = "<group>"; };
 		DD5797346C09EA8D743A297C /* ArchivedSubscriptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArchivedSubscriptionsView.swift; sourceTree = "<group>"; };
+		E83A82BA57C51929AE2CBD16 /* ReceiptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptView.swift; sourceTree = "<group>"; };
 		EF2B1A4EE8C71CFEC125E8C6 /* SubscriptionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionsView.swift; sourceTree = "<group>"; };
 		F18249F1BDF27876BC795427 /* PaymentMethodsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentMethodsView.swift; sourceTree = "<group>"; };
 		F1E326D177E55F0830811DA8 /* AppearanceSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearanceSettingsView.swift; sourceTree = "<group>"; };
@@ -109,6 +144,7 @@
 		F8BECFC9E57AC91905710BCF /* CategoryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryDetailView.swift; sourceTree = "<group>"; };
 		FA4B32A05C5F9821174DE793 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		FAF4459274422611AF74E573 /* NotificationSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettingsView.swift; sourceTree = "<group>"; };
+		FE916286BCEB94944FC8C18D /* EONWidgets.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = EONWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -123,6 +159,7 @@
 		46A85862377EC9F7C2F801A2 /* Products */ = {
 			isa = PBXGroup;
 			children = (
+				FE916286BCEB94944FC8C18D /* EONWidgets.appex */,
 				93C9229073710C354E367927 /* SubscribeApp.app */,
 			);
 			name = Products;
@@ -131,6 +168,8 @@
 		48338609EB686ADB4FE276B1 = {
 			isa = PBXGroup;
 			children = (
+				69A45B2618A88063973538F1 /* EONWidgets */,
+				990C7243E3A1370011757B87 /* Shared */,
 				F1F0F7597420B54DE5502EC7 /* SubscribeApp */,
 				46A85862377EC9F7C2F801A2 /* Products */,
 			);
@@ -160,6 +199,7 @@
 				F18249F1BDF27876BC795427 /* PaymentMethodsView.swift */,
 				B6FA51330054DE91B765C4C8 /* PersonalityView.swift */,
 				A27A1E1F038AAF41ECAE8CC9 /* RandomSpotlightSheet.swift */,
+				E83A82BA57C51929AE2CBD16 /* ReceiptView.swift */,
 				5ECE824190F78DD3AD0B9A41 /* SettingsView.swift */,
 				DB3757917818B820ACD482C2 /* ShakeDetector.swift */,
 				F83900B936E3D2CE2D308A08 /* SpinningIcon.swift */,
@@ -182,6 +222,25 @@
 				5499976ECD845C44C8FBD8CB /* Subscription.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		69A45B2618A88063973538F1 /* EONWidgets */ = {
+			isa = PBXGroup;
+			children = (
+				47FDA8445D51D77EED18884C /* EONWidgets.entitlements */,
+				BFF75136DF52DC35764FB7DC /* EONWidgets.swift */,
+				3717004A1E6B198A5663F31E /* Info.plist */,
+			);
+			path = EONWidgets;
+			sourceTree = "<group>";
+		};
+		990C7243E3A1370011757B87 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				7341B1392B9CEC9937D032CC /* WidgetShared.swift */,
+			);
+			name = Shared;
+			path = SubscribeApp/Shared;
 			sourceTree = "<group>";
 		};
 		ADBB179F34DFEEC2BF3C0DE0 /* Services */ = {
@@ -211,6 +270,7 @@
 				D9CA153951B96AEB8859C0B8 /* SubscribeApp.swift */,
 				5AFCBE2A087A8BB7B5B5CAB1 /* Models */,
 				ADBB179F34DFEEC2BF3C0DE0 /* Services */,
+				990C7243E3A1370011757B87 /* Shared */,
 				12C34D77F483A502E2A490CD /* Store */,
 				5168487F2DF7A9A476010948 /* Views */,
 			);
@@ -220,16 +280,36 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		36C904ED2903245D17B11F12 /* EONWidgets */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E7196A53027775F092DC3D81 /* Build configuration list for PBXNativeTarget "EONWidgets" */;
+			buildPhases = (
+				4D3A99FF19BD2714FEA2ED72 /* Sources */,
+				512C61E88F5BBC988B6AD798 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = EONWidgets;
+			packageProductDependencies = (
+			);
+			productName = EONWidgets;
+			productReference = FE916286BCEB94944FC8C18D /* EONWidgets.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		8B7B793B12DC71F69EA8B6BC /* SubscribeApp */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = AAE672CFE639C2F6222D5E43 /* Build configuration list for PBXNativeTarget "SubscribeApp" */;
 			buildPhases = (
 				04CA52D5E242E1E4C68AE512 /* Sources */,
 				614124DC8126ED7359083D55 /* Resources */,
+				453B7B98B3ED68B149D8CA38 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				CC3D0A873913F15363C1416A /* PBXTargetDependency */,
 			);
 			name = SubscribeApp;
 			packageProductDependencies = (
@@ -247,6 +327,10 @@
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
+					36C904ED2903245D17B11F12 = {
+						DevelopmentTeam = 56D3875D7U;
+						ProvisioningStyle = Automatic;
+					};
 					8B7B793B12DC71F69EA8B6BC = {
 						DevelopmentTeam = 56D3875D7U;
 						ProvisioningStyle = Automatic;
@@ -274,12 +358,21 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
+				36C904ED2903245D17B11F12 /* EONWidgets */,
 				8B7B793B12DC71F69EA8B6BC /* SubscribeApp */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		512C61E88F5BBC988B6AD798 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				263ECA499A514A0CF1077660 /* Localizable.xcstrings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		614124DC8126ED7359083D55 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -328,6 +421,7 @@
 				0FA4B2EF1DAA2206FDFA08DE /* PersonalityType.swift in Sources */,
 				B7351B13740709B8DFE512C8 /* PersonalityView.swift in Sources */,
 				D61908DF7B850466890A7CB3 /* RandomSpotlightSheet.swift in Sources */,
+				CAE7E04EDD62415C5D513BFC /* ReceiptView.swift in Sources */,
 				E76060878123D0E64F5A40D4 /* RemindersService.swift in Sources */,
 				D4B7D72CFE9D15A3BCA812F1 /* SettingsView.swift in Sources */,
 				F48247FF7D34F4FCF323BCBD /* ShakeDetector.swift in Sources */,
@@ -342,10 +436,28 @@
 				0A324C0CCAE7EBF5319717F7 /* TipStore.swift in Sources */,
 				9B848F4CCD77B6A204D3D2F6 /* Toast.swift in Sources */,
 				7F5F9071BAF7AC253AFAD936 /* VersionHistoryView.swift in Sources */,
+				4CEEEBDCBC45B4B1C41EBDAC /* WidgetShared.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4D3A99FF19BD2714FEA2ED72 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CC86EB8B754FD1A680AAA59A /* EONWidgets.swift in Sources */,
+				A774840C982382E84D955FA1 /* WidgetShared.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		CC3D0A873913F15363C1416A /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 36C904ED2903245D17B11F12 /* EONWidgets */;
+			targetProxy = 5388922848A2F50572D5B86D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		81C9DBAED9D0914A0597C947 /* Debug */ = {
@@ -367,6 +479,24 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
+		};
+		82EDC3F868DCD8B23F803074 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = EONWidgets/EONWidgets.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 56D3875D7U;
+				INFOPLIST_FILE = EONWidgets/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.leon.eon.widgets;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
 		};
 		B1E78B9572940305CFA7A154 /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -511,6 +641,24 @@
 			};
 			name = Debug;
 		};
+		D7731740FA26671E22CF46CE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = EONWidgets/EONWidgets.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 56D3875D7U;
+				INFOPLIST_FILE = EONWidgets/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.leon.eon.widgets;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -528,6 +676,15 @@
 			buildConfigurations = (
 				81C9DBAED9D0914A0597C947 /* Debug */,
 				CC4A5DE70A24616D29046DD3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		E7196A53027775F092DC3D81 /* Build configuration list for PBXNativeTarget "EONWidgets" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D7731740FA26671E22CF46CE /* Debug */,
+				82EDC3F868DCD8B23F803074 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

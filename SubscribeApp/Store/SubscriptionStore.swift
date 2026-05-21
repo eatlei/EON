@@ -1,6 +1,7 @@
 import Foundation
 import SwiftUI
 import UIKit
+import WidgetKit
 
 @MainActor
 final class SubscriptionStore: ObservableObject {
@@ -8,11 +9,12 @@ final class SubscriptionStore: ObservableObject {
         didSet {
             save()
             syncReminders()
+            updateWidgetSnapshot()
         }
     }
 
     @Published var baseCurrency: CurrencyCode {
-        didSet { saveSettings() }
+        didSet { saveSettings(); updateWidgetSnapshot() }
     }
 
     @Published var remindersEnabled: Bool {
@@ -155,6 +157,7 @@ final class SubscriptionStore: ObservableObject {
         syncReminders()
         // 启动时跑一遍"到期归档" —— 旧设备上一直开着 App 没动也得追得回来。
         autoArchiveExpiredSubscriptions()
+        updateWidgetSnapshot()
         Task { await refreshRatesIfStale() }
         startSyncObservers()
     }
@@ -662,6 +665,34 @@ final class SubscriptionStore: ObservableObject {
         }
     }
 
+    /// 把展示用的数据算成一份精简快照写进 App Group,供桌面 / 锁屏 widget 读取,
+    /// 然后请 WidgetKit 刷新时间线。订阅 / 币种变化时都会调一次。
+    func updateWidgetSnapshot() {
+        let monthTotalText = converter.format(fullDueAmount(in: .month), currency: baseCurrency)
+        let cal = Calendar.current
+        let today = cal.startOfDay(for: Date())
+        let items: [EONWidgetSnapshot.Item] = upcomingCharges(limit: 5).map { c in
+            let days = max(0, cal.dateComponents([.day], from: today,
+                                                 to: cal.startOfDay(for: c.date)).day ?? 0)
+            return EONWidgetSnapshot.Item(
+                name: c.subscription.name,
+                amountText: converter.format(c.amount, currency: baseCurrency),
+                dateText: c.date.formatted(.dateTime.month().day()),
+                daysLeft: days,
+                letter: String(c.subscription.name.prefix(1)).uppercased(),
+                colorHex: UIColor(c.subscription.displayCategoryColor).eonHexString
+            )
+        }
+        let snapshot = EONWidgetSnapshot(
+            monthTotalText: monthTotalText,
+            subscriptionCount: activeSubscriptions.count,
+            upcoming: items,
+            updatedAt: Date()
+        )
+        EONWidgetStore.save(snapshot)
+        WidgetCenter.shared.reloadAllTimelines()
+    }
+
     /// 距上次更新超过 24 小时（或从未更新）则后台刷新一次。
     func refreshRatesIfStale() async {
         if let last = ratesUpdatedAt, Date().timeIntervalSince(last) < 24 * 3600 { return }
@@ -766,6 +797,16 @@ struct EasterEggPrefs: Codable, Equatable {
         shakeSpotlight = try c.decodeIfPresent(Bool.self, forKey: .shakeSpotlight) ?? true
         dailyWelcomeConfetti = try c.decodeIfPresent(Bool.self, forKey: .dailyWelcomeConfetti) ?? true
         solidEmojiBalls = try c.decodeIfPresent(Bool.self, forKey: .solidEmojiBalls) ?? false
+    }
+}
+
+private extension UIColor {
+    /// 取 "RRGGBB" 十六进制(给 widget 快照存色用,widget 端再用 Color(eonHex:) 还原)。
+    var eonHexString: String {
+        var r: CGFloat = 0, g: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 0
+        getRed(&r, green: &g, blue: &b, alpha: &a)
+        return String(format: "%02X%02X%02X",
+                      Int((r * 255).rounded()), Int((g * 255).rounded()), Int((b * 255).rounded()))
     }
 }
 

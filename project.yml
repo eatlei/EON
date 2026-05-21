@@ -15,6 +15,8 @@ targets:
     platform: iOS
     sources:
       - path: SubscribeApp
+    dependencies:
+      - target: EONWidgets
     info:
       path: SubscribeApp/Info.plist
       properties:
@@ -62,4 +64,26 @@ targets:
         #     问"请选择 Team"
         #   - xcodebuild 命令行也能直接签名
         # 在 https://developer.apple.com/account → Membership 页面能查到。
+        DEVELOPMENT_TEAM: 56D3875D7U
+
+  # WidgetKit 扩展。读 App Group 里的快照展示"下次扣费 / 本月总额 / 即将扣费"。
+  EONWidgets:
+    type: app-extension
+    platform: iOS
+    sources:
+      - path: EONWidgets
+      - path: SubscribeApp/Shared/WidgetShared.swift
+      # 共用 App 的字符串目录,widget 文案跟随系统语言(同一份翻译)。
+      - path: SubscribeApp/Localizable.xcstrings
+    info:
+      path: EONWidgets/Info.plist
+      properties:
+        CFBundleDisplayName: EON
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.leon.eon.widgets
+        CODE_SIGN_ENTITLEMENTS: EONWidgets/EONWidgets.entitlements
+        CODE_SIGN_STYLE: Automatic
         DEVELOPMENT_TEAM: 56D3875D7U
