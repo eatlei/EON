@@ -1,7 +1,9 @@
 {
   "sourceLanguage": "zh-Hans",
   "strings": {
-    "": {},
+    "": {
+      "shouldTranslate": false
+    },
     " ": {
       "shouldTranslate": false
     },
@@ -251,7 +253,9 @@
       },
       "shouldTranslate": false
     },
-    "%lld": {},
+    "%lld": {
+      "shouldTranslate": false
+    },
     "%lld / %lld": {
       "localizations": {
         "zh-Hans": {
@@ -260,7 +264,8 @@
             "value": "%1$lld / %2$lld"
           }
         }
-      }
+      },
+      "shouldTranslate": false
     },
     "%lld 个订阅 · 月均": {
       "localizations": {
@@ -587,7 +592,9 @@
         }
       }
     },
-    "%lld%%": {},
+    "%lld%%": {
+      "shouldTranslate": false
+    },
     "(不打赏也可以继续白嫖,我们做朋友 🤝)": {
       "extractionState": "stale",
       "localizations": {
@@ -635,7 +642,9 @@
         }
       }
     },
-    "+%lld": {},
+    "+%lld": {
+      "shouldTranslate": false
+    },
     "/%lld天": {
       "localizations": {
         "de": {
@@ -1394,7 +1403,9 @@
     "EON": {
       "shouldTranslate": false
     },
-    "EON Subscriptions": {},
+    "EON Subscriptions": {
+      "shouldTranslate": false
+    },
     "EON · %@ 即将续费": {
       "localizations": {
         "de": {
