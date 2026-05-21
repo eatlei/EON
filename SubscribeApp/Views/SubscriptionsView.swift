@@ -336,10 +336,8 @@ private struct Row: View {
         return "\(plan) · \(subscription.displayCategoryTitle)"
     }
 
-    /// 订阅时间(真·下次扣费日,滚动到今天之后,避免显示成"过去"的锚点)。
-    private var dateText: String {
-        subscription.upcomingBillingDate().formatted(.dateTime.year().month().day())
-    }
+    /// 订阅时间(真·下次扣费日,滚动到今天之后)。今年内只显月/日,跨年才带年份。
+    private var dateText: String { subscription.billingDateDisplay() }
 
     var body: some View {
         HStack(spacing: AppTheme.Space.m) {
@@ -380,14 +378,14 @@ private struct Row: View {
                             .foregroundStyle(AppTheme.secondary)
                     }
                 }
-                // 第 3 排:订阅时间(下次扣费日)
+                // 第 3 排:订阅时间(下次扣费日)。用 secondary,tertiary 在深色下太暗看不清。
                 HStack(spacing: 3) {
                     Image(systemName: "calendar")
                         .font(.system(size: 9, weight: .semibold))
-                        .foregroundStyle(AppTheme.tertiary)
+                        .foregroundStyle(AppTheme.secondary)
                     Text(dateText)
                         .font(.caption2)
-                        .foregroundStyle(AppTheme.tertiary)
+                        .foregroundStyle(AppTheme.secondary)
                 }
             }
             Spacer(minLength: AppTheme.Space.s)
@@ -581,9 +579,19 @@ private struct GridCard: View {
                     .minimumScaleFactor(0.65)
                 Spacer(minLength: 4)
             }
-            Text(subscription.nextBillingDate.formatted(.dateTime.month().day()))
-                .font(.caption2)
-                .foregroundStyle(AppTheme.tertiary)
+            // 跟列表样式字段一致:订阅时间(年份逻辑同列表)+ 循环次数,统一用 secondary。
+            HStack(spacing: 3) {
+                Image(systemName: "calendar")
+                    .font(.system(size: 9, weight: .semibold))
+                    .foregroundStyle(AppTheme.secondary)
+                Text(subscription.billingDateDisplay())
+                    .font(.caption2)
+                    .foregroundStyle(AppTheme.secondary)
+                Spacer(minLength: 4)
+                Text(String(localized: "循环 \(subscription.billingCountElapsed()) 次"))
+                    .font(.caption2)
+                    .foregroundStyle(AppTheme.secondary)
+            }
         }
         .padding(AppTheme.Space.m)
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -612,6 +620,18 @@ private struct GridCard: View {
         } else {
             AppTheme.surface.clipShape(RoundedRectangle(cornerRadius: AppTheme.radius))
         }
+    }
+}
+
+private extension Subscription {
+    /// 列表 / 卡片共用的"下次扣费日"展示:今年内只显示月/日,跨年才带上年份。
+    func billingDateDisplay() -> String {
+        let date = upcomingBillingDate()
+        let cal = Calendar.current
+        if cal.component(.year, from: date) == cal.component(.year, from: Date()) {
+            return date.formatted(.dateTime.month().day())
+        }
+        return date.formatted(.dateTime.year().month().day())
     }
 }
 

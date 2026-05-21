@@ -47,7 +47,9 @@ struct SettingsView: View {
                             SettingsIcon(name: "dollarsign.circle")
                             Text("货币")
                             Spacer()
-                            Text(store.baseCurrency.rawValue).foregroundStyle(.secondary)
+                            Text(store.baseCurrency.rawValue)
+                                .fontWeight(.semibold)
+                                .foregroundStyle(AppTheme.accent)
                         }
                     }
                     NavigationLink(value: SettingsRoute.category) {

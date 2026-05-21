@@ -176,13 +176,12 @@ private struct TipCard: View {
                         Image(assetName)
                             .resizable()
                             .scaledToFit()
-                            .padding(6)
                     } else {
                         Text(emoji).font(.system(size: 44))
                     }
                 }
+                // 抠好背景的图标直接浮在卡片上,不再套深色色块(深色模式下那块会发黑)。
                 .frame(width: 64, height: 64)
-                .background(AppTheme.canvas, in: RoundedRectangle(cornerRadius: 18))
 
                 VStack(alignment: .leading, spacing: 4) {
                     Text(title)

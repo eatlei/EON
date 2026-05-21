@@ -17,10 +17,14 @@ struct CurrencySettingsView: View {
                         store.baseCurrency = c
                     } label: {
                         HStack {
-                            Text("\(c.rawValue) · \(c.title)").foregroundStyle(.primary)
+                            Text("\(c.rawValue) · \(c.title)")
+                                .foregroundStyle(store.baseCurrency == c ? AppTheme.accent : AppTheme.ink)
+                                .fontWeight(store.baseCurrency == c ? .semibold : .regular)
                             Spacer()
                             if store.baseCurrency == c {
-                                Image(systemName: "checkmark").foregroundStyle(.primary)
+                                Image(systemName: "checkmark")
+                                    .fontWeight(.bold)
+                                    .foregroundStyle(AppTheme.accent)
                             }
                         }
                         .contentShape(Rectangle())
