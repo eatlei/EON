@@ -8,6 +8,18 @@ struct AppearanceSettingsView: View {
     /// 切语言后的"正在重启"全屏 HUD —— Bundle 的本地化表只有进程冷启动才会重读,
     /// 所以这里走 exit(0) 真重启:HUD 给用户 0.6s 视觉缓冲再退出,避免"啪一下"的突兀感。
     @State private var restarting = false
+    /// App 图标选择:false = 通用(默认),true = 订阅人格(当前为占位图标)。
+    /// 初值读系统当前的备用图标名,保证页面跟实际图标一致。
+    @State private var usePersonaIcon: Bool = (UIApplication.shared.alternateIconName != nil)
+
+    /// 切换 App 图标。nil = 恢复默认图标;否则切到备用图标 AppIcon-Persona。
+    private func applyAppIcon(persona: Bool) {
+        let name: String? = persona ? "AppIcon-Persona" : nil
+        guard UIApplication.shared.supportsAlternateIcons,
+              UIApplication.shared.alternateIconName != name else { return }
+        Haptics.tap()
+        UIApplication.shared.setAlternateIconName(name) { _ in }
+    }
 
     /// 当前 App 实际使用的语言代码(取自 Bundle 或 AppleLanguages 用户偏好)。
     private var currentLanguageCode: String {
@@ -89,6 +101,27 @@ struct AppearanceSettingsView: View {
                 .buttonStyle(.plain)
             } header: {
                 Text("显示")
+            }
+
+            // App 图标切换:通用 / 订阅人格(目前为占位图标)。
+            Section {
+                Picker(selection: $usePersonaIcon) {
+                    Text("通用").tag(false)
+                    Text("订阅人格").tag(true)
+                } label: {
+                    HStack(spacing: 12) {
+                        SettingsIcon(name: "app.badge")
+                        Text("App 图标")
+                    }
+                }
+                .pickerStyle(.menu)
+                .onChange(of: usePersonaIcon) { _, persona in
+                    applyAppIcon(persona: persona)
+                }
+            } header: {
+                Text("图标")
+            } footer: {
+                Text("「订阅人格」目前是占位图标,后续会替换成跟你人格匹配的专属图标。切换时系统会弹一下确认。")
             }
 
             Section {
