@@ -1,26 +1,23 @@
 import SwiftUI
 import UIKit
 
-/// 二级页面:展示用户的"订阅人格"。布局是 1 张大图 + 名字 + 口号 + 描述 +
-/// 一句"会随订阅变化"的提示 + 免责声明。入场带丰富的动画(渐显 / 缩放 /
-/// 错开节奏),配合震动反馈,做出"翻牌揭晓"的惊喜感。
+/// 二级页面:展示用户的"订阅人格"。
+///
+/// 设计为一张"可分享卡片"风格的主视觉(不是浮层弹窗):主题色渐变卡片 +
+/// 透明抠图形象浮在卡上,配合「上下浮动 / 背后光晕脉动 / 斜向高光扫过 /
+/// 拖拽倾斜」的动效,做出一张活的卡片。卡片下方是描述卡 + 两行轻量脚注。
 struct PersonalityView: View {
     @EnvironmentObject private var store: SubscriptionStore
 
     private var type: PersonalityType { store.personality }
 
-    // MARK: - 进场动画相关 state
-    //
-    // 每个 state 控制 view 链里一组元素的"是否进场",时间错开 0.05~0.15 秒就能
-    // 形成"图先到 → 名字到 → 标语到 → 详情到 → 提示到"的瀑布感。
-    @State private var heroAppeared = false      // 大图缩放 + 旋转入场
-    @State private var nameAppeared = false      // 人格名字
-    @State private var taglineAppeared = false   // 一句标语
-    @State private var detailAppeared = false    // 详细描述
-    @State private var hintAppeared = false      // 会变化的提示
-    @State private var disclaimerAppeared = false // 免责声明
+    // MARK: - 进场动画 state
+    @State private var heroAppeared = false       // 主卡片缩放 + 渐显
+    @State private var detailAppeared = false     // 描述卡上浮
+    @State private var hintAppeared = false        // 会变化的提示
+    @State private var disclaimerAppeared = false  // 免责声明
 
-    /// 进场时的轻触反馈:大图弹到位时一下 medium impact,跟视觉的"啪"对上。
+    /// 主卡片弹到位时来一下 medium impact,跟视觉的"啪"对上。
     @State private var revealTick = 0
 
     /// 渲染好的分享卡片图(ImageRenderer 出图后填上,工具栏才出现分享按钮)。
@@ -36,31 +33,30 @@ struct PersonalityView: View {
     }
 
     var body: some View {
-        // 主内容 = 大图 + 名字 + 标语 + 详情;放在可滚动区。
-        // 辅助说明(随订阅变化 / 仅供娱乐)从滚动内容里拆出来,固定在弹窗底部,
-        // 这样用户看主内容时眼睛不会被这两行 caption 拽下去。
-        VStack(spacing: 0) {
-            ScrollView {
-                VStack(spacing: AppTheme.Space.xl) {
-                    heroImage
-                    content
-                }
-                .padding(.horizontal, AppTheme.Space.xl)
-                .padding(.top, AppTheme.Space.l)
-                .padding(.bottom, AppTheme.Space.l)
-                .readableWidth(560)
-            }
+        ScrollView {
+            VStack(spacing: AppTheme.Space.xl) {
+                // 主视觉:活的分享卡
+                PersonaHeroCard(type: type, stats: shareStats)
+                    .scaleEffect(heroAppeared ? 1 : 0.9)
+                    .opacity(heroAppeared ? 1 : 0)
 
-            VStack(spacing: AppTheme.Space.xs) {
-                evolutionHint
-                disclaimer
+                // 描述卡
+                detailCard
+                    .opacity(detailAppeared ? 1 : 0)
+                    .offset(y: detailAppeared ? 0 : 18)
+
+                // 脚注
+                VStack(spacing: AppTheme.Space.s) {
+                    evolutionHint
+                    disclaimer
+                }
             }
             .padding(.horizontal, AppTheme.Space.xl)
-            .padding(.top, AppTheme.Space.s)
-            .padding(.bottom, AppTheme.Space.m)
-            .frame(maxWidth: .infinity)
+            .padding(.top, AppTheme.Space.l)
+            .padding(.bottom, AppTheme.Space.xxl)
+            .readableWidth(560)
         }
-        .background(AppTheme.canvas.ignoresSafeArea())
+        .background(themedBackground)
         .navigationTitle("订阅人格")
         .navigationBarTitleDisplayMode(.inline)
         .sensoryFeedback(.impact(weight: .medium), trigger: revealTick)
@@ -83,6 +79,80 @@ struct PersonalityView: View {
         }
     }
 
+    // MARK: - 主题化背景
+
+    /// 整页背景:canvas 上叠一层从顶部洒下的主题色光晕,让页面跟人格同色调。
+    private var themedBackground: some View {
+        ZStack {
+            AppTheme.canvas
+            RadialGradient(
+                colors: [type.tint.opacity(0.22), type.tint.opacity(0.06), .clear],
+                center: .top, startRadius: 0, endRadius: 460
+            )
+        }
+        .ignoresSafeArea()
+    }
+
+    // MARK: - 描述卡
+
+    private var detailCard: some View {
+        VStack(alignment: .leading, spacing: AppTheme.Space.s) {
+            Text(type.detail)
+                .font(.body)
+                .foregroundStyle(AppTheme.secondary)
+                .lineSpacing(5)
+                .fixedSize(horizontal: false, vertical: true)
+            // top 分类:有就用小胶囊点一下"是哪些"(不含金额,隐私安全)
+            if !shareStats.topCategories.isEmpty {
+                HStack(spacing: 6) {
+                    ForEach(shareStats.topCategories, id: \.self) { name in
+                        Text(name)
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(type.tint)
+                            .padding(.horizontal, 10).padding(.vertical, 5)
+                            .background(type.tint.opacity(0.12), in: Capsule())
+                    }
+                }
+                .padding(.top, 2)
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(AppTheme.Space.l)
+        .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: AppTheme.radius))
+        .glassBorder()
+    }
+
+    // MARK: - 脚注
+
+    @ViewBuilder
+    private var evolutionHint: some View {
+        HStack(spacing: 6) {
+            Image(systemName: "arrow.triangle.2.circlepath")
+                .font(.caption2)
+            Text("人格会随你的订阅而变化")
+                .font(.caption)
+        }
+        .foregroundStyle(AppTheme.tertiary)
+        .padding(.top, AppTheme.Space.s)
+        .opacity(hintAppeared ? 1 : 0)
+    }
+
+    @ViewBuilder
+    private var disclaimer: some View {
+        VStack(spacing: 4) {
+            Image(systemName: "sparkles")
+                .font(.caption)
+            Text("仅供娱乐 · 不代表 EON 的任何评价或建议")
+                .font(.caption)
+                .multilineTextAlignment(.center)
+        }
+        .foregroundStyle(AppTheme.tertiary)
+        .padding(.top, AppTheme.Space.xs)
+        .opacity(disclaimerAppeared ? 1 : 0)
+    }
+
+    // MARK: - 出图 & 动画编排
+
     /// 用 ImageRenderer 把分享卡片烤成图。3x 保证清晰,出图后工具栏分享按钮才出现。
     @MainActor
     private func renderShareCard() {
@@ -92,140 +162,167 @@ struct PersonalityView: View {
         cardImage = renderer.uiImage
     }
 
-    /// 入场动画编排 —— 各元素错开节奏,跟一次 medium haptic 同步。
+    /// 进场:主卡片弹到位(配 haptic)→ 描述卡上浮 → 脚注渐显。
     private func playEntryAnimation() async {
-        // 大图先弹到位
-        withAnimation(.spring(response: 0.55, dampingFraction: 0.7)) {
+        withAnimation(.spring(response: 0.6, dampingFraction: 0.72)) {
             heroAppeared = true
         }
         revealTick &+= 1
-        try? await Task.sleep(nanoseconds: 220_000_000)
-        withAnimation(.easeOut(duration: 0.35)) { nameAppeared = true }
-        try? await Task.sleep(nanoseconds: 110_000_000)
-        withAnimation(.easeOut(duration: 0.35)) { taglineAppeared = true }
-        try? await Task.sleep(nanoseconds: 110_000_000)
+        try? await Task.sleep(nanoseconds: 240_000_000)
         withAnimation(.easeOut(duration: 0.4)) { detailAppeared = true }
-        try? await Task.sleep(nanoseconds: 130_000_000)
+        try? await Task.sleep(nanoseconds: 120_000_000)
         withAnimation(.easeOut(duration: 0.4)) { hintAppeared = true }
-        try? await Task.sleep(nanoseconds: 110_000_000)
+        try? await Task.sleep(nanoseconds: 100_000_000)
         withAnimation(.easeOut(duration: 0.4)) { disclaimerAppeared = true }
     }
+}
 
-    // MARK: - 大图
+// MARK: - 活的主卡片
 
-    /// 真图(Assets 里)优先,没有就用渐变 + SF Symbol 兜底。入场做 spring 缩放
-    /// + 轻微旋转,显得"啪一下揭出来"。
-    @ViewBuilder
-    private var heroImage: some View {
-        let assetName = type.imageAssetName
-        let hasAsset = (UIImage(named: assetName) != nil)
+/// 主视觉卡片:主题色渐变 + 透明抠图形象 + 名字 + 标语 + 数据胶囊。
+/// 动效:形象上下浮动、背后光晕脉动、斜向高光循环扫过、拖拽时整卡 3D 倾斜。
+private struct PersonaHeroCard: View {
+    let type: PersonalityType
+    let stats: PersonaShareStats
 
-        ZStack {
-            // 主题色径向渐变底 —— 抠图是透明的,垫一层渐变,人格形象浮在上面,
-            // 不会露出空白背景;没有真图时也用它配 SF Symbol 兜底。
-            RadialGradient(
-                stops: [
-                    .init(color: type.tint.opacity(0.85), location: 0.0),
-                    .init(color: type.tint.opacity(0.35), location: 0.55),
-                    .init(color: type.tint.opacity(0.10), location: 1.0),
-                ],
-                center: .center, startRadius: 0, endRadius: 220
-            )
-            if hasAsset {
-                Image(assetName)
-                    .resizable()
-                    .scaledToFit()
-                    .padding(20)
-                    .shadow(color: .black.opacity(0.18), radius: 10, x: 0, y: 6)
-            } else {
-                Image(systemName: type.fallbackSymbol)
-                    .font(.system(size: 110, weight: .bold))
+    @State private var float = false       // 形象上下浮动
+    @State private var glowPulse = false   // 背后光晕脉动
+    @State private var shine = false        // 斜向高光扫过
+    @GestureState private var drag: CGSize = .zero
+
+    private let corner: CGFloat = 32
+
+    var body: some View {
+        VStack(spacing: AppTheme.Space.l) {
+            artZone
+            VStack(spacing: 6) {
+                Text(type.name)
+                    .font(.system(size: 30, weight: .heavy, design: .rounded))
                     .foregroundStyle(.white)
-                    .shadow(color: .black.opacity(0.2), radius: 8, x: 0, y: 4)
+                    .multilineTextAlignment(.center)
+                Text(type.tagline)
+                    .font(.headline.weight(.semibold))
+                    .foregroundStyle(.white.opacity(0.92))
+                    .multilineTextAlignment(.center)
+            }
+            HStack(spacing: 10) {
+                statChip(value: "\(stats.count)", label: "订阅")
+                statChip(value: "\(stats.categoryCount)", label: "分类")
             }
         }
+        .padding(.vertical, AppTheme.Space.xxl)
+        .padding(.horizontal, AppTheme.Space.xl)
         .frame(maxWidth: .infinity)
-        .frame(height: 280)
-        .clipShape(RoundedRectangle(cornerRadius: 32, style: .continuous))
+        .background(cardBackground)
+        .clipShape(RoundedRectangle(cornerRadius: corner, style: .continuous))
+        .overlay(shineOverlay)
         .overlay(
-            RoundedRectangle(cornerRadius: 32, style: .continuous)
-                .stroke(AppTheme.hairline, lineWidth: 0.5)
+            RoundedRectangle(cornerRadius: corner, style: .continuous)
+                .stroke(.white.opacity(0.28), lineWidth: 1)
         )
-        .shadow(color: type.tint.opacity(0.25), radius: 22, x: 0, y: 12)
-        // 入场缩放 + 极轻旋转:0.85 → 1.0, -2° → 0°,弹簧节奏
-        .scaleEffect(heroAppeared ? 1.0 : 0.85)
-        .rotationEffect(.degrees(heroAppeared ? 0 : -2))
-        .opacity(heroAppeared ? 1 : 0)
+        .shadow(color: type.tint.opacity(0.45), radius: 28, x: 0, y: 18)
+        // 拖拽倾斜:整卡跟着手指做轻微 3D 旋转,松手弹回。
+        .rotation3DEffect(.degrees(Double(drag.width) / 16),
+                          axis: (x: 0, y: 1, z: 0), perspective: 0.6)
+        .rotation3DEffect(.degrees(Double(-drag.height) / 18),
+                          axis: (x: 1, y: 0, z: 0), perspective: 0.6)
+        .gesture(
+            DragGesture(minimumDistance: 0)
+                .updating($drag) { value, state, _ in state = value.translation }
+        )
+        .animation(.spring(response: 0.4, dampingFraction: 0.6), value: drag)
+        .onAppear { startAmbientAnimations() }
     }
 
-    // MARK: - 文字部分
+    // 形象区:背后脉动光晕 + 浮动的透明抠图。
+    private var artZone: some View {
+        ZStack {
+            Circle()
+                .fill(RadialGradient(
+                    colors: [.white.opacity(0.5), .white.opacity(0.12), .clear],
+                    center: .center, startRadius: 0, endRadius: 130))
+                .frame(width: 240, height: 240)
+                .scaleEffect(glowPulse ? 1.08 : 0.9)
+                .opacity(glowPulse ? 0.95 : 0.55)
+                .blur(radius: 6)
 
-    @ViewBuilder
-    private var content: some View {
-        VStack(spacing: AppTheme.Space.s) {
-            // 名字 —— 从下方淡入
-            Text(type.name)
-                .font(.system(size: 32, weight: .heavy, design: .rounded))
-                .foregroundStyle(AppTheme.ink)
-                .multilineTextAlignment(.center)
-                .opacity(nameAppeared ? 1 : 0)
-                .offset(y: nameAppeared ? 0 : 12)
-
-            // 标语 —— 跟在名字后面 0.1s 进入
-            Text(type.tagline)
-                .font(.headline.weight(.semibold))
-                .foregroundStyle(type.tint)
-                .multilineTextAlignment(.center)
-                .padding(.bottom, 4)
-                .opacity(taglineAppeared ? 1 : 0)
-                .offset(y: taglineAppeared ? 0 : 10)
-
-            // 详情 —— 多行段落,渐显
-            Text(type.detail)
-                .font(.body)
-                .foregroundStyle(AppTheme.secondary)
-                .multilineTextAlignment(.center)
-                .lineSpacing(4)
-                .fixedSize(horizontal: false, vertical: true)
-                .opacity(detailAppeared ? 1 : 0)
-                .offset(y: detailAppeared ? 0 : 8)
+            artwork
+                .frame(height: 184)
+                .offset(y: float ? -9 : 9)
+                .shadow(color: .black.opacity(0.22), radius: 16, x: 0, y: 12)
         }
-        .padding(.horizontal, AppTheme.Space.s)
+        .frame(height: 212)
     }
 
-    // MARK: - "会随订阅变化"提示
-    //
-    // 一行小字,纯灰,不抢戏。之前用大色卡 + 加粗标题太重,现在调成"脚注"质感:
-    // 一个小图标 + 一句轻描淡写的解释,信息传达到了即可。
-
     @ViewBuilder
-    private var evolutionHint: some View {
-        HStack(spacing: 6) {
-            Image(systemName: "arrow.triangle.2.circlepath")
-                .font(.caption2)
-            Text("人格会随你的订阅而变化")  // 短一句脚注;译文表里已配 8 国语种
-                .font(.caption)
+    private var artwork: some View {
+        if UIImage(named: type.imageAssetName) != nil {
+            Image(type.imageAssetName)
+                .resizable()
+                .scaledToFit()
+        } else {
+            Image(systemName: type.fallbackSymbol)
+                .font(.system(size: 96, weight: .bold))
+                .foregroundStyle(.white)
         }
-        .foregroundStyle(AppTheme.tertiary)
-        .padding(.top, AppTheme.Space.s)
-        .opacity(hintAppeared ? 1 : 0)
     }
 
-    // MARK: - 免责声明
-
-    @ViewBuilder
-    private var disclaimer: some View {
-        VStack(spacing: 4) {
-            Image(systemName: "sparkles")
-                .font(.caption)
-                .foregroundStyle(AppTheme.tertiary)
-            Text("仅供娱乐 · 不代表 EON 的任何评价或建议")
-                .font(.caption)
-                .foregroundStyle(AppTheme.tertiary)
-                .multilineTextAlignment(.center)
+    private var cardBackground: some View {
+        ZStack {
+            LinearGradient(
+                colors: [type.tint, type.tint.opacity(0.68)],
+                startPoint: .topLeading, endPoint: .bottomTrailing
+            )
+            RadialGradient(
+                colors: [.white.opacity(0.3), .clear],
+                center: UnitPoint(x: 0.22, y: 0.1), startRadius: 0, endRadius: 340
+            )
         }
-        .padding(.top, AppTheme.Space.m)
-        .opacity(disclaimerAppeared ? 1 : 0)
+    }
+
+    // 斜向高光:一条半透明白带循环从左下扫到右上。
+    private var shineOverlay: some View {
+        GeometryReader { geo in
+            let w = geo.size.width
+            LinearGradient(
+                colors: [.clear, .white.opacity(0.35), .clear],
+                startPoint: .top, endPoint: .bottom
+            )
+            .frame(width: w * 0.45)
+            .rotationEffect(.degrees(22))
+            .offset(x: shine ? w * 1.25 : -w * 1.25)
+            .blendMode(.plusLighter)
+        }
+        .clipShape(RoundedRectangle(cornerRadius: corner, style: .continuous))
+        .allowsHitTesting(false)
+    }
+
+    private func statChip(value: String, label: LocalizedStringKey) -> some View {
+        VStack(spacing: 2) {
+            Text(value)
+                .font(.system(size: 22, weight: .heavy, design: .rounded).monospacedDigit())
+                .foregroundStyle(.white)
+            Text(label)
+                .font(.caption2.weight(.semibold))
+                .foregroundStyle(.white.opacity(0.85))
+        }
+        .frame(minWidth: 72)
+        .padding(.vertical, 10)
+        .background(.white.opacity(0.16), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous)
+            .stroke(.white.opacity(0.2), lineWidth: 0.5))
+    }
+
+    private func startAmbientAnimations() {
+        withAnimation(.easeInOut(duration: 2.4).repeatForever(autoreverses: true)) {
+            float = true
+        }
+        withAnimation(.easeInOut(duration: 2.8).repeatForever(autoreverses: true)) {
+            glowPulse = true
+        }
+        withAnimation(.linear(duration: 3.4).repeatForever(autoreverses: false).delay(0.8)) {
+            shine = true
+        }
     }
 }
 
