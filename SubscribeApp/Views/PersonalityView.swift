@@ -121,19 +121,23 @@ struct PersonalityView: View {
         let hasAsset = (UIImage(named: assetName) != nil)
 
         ZStack {
+            // 主题色径向渐变底 —— 抠图是透明的,垫一层渐变,人格形象浮在上面,
+            // 不会露出空白背景;没有真图时也用它配 SF Symbol 兜底。
+            RadialGradient(
+                stops: [
+                    .init(color: type.tint.opacity(0.85), location: 0.0),
+                    .init(color: type.tint.opacity(0.35), location: 0.55),
+                    .init(color: type.tint.opacity(0.10), location: 1.0),
+                ],
+                center: .center, startRadius: 0, endRadius: 220
+            )
             if hasAsset {
                 Image(assetName)
                     .resizable()
-                    .scaledToFill()
+                    .scaledToFit()
+                    .padding(20)
+                    .shadow(color: .black.opacity(0.18), radius: 10, x: 0, y: 6)
             } else {
-                RadialGradient(
-                    stops: [
-                        .init(color: type.tint.opacity(0.85), location: 0.0),
-                        .init(color: type.tint.opacity(0.35), location: 0.55),
-                        .init(color: type.tint.opacity(0.10), location: 1.0),
-                    ],
-                    center: .center, startRadius: 0, endRadius: 220
-                )
                 Image(systemName: type.fallbackSymbol)
                     .font(.system(size: 110, weight: .bold))
                     .foregroundStyle(.white)
