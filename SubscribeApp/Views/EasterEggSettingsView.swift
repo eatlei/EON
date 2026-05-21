@@ -97,12 +97,15 @@ struct EasterEggSettingsView: View {
         .navigationBarTitleDisplayMode(.inline)
     }
 
-    /// 单行的 Liquid Glass 背景。圆角对齐 insetGrouped 的视觉。
+    /// 单行的半透明卡片背景。之前用 `Color.clear.glassEffect` 在暗色模式下,因为
+    /// 背后没有足够亮的内容可"磨砂",会塌成一块纯黑方块,看起来像 bug。改用
+    /// `.regularMaterial`:两种模式下都渲染成正常的磨砂卡片,小球还能隐约透过来。
     private var glassRowBackground: some View {
-        Color.clear
-            .glassEffect(
-                .regular,
-                in: RoundedRectangle(cornerRadius: 14, style: .continuous)
+        RoundedRectangle(cornerRadius: 14, style: .continuous)
+            .fill(.regularMaterial)
+            .overlay(
+                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                    .stroke(AppTheme.hairline, lineWidth: 0.5)
             )
     }
 
