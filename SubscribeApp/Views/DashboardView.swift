@@ -560,9 +560,38 @@ private struct CalendarPanel: View {
         d.formatted(.dateTime.year().month(.wide))
     }
     private func step(_ delta: Int) {
+        Haptics.selection()
         if let d = Calendar.current.date(byAdding: .month, value: delta, to: monthAnchor),
            let s = Calendar.current.dateInterval(of: .month, for: d)?.start {
             monthAnchor = s
+        }
+    }
+
+    /// 左右切月按钮 —— 跟"选月份弹窗"里的年份步进按钮同款:圆形 surface 底 +
+    /// 细描边,视觉上成一组。
+    @ViewBuilder
+    private func navButton(_ systemName: String, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Image(systemName: systemName)
+                .font(.subheadline.weight(.bold))
+                .foregroundStyle(AppTheme.ink)
+                .frame(width: 36, height: 36)
+                .background(AppTheme.surface, in: Circle())
+                .overlay(Circle().stroke(AppTheme.hairline, lineWidth: 0.5))
+                .contentShape(Circle())
+        }
+        .buttonStyle(.plain)
+    }
+
+    /// 热力图色深:当天扣费笔数越多,accent 透明度越高(0 笔=透明)。封顶 5 笔。
+    private func heatOpacity(_ count: Int) -> Double {
+        switch count {
+        case 0:  return 0
+        case 1:  return 0.18
+        case 2:  return 0.32
+        case 3:  return 0.46
+        case 4:  return 0.60
+        default: return 0.72
         }
     }
 
@@ -573,13 +602,7 @@ private struct CalendarPanel: View {
         return Panel {
             VStack(spacing: AppTheme.Space.m) {
                 HStack(spacing: AppTheme.Space.s) {
-                    Button { step(-1) } label: {
-                        Image(systemName: "chevron.left")
-                            .font(.subheadline.weight(.bold))
-                            .foregroundStyle(AppTheme.secondary)
-                            .frame(width: 30, height: 30)
-                            .contentShape(Rectangle())
-                    }.buttonStyle(.plain)
+                    navButton("chevron.left") { step(-1) }
 
                     Spacer()
 
@@ -609,13 +632,7 @@ private struct CalendarPanel: View {
 
                     Spacer()
 
-                    Button { step(1) } label: {
-                        Image(systemName: "chevron.right")
-                            .font(.subheadline.weight(.bold))
-                            .foregroundStyle(AppTheme.secondary)
-                            .frame(width: 30, height: 30)
-                            .contentShape(Rectangle())
-                    }.buttonStyle(.plain)
+                    navButton("chevron.right") { step(1) }
                 }
 
                 HStack {
@@ -636,52 +653,51 @@ private struct CalendarPanel: View {
                             // 没有扣费的日子点了不会选中(否则会出现"空选中态
                             // 闪一下又恢复"的残影);有扣费的日子才允许 toggle。
                             let isInteractive = !cs.isEmpty
+                            // 热力图:当天扣费笔数越多,整格 accent 底色越深。
+                            let heat = heatOpacity(cs.count)
+                            // 色深到一定程度,数字改用白色才看得清。
+                            let onHeat = heat >= 0.4
                             Button {
                                 guard isInteractive else { return }
+                                Haptics.selection()
                                 // selectedDay 的过渡由外层 ZStack 的 .animation(value:)
                                 // 接管,这里只做赋值,避免双重动画导致的残影。
                                 selectedDay = (selectedDay == day) ? nil : day
                             } label: {
-                                VStack(spacing: 0) {  // 圆点紧贴数字
-                                    // iOS Calendar 风格 —— 今天用主题色实心圆 + 白色数字,
-                                    // 圆稍大(30pt)+ 字加粗,远远扫一眼就能找到"今天"。
-                                    ZStack {
-                                        if isToday {
-                                            Circle()
-                                                .fill(AppTheme.accent)
-                                                .frame(width: 30, height: 30)
-                                                .shadow(color: AppTheme.accent.opacity(0.35),
-                                                        radius: 4, x: 0, y: 1)
-                                        }
-                                        Text("\(day)")
-                                            .font(
-                                                .system(
-                                                    size: isToday ? 15 : 13,
-                                                    weight: isToday ? .heavy
-                                                            : (cs.isEmpty ? .regular : .bold),
-                                                    design: .rounded
-                                                ).monospacedDigit()
-                                            )
-                                            .foregroundStyle(
-                                                isToday ? Color.white
-                                                : (cs.isEmpty ? AppTheme.tertiary : AppTheme.ink)
-                                            )
+                                ZStack {
+                                    // 热力底块(今天不铺热力,保留主题色实心圆更醒目)。
+                                    if !isToday && heat > 0 {
+                                        RoundedRectangle(cornerRadius: AppTheme.radiusSmall)
+                                            .fill(AppTheme.accent.opacity(heat))
                                     }
-                                    .frame(width: 30, height: 30)
-
-                                    // 圆点占位高度固定为 5,即便没有扣费也保留位
-                                    // 子,所有单元格高度一致,网格不会跳。
-                                    HStack(spacing: 2) {
-                                        ForEach(cs.prefix(3)) { c in
-                                            Circle().fill(c.subscription.displayCategoryColor).frame(width: 4, height: 4)
-                                        }
-                                    }.frame(height: 5)
+                                    // 今天:主题色实心圆 + 白字。
+                                    if isToday {
+                                        Circle()
+                                            .fill(AppTheme.accent)
+                                            .frame(width: 30, height: 30)
+                                            .shadow(color: AppTheme.accent.opacity(0.35),
+                                                    radius: 4, x: 0, y: 1)
+                                    }
+                                    Text("\(day)")
+                                        .font(
+                                            .system(
+                                                size: isToday ? 15 : 13,
+                                                weight: isToday ? .heavy
+                                                        : (cs.isEmpty ? .regular : .bold),
+                                                design: .rounded
+                                            ).monospacedDigit()
+                                        )
+                                        .foregroundStyle(
+                                            isToday ? Color.white
+                                            : (cs.isEmpty ? AppTheme.tertiary
+                                               : (onHeat ? Color.white : AppTheme.ink))
+                                        )
                                 }
                                 .frame(height: 40).frame(maxWidth: .infinity)
-                                .background(
-                                    isSelected && !isToday ? AppTheme.accent.opacity(0.30)
-                                    : (!cs.isEmpty && !isToday ? AppTheme.accent.opacity(0.14) : .clear),
-                                    in: RoundedRectangle(cornerRadius: AppTheme.radiusSmall)
+                                // 选中态:加一圈描边,不动底色(底色已经是热力)。
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: AppTheme.radiusSmall)
+                                        .stroke(AppTheme.accent, lineWidth: isSelected && !isToday ? 2 : 0)
                                 )
                                 .contentShape(Rectangle())
                             }
