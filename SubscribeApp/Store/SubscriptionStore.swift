@@ -665,32 +665,78 @@ final class SubscriptionStore: ObservableObject {
         }
     }
 
-    /// 把展示用的数据算成一份精简快照写进 App Group,供桌面 / 锁屏 widget 读取,
+    /// 把展示用的数据算成一份快照写进 App Group,供桌面 / 锁屏 widget 读取,
     /// 然后请 WidgetKit 刷新时间线。订阅 / 币种变化时都会调一次。
+    /// 真实图标渲染成 PNG 写到共享容器 icons/<id>.png,快照里只存 id。
     func updateWidgetSnapshot() {
-        let monthTotalText = converter.format(fullDueAmount(in: .month), currency: baseCurrency)
         let cal = Calendar.current
         let today = cal.startOfDay(for: Date())
-        let items: [EONWidgetSnapshot.Item] = upcomingCharges(limit: 5).map { c in
-            let days = max(0, cal.dateComponents([.day], from: today,
-                                                 to: cal.startOfDay(for: c.date)).day ?? 0)
+
+        // 先把要用到的图标渲染并写进 App Group 容器(按 id 去重)。
+        var writtenIcons = Set<String>()
+        if let dir = EONWidgetStore.iconsDir {
+            try? FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
+        }
+        func ensureIcon(_ sub: Subscription) -> String {
+            let idStr = sub.id.uuidString
+            guard !writtenIcons.contains(idStr) else { return idStr }
+            writtenIcons.insert(idStr)
+            if let data = NotificationIconRenderer.pngData(for: sub),
+               let url = EONWidgetStore.iconURL(idStr) {
+                try? data.write(to: url, options: .atomic)
+            }
+            return idStr
+        }
+
+        func makeItem(_ c: RenewalCharge) -> EONWidgetSnapshot.Item {
+            let days = cal.dateComponents([.day], from: today,
+                                          to: cal.startOfDay(for: c.date)).day ?? 0
             return EONWidgetSnapshot.Item(
                 name: c.subscription.name,
                 amountText: converter.format(c.amount, currency: baseCurrency),
                 dateText: c.date.formatted(.dateTime.month().day()),
-                daysLeft: days,
+                daysLeft: max(0, days),
+                paid: days < 0,
                 letter: String(c.subscription.name.prefix(1)).uppercased(),
-                colorHex: UIColor(c.subscription.displayCategoryColor).eonHexString
+                colorHex: UIColor(c.subscription.displayCategoryColor).eonHexString,
+                iconID: ensureIcon(c.subscription)
             )
         }
+
+        let upcoming = upcomingCharges(limit: 5).map(makeItem)
+        let month = charges(inMonthContaining: Date())
+            .sorted { $0.date < $1.date }
+            .prefix(12)
+            .map(makeItem)
+        let monthTotal = charges(inMonthContaining: Date()).reduce(0.0) { $0 + $1.amount }
+        let (major, minor) = splitAmountForWidget(monthTotal)
+
         let snapshot = EONWidgetSnapshot(
-            monthTotalText: monthTotalText,
+            monthLabel: Date().formatted(.dateTime.month(.abbreviated)),
+            monthMajor: major,
+            monthMinor: minor,
+            dueCount: charges(inMonthContaining: Date()).count,
             subscriptionCount: activeSubscriptions.count,
-            upcoming: items,
+            upcoming: upcoming,
+            periodCharges: Array(month),
             updatedAt: Date()
         )
         EONWidgetStore.save(snapshot)
         WidgetCenter.shared.reloadAllTimelines()
+    }
+
+    /// 把金额拆成"符号+整数"和"两位小数",供 widget 把小数画小一号。
+    /// 日元等无小数币种返回空小数。
+    private func splitAmountForWidget(_ value: Double) -> (String, String) {
+        let nf = NumberFormatter()
+        nf.numberStyle = .decimal
+        nf.maximumFractionDigits = 0
+        nf.usesGroupingSeparator = true
+        let intText = nf.string(from: NSNumber(value: floor(value))) ?? "\(Int(value))"
+        let major = baseCurrency.symbol + intText
+        if baseCurrency == .jpy { return (major, "") }
+        let cents = Int(((value - floor(value)) * 100).rounded())
+        return (major, String(format: "%02d", cents))
     }
 
     /// 距上次更新超过 24 小时（或从未更新）则后台刷新一次。

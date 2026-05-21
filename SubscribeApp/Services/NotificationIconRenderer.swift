@@ -7,6 +7,12 @@ import UserNotifications
 ///   - .image:直接用用户上传 / 下载的方形图
 ///   - .tile :画一个圆角色块 + 首字母 / SF Symbol(跟 App 里 CategoryGlyph 一致)
 enum NotificationIconRenderer {
+    /// 把订阅图标渲染成 PNG 数据(给 widget 写到 App Group 容器用)。
+    @MainActor
+    static func pngData(for sub: Subscription) -> Data? {
+        renderIcon(for: sub)?.pngData()
+    }
+
     /// 为某个订阅生成通知缩略图附件。失败(画不出 / 写盘失败)返回 nil,
     /// 调用方据此决定通知带不带图,都不影响通知本身能发出去。
     @MainActor

@@ -1,10 +1,11 @@
 import SwiftUI
 
 // 主 App 与 Widget 扩展共享的这一个文件(在 project.yml 里同时挂到两个 target)。
-// App 端算好一份精简快照写进 App Group;Widget 端只读这份快照,不依赖任何模型,
-// 进程隔离也能拿到数据。
+// App 端算好一份精简快照写进 App Group;Widget 端只读这份快照。
+// 真实订阅图标不塞进快照(避免 UserDefaults 膨胀),而是 App 把每个订阅图标渲染成
+// PNG 写到 App Group 容器的 icons/ 目录,快照里只存 iconID,Widget 按 id 读文件。
 
-/// 写进 App Group 的精简快照。只放展示用的字符串 + 少量数字,不含敏感原始数据。
+/// 写进 App Group 的精简快照。
 struct EONWidgetSnapshot: Codable {
     struct Item: Codable, Identifiable {
         var id = UUID()
@@ -12,31 +13,41 @@ struct EONWidgetSnapshot: Codable {
         let amountText: String
         let dateText: String
         let daysLeft: Int
-        let letter: String
+        let paid: Bool          // 这笔本周期是否已经扣过(日期早于今天)
+        let letter: String      // 没有图标文件时的兜底首字母
         let colorHex: String
+        let iconID: String      // 对应 App Group 容器里 icons/<iconID>.png
     }
-    let monthTotalText: String
-    let subscriptionCount: Int
-    let upcoming: [Item]
+    let monthLabel: String      // 本月本地化短名,如 "5月" / "May"
+    let monthMajor: String      // 大字部分,含符号与整数,如 "$40"
+    let monthMinor: String      // 小数部分两位,如 "99";无小数币种为空
+    let dueCount: Int           // 本月扣费笔数
+    let subscriptionCount: Int  // 活跃订阅数
+    let upcoming: [Item]        // 未来的扣费(可能跨月),给"下次扣费"用
+    let periodCharges: [Item]   // 本月扣费(含已扣 + 待扣),给清单用
     let updatedAt: Date
 
-    /// 占位数据(widget 画廊预览 / 还没写过快照时用)。
     static let placeholder = EONWidgetSnapshot(
-        monthTotalText: "¥128",
-        subscriptionCount: 6,
+        monthLabel: "May",
+        monthMajor: "$40", monthMinor: "99",
+        dueCount: 5, subscriptionCount: 6,
         upcoming: [
-            .init(name: "ChatGPT", amountText: "¥20", dateText: "5/21", daysLeft: 0, letter: "C", colorHex: "5E5CE6"),
-            .init(name: "Netflix", amountText: "¥68", dateText: "5/24", daysLeft: 3, letter: "N", colorHex: "E50914"),
-            .init(name: "iCloud",  amountText: "¥6",  dateText: "5/28", daysLeft: 7, letter: "I", colorHex: "3A8DFF"),
+            .init(name: "GitHub Copilot", amountText: "$0.00", dateText: "5/18", daysLeft: 4, paid: false, letter: "G", colorHex: "5E5CE6", iconID: ""),
+        ],
+        periodCharges: [
+            .init(name: "Surge",   amountText: "$15.00", dateText: "5/1",  daysLeft: -3, paid: true,  letter: "S", colorHex: "AF52DE", iconID: ""),
+            .init(name: "iCloud+",  amountText: "$2.99", dateText: "5/1",  daysLeft: -3, paid: true,  letter: "I", colorHex: "3A8DFF", iconID: ""),
+            .init(name: "Claude Code", amountText: "$20.00", dateText: "5/3", daysLeft: -1, paid: true, letter: "C", colorHex: "D97757", iconID: ""),
+            .init(name: "GitHub Copilot", amountText: "$0.00", dateText: "5/18", daysLeft: 4, paid: false, letter: "G", colorHex: "5E5CE6", iconID: ""),
         ],
         updatedAt: Date()
     )
 }
 
-/// App Group 读写。App 写、Widget 读,key 一致即可。
+/// App Group 读写 + 图标文件目录。
 enum EONWidgetStore {
     static let suiteName = "group.com.leon.eon"
-    private static let key = "widget.snapshot.v1"
+    private static let key = "widget.snapshot.v2"
 
     static func save(_ snapshot: EONWidgetSnapshot) {
         guard let defaults = UserDefaults(suiteName: suiteName),
@@ -49,11 +60,22 @@ enum EONWidgetStore {
               let data = defaults.data(forKey: key) else { return nil }
         return try? JSONDecoder().decode(EONWidgetSnapshot.self, from: data)
     }
+
+    /// App Group 共享容器。
+    static var containerURL: URL? {
+        FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: suiteName)
+    }
+    static var iconsDir: URL? {
+        containerURL?.appendingPathComponent("icons", isDirectory: true)
+    }
+    static func iconURL(_ id: String) -> URL? {
+        guard !id.isEmpty else { return nil }
+        return iconsDir?.appendingPathComponent("\(id).png")
+    }
 }
 
 extension Color {
-    /// 从 "RRGGBB" / "#RRGGBB" 十六进制构造颜色。Widget 端独立解析,不依赖 App 的
-    /// AppTheme(那在主 target 里,扩展访问不到)。
+    /// 从 "RRGGBB" / "#RRGGBB" 十六进制构造颜色。
     init(eonHex hex: String) {
         let s = hex.trimmingCharacters(in: CharacterSet(charactersIn: "#"))
         var v: UInt64 = 0

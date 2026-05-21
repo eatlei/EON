@@ -268,29 +268,18 @@
       "shouldTranslate": false
     },
     "%lld 个活跃订阅": {
+      "extractionState": "stale",
       "localizations": {
-        "zh-Hant": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld 個活躍訂閱"
+            "value": "%lld aktive Abos"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "%lld active subscriptions"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "アクティブなサブスク %lld 件"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "활성 구독 %lld개"
           }
         },
         "es": {
@@ -305,10 +294,22 @@
             "value": "%lld abonnements actifs"
           }
         },
-        "de": {
+        "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "%lld aktive Abos"
+            "value": "アクティブなサブスク %lld 件"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "활성 구독 %lld개"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld 個活躍訂閱"
           }
         }
       }
@@ -588,6 +589,52 @@
           "stringUnit": {
             "state": "translated",
             "value": "%lld 筆 · 下一筆 %@ %@"
+          }
+        }
+      }
+    },
+    "%lld 笔待扣费": {
+      "localizations": {
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld 筆待扣費"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld charges this month"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今月 %lld 件の請求"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이번 달 %lld건 결제"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld cargos este mes"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld prélèvements ce mois"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld Abbuchungen diesen Monat"
           }
         }
       }
@@ -1355,28 +1402,16 @@
     },
     "App 图标": {
       "localizations": {
-        "zh-Hant": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "App 圖示"
+            "value": "App-Symbol"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "App Icon"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "App アイコン"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "앱 아이콘"
           }
         },
         "es": {
@@ -1391,10 +1426,22 @@
             "value": "Icône de l'app"
           }
         },
-        "de": {
+        "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "App-Symbol"
+            "value": "App アイコン"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "앱 아이콘"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "App 圖示"
           }
         }
       }
@@ -2196,28 +2243,16 @@
     },
     "「订阅人格」目前是占位图标,后续会替换成跟你人格匹配的专属图标。切换时系统会弹一下确认。": {
       "localizations": {
-        "zh-Hant": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "「訂閱人格」目前是佔位圖示,後續會替換成跟你人格相符的專屬圖示。切換時系統會彈一下確認。"
+            "value": "Der Typ ist vorerst ein Platzhalter-Symbol; es wird später durch ein zu deinem Typ passendes ersetzt. iOS zeigt beim Wechsel eine kurze Bestätigung."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Persona is a placeholder icon for now; it will be replaced with one matching your persona later. iOS shows a quick confirmation when switching."
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "「サブスク人格」は今は仮アイコンです。今後あなたの人格に合った専用アイコンに置き換えます。切り替え時に iOS が確認を表示します。"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "'구독 페르소나'는 현재 자리표시 아이콘이며, 추후 당신의 페르소나에 맞는 전용 아이콘으로 교체됩니다. 전환 시 iOS가 확인을 표시합니다."
           }
         },
         "es": {
@@ -2232,10 +2267,22 @@
             "value": "Le profil est une icône provisoire ; elle sera remplacée par une icône correspondant à votre profil. iOS affiche une confirmation au changement."
           }
         },
-        "de": {
+        "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Der Typ ist vorerst ein Platzhalter-Symbol; es wird später durch ein zu deinem Typ passendes ersetzt. iOS zeigt beim Wechsel eine kurze Bestätigung."
+            "value": "「サブスク人格」は今は仮アイコンです。今後あなたの人格に合った専用アイコンに置き換えます。切り替え時に iOS が確認を表示します。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "'구독 페르소나'는 현재 자리표시 아이콘이며, 추후 당신의 페르소나에 맞는 전용 아이콘으로 교체됩니다. 전환 시 iOS가 확인을 표시합니다."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「訂閱人格」目前是佔位圖示,後續會替換成跟你人格相符的專屬圖示。切換時系統會彈一下確認。"
           }
         }
       }
@@ -7279,29 +7326,18 @@
       }
     },
     "即将扣费清单": {
+      "extractionState": "stale",
       "localizations": {
-        "zh-Hant": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "即將扣費清單"
+            "value": "Anstehende Abbuchungen"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Upcoming Charges"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "まもなくの請求一覧"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "예정 결제 목록"
           }
         },
         "es": {
@@ -7316,10 +7352,22 @@
             "value": "Prochains prélèvements"
           }
         },
-        "de": {
+        "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Anstehende Abbuchungen"
+            "value": "まもなくの請求一覧"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "예정 결제 목록"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "即將扣費清單"
           }
         }
       }
@@ -11554,28 +11602,16 @@
     },
     "当前周期的订阅支出总额。": {
       "localizations": {
-        "zh-Hant": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "目前週期的訂閱支出總額。"
+            "value": "Gesamtausgaben für Abos in dieser Periode."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Total subscription spend this period."
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "今期のサブスク支出合計。"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "이번 주기의 구독 지출 합계."
           }
         },
         "es": {
@@ -11590,10 +11626,22 @@
             "value": "Total des dépenses d'abonnement cette période."
           }
         },
-        "de": {
+        "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Gesamtausgaben für Abos in dieser Periode."
+            "value": "今期のサブスク支出合計。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이번 주기의 구독 지출 합계."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "目前週期的訂閱支出總額。"
           }
         }
       }
@@ -13454,29 +13502,18 @@
       }
     },
     "接下来几笔订阅扣费。": {
+      "extractionState": "stale",
       "localizations": {
-        "zh-Hant": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "接下來幾筆訂閱扣費。"
+            "value": "Deine nächsten Abo-Abbuchungen."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Your next few subscription charges."
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "次の数件のサブスク請求。"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "다음 몇 건의 구독 결제."
           }
         },
         "es": {
@@ -13491,10 +13528,22 @@
             "value": "Vos prochains prélèvements d'abonnement."
           }
         },
-        "de": {
+        "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Deine nächsten Abo-Abbuchungen."
+            "value": "次の数件のサブスク請求。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "다음 몇 건의 구독 결제."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "接下來幾筆訂閱扣費。"
           }
         }
       }
@@ -16312,6 +16361,144 @@
           "stringUnit": {
             "state": "translated",
             "value": "本月總額"
+          }
+        }
+      }
+    },
+    "本月无扣费": {
+      "localizations": {
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "本月無扣費"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No charges this month"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今月の請求なし"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이번 달 결제 없음"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sin cargos este mes"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aucun prélèvement ce mois"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Keine Abbuchungen diesen Monat"
+          }
+        }
+      }
+    },
+    "本月清单": {
+      "localizations": {
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "本月清單"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This Month"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今月の一覧"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이번 달 목록"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Este mes"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ce mois-ci"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dieser Monat"
+          }
+        }
+      }
+    },
+    "本月的订阅扣费清单。": {
+      "localizations": {
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "本月的訂閱扣費清單。"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This month's subscription charges."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "今月のサブスク請求一覧。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이번 달 구독 결제 목록."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cargos de suscripción de este mes."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les prélèvements d'abonnement de ce mois."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Abo-Abbuchungen dieses Monats."
           }
         }
       }
@@ -20024,28 +20211,16 @@
     },
     "离你下一笔订阅续费还有几天。": {
       "localizations": {
-        "zh-Hant": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "離你下一筆訂閱續費還有幾天。"
+            "value": "Tage bis zur nächsten Abo-Verlängerung."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Days until your next subscription renewal."
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "次のサブスク更新まであと何日か。"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "다음 구독 갱신까지 며칠 남았는지."
           }
         },
         "es": {
@@ -20060,10 +20235,22 @@
             "value": "Jours avant votre prochain renouvellement."
           }
         },
-        "de": {
+        "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tage bis zur nächsten Abo-Verlängerung."
+            "value": "次のサブスク更新まであと何日か。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "다음 구독 갱신까지 며칠 남았는지."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "離你下一筆訂閱續費還有幾天。"
           }
         }
       }
@@ -20899,6 +21086,52 @@
           "stringUnit": {
             "state": "translated",
             "value": "繼續往下拉…"
+          }
+        }
+      }
+    },
+    "续费": {
+      "localizations": {
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "續費"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Renews"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "更新"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "갱신"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Renueva"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Renouvelle"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verlängert"
           }
         }
       }
@@ -23952,28 +24185,16 @@
     },
     "近期无扣费": {
       "localizations": {
-        "zh-Hant": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "近期無扣費"
+            "value": "Keine anstehenden Abbuchungen"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "No upcoming charges"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "まもなくの請求なし"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "예정 결제 없음"
           }
         },
         "es": {
@@ -23988,10 +24209,22 @@
             "value": "Aucun prélèvement à venir"
           }
         },
-        "de": {
+        "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Keine anstehenden Abbuchungen"
+            "value": "まもなくの請求なし"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "예정 결제 없음"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "近期無扣費"
           }
         }
       }

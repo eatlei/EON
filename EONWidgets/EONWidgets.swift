@@ -1,8 +1,9 @@
 import WidgetKit
 import SwiftUI
+import UIKit
 
-// EON 的桌面 / 锁屏小组件。三个:下次扣费倒计时、本月总额、即将扣费清单。
-// 数据全部来自 App Group 里的 EONWidgetSnapshot(App 端算好写入)。
+// EON 的桌面 / 锁屏小组件。三个:下次扣费、本月总额、本月清单。
+// 数据来自 App Group 的 EONWidgetSnapshot;真实图标按 iconID 从共享容器读 PNG。
 
 // MARK: - Timeline
 
@@ -27,21 +28,55 @@ struct EONProvider: TimelineProvider {
     }
 }
 
-// MARK: - 共用小组件
+// MARK: - 复用零件
 
-private struct IconTile: View {
-    let letter: String
-    let colorHex: String
-    var size: CGFloat = 34
+/// 真实订阅图标。有 PNG 文件就用真图,否则退回"色块 + 首字母"。
+private struct WIcon: View {
+    let item: EONWidgetSnapshot.Item
+    var size: CGFloat = 30
     var body: some View {
-        RoundedRectangle(cornerRadius: size * 0.28, style: .continuous)
-            .fill(Color(eonHex: colorHex))
-            .frame(width: size, height: size)
-            .overlay(
-                Text(letter)
-                    .font(.system(size: size * 0.5, weight: .heavy, design: .rounded))
-                    .foregroundStyle(.white)
-            )
+        Group {
+            if let url = EONWidgetStore.iconURL(item.iconID),
+               let ui = UIImage(contentsOfFile: url.path) {
+                Image(uiImage: ui).resizable().scaledToFill()
+            } else {
+                RoundedRectangle(cornerRadius: size * 0.28, style: .continuous)
+                    .fill(Color(eonHex: item.colorHex))
+                    .overlay(
+                        Text(item.letter)
+                            .font(.system(size: size * 0.5, weight: .heavy, design: .rounded))
+                            .foregroundStyle(.white)
+                    )
+            }
+        }
+        .frame(width: size, height: size)
+        .clipShape(RoundedRectangle(cornerRadius: size * 0.28, style: .continuous))
+    }
+}
+
+/// 大金额:整数部分大,小数部分小一号、淡一档(像 Apple Wallet)。
+private struct BigAmount: View {
+    let major: String
+    let minor: String
+    var size: CGFloat = 30
+    var body: some View {
+        HStack(alignment: .firstTextBaseline, spacing: 1) {
+            Text(major)
+                .font(.system(size: size, weight: .heavy, design: .rounded))
+            if !minor.isEmpty {
+                Text("." + minor)
+                    .font(.system(size: size * 0.6, weight: .heavy, design: .rounded))
+                    .foregroundStyle(.secondary)
+            }
+        }
+        .minimumScaleFactor(0.6)
+        .lineLimit(1)
+    }
+}
+
+private struct EonMark: View {
+    var body: some View {
+        Text("EON").font(.caption2.weight(.heavy)).foregroundStyle(.secondary).tracking(0.5)
     }
 }
 
@@ -51,7 +86,61 @@ private func daysText(_ d: Int) -> String {
     return String(localized: "还有 \(d) 天")
 }
 
-// MARK: - 下次扣费倒计时
+private func calLabel(_ s: String) -> some View {
+    HStack(spacing: 4) {
+        Image(systemName: "calendar").font(.caption2.weight(.bold))
+        Text(s).font(.caption.weight(.semibold))
+    }
+    .foregroundStyle(.secondary)
+}
+
+// MARK: - 本月总额
+
+struct MonthTotalWidgetView: View {
+    var entry: EONEntry
+    @Environment(\.widgetFamily) private var family
+    private var snap: EONWidgetSnapshot { entry.snapshot }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            HStack {
+                calLabel(snap.monthLabel)
+                Spacer()
+                EonMark()
+            }
+            Spacer(minLength: 2)
+            BigAmount(major: snap.monthMajor, minor: snap.monthMinor, size: family == .systemSmall ? 30 : 34)
+            Text(String(localized: "\(snap.dueCount) 笔待扣费"))
+                .font(.caption).foregroundStyle(.secondary)
+            if let first = snap.upcoming.first {
+                Spacer(minLength: 2)
+                Divider()
+                HStack(spacing: 6) {
+                    WIcon(item: first, size: 22)
+                    Text(first.name).font(.caption2.weight(.semibold)).lineLimit(1)
+                    Spacer()
+                    Text(first.dateText).font(.caption2).foregroundStyle(.secondary)
+                }
+            }
+        }
+    }
+}
+
+struct MonthTotalWidget: Widget {
+    let kind = "EONMonthTotal"
+    var body: some WidgetConfiguration {
+        StaticConfiguration(kind: kind, provider: EONProvider()) { entry in
+            MonthTotalWidgetView(entry: entry)
+                .padding(2)
+                .containerBackground(for: .widget) { Color(.systemBackground) }
+        }
+        .configurationDisplayName(Text("本月总额"))
+        .description(Text("当前周期的订阅支出总额。"))
+        .supportedFamilies([.systemSmall, .accessoryRectangular])
+    }
+}
+
+// MARK: - 下次扣费
 
 struct NextChargeWidgetView: View {
     var entry: EONEntry
@@ -61,31 +150,30 @@ struct NextChargeWidgetView: View {
         if let item = entry.snapshot.upcoming.first {
             VStack(alignment: .leading, spacing: 6) {
                 HStack {
-                    IconTile(letter: item.letter, colorHex: item.colorHex, size: family == .systemSmall ? 30 : 34)
+                    WIcon(item: item, size: family == .systemSmall ? 30 : 36)
                     Spacer()
-                    Text("EON").font(.caption2.weight(.heavy)).foregroundStyle(.secondary)
+                    Text("续费").font(.caption2.weight(.heavy))
+                        .foregroundStyle(.tint)
+                        .padding(.horizontal, 7).padding(.vertical, 3)
+                        .background(.tint.opacity(0.15), in: Capsule())
                 }
                 Spacer(minLength: 0)
                 Text(item.name).font(.headline).lineLimit(1)
                 Text(daysText(item.daysLeft))
                     .font(.title3.weight(.heavy))
                     .foregroundStyle(.tint)
-                HStack {
+                HStack(alignment: .firstTextBaseline) {
                     Text(item.amountText).font(.subheadline.weight(.bold))
                     Spacer()
                     Text(item.dateText).font(.caption).foregroundStyle(.secondary)
                 }
             }
-            .padding(4)
         } else {
-            placeholderEmpty
-        }
-    }
-
-    private var placeholderEmpty: some View {
-        VStack(spacing: 6) {
-            Image(systemName: "checkmark.circle").font(.title)
-            Text("近期无扣费").font(.caption).foregroundStyle(.secondary)
+            VStack(spacing: 6) {
+                Image(systemName: "checkmark.circle.fill").font(.title).foregroundStyle(.green)
+                Text("近期无扣费").font(.caption).foregroundStyle(.secondary)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
     }
 }
@@ -95,7 +183,8 @@ struct NextChargeWidget: Widget {
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: EONProvider()) { entry in
             NextChargeWidgetView(entry: entry)
-                .containerBackground(.fill.tertiary, for: .widget)
+                .padding(2)
+                .containerBackground(for: .widget) { Color(.systemBackground) }
         }
         .configurationDisplayName(Text("下次扣费"))
         .description(Text("离你下一笔订阅续费还有几天。"))
@@ -103,73 +192,45 @@ struct NextChargeWidget: Widget {
     }
 }
 
-// MARK: - 本月总额
-
-struct MonthTotalWidgetView: View {
-    var entry: EONEntry
-    var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            HStack {
-                Image(systemName: "chart.pie.fill").foregroundStyle(.tint)
-                Spacer()
-                Text("EON").font(.caption2.weight(.heavy)).foregroundStyle(.secondary)
-            }
-            Spacer(minLength: 0)
-            Text("本月总额").font(.caption).foregroundStyle(.secondary)
-            Text(entry.snapshot.monthTotalText)
-                .font(.system(size: 30, weight: .heavy, design: .rounded))
-                .minimumScaleFactor(0.5).lineLimit(1)
-            Text(String(localized: "\(entry.snapshot.subscriptionCount) 个活跃订阅"))
-                .font(.caption2).foregroundStyle(.secondary)
-        }
-        .padding(4)
-    }
-}
-
-struct MonthTotalWidget: Widget {
-    let kind = "EONMonthTotal"
-    var body: some WidgetConfiguration {
-        StaticConfiguration(kind: kind, provider: EONProvider()) { entry in
-            MonthTotalWidgetView(entry: entry)
-                .containerBackground(.fill.tertiary, for: .widget)
-        }
-        .configurationDisplayName(Text("本月总额"))
-        .description(Text("当前周期的订阅支出总额。"))
-        .supportedFamilies([.systemSmall, .accessoryRectangular])
-    }
-}
-
-// MARK: - 即将扣费清单
+// MARK: - 本月清单
 
 struct UpcomingListWidgetView: View {
     var entry: EONEntry
+    @Environment(\.widgetFamily) private var family
+    private var snap: EONWidgetSnapshot { entry.snapshot }
+    private var maxRows: Int { family == .systemLarge ? 7 : 3 }
+
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                Text("即将扣费").font(.subheadline.weight(.bold))
+            HStack(alignment: .firstTextBaseline) {
+                calLabel(snap.monthLabel)
                 Spacer()
-                Text("EON").font(.caption2.weight(.heavy)).foregroundStyle(.secondary)
+                BigAmount(major: snap.monthMajor, minor: snap.monthMinor, size: 22)
             }
-            if entry.snapshot.upcoming.isEmpty {
+            if snap.periodCharges.isEmpty {
                 Spacer()
-                Text("近期无扣费").font(.caption).foregroundStyle(.secondary)
+                HStack { Spacer()
+                    Text("本月无扣费").font(.caption).foregroundStyle(.secondary)
+                    Spacer() }
                 Spacer()
             } else {
-                ForEach(entry.snapshot.upcoming.prefix(4)) { item in
+                ForEach(snap.periodCharges.prefix(maxRows)) { item in
                     HStack(spacing: 8) {
-                        IconTile(letter: item.letter, colorHex: item.colorHex, size: 26)
-                        VStack(alignment: .leading, spacing: 1) {
-                            Text(item.name).font(.caption.weight(.semibold)).lineLimit(1)
-                            Text(daysText(item.daysLeft)).font(.caption2).foregroundStyle(.secondary)
-                        }
+                        WIcon(item: item, size: 26)
+                        Text(item.name).font(.caption.weight(.semibold)).lineLimit(1)
+                        Text(item.dateText).font(.caption2).foregroundStyle(.tertiary)
                         Spacer()
-                        Text(item.amountText).font(.caption.weight(.bold).monospacedDigit())
+                        Text(item.amountText)
+                            .font(.caption.weight(.bold).monospacedDigit())
+                        if item.paid {
+                            Image(systemName: "checkmark.circle.fill")
+                                .font(.caption2).foregroundStyle(.green)
+                        }
                     }
                 }
                 Spacer(minLength: 0)
             }
         }
-        .padding(4)
     }
 }
 
@@ -178,10 +239,11 @@ struct UpcomingListWidget: Widget {
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: EONProvider()) { entry in
             UpcomingListWidgetView(entry: entry)
-                .containerBackground(.fill.tertiary, for: .widget)
+                .padding(2)
+                .containerBackground(for: .widget) { Color(.systemBackground) }
         }
-        .configurationDisplayName(Text("即将扣费清单"))
-        .description(Text("接下来几笔订阅扣费。"))
+        .configurationDisplayName(Text("本月清单"))
+        .description(Text("本月的订阅扣费清单。"))
         .supportedFamilies([.systemMedium, .systemLarge])
     }
 }
