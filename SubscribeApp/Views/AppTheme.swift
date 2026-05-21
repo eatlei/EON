@@ -343,6 +343,13 @@ struct RevealModifier: ViewModifier {
 
 extension View {
     func reveal(_ index: Int) -> some View { modifier(RevealModifier(index: index)) }
+
+    /// iPad / Mac 等大屏上把内容限制到一个舒服的最大阅读宽度并居中,避免一行被
+    /// 拉得过宽。iPhone 上宽度本来就小于上限,等于不生效。
+    func readableWidth(_ maxWidth: CGFloat = 640) -> some View {
+        frame(maxWidth: maxWidth)
+            .frame(maxWidth: .infinity)
+    }
 }
 
 struct SettingsLabelStyle: LabelStyle {

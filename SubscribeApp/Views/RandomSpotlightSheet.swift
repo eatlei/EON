@@ -59,6 +59,7 @@ struct RandomSpotlightSheet: View {
                     .padding(.horizontal, AppTheme.Space.xl)
                     .padding(.top, AppTheme.Space.l)
                     .padding(.bottom, AppTheme.Space.xxl)
+                    .readableWidth(540)
                 }
             }
             .navigationTitle("🎲 摇出来的")

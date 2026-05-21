@@ -103,6 +103,7 @@ struct SubscriptionsView: View {
                 .padding(.horizontal, AppTheme.Space.xl)
                 .padding(.top, AppTheme.Space.m)
                 .padding(.bottom, AppTheme.dockClearance)
+                .readableWidth(720)
             }
             .scrollDismissesKeyboard(.interactively)
             .background(AppTheme.canvas.ignoresSafeArea())
@@ -112,6 +113,7 @@ struct SubscriptionsView: View {
                     .padding(.horizontal, AppTheme.Space.xl)
                     .padding(.top, AppTheme.Space.s)
                     .padding(.bottom, AppTheme.Space.s)
+                    .readableWidth(720)
             }
             .toolbar(.hidden, for: .navigationBar)
             .sheet(item: $detailing) { sub in

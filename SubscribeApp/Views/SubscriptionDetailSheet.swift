@@ -70,6 +70,7 @@ struct SubscriptionDetailSheet: View {
             .padding(.horizontal, AppTheme.Space.xl)
             .padding(.top, AppTheme.Space.m)
             .padding(.bottom, AppTheme.Space.xxl)
+            .readableWidth(560)
         }
     }
 

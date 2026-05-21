@@ -63,6 +63,7 @@ struct DashboardView: View {
                             .padding(.horizontal, AppTheme.Space.xl)
                             .padding(.top, AppTheme.Space.m)
                             .padding(.bottom, AppTheme.dockClearance)
+                            .readableWidth(680)
                         }
                         .scrollDismissesKeyboard(.interactively)
                         .background(AppTheme.canvas.ignoresSafeArea())
@@ -77,6 +78,7 @@ struct DashboardView: View {
                         .padding(.horizontal, AppTheme.Space.xl)
                         .padding(.top, AppTheme.Space.s)
                         .padding(.bottom, AppTheme.Space.s)
+                        .readableWidth(680)
                 }
             }
             // 每日彩带:挂在 NavigationStack 上,盖在所有内容之上但不拦截手势。

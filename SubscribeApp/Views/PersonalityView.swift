@@ -36,7 +36,7 @@ struct PersonalityView: View {
                 .padding(.horizontal, AppTheme.Space.xl)
                 .padding(.top, AppTheme.Space.l)
                 .padding(.bottom, AppTheme.Space.l)
-                .frame(maxWidth: .infinity)
+                .readableWidth(560)
             }
 
             VStack(spacing: AppTheme.Space.xs) {
