@@ -99,11 +99,11 @@ enum PersonalityType: String, CaseIterable, Identifiable {
     var detail: String {
         switch self {
         case .ai:
-            return String(localized: "ChatGPT、Claude、Midjourney 都在你的订阅栏里安家。早上跟 AI 写代码,晚上跟 AI 写日记 —— 智能时代的常住居民,大概就长你这样。")
+            return String(localized: "豆包、Kimi、即梦 都在你的订阅栏里安家。早上跟 AI 写代码,晚上跟 AI 写日记 —— 智能时代的常住居民,大概就长你这样。")
         case .productivity:
             return String(localized: "Notion、Things、Obsidian、Raycast,你的工具像精密的齿轮咬合在一起。每个 task 都有它的位置,每个想法都不会丢。")
         case .entertainment:
-            return String(localized: "Netflix、Spotify、YouTube Premium、漫画 App —— 你的休闲时间被精挑细选的内容填得满满当当。沙发就是你的剧院。")
+            return String(localized: "爱奇艺、腾讯视频、网易云音乐、漫画 App —— 你的休闲时间被精挑细选的内容填得满满当当。沙发就是你的剧院。")
         case .cloud:
             return String(localized: "iCloud、Dropbox、Google One、Backblaze… 你的数据漂在天上,设备坏了也不慌。云端就是你的随身硬盘。")
         case .developer:

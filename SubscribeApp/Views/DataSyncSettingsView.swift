@@ -94,7 +94,7 @@ struct DataSyncSettingsView: View {
                 }
                 .buttonStyle(.plain)
             } header: { Text("导出") } footer: {
-                Text("数据只发到你选择的 App,EON 不会上传到任何服务器。Markdown 末尾带了一段提示词,粘到 ChatGPT / Claude 就能直接分析你的订阅。")
+                Text("数据只发到你选择的 App,EON 不会上传到任何服务器。Markdown 末尾带了一段提示词,粘到豆包 / Kimi 等 AI 就能直接分析你的订阅。")
             }
         }
         .listStyle(.insetGrouped)

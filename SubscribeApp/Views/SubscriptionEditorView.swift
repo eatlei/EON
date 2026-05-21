@@ -102,7 +102,7 @@ struct SubscriptionEditorView: View {
 
                         MaterialPanel(title: "基础") {
                             FieldRow("名称") {
-                                TextField("如 ChatGPT", text: $draft.name)
+                                TextField("如 豆包", text: $draft.name)
                                     .multilineTextAlignment(.trailing)
                                     .textInputAutocapitalization(.words)
                                     .autocorrectionDisabled()

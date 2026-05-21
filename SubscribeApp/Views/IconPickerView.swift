@@ -204,7 +204,7 @@ struct IconPickerView: View {
     private var appStoreSection: some View {
         VStack(spacing: AppTheme.Space.m) {
             HStack(spacing: AppTheme.Space.s) {
-                searchField("搜索 App，如 Netflix", text: $asQuery, onSubmit: runSearch)
+                searchField("搜索 App，如 爱奇艺", text: $asQuery, onSubmit: runSearch)
                 Menu {
                     Picker("", selection: $region) {
                         ForEach(AppStoreRegion.allCases) { Text($0.title).tag($0) }
