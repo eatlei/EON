@@ -198,6 +198,13 @@ struct AboutView: View {
         let ios = UIDevice.current.systemVersion
         let model = deviceModelIdentifier()
         let intro = String(localized: "请在此描述你的问题或建议：")
+        // 诊断信息块:版本 / 系统 / 机型 / 语言 / 时间。时间用 ISO8601 含时区,
+        // 方便定位"什么时候、哪个版本、什么环境"出的问题。这些都是设备本地信息,
+        // 只有用户点了发送、确认邮件内容后才会带出去。
+        let locale = Locale.current.identifier
+        let df = ISO8601DateFormatter()
+        df.formatOptions = [.withInternetDateTime]
+        let now = df.string(from: Date())
         let body = """
         \(intro)
 
@@ -206,6 +213,8 @@ struct AboutView: View {
         App: EON v\(v) (\(b))
         iOS: \(ios)
         Device: \(model)
+        Locale: \(locale)
+        Date: \(now)
         """
         let subject = String(localized: "EON 反馈")
         var c = URLComponents()

@@ -65,7 +65,7 @@ struct DataSyncSettingsView: View {
                 .disabled(!syncEnabled)
                 .buttonStyle(.plain)
             } header: { Text("iCloud") } footer: {
-                Text("开启后,你在任何一台设备上的修改都会同步到其他设备。需登录 iCloud,模拟器看不到效果。")
+                Text("开启后,你在任何一台设备上的修改都会通过 iCloud 自动同步到登录同一 Apple 账户的其他设备。")
             }
 
             // Export

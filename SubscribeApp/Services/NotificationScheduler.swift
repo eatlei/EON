@@ -20,6 +20,7 @@ enum NotificationScheduler {
         await UNUserNotificationCenter.current().notificationSettings().authorizationStatus
     }
 
+    @MainActor
     static func scheduleReminder(for subscription: Subscription) {
         removeReminder(for: subscription.id)
 
@@ -41,6 +42,10 @@ enum NotificationScheduler {
         content.title = String(localized: "订阅即将续费")
         content.body = String(localized: "\(subscription.name) 将在 \(subscription.reminderDaysBefore) 天后续费。")
         content.sound = .default
+        // 右侧缩略图 = 订阅图标,让用户一眼认出是哪个订阅。
+        if let attachment = NotificationIconRenderer.attachment(for: subscription) {
+            content.attachments = [attachment]
+        }
 
         let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
         let request = UNNotificationRequest(
@@ -58,6 +63,7 @@ enum NotificationScheduler {
         )
     }
 
+    @MainActor
     static func rescheduleAll(_ subscriptions: [Subscription]) {
         for subscription in subscriptions {
             scheduleReminder(for: subscription)
@@ -98,6 +104,10 @@ enum NotificationScheduler {
         if let sub = subscription {
             content.title = String(localized: "订阅即将续费")
             content.body = String(localized: "\(sub.name) 将在 \(max(sub.reminderDaysBefore, 1)) 天后续费。")
+            if let url = await MainActor.run(body: { NotificationIconRenderer.iconFileURL(for: sub) }),
+               let attachment = try? UNNotificationAttachment(identifier: "icon-\(sub.id.uuidString)", url: url, options: nil) {
+                content.attachments = [attachment]
+            }
         } else {
             content.title = String(localized: "通知预览")
             content.body = String(localized: "这就是订阅到期前你会收到的提醒样子。")
