@@ -1,30 +1,27 @@
 import SwiftUI
 import UIKit
 
-/// 二级页面:展示用户的"订阅人格"。
-///
-/// 设计为一张"可分享卡片"风格的主视觉(不是浮层弹窗):主题色渐变卡片 +
-/// 透明抠图形象浮在卡上,配合「上下浮动 / 背后光晕脉动 / 斜向高光扫过 /
-/// 拖拽倾斜」的动效,做出一张活的卡片。卡片下方是描述卡 + 两行轻量脚注。
+/// 二级页面:把用户的"订阅人格"呈现为**一整张包装海报式卡片**(灵感来自潮玩
+/// 收藏卡):中间是人格形象,两侧像"装备"一样陈列用户订阅的 App 图标,配上标题 /
+/// 标语 / 条码等文案。进入时先放一个"正在生成卡片"的 loading 动效,再把卡片
+/// 连同两侧图标错峰弹出来。整卡支持拖拽轻微 3D 倾斜 + 形象浮动 + 高光扫过。
 struct PersonalityView: View {
     @EnvironmentObject private var store: SubscriptionStore
 
     private var type: PersonalityType { store.personality }
 
-    // MARK: - 进场动画 state
-    @State private var heroAppeared = false       // 主卡片缩放 + 渐显
-    @State private var detailAppeared = false     // 描述卡上浮
-    @State private var hintAppeared = false        // 会变化的提示
-    @State private var disclaimerAppeared = false  // 免责声明
-
-    /// 主卡片弹到位时来一下 medium impact,跟视觉的"啪"对上。
+    /// loading 阶段(生成卡片);结束后切到卡片。
+    @State private var isGenerating = true
+    /// 卡片入场总开关:true 时卡片 + 两侧图标错峰弹入。
+    @State private var play = false
     @State private var revealTick = 0
-
-    /// 渲染好的分享卡片图(ImageRenderer 出图后填上,工具栏才出现分享按钮)。
     @State private var cardImage: UIImage?
 
+    /// 卡上要陈列的订阅图标:取活跃订阅前 6 个(两侧各最多 3 个)。
+    private var iconSubs: [Subscription] { Array(store.activeSubscriptions.prefix(6)) }
+
     /// 分享卡片要展示的"隐私安全"数据:订阅数 + 分类数 + top 分类名(不含金额、
-    /// 不含具体服务名),足够有趣又不泄露敏感信息。
+    /// 不含具体服务名)。
     private var shareStats: PersonaShareStats {
         let subs = store.activeSubscriptions
         let cats = Set(subs.map { $0.displayCategoryID })
@@ -33,30 +30,22 @@ struct PersonalityView: View {
     }
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: AppTheme.Space.xl) {
-                // 主视觉:活的分享卡
-                PersonaHeroCard(type: type, stats: shareStats)
-                    .scaleEffect(heroAppeared ? 1 : 0.9)
-                    .opacity(heroAppeared ? 1 : 0)
+        ZStack {
+            posterBackground
 
-                // 描述卡
-                detailCard
-                    .opacity(detailAppeared ? 1 : 0)
-                    .offset(y: detailAppeared ? 0 : 18)
-
-                // 脚注
-                VStack(spacing: AppTheme.Space.s) {
-                    evolutionHint
-                    disclaimer
-                }
+            ScrollView {
+                PersonaPosterCard(type: type, subs: iconSubs, stats: shareStats, play: play)
+                    .padding(AppTheme.Space.l)
+                    .readableWidth(520)
             }
-            .padding(.horizontal, AppTheme.Space.xl)
-            .padding(.top, AppTheme.Space.l)
-            .padding(.bottom, AppTheme.Space.xxl)
-            .readableWidth(560)
+            .opacity(play ? 1 : 0)
+            .scaleEffect(play ? 1 : 0.96)
+
+            if isGenerating {
+                GeneratingOverlay(tint: type.tint)
+                    .transition(.opacity)
+            }
         }
-        .background(themedBackground)
         .navigationTitle("订阅人格")
         .navigationBarTitleDisplayMode(.inline)
         .sensoryFeedback(.impact(weight: .medium), trigger: revealTick)
@@ -73,260 +62,78 @@ struct PersonalityView: View {
                 }
             }
         }
-        .task {
-            renderShareCard()
-            await playEntryAnimation()
-        }
+        .task { await generateAndReveal() }
     }
 
-    // MARK: - 主题化背景
-
     /// 整页背景:canvas 上叠一层从顶部洒下的主题色光晕,让页面跟人格同色调。
-    private var themedBackground: some View {
+    private var posterBackground: some View {
         ZStack {
             AppTheme.canvas
             RadialGradient(
-                colors: [type.tint.opacity(0.22), type.tint.opacity(0.06), .clear],
+                colors: [type.tint.opacity(0.20), type.tint.opacity(0.05), .clear],
                 center: .top, startRadius: 0, endRadius: 460
             )
         }
         .ignoresSafeArea()
     }
 
-    // MARK: - 描述卡
-
-    private var detailCard: some View {
-        VStack(alignment: .leading, spacing: AppTheme.Space.s) {
-            Text(type.detail)
-                .font(.body)
-                .foregroundStyle(AppTheme.secondary)
-                .lineSpacing(5)
-                .fixedSize(horizontal: false, vertical: true)
-            // top 分类:有就用小胶囊点一下"是哪些"(不含金额,隐私安全)
-            if !shareStats.topCategories.isEmpty {
-                HStack(spacing: 6) {
-                    ForEach(shareStats.topCategories, id: \.self) { name in
-                        Text(name)
-                            .font(.caption.weight(.semibold))
-                            .foregroundStyle(type.tint)
-                            .padding(.horizontal, 10).padding(.vertical, 5)
-                            .background(type.tint.opacity(0.12), in: Capsule())
-                    }
-                }
-                .padding(.top, 2)
-            }
-        }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(AppTheme.Space.l)
-        .background(AppTheme.surface, in: RoundedRectangle(cornerRadius: AppTheme.radius))
-        .glassBorder()
+    /// 先把分享图烤好,放一会 loading 动效(营造"生成卡片"的仪式感),
+    /// 再淡出 loading、弹入卡片。
+    private func generateAndReveal() async {
+        renderShareCard()
+        try? await Task.sleep(nanoseconds: 1_150_000_000)
+        withAnimation(.easeOut(duration: 0.35)) { isGenerating = false }
+        withAnimation(.spring(response: 0.62, dampingFraction: 0.8)) { play = true }
+        revealTick &+= 1
     }
 
-    // MARK: - 脚注
-
-    @ViewBuilder
-    private var evolutionHint: some View {
-        HStack(spacing: 6) {
-            Image(systemName: "arrow.triangle.2.circlepath")
-                .font(.caption2)
-            Text("人格会随你的订阅而变化")
-                .font(.caption)
-        }
-        .foregroundStyle(AppTheme.tertiary)
-        .padding(.top, AppTheme.Space.s)
-        .opacity(hintAppeared ? 1 : 0)
-    }
-
-    @ViewBuilder
-    private var disclaimer: some View {
-        VStack(spacing: 4) {
-            Image(systemName: "sparkles")
-                .font(.caption)
-            Text("仅供娱乐 · 不代表 EON 的任何评价或建议")
-                .font(.caption)
-                .multilineTextAlignment(.center)
-        }
-        .foregroundStyle(AppTheme.tertiary)
-        .padding(.top, AppTheme.Space.xs)
-        .opacity(disclaimerAppeared ? 1 : 0)
-    }
-
-    // MARK: - 出图 & 动画编排
-
-    /// 用 ImageRenderer 把分享卡片烤成图。3x 保证清晰,出图后工具栏分享按钮才出现。
+    /// 用 ImageRenderer 把海报卡片烤成图(3x),分享 / 存相册。
     @MainActor
     private func renderShareCard() {
-        let card = PersonalityShareCard(type: type, stats: shareStats)
+        let card = PersonaPosterCard(type: type, subs: iconSubs, stats: shareStats,
+                                     play: true, forSharing: true)
         let renderer = ImageRenderer(content: card)
         renderer.scale = 3
         cardImage = renderer.uiImage
     }
-
-    /// 进场:主卡片弹到位(配 haptic)→ 描述卡上浮 → 脚注渐显。
-    private func playEntryAnimation() async {
-        withAnimation(.spring(response: 0.6, dampingFraction: 0.72)) {
-            heroAppeared = true
-        }
-        revealTick &+= 1
-        try? await Task.sleep(nanoseconds: 240_000_000)
-        withAnimation(.easeOut(duration: 0.4)) { detailAppeared = true }
-        try? await Task.sleep(nanoseconds: 120_000_000)
-        withAnimation(.easeOut(duration: 0.4)) { hintAppeared = true }
-        try? await Task.sleep(nanoseconds: 100_000_000)
-        withAnimation(.easeOut(duration: 0.4)) { disclaimerAppeared = true }
-    }
 }
 
-// MARK: - 活的主卡片
+// MARK: - 生成中 loading
 
-/// 主视觉卡片:主题色渐变 + 透明抠图形象 + 名字 + 标语 + 数据胶囊。
-/// 动效:形象上下浮动、背后光晕脉动、斜向高光循环扫过、拖拽时整卡 3D 倾斜。
-private struct PersonaHeroCard: View {
-    let type: PersonalityType
-    let stats: PersonaShareStats
-
-    @State private var float = false       // 形象上下浮动
-    @State private var glowPulse = false   // 背后光晕脉动
-    @State private var shine = false        // 斜向高光扫过
-    @GestureState private var drag: CGSize = .zero
-
-    private let corner: CGFloat = 32
+/// "正在生成你的人格卡片"——一圈旋转的进度弧 + 中心脉动 sparkles。
+private struct GeneratingOverlay: View {
+    let tint: Color
+    @State private var spin = false
+    @State private var pulse = false
 
     var body: some View {
-        VStack(spacing: AppTheme.Space.l) {
-            artZone
-            VStack(spacing: 6) {
-                Text(type.name)
-                    .font(.system(size: 30, weight: .heavy, design: .rounded))
-                    .foregroundStyle(.white)
-                    .multilineTextAlignment(.center)
-                Text(type.tagline)
-                    .font(.headline.weight(.semibold))
-                    .foregroundStyle(.white.opacity(0.92))
-                    .multilineTextAlignment(.center)
+        VStack(spacing: 18) {
+            ZStack {
+                Circle()
+                    .stroke(tint.opacity(0.15), lineWidth: 6)
+                    .frame(width: 84, height: 84)
+                Circle()
+                    .trim(from: 0, to: 0.3)
+                    .stroke(tint, style: StrokeStyle(lineWidth: 6, lineCap: .round))
+                    .frame(width: 84, height: 84)
+                    .rotationEffect(.degrees(spin ? 360 : 0))
+                Image(systemName: "sparkles")
+                    .font(.title2.weight(.bold))
+                    .foregroundStyle(tint)
+                    .scaleEffect(pulse ? 1.12 : 0.88)
             }
-            HStack(spacing: 10) {
-                statChip(value: "\(stats.count)", label: "订阅")
-                statChip(value: "\(stats.categoryCount)", label: "分类")
-            }
+            Text("正在生成你的人格卡片…")
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(AppTheme.secondary)
         }
-        .padding(.vertical, AppTheme.Space.xxl)
-        .padding(.horizontal, AppTheme.Space.xl)
-        .frame(maxWidth: .infinity)
-        .background(cardBackground)
-        .clipShape(RoundedRectangle(cornerRadius: corner, style: .continuous))
-        .overlay(shineOverlay)
-        .overlay(
-            RoundedRectangle(cornerRadius: corner, style: .continuous)
-                .stroke(.white.opacity(0.28), lineWidth: 1)
-        )
-        .shadow(color: type.tint.opacity(0.45), radius: 28, x: 0, y: 18)
-        // 拖拽倾斜:整卡跟着手指做轻微 3D 旋转,松手弹回。
-        .rotation3DEffect(.degrees(Double(drag.width) / 16),
-                          axis: (x: 0, y: 1, z: 0), perspective: 0.6)
-        .rotation3DEffect(.degrees(Double(-drag.height) / 18),
-                          axis: (x: 1, y: 0, z: 0), perspective: 0.6)
-        .gesture(
-            DragGesture(minimumDistance: 0)
-                .updating($drag) { value, state, _ in state = value.translation }
-        )
-        .animation(.spring(response: 0.4, dampingFraction: 0.6), value: drag)
-        .onAppear { startAmbientAnimations() }
-    }
-
-    // 形象区:背后脉动光晕 + 浮动的透明抠图。
-    private var artZone: some View {
-        ZStack {
-            Circle()
-                .fill(RadialGradient(
-                    colors: [.white.opacity(0.5), .white.opacity(0.12), .clear],
-                    center: .center, startRadius: 0, endRadius: 130))
-                .frame(width: 240, height: 240)
-                .scaleEffect(glowPulse ? 1.08 : 0.9)
-                .opacity(glowPulse ? 0.95 : 0.55)
-                .blur(radius: 6)
-
-            artwork
-                .frame(height: 184)
-                .offset(y: float ? -9 : 9)
-                .shadow(color: .black.opacity(0.22), radius: 16, x: 0, y: 12)
-        }
-        .frame(height: 212)
-    }
-
-    @ViewBuilder
-    private var artwork: some View {
-        if UIImage(named: type.imageAssetName) != nil {
-            Image(type.imageAssetName)
-                .resizable()
-                .scaledToFit()
-        } else {
-            Image(systemName: type.fallbackSymbol)
-                .font(.system(size: 96, weight: .bold))
-                .foregroundStyle(.white)
-        }
-    }
-
-    private var cardBackground: some View {
-        ZStack {
-            LinearGradient(
-                colors: [type.tint, type.tint.opacity(0.68)],
-                startPoint: .topLeading, endPoint: .bottomTrailing
-            )
-            RadialGradient(
-                colors: [.white.opacity(0.3), .clear],
-                center: UnitPoint(x: 0.22, y: 0.1), startRadius: 0, endRadius: 340
-            )
-        }
-    }
-
-    // 斜向高光:一条半透明白带循环从左下扫到右上。
-    private var shineOverlay: some View {
-        GeometryReader { geo in
-            let w = geo.size.width
-            LinearGradient(
-                colors: [.clear, .white.opacity(0.35), .clear],
-                startPoint: .top, endPoint: .bottom
-            )
-            .frame(width: w * 0.45)
-            .rotationEffect(.degrees(22))
-            .offset(x: shine ? w * 1.25 : -w * 1.25)
-            .blendMode(.plusLighter)
-        }
-        .clipShape(RoundedRectangle(cornerRadius: corner, style: .continuous))
-        .allowsHitTesting(false)
-    }
-
-    private func statChip(value: String, label: LocalizedStringKey) -> some View {
-        VStack(spacing: 2) {
-            Text(value)
-                .font(.system(size: 22, weight: .heavy, design: .rounded).monospacedDigit())
-                .foregroundStyle(.white)
-            Text(label)
-                .font(.caption2.weight(.semibold))
-                .foregroundStyle(.white.opacity(0.85))
-        }
-        .frame(minWidth: 72)
-        .padding(.vertical, 10)
-        .background(.white.opacity(0.16), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous)
-            .stroke(.white.opacity(0.2), lineWidth: 0.5))
-    }
-
-    private func startAmbientAnimations() {
-        withAnimation(.easeInOut(duration: 2.4).repeatForever(autoreverses: true)) {
-            float = true
-        }
-        withAnimation(.easeInOut(duration: 2.8).repeatForever(autoreverses: true)) {
-            glowPulse = true
-        }
-        withAnimation(.linear(duration: 3.4).repeatForever(autoreverses: false).delay(0.8)) {
-            shine = true
+        .onAppear {
+            withAnimation(.linear(duration: 1.0).repeatForever(autoreverses: false)) { spin = true }
+            withAnimation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true)) { pulse = true }
         }
     }
 }
 
-// MARK: - 分享卡片
+// MARK: - 海报卡片
 
 /// 卡片要展示的隐私安全数据。只放聚合数字 + 分类名,绝不含金额或具体服务名。
 struct PersonaShareStats {
@@ -335,124 +142,310 @@ struct PersonaShareStats {
     let topCategories: [String]
 }
 
-/// 可分享的"订阅人格"卡片。用 ImageRenderer 烤成图后分享 / 存相册。
-/// 顶部露出 EON 图标 + 名称,中间是人格形象 + 名字 + 标语,下面是几枚数据胶囊。
-private struct PersonalityShareCard: View {
+/// 一整张"包装海报"式人格卡:头部品牌行 + 大标题 + 中央形象(两侧陈列订阅图标)
+/// + 底部条码与数据。屏幕上可拖拽轻微 3D 倾斜、形象上下浮动、高光循环扫过;
+/// 用 ImageRenderer 出图分享时传 `forSharing` 关掉交互、用固定宽度。
+private struct PersonaPosterCard: View {
     let type: PersonalityType
+    let subs: [Subscription]
     let stats: PersonaShareStats
+    var play: Bool
+    var forSharing: Bool = false
 
-    private let width: CGFloat = 360
+    @State private var float = false
+    @State private var shine = false
+    @GestureState private var drag: CGSize = .zero
+
+    private let corner: CGFloat = 28
+
+    /// 两侧分配:左列拿前一半,右列拿后一半。
+    private var leftSubs: [Subscription] { Array(subs.prefix((subs.count + 1) / 2)) }
+    private var rightSubs: [Subscription] { Array(subs.suffix(subs.count - (subs.count + 1) / 2)) }
+
+    /// 给海报一个稳定的"编号"——人格在枚举里的序号。
+    private var personaNumber: String {
+        let idx = (PersonalityType.allCases.firstIndex(of: type) ?? 0) + 1
+        return String(format: "#%02d", idx)
+    }
 
     var body: some View {
-        VStack(spacing: AppTheme.Space.l) {
-            // 顶部品牌行
-            HStack(spacing: 8) {
-                brandIcon
-                Text(verbatim: "EON")
-                    .font(.system(size: 18, weight: .heavy, design: .rounded))
-                    .foregroundStyle(.white)
-                Spacer()
-                Text("订阅人格")
-                    .font(.caption.weight(.bold))
-                    .foregroundStyle(.white.opacity(0.85))
-                    .padding(.horizontal, 10).padding(.vertical, 4)
-                    .background(.white.opacity(0.18), in: Capsule())
-            }
-
-            // 人格形象
-            personaArt
-                .frame(width: 150, height: 150)
-                .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
-                .overlay(RoundedRectangle(cornerRadius: 28, style: .continuous)
-                    .stroke(.white.opacity(0.5), lineWidth: 1))
-                .shadow(color: .black.opacity(0.25), radius: 16, y: 8)
-
-            VStack(spacing: 6) {
-                Text(type.name)
-                    .font(.system(size: 26, weight: .heavy, design: .rounded))
-                    .foregroundStyle(.white)
-                    .multilineTextAlignment(.center)
-                Text(type.tagline)
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(.white.opacity(0.9))
-                    .multilineTextAlignment(.center)
-            }
-
-            // 数据胶囊(隐私安全:只有数量 + 分类名)
-            HStack(spacing: 8) {
-                statChip(value: "\(stats.count)", label: String(localized: "订阅"))
-                statChip(value: "\(stats.categoryCount)", label: String(localized: "分类"))
-            }
-            if !stats.topCategories.isEmpty {
-                Text(stats.topCategories.joined(separator: " · "))
-                    .font(.caption.weight(.semibold))
-                    .foregroundStyle(.white.opacity(0.9))
-                    .multilineTextAlignment(.center)
-                    .padding(.horizontal, 12).padding(.vertical, 6)
-                    .background(.white.opacity(0.15), in: Capsule())
-            }
-
-            Text("由 EON 生成 · 仅供娱乐")
-                .font(.caption2)
-                .foregroundStyle(.white.opacity(0.7))
-                .padding(.top, 2)
+        VStack(alignment: .leading, spacing: AppTheme.Space.l) {
+            header
+            titleBlock
+            stage
+            footer
         }
-        .padding(AppTheme.Space.xl)
-        .frame(width: width)
-        .background(
-            ZStack {
-                LinearGradient(
-                    colors: [type.tint, type.tint.opacity(0.65)],
-                    startPoint: .topLeading, endPoint: .bottomTrailing
-                )
-                RadialGradient(
-                    colors: [.white.opacity(0.25), .clear],
-                    center: UnitPoint(x: 0.2, y: 0.1), startRadius: 0, endRadius: 260
-                )
-            }
+        .padding(AppTheme.Space.l)
+        .frame(maxWidth: forSharing ? 360 : .infinity)
+        .background(cardBackground)
+        .overlay(cornerTicks)
+        .overlay(shineOverlay)
+        .clipShape(RoundedRectangle(cornerRadius: corner, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: corner, style: .continuous)
+                .stroke(AppTheme.ink.opacity(0.14), lineWidth: 1)
         )
+        .shadow(color: type.tint.opacity(forSharing ? 0 : 0.22), radius: 26, x: 0, y: 16)
+        .rotation3DEffect(.degrees(forSharing ? 0 : Double(drag.width) / 18),
+                          axis: (x: 0, y: 1, z: 0), perspective: 0.6)
+        .rotation3DEffect(.degrees(forSharing ? 0 : Double(-drag.height) / 22),
+                          axis: (x: 1, y: 0, z: 0), perspective: 0.6)
+        .gesture(forSharing ? nil :
+            DragGesture(minimumDistance: 0)
+                .updating($drag) { value, state, _ in state = value.translation }
+        )
+        .animation(.spring(response: 0.4, dampingFraction: 0.6), value: drag)
+        .onAppear {
+            guard !forSharing else { return }
+            withAnimation(.easeInOut(duration: 2.6).repeatForever(autoreverses: true)) { float = true }
+            withAnimation(.linear(duration: 3.6).repeatForever(autoreverses: false).delay(0.8)) { shine = true }
+        }
+    }
+
+    // 头部品牌行
+    private var header: some View {
+        HStack(spacing: 8) {
+            brandIcon
+            Text(verbatim: "EON")
+                .font(.system(size: 17, weight: .heavy, design: .rounded))
+                .foregroundStyle(AppTheme.ink)
+            Spacer()
+            Text(verbatim: personaNumber)
+                .font(.system(size: 13, weight: .bold, design: .monospaced))
+                .foregroundStyle(AppTheme.secondary)
+            Text("订阅人格")
+                .font(.caption2.weight(.bold))
+                .foregroundStyle(.white)
+                .padding(.horizontal, 8).padding(.vertical, 3)
+                .background(type.tint, in: Capsule())
+        }
+    }
+
+    // 大标题块
+    private var titleBlock: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(verbatim: "SUBSCRIPTION PERSONA")
+                .font(.system(size: 10, weight: .bold))
+                .tracking(2)
+                .foregroundStyle(AppTheme.tertiary)
+            Text(type.name)
+                .font(.system(size: 30, weight: .heavy, design: .rounded))
+                .foregroundStyle(AppTheme.ink)
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
+            Text(type.tagline)
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(type.tint)
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    // 中央舞台:左列图标 + 形象 + 右列图标
+    private var stage: some View {
+        HStack(alignment: .center, spacing: AppTheme.Space.s) {
+            if !leftSubs.isEmpty {
+                iconColumn(leftSubs, sideOffset: 0)
+            }
+            figure
+                .frame(maxWidth: .infinity)
+            if !rightSubs.isEmpty {
+                iconColumn(rightSubs, sideOffset: leftSubs.count)
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .frame(minHeight: 210)
+    }
+
+    private func iconColumn(_ items: [Subscription], sideOffset: Int) -> some View {
+        VStack(spacing: AppTheme.Space.s) {
+            ForEach(Array(items.enumerated()), id: \.element.id) { i, sub in
+                IconBlister(subscription: sub, tint: type.tint)
+                    .scaleEffect(play ? 1 : 0.5)
+                    .opacity(play ? 1 : 0)
+                    .animation(.spring(response: 0.5, dampingFraction: 0.7)
+                        .delay(0.25 + Double(sideOffset + i) * 0.08), value: play)
+            }
+        }
+    }
+
+    // 中央形象:主题色光晕 + 透明抠图浮动
+    private var figure: some View {
+        ZStack {
+            Circle()
+                .fill(RadialGradient(
+                    colors: [type.tint.opacity(0.4), type.tint.opacity(0.12), .clear],
+                    center: .center, startRadius: 0, endRadius: 120))
+                .frame(width: 230, height: 230)
+                .blur(radius: 4)
+            artwork
+                .frame(height: 188)
+                .offset(y: float ? -8 : 8)
+                .shadow(color: .black.opacity(0.2), radius: 14, x: 0, y: 10)
+        }
+        .scaleEffect(play ? 1 : 0.8)
+        .opacity(play ? 1 : 0)
+        .animation(.spring(response: 0.6, dampingFraction: 0.7).delay(0.1), value: play)
+    }
+
+    @ViewBuilder
+    private var artwork: some View {
+        if UIImage(named: type.imageAssetName) != nil {
+            Image(type.imageAssetName).resizable().scaledToFit()
+        } else {
+            Image(systemName: type.fallbackSymbol)
+                .font(.system(size: 92, weight: .bold))
+                .foregroundStyle(type.tint)
+        }
+    }
+
+    // 底部:条码 + 生成署名 + 数据胶囊
+    private var footer: some View {
+        HStack(alignment: .bottom) {
+            VStack(alignment: .leading, spacing: 6) {
+                BarcodeStrip(tint: AppTheme.ink)
+                    .frame(width: 110, height: 26)
+                Text("由 EON 生成 · 仅供娱乐")
+                    .font(.system(size: 9, weight: .semibold))
+                    .foregroundStyle(AppTheme.tertiary)
+            }
+            Spacer()
+            HStack(spacing: 6) {
+                statChip(value: "\(stats.count)", label: "订阅")
+                statChip(value: "\(stats.categoryCount)", label: "分类")
+            }
+        }
+    }
+
+    private func statChip(value: String, label: LocalizedStringKey) -> some View {
+        VStack(spacing: 0) {
+            Text(value)
+                .font(.system(size: 18, weight: .heavy, design: .rounded).monospacedDigit())
+                .foregroundStyle(AppTheme.ink)
+            Text(label)
+                .font(.system(size: 9, weight: .semibold))
+                .foregroundStyle(AppTheme.secondary)
+        }
+        .frame(minWidth: 52)
+        .padding(.vertical, 7)
+        .background(type.tint.opacity(0.10), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: 10, style: .continuous)
+            .stroke(type.tint.opacity(0.25), lineWidth: 0.5))
+    }
+
+    // 卡面:surface 底 + 浅网格 + 顶部主题色微染
+    private var cardBackground: some View {
+        ZStack {
+            AppTheme.surface
+            GridPattern(spacing: 22, color: AppTheme.ink.opacity(0.045))
+            RadialGradient(
+                colors: [type.tint.opacity(0.12), .clear],
+                center: UnitPoint(x: 0.5, y: 0.0), startRadius: 0, endRadius: 280)
+        }
+    }
+
+    // 四角裁切标记,呼应包装海报的"印刷裁切线"
+    private var cornerTicks: some View {
+        GeometryReader { geo in
+            let w = geo.size.width, h = geo.size.height
+            let len: CGFloat = 12, inset: CGFloat = 14
+            Path { p in
+                // 左上
+                p.move(to: CGPoint(x: inset, y: inset + len)); p.addLine(to: CGPoint(x: inset, y: inset)); p.addLine(to: CGPoint(x: inset + len, y: inset))
+                // 右上
+                p.move(to: CGPoint(x: w - inset - len, y: inset)); p.addLine(to: CGPoint(x: w - inset, y: inset)); p.addLine(to: CGPoint(x: w - inset, y: inset + len))
+                // 左下
+                p.move(to: CGPoint(x: inset, y: h - inset - len)); p.addLine(to: CGPoint(x: inset, y: h - inset)); p.addLine(to: CGPoint(x: inset + len, y: h - inset))
+                // 右下
+                p.move(to: CGPoint(x: w - inset - len, y: h - inset)); p.addLine(to: CGPoint(x: w - inset, y: h - inset)); p.addLine(to: CGPoint(x: w - inset, y: h - inset - len))
+            }
+            .stroke(AppTheme.ink.opacity(0.18), lineWidth: 1.2)
+        }
+        .allowsHitTesting(false)
+    }
+
+    private var shineOverlay: some View {
+        GeometryReader { geo in
+            let w = geo.size.width
+            LinearGradient(colors: [.clear, .white.opacity(0.22), .clear],
+                           startPoint: .top, endPoint: .bottom)
+                .frame(width: w * 0.4)
+                .rotationEffect(.degrees(22))
+                .offset(x: shine ? w * 1.3 : -w * 1.3)
+                .blendMode(.plusLighter)
+        }
+        .clipShape(RoundedRectangle(cornerRadius: corner, style: .continuous))
+        .allowsHitTesting(false)
     }
 
     @ViewBuilder
     private var brandIcon: some View {
         if let ui = UIImage(named: "EONBrandIcon") {
             Image(uiImage: ui).resizable().scaledToFill()
-                .frame(width: 30, height: 30)
-                .clipShape(RoundedRectangle(cornerRadius: 7, style: .continuous))
+                .frame(width: 24, height: 24)
+                .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
         } else {
-            RoundedRectangle(cornerRadius: 7, style: .continuous)
-                .fill(.white.opacity(0.25))
-                .frame(width: 30, height: 30)
-                .overlay(Text(verbatim: "E").font(.system(size: 16, weight: .heavy, design: .rounded)).foregroundStyle(.white))
+            RoundedRectangle(cornerRadius: 6, style: .continuous)
+                .fill(type.tint)
+                .frame(width: 24, height: 24)
+                .overlay(Text(verbatim: "E").font(.system(size: 13, weight: .heavy, design: .rounded)).foregroundStyle(.white))
         }
     }
+}
 
-    @ViewBuilder
-    private var personaArt: some View {
-        if UIImage(named: type.imageAssetName) != nil {
-            Image(type.imageAssetName).resizable().scaledToFill()
-        } else {
-            ZStack {
-                Color.white.opacity(0.16)
-                Image(systemName: type.fallbackSymbol)
-                    .font(.system(size: 64, weight: .bold))
-                    .foregroundStyle(.white)
+// MARK: - 订阅图标"装备格"
+
+/// 单个订阅图标的"泡壳格":白底圆角 + 细描边 + App 图标,像潮玩包装里的配件。
+private struct IconBlister: View {
+    let subscription: Subscription
+    let tint: Color
+
+    var body: some View {
+        CategoryGlyph(subscription: subscription, size: 38)
+            .padding(9)
+            .background(AppTheme.canvas, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+            .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .stroke(AppTheme.ink.opacity(0.12), lineWidth: 1))
+            .shadow(color: .black.opacity(0.06), radius: 4, x: 0, y: 2)
+    }
+}
+
+// MARK: - 装饰元素
+
+/// 卡面浅网格(graph-paper 质感)。
+private struct GridPattern: View {
+    var spacing: CGFloat = 22
+    var color: Color
+
+    var body: some View {
+        Canvas { ctx, size in
+            var path = Path()
+            var x: CGFloat = 0
+            while x <= size.width { path.move(to: CGPoint(x: x, y: 0)); path.addLine(to: CGPoint(x: x, y: size.height)); x += spacing }
+            var y: CGFloat = 0
+            while y <= size.height { path.move(to: CGPoint(x: 0, y: y)); path.addLine(to: CGPoint(x: size.width, y: y)); y += spacing }
+            ctx.stroke(path, with: .color(color), lineWidth: 0.5)
+        }
+    }
+}
+
+/// 纯装饰的"条码"——一排粗细随机但稳定的竖线,给海报增添包装感。
+private struct BarcodeStrip: View {
+    var tint: Color
+    // 固定的一段条宽序列,保证每次渲染一致(也利于出图)。
+    private let widths: [CGFloat] = [2, 1, 3, 1, 1, 2, 1, 3, 2, 1, 1, 2, 3, 1, 2, 1, 1, 3, 1, 2, 2, 1, 3, 1]
+
+    var body: some View {
+        GeometryReader { geo in
+            HStack(alignment: .center, spacing: 1.5) {
+                ForEach(Array(widths.enumerated()), id: \.offset) { i, w in
+                    Rectangle()
+                        .fill(tint.opacity(i % 5 == 0 ? 0.35 : 0.8))
+                        .frame(width: w)
+                }
             }
+            .frame(width: geo.size.width, height: geo.size.height, alignment: .leading)
         }
-    }
-
-    private func statChip(value: String, label: String) -> some View {
-        VStack(spacing: 0) {
-            Text(value)
-                .font(.system(size: 22, weight: .heavy, design: .rounded).monospacedDigit())
-                .foregroundStyle(.white)
-            Text(label)
-                .font(.caption2.weight(.semibold))
-                .foregroundStyle(.white.opacity(0.8))
-        }
-        .frame(minWidth: 64)
-        .padding(.vertical, 8)
-        .background(.white.opacity(0.15), in: RoundedRectangle(cornerRadius: 12))
     }
 }
 
