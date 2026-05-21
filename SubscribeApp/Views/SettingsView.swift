@@ -7,11 +7,11 @@ import UIKit
 /// 后者在返回时会让 tab bar 闪一下(系统在 pop 动画里重新算可见性,慢半拍),
 /// 根级绑定则跟 pop 同步,不再闪。
 private enum SettingsRoute: Hashable {
-    case appearance, easterEgg, currency, category, payment, notification, archived, dataSync, about
+    case appearance, easterEgg, other, currency, category, payment, notification, archived, dataSync, about
 }
 
 /// 整 App 的设置入口。条目按"用途接近"原则分了 4 段:
-/// - 偏好:外观(含语言/主题/卡片)
+/// - 偏好:外观(主题/卡片)、小玩具、其他(语言/触觉反馈)
 /// - 订阅:跟订阅本体最相关的设置
 /// - 数据:iCloud 同步与导出
 /// - 关于:App 信息 / 评分 / 反馈
@@ -27,13 +27,19 @@ struct SettingsView: View {
                     NavigationLink(value: SettingsRoute.appearance) {
                         HStack(spacing: 12) {
                             SettingsIcon(name: "paintpalette")
-                            Text("外观与语言")
+                            Text("外观")
                         }
                     }
                     NavigationLink(value: SettingsRoute.easterEgg) {
                         HStack(spacing: 12) {
                             SettingsIcon(name: "sparkles")
                             Text("小玩具")
+                        }
+                    }
+                    NavigationLink(value: SettingsRoute.other) {
+                        HStack(spacing: 12) {
+                            SettingsIcon(name: "ellipsis.circle")
+                            Text("其他")
                         }
                     }
                 } header: {
@@ -112,6 +118,7 @@ struct SettingsView: View {
                 switch route {
                 case .appearance:   AppearanceSettingsView()
                 case .easterEgg:    EasterEggSettingsView()
+                case .other:        OtherSettingsView()
                 case .currency:     CurrencySettingsView()
                 case .category:     CategorySettingsView()
                 case .payment:      PaymentMethodsView()
