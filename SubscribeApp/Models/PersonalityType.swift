@@ -126,6 +126,24 @@ enum PersonalityType: String, CaseIterable, Identifiable {
 
 // MARK: - Detection
 
+/// 记录用户"上次查看到的订阅人格",用来决定入口要不要给动效提示。
+/// 判定只比较"当前人格 vs 上次查看的人格" —— 跟人格变了几次无关:只要看过
+/// 一次最新的就重置,不会因为连变多次而一直闪。
+enum PersonalityTracker {
+    private static let key = "eon.personality.lastViewed"
+
+    /// 入口要不要高亮 + 动效:从没看过(nil)→ 要;当前人格 ≠ 上次看的 → 要。
+    static func shouldHighlight(current: PersonalityType) -> Bool {
+        guard let last = UserDefaults.standard.string(forKey: key) else { return true }
+        return last != current.rawValue
+    }
+
+    /// 用户看过之后记下当前人格,动效随即停止,直到人格再次变化。
+    static func markViewed(_ type: PersonalityType) {
+        UserDefaults.standard.set(type.rawValue, forKey: key)
+    }
+}
+
 extension SubscriptionStore {
     /// 根据当前订阅情况推断出来的"订阅人格"。
     /// 优先级:beginner > dailyAdder > balanced > 主导分类 > eclectic。

@@ -27,6 +27,7 @@ struct DashboardView: View {
                         ScrollView {
                             VStack(spacing: AppTheme.Space.xl) {
                                 HeroTotal(period: period).reveal(0)
+                                PersonalityEntry()
                                 // 试用面板紧跟在总额下面,只有当用户标了试用
                                 // 订阅时才出现 —— 提醒首次正式扣费倒计时,
                                 // 免得免费试用悄悄转成付费。
@@ -132,7 +133,6 @@ struct DashboardView: View {
 private struct DashboardHeader: View {
     @EnvironmentObject private var store: SubscriptionStore
     @Binding var period: SpendPeriod
-    @State private var showPersonality = false
 
     /// SegmentedPill 在切换时是用 withAnimation 包的赋值;但 period 这个全局
     /// state 一变,Hero/Stats/Lifetime 等所有跟 period 相关的子视图都会重算,
@@ -160,32 +160,72 @@ private struct DashboardHeader: View {
             .frame(maxWidth: 200)  // 三档,留点空间不要顶到右边
 
             Spacer()
+            // 订阅人格入口从这里挪走了 —— 不再常驻吸顶 Header。改成下方内容区的
+            // 一个文字按钮(PersonalityEntry),且只有"首次打开 / 人格变化"时才有
+            // 轻微动效提示。
+        }
+    }
+}
 
-            // 货币切换从右上角下线了 —— 改去"设置 → 货币"那一栏走专门页面。
-            // 这里换成"订阅人格"彩蛋的入口。原本是 NavigationLink,但很多用户
-            // 反映点了没反应(safeAreaInset + NavigationStack 的组合下 NL 有时
-            // 不上车);改成 Button + .sheet,既稳又能配 sheet 内丰富的入场动画。
-            Button {
-                showPersonality = true
-            } label: {
-                HStack(spacing: 6) {
-                    Image(systemName: "sparkles").font(.subheadline.weight(.bold))
-                    Text("订阅人格").font(.subheadline.weight(.bold))
+// MARK: - 订阅人格入口(内容区文字按钮)
+//
+// 需求:不常驻顶部;只有"用户从没打开过"或"人格自上次查看后又变了"时,入口
+// 才有一点点动效提示。看过之后(markViewed)动效立刻消失,直到人格再次变化。
+// 即便人格连变多次没看,只要看一次最新的就重置 —— 因为判定只看"当前 vs 上次
+// 查看的人格",跟变化次数无关。
+private struct PersonalityEntry: View {
+    @EnvironmentObject private var store: SubscriptionStore
+    @State private var showPersonality = false
+    @State private var highlight = false
+    @State private var pulse = false
+
+    var body: some View {
+        Button {
+            Haptics.tap()
+            showPersonality = true
+        } label: {
+            HStack(spacing: 8) {
+                Image(systemName: "sparkles")
+                    .font(.subheadline.weight(.bold))
+                    .foregroundStyle(highlight ? AppTheme.accent : AppTheme.secondary)
+                    .scaleEffect(highlight && pulse ? 1.18 : 1)
+                Text("看看你的订阅人格")
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(highlight ? AppTheme.ink : AppTheme.secondary)
+                // 有更新时挂一个小红点,跟动效一起提示"有新东西"。
+                if highlight {
+                    Circle().fill(Color.red).frame(width: 6, height: 6)
                 }
-                .foregroundStyle(AppTheme.ink)
-                .padding(.horizontal, AppTheme.Space.m)
-                .padding(.vertical, 10)
-                .glassEffect(.regular, in: Capsule())
-                .contentShape(Capsule())   // 整个胶囊都是 hit area
+                Image(systemName: "chevron.right")
+                    .font(.caption2.weight(.bold))
+                    .foregroundStyle(AppTheme.tertiary)
             }
-            .buttonStyle(.plain)
-            .sheet(isPresented: $showPersonality) {
-                NavigationStack {
-                    PersonalityView()
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 10)
+            .background(
+                Capsule().fill(highlight ? AppTheme.accent.opacity(0.10) : Color.clear)
+            )
+            .contentShape(Capsule())
+        }
+        .buttonStyle(.plain)
+        .onAppear {
+            highlight = PersonalityTracker.shouldHighlight(current: store.personality)
+            // 只有 highlight 时才跑脉动动画;不 highlight 就是静止文字按钮。
+            if highlight {
+                withAnimation(.easeInOut(duration: 0.9).repeatForever(autoreverses: true)) {
+                    pulse = true
                 }
+            }
+        }
+        .sheet(isPresented: $showPersonality, onDismiss: {
+            // 查看后:记下当前人格为"已看",动效与红点立即停。
+            PersonalityTracker.markViewed(store.personality)
+            withAnimation(.easeOut(duration: 0.25)) { highlight = false }
+            pulse = false
+        }) {
+            NavigationStack { PersonalityView() }
                 .presentationDetents([.large])
                 .presentationDragIndicator(.visible)
-            }
         }
     }
 }
