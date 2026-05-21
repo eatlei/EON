@@ -53,6 +53,12 @@ final class SubscriptionStore: ObservableObject {
         didSet { saveSettings() }
     }
 
+    /// 全局触觉反馈开关。默认开。改动时同步给 Haptics.enabled,让所有走 Haptics
+    /// 的反馈点立即生效。
+    @Published var hapticsEnabled: Bool = true {
+        didSet { Haptics.enabled = hapticsEnabled; saveSettings() }
+    }
+
     /// 用户在"分类管理"里给分类起的自定义名字。Key 是 SubscriptionCategory.rawValue,
     /// 空串视为未自定义。改动会立即 mirror 到 SubscriptionCategory.nameOverrides 上,
     /// 这样全 App 所有读 title 的地方自动跟进。
@@ -112,11 +118,14 @@ final class SubscriptionStore: ObservableObject {
             categoryNameOverrides = settings.categoryNameOverrides
             customCategories = settings.customCategories
             easterEggs = settings.easterEggs
+            hapticsEnabled = settings.hapticsEnabled
         } else {
             baseCurrency = .cny
             remindersEnabled = true
             iCloudSyncEnabled = false
         }
+        // 把持久化的开关同步给全局 Haptics,避免首帧之前的反馈不受控。
+        Haptics.enabled = hapticsEnabled
         // Mirror category overrides into the enum's static lookup so every read
         // of SubscriptionCategory.title sees the user's customised names.
         SubscriptionCategory.nameOverrides = categoryNameOverrides
@@ -638,7 +647,8 @@ final class SubscriptionStore: ObservableObject {
             coloredSubscriptionCards: coloredSubscriptionCards,
             categoryNameOverrides: categoryNameOverrides,
             customCategories: customCategories,
-            easterEggs: easterEggs
+            easterEggs: easterEggs,
+            hapticsEnabled: hapticsEnabled
         )
         if let data = try? JSONEncoder().encode(settings) {
             UserDefaults.standard.set(data, forKey: settingsKey)
@@ -689,6 +699,7 @@ private struct Settings: Codable {
     var categoryNameOverrides: [String: String]
     var customCategories: [CustomCategory]
     var easterEggs: EasterEggPrefs
+    var hapticsEnabled: Bool
 
     static let defaultPaymentMethods = ["支付宝", "微信支付", "Apple Pay", "Visa", "Mastercard", "银联", "PayPal"]
 
@@ -697,7 +708,8 @@ private struct Settings: Codable {
          defaultReminderDays: Int, coloredSubscriptionCards: Bool,
          categoryNameOverrides: [String: String],
          customCategories: [CustomCategory],
-         easterEggs: EasterEggPrefs) {
+         easterEggs: EasterEggPrefs,
+         hapticsEnabled: Bool = true) {
         self.baseCurrency = baseCurrency
         self.remindersEnabled = remindersEnabled
         self.iCloudSyncEnabled = iCloudSyncEnabled
@@ -709,6 +721,7 @@ private struct Settings: Codable {
         self.categoryNameOverrides = categoryNameOverrides
         self.customCategories = customCategories
         self.easterEggs = easterEggs
+        self.hapticsEnabled = hapticsEnabled
     }
 
     init(from decoder: Decoder) throws {
@@ -725,6 +738,7 @@ private struct Settings: Codable {
         categoryNameOverrides = try c.decodeIfPresent([String: String].self, forKey: .categoryNameOverrides) ?? [:]
         customCategories = try c.decodeIfPresent([CustomCategory].self, forKey: .customCategories) ?? []
         easterEggs = try c.decodeIfPresent(EasterEggPrefs.self, forKey: .easterEggs) ?? EasterEggPrefs()
+        hapticsEnabled = try c.decodeIfPresent(Bool.self, forKey: .hapticsEnabled) ?? true
     }
 }
 

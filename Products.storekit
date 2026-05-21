@@ -28,6 +28,15 @@
       "productID" : "com.leon.eon.tip.meal",
       "referenceName" : "Tip 5",
       "type" : "Consumable"
+    },
+    {
+      "displayPrice" : "9.99",
+      "familyShareable" : false,
+      "internalID" : "11111111-0000-0000-0000-000000000004",
+      "localizations" : [ { "description" : "A top-tier Geisha pour-over", "displayName" : "Tip $9.99", "locale" : "en_US" } ],
+      "productID" : "com.leon.eon.tip.geisha",
+      "referenceName" : "Tip 9.99",
+      "type" : "Consumable"
     }
   ],
   "settings" : { "_failTransactionsEnabled" : false, "_storeKitErrors" : [] },

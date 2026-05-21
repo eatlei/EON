@@ -8,7 +8,8 @@ final class TipStore: ObservableObject {
     static let productIDs = [
         "com.leon.eon.tip.coffee",
         "com.leon.eon.tip.snack",
-        "com.leon.eon.tip.meal"
+        "com.leon.eon.tip.meal",
+        "com.leon.eon.tip.geisha"
     ]
 
     @Published private(set) var products: [Product] = []

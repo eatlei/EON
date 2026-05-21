@@ -47,8 +47,8 @@ struct ContentView: View {
         // 彩蛋的话不重复触发。每次摇都补一次震动反馈,即便没真弹出 sheet 也响。
         .onShake {
             guard store.easterEggs.shakeSpotlight else { return }
-            // medium → heavy 两段震动,把"摇"的能量感传出来
-            shakeTick &+= 1
+            // medium → heavy 两段震动,把"摇"的能量感传出来。受全局触觉开关控制。
+            if store.hapticsEnabled { shakeTick &+= 1 }
             guard spotlightSubscription == nil, !showEditor else { return }
             if let picked = store.activeSubscriptions.randomElement() {
                 spotlightSubscription = picked

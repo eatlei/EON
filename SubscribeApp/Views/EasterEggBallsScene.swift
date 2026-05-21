@@ -126,6 +126,7 @@ final class EasterEggBallsScene: SKScene, SKPhysicsContactDelegate {
 
     @MainActor
     private func fireHapticIfAllowed(impulse: CGFloat) {
+        guard Haptics.enabled else { return }
         let now = CACurrentMediaTime()
         guard now - lastImpactTime > 0.06 else { return }
         lastImpactTime = now

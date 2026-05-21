@@ -103,6 +103,19 @@ struct AppearanceSettingsView: View {
             } footer: {
                 Text("让每张订阅卡片渲染上图标的主色调。关闭则回到默认浅色卡片。")
             }
+
+            Section {
+                Toggle(isOn: $store.hapticsEnabled) {
+                    HStack(spacing: 12) {
+                        SettingsIcon(name: "hand.tap")
+                        Text("触觉反馈")
+                    }
+                }
+            } header: {
+                Text("反馈")
+            } footer: {
+                Text("点按、打赏、摇一摇、彩蛋小球碰撞等操作会有轻微震动。关闭后 EON 不再主动触发任何震动。")
+            }
         }
         .listStyle(.insetGrouped)
         .scrollContentBackground(.visible)
