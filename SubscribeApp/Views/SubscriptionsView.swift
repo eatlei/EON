@@ -311,6 +311,12 @@ private struct Row: View {
     private var colored: Bool { store.coloredSubscriptionCards }
     private var isDark: Bool { colorScheme == .dark }
 
+    /// 副标题 / 日期等次要文字的颜色。彩色卡片上 secondary 灰字会被饱和底色吃掉,
+    /// 改用随明暗自适应的 ink 加透明度(深色→浅灰、浅色→深灰),对比始终够。
+    private var subtleColor: Color {
+        colored ? AppTheme.ink.opacity(0.78) : AppTheme.secondary
+    }
+
     /// 卡片底色:.tile 取色号,.image 取图像平均色,均回退分类色(自定义优先)。
     private var cardColor: Color {
         switch subscription.icon {
@@ -368,24 +374,24 @@ private struct Row: View {
                 HStack(spacing: 4) {
                     Text(subtitle)
                         .font(.caption)
-                        .foregroundStyle(AppTheme.secondary)
+                        .foregroundStyle(subtleColor)
                         .lineLimit(1)
                     if !subscription.includeInStatistics {
                         Text("不计入")
                             .font(.system(size: 9, weight: .bold))
                             .padding(.horizontal, 5).padding(.vertical, 1)
                             .background(AppTheme.tertiary.opacity(0.18), in: Capsule())
-                            .foregroundStyle(AppTheme.secondary)
+                            .foregroundStyle(subtleColor)
                     }
                 }
-                // 第 3 排:订阅时间(下次扣费日)。用 secondary,tertiary 在深色下太暗看不清。
+                // 第 3 排:订阅时间(下次扣费日)。彩色卡片上用自适应色,保证看得清。
                 HStack(spacing: 3) {
                     Image(systemName: "calendar")
                         .font(.system(size: 9, weight: .semibold))
-                        .foregroundStyle(AppTheme.secondary)
+                        .foregroundStyle(subtleColor)
                     Text(dateText)
                         .font(.caption2)
-                        .foregroundStyle(AppTheme.secondary)
+                        .foregroundStyle(subtleColor)
                 }
             }
             Spacer(minLength: AppTheme.Space.s)
@@ -398,7 +404,7 @@ private struct Row: View {
                     .minimumScaleFactor(0.65)
                 Text(String(localized: "循环 \(subscription.billingCountElapsed()) 次"))
                     .font(.caption2.weight(.medium))
-                    .foregroundStyle(AppTheme.secondary)
+                    .foregroundStyle(subtleColor)
             }
             Menu {
                 Button { onArchive() } label: {
@@ -487,6 +493,11 @@ private struct GridCard: View {
     private var colored: Bool { store.coloredSubscriptionCards }
     private var isDark: Bool { colorScheme == .dark }
 
+    /// 次要文字色:彩色卡片上用自适应 ink,避免 secondary 灰字被饱和底色吃掉。
+    private var subtleColor: Color {
+        colored ? AppTheme.ink.opacity(0.78) : AppTheme.secondary
+    }
+
     /// 套餐 · 类型;套餐为空时只显类型。卡片模式也要露出套餐信息。
     private var subtitle: String {
         let plan = subscription.plan.trimmingCharacters(in: .whitespaces)
@@ -559,14 +570,14 @@ private struct GridCard: View {
                 HStack(spacing: 4) {
                     Text(subtitle)
                         .font(.caption2)
-                        .foregroundStyle(AppTheme.secondary)
+                        .foregroundStyle(subtleColor)
                         .lineLimit(1)
                     if !subscription.includeInStatistics {
                         Text("不计入")
                             .font(.system(size: 8, weight: .bold))
                             .padding(.horizontal, 4).padding(.vertical, 1)
                             .background(AppTheme.tertiary.opacity(0.18), in: Capsule())
-                            .foregroundStyle(AppTheme.secondary)
+                            .foregroundStyle(subtleColor)
                     }
                 }
             }
@@ -583,14 +594,14 @@ private struct GridCard: View {
             HStack(spacing: 3) {
                 Image(systemName: "calendar")
                     .font(.system(size: 9, weight: .semibold))
-                    .foregroundStyle(AppTheme.secondary)
+                    .foregroundStyle(subtleColor)
                 Text(subscription.billingDateDisplay())
                     .font(.caption2)
-                    .foregroundStyle(AppTheme.secondary)
+                    .foregroundStyle(subtleColor)
                 Spacer(minLength: 4)
                 Text(String(localized: "循环 \(subscription.billingCountElapsed()) 次"))
                     .font(.caption2)
-                    .foregroundStyle(AppTheme.secondary)
+                    .foregroundStyle(subtleColor)
             }
         }
         .padding(AppTheme.Space.m)
