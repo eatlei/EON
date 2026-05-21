@@ -93,7 +93,7 @@ struct EasterEggSettingsView: View {
             // 套 .glassEffect 出 Liquid Glass 质感,内容仍清晰可读。
             .scrollContentBackground(.hidden)
         }
-        .navigationTitle("藏着的惊喜")
+        .navigationTitle("小玩具")
         .navigationBarTitleDisplayMode(.inline)
     }
 

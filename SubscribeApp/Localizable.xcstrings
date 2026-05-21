@@ -9839,6 +9839,52 @@
         }
       }
     },
+    "小玩具": {
+      "localizations": {
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "小玩具"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Little Toys"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "おもちゃ箱"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "작은 장난감"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Juguetitos"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Petits jouets"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Spielzeugkiste"
+          }
+        }
+      }
+    },
     "小票": {
       "localizations": {
         "de": {
@@ -22060,29 +22106,18 @@
       }
     },
     "藏着的惊喜": {
+      "extractionState": "stale",
       "localizations": {
-        "zh-Hant": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "藏起來的驚喜"
+            "value": "Versteckte Extras"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Easter Eggs"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "おまけ"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "숨은 재미"
           }
         },
         "es": {
@@ -22097,10 +22132,22 @@
             "value": "Petites surprises"
           }
         },
-        "de": {
+        "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Versteckte Extras"
+            "value": "おまけ"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "숨은 재미"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "藏起來的驚喜"
           }
         }
       }
