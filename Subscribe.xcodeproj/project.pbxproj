@@ -51,6 +51,7 @@
 		DAE1030D0E695370D8FA36B1 /* NotificationIconRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA7D0201FA943AD4E0AA3BA8 /* NotificationIconRenderer.swift */; };
 		DAE15CF1D7517DC245E50798 /* CurrencyPickerSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5DE1852EAA8DCA78A53B9A44 /* CurrencyPickerSheet.swift */; };
 		DB7E76AC52762B27F7253673 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 65DED4E03282BB7A1926B1D5 /* Assets.xcassets */; };
+		E76060878123D0E64F5A40D4 /* RemindersService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1EFBC8A9C8917E6190A140C /* RemindersService.swift */; };
 		E9CF9A04AB2F2BAB155135E3 /* SubscribeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9CA153951B96AEB8859C0B8 /* SubscribeApp.swift */; };
 		F48247FF7D34F4FCF323BCBD /* ShakeDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB3757917818B820ACD482C2 /* ShakeDetector.swift */; };
 		F4D243320C3F978CCD1A413C /* DataSyncSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A685EDE27E39F3F2842793B /* DataSyncSettingsView.swift */; };
@@ -87,6 +88,7 @@
 		92E53482784299831342EB90 /* CurrencyConverter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyConverter.swift; sourceTree = "<group>"; };
 		93B5C073856DE1A2860C1956 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		93C9229073710C354E367927 /* SubscribeApp.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = SubscribeApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A1EFBC8A9C8917E6190A140C /* RemindersService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemindersService.swift; sourceTree = "<group>"; };
 		A27A1E1F038AAF41ECAE8CC9 /* RandomSpotlightSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomSpotlightSheet.swift; sourceTree = "<group>"; };
 		ABA05720A891C34355A2A203 /* TipSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TipSheet.swift; sourceTree = "<group>"; };
 		AC5D6BFC6D29F5A5966683F9 /* CustomCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCategory.swift; sourceTree = "<group>"; };
@@ -193,6 +195,7 @@
 				D75247CB3B2D0B30F64A187A /* LLMExporter.swift */,
 				DA7D0201FA943AD4E0AA3BA8 /* NotificationIconRenderer.swift */,
 				55C474BE951C367D83194A7B /* NotificationScheduler.swift */,
+				A1EFBC8A9C8917E6190A140C /* RemindersService.swift */,
 				88F2D7AAABDDA23FC8EB7E22 /* TipStore.swift */,
 			);
 			path = Services;
@@ -325,6 +328,7 @@
 				0FA4B2EF1DAA2206FDFA08DE /* PersonalityType.swift in Sources */,
 				B7351B13740709B8DFE512C8 /* PersonalityView.swift in Sources */,
 				D61908DF7B850466890A7CB3 /* RandomSpotlightSheet.swift in Sources */,
+				E76060878123D0E64F5A40D4 /* RemindersService.swift in Sources */,
 				D4B7D72CFE9D15A3BCA812F1 /* SettingsView.swift in Sources */,
 				F48247FF7D34F4FCF323BCBD /* ShakeDetector.swift in Sources */,
 				9B59004C5BFFD6EC95BAC4A8 /* SpinningIcon.swift in Sources */,

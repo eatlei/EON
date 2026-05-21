@@ -31,6 +31,8 @@
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>NSRemindersFullAccessUsageDescription</key>
+	<string>EON 会在你确认后,把订阅的续费/试用到期提醒添加到「提醒事项」,以便用上系统的多重提醒,确保你不会错过。</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

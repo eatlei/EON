@@ -12,6 +12,14 @@ struct SubscriptionEditorView: View {
     private let isReactivating: Bool
     @State private var didApplyDefaults = false
 
+    // 保存手动续费 / 试用订阅后,询问是否加到「提醒事项」的弹窗状态。
+    @State private var showRemindersPrompt = false
+    @State private var reminderResult: ReminderResultAlert?
+    private enum ReminderResultAlert: Identifiable {
+        case added, denied
+        var id: Int { hashValue }
+    }
+
     private enum Field: Hashable { case name, plan, price }
     @FocusState private var focused: Field?
 
@@ -324,26 +332,7 @@ struct SubscriptionEditorView: View {
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     Button {
-                        focused = nil
-                        draft.price = Double(priceText) ?? 0
-                        // 新订阅首次保存时把 startDate 固定下来 = 当时的 nextBillingDate。
-                        // 之后即便用户改 nextBillingDate(把下次扣费日往后挪),
-                        // startDate 也不动,这样"已扣 N 次"才有可追溯的基准日。
-                        if isNew && draft.startDate == nil {
-                            draft.startDate = draft.nextBillingDate
-                        }
-                        // 重启归档订阅:取消归档 + 如果残留的 endDate 已过期就清掉,
-                        // 否则下次 autoArchive 又会立刻把它打回归档,等于没重启。
-                        if isReactivating {
-                            draft.isArchived = false
-                            if let end = draft.endDate,
-                               Calendar.current.startOfDay(for: end) <=
-                               Calendar.current.startOfDay(for: .now) {
-                                draft.endDate = nil
-                            }
-                        }
-                        store.upsert(draft)
-                        dismiss()
+                        performSave()
                     } label: {
                         Text("保存")
                     }
@@ -364,6 +353,82 @@ struct SubscriptionEditorView: View {
             .sheet(isPresented: $showIconPicker) {
                 IconPickerView(icon: $draft.icon, appName: $draft.name)
             }
+            // 保存手动/试用订阅后:问要不要也加到「提醒事项」(多重提醒更保险)。
+            .alert(String(localized: "也加到提醒事项?"), isPresented: $showRemindersPrompt) {
+                Button(String(localized: "添加到提醒事项")) {
+                    Task { await addToReminders() }
+                }
+                Button(String(localized: "暂不"), role: .cancel) { dismiss() }
+            } message: {
+                Text("苹果「提醒事项」支持到期前 + 当天的多重提醒,比 App 内通知更不容易错过。需要你授权一次,内容只保存在你的设备上。")
+            }
+            // 写入结果反馈。
+            .alert(item: $reminderResult) { result in
+                switch result {
+                case .added:
+                    return Alert(
+                        title: Text("已加到提醒事项 ✅"),
+                        message: Text("到期前和当天都会提醒你。"),
+                        primaryButton: .default(Text("打开提醒事项")) {
+                            RemindersService.openRemindersApp()
+                            dismiss()
+                        },
+                        secondaryButton: .cancel(Text("好的")) { dismiss() }
+                    )
+                case .denied:
+                    return Alert(
+                        title: Text("没有提醒事项权限"),
+                        message: Text("可以在 iOS 设置 → EON 里允许访问「提醒事项」后再试。"),
+                        dismissButton: .default(Text("好的")) { dismiss() }
+                    )
+                }
+            }
+        }
+    }
+
+    // MARK: - 保存 + 提醒事项
+
+    private func performSave() {
+        focused = nil
+        draft.price = Double(priceText) ?? 0
+        // 新订阅首次保存时把 startDate 固定下来 = 当时的 nextBillingDate。
+        // 之后即便用户改 nextBillingDate(把下次扣费日往后挪),startDate 也不动,
+        // 这样"已扣 N 次"才有可追溯的基准日。
+        if isNew && draft.startDate == nil {
+            draft.startDate = draft.nextBillingDate
+        }
+        // 重启归档订阅:取消归档 + 如果残留的 endDate 已过期就清掉,否则下次
+        // autoArchive 又会立刻把它打回归档,等于没重启。
+        if isReactivating {
+            draft.isArchived = false
+            if let end = draft.endDate,
+               Calendar.current.startOfDay(for: end) <=
+               Calendar.current.startOfDay(for: .now) {
+                draft.endDate = nil
+            }
+        }
+        store.upsert(draft)
+        Haptics.success()
+
+        // 新增 / 重启一个"手动续费"或"试用"订阅时,问一句要不要加到提醒事项。
+        // 只在这两种"添加"场景弹,避免日常编辑时反复打扰。
+        if (isNew || isReactivating) && (draft.status == .manual || draft.status == .trial) {
+            showRemindersPrompt = true
+        } else {
+            dismiss()
+        }
+    }
+
+    private func addToReminders() async {
+        let result = await RemindersService.addRenewalReminder(for: draft)
+        switch result {
+        case .added:
+            Haptics.success()
+            reminderResult = .added
+        case .denied:
+            reminderResult = .denied
+        case .failed:
+            dismiss()
         }
     }
 
