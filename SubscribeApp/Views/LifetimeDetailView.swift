@@ -5,6 +5,8 @@ import SwiftUI
 /// 顶部是一个 Hero 卡:大字号总额 + 笔数。
 struct LifetimeDetailView: View {
     @EnvironmentObject private var store: SubscriptionStore
+    @State private var receiptImage: UIImage?
+    @State private var showReceipt = false
 
     /// 所有计入统计的活跃订阅,按累计支付金额从高到低。归档 / 不计入统计的不包含。
     private var subs: [Subscription] {
@@ -36,7 +38,57 @@ struct LifetimeDetailView: View {
         .background(AppTheme.canvas.ignoresSafeArea())
         .navigationTitle("累计支付")
         .navigationBarTitleDisplayMode(.inline)
-        // 二级页隐掉底部 TabBar,避免占视区。
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                // "Print" —— 把累计消费打成一张超市小票样式的图片。
+                Button {
+                    renderReceipt()
+                    if receiptImage != nil { showReceipt = true }
+                } label: {
+                    Label("Print", systemImage: "printer")
+                }
+                .disabled(subs.isEmpty)
+            }
+        }
+        .sheet(isPresented: $showReceipt) {
+            if let img = receiptImage {
+                ReceiptPreviewSheet(image: img)
+            }
+        }
+    }
+
+    /// 把累计消费按时间顺序烤成一张小票图。按 effectiveStartDate 升序(从最早订到
+    /// 最新),最贴近"消费历史"的直觉。日期 / 金额走当前地区格式。
+    @MainActor
+    private func renderReceipt() {
+        let chrono = subs.sorted { $0.effectiveStartDate < $1.effectiveStartDate }
+        let lines: [ReceiptLine] = chrono.map { sub in
+            let unit = store.converter.convert(sub.price, from: sub.currency, to: store.baseCurrency)
+            let count = sub.billingCountElapsed()
+            let lifetime = sub.lifetimeSpend(in: store.baseCurrency, converter: store.converter)
+            return ReceiptLine(
+                name: sub.name,
+                detail: "\(store.converter.format(unit, currency: store.baseCurrency)) x \(count)",
+                amount: store.converter.format(lifetime, currency: store.baseCurrency)
+            )
+        }
+        let df = DateFormatter()
+        df.locale = .current
+        df.dateStyle = .medium
+        df.timeStyle = .short
+        // 单号:用日期 + 时间拼一个看起来像收银流水号的东西。
+        let noFmt = DateFormatter()
+        noFmt.dateFormat = "MMddHHmm"
+        let receipt = ReceiptView(
+            lines: lines,
+            totalText: store.converter.format(total, currency: store.baseCurrency),
+            chargeCount: totalCount,
+            dateText: df.string(from: Date()),
+            receiptNo: "EON-" + noFmt.string(from: Date())
+        )
+        let renderer = ImageRenderer(content: receipt)
+        renderer.scale = 3
+        receiptImage = renderer.uiImage
     }
 
     // MARK: - 顶部总额卡
