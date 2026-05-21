@@ -4,8 +4,8 @@ import StoreKit
 
 enum AppLinks {
     // TODO: replace with the published URLs once available.
-    static let privacyPolicy = URL(string: "https://example.com/eon/privacy")!
-    static let termsOfUse    = URL(string: "https://example.com/eon/terms")!
+    static let privacyPolicy = URL(string: "https://eatlei.github.io/eon-site/privacy.html")!
+    static let termsOfUse    = URL(string: "https://eatlei.github.io/eon-site/terms.html")!
     static let appStoreID    = "0000000000" // TODO: set after first App Store release
     static var appStoreReviewURL: URL { URL(string: "itms-apps://itunes.apple.com/app/id\(appStoreID)?action=write-review")! }
     static var appStoreShareURL: URL { URL(string: "https://apps.apple.com/app/id\(appStoreID)")! }

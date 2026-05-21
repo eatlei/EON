@@ -31,6 +31,8 @@ targets:
           - fr
           - de
         CFBundleDisplayName: EON
+        # 只用标准加密(HTTPS),声明不含需出口合规审批的加密,免去每次提交时的弹窗。
+        ITSAppUsesNonExemptEncryption: false
         NSRemindersFullAccessUsageDescription: EON 会在你确认后,把订阅的续费/试用到期提醒添加到「提醒事项」,以便用上系统的多重提醒,确保你不会错过。
         UILaunchScreen: {}
         UISupportedInterfaceOrientations:
