@@ -212,15 +212,16 @@ private struct PersonalityEntry: View {
                 }
             }
         }
-        .sheet(isPresented: $showPersonality, onDismiss: {
+        // 全屏蒙层弹窗:卡片浮在变暗的 App 之上,更突出人格形象。
+        // 用 fullScreenCover + 透明 presentationBackground,自己画暗色蒙层。
+        .fullScreenCover(isPresented: $showPersonality, onDismiss: {
             // 查看后:记下当前人格为"已看",动效与红点立即停。
             PersonalityTracker.markViewed(store.personality)
             withAnimation(.easeOut(duration: 0.25)) { highlight = false }
             pulse = false
         }) {
-            NavigationStack { PersonalityView() }
-                .presentationDetents([.large])
-                .presentationDragIndicator(.visible)
+            PersonalityView()
+                .presentationBackground(.clear)
         }
     }
 }

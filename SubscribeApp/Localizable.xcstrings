@@ -3518,6 +3518,7 @@
       }
     },
     "人格会随你的订阅而变化": {
+      "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -3611,6 +3612,7 @@
       }
     },
     "仅供娱乐 · 不代表 EON 的任何评价或建议": {
+      "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -5904,7 +5906,6 @@
       }
     },
     "其他": {
-      "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -9097,6 +9098,7 @@
       }
     },
     "外观与语言": {
+      "extractionState": "stale",
       "localizations": {
         "de": {
           "stringUnit": {
@@ -17227,6 +17229,53 @@
           "stringUnit": {
             "state": "translated",
             "value": "歐元"
+          }
+        }
+      }
+    },
+    "正在生成你的人格卡片…": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine Persönlichkeitskarte wird erstellt…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Generating your persona card…"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Generando tu tarjeta de personalidad…"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Génération de ta carte de personnalité…"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "あなたのパーソナリティカードを生成中…"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "당신의 구독 성향 카드를 생성하는 중…"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正在產生你的人格卡片…"
           }
         }
       }
@@ -27143,49 +27192,49 @@
         }
       }
     },
-    "正在生成你的人格卡片…": {
+    "常驻分类": {
       "extractionState": "manual",
       "localizations": {
         "zh-Hant": {
           "stringUnit": {
             "state": "translated",
-            "value": "正在產生你的人格卡片…"
+            "value": "常駐分類"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Generating your persona card…"
+            "value": "Top Categories"
           }
         },
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "あなたのパーソナリティカードを生成中…"
+            "value": "主なカテゴリ"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "당신의 구독 성향 카드를 생성하는 중…"
+            "value": "주요 카테고리"
           }
         },
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Generando tu tarjeta de personalidad…"
+            "value": "Categorías principales"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Génération de ta carte de personnalité…"
+            "value": "Catégories principales"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Deine Persönlichkeitskarte wird erstellt…"
+            "value": "Top-Kategorien"
           }
         }
       }
