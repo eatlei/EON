@@ -21,13 +21,20 @@ struct PersonalityView: View {
     /// 卡上要陈列的订阅图标:取活跃订阅前 6 个(两侧各最多 3 个)。
     private var iconSubs: [Subscription] { Array(store.activeSubscriptions.prefix(6)) }
 
-    /// 分享卡片要展示的"隐私安全"数据:订阅数 + 分类数 + top 分类名(不含金额、
-    /// 不含具体服务名)。
+    /// 分享卡片要展示的"隐私安全"数据:订阅数 + 分类数 + 订阅最多的分类(只放
+    /// 聚合数字与分类名,不含金额、不含具体服务名)。
     private var shareStats: PersonaShareStats {
         let subs = store.activeSubscriptions
         let cats = Set(subs.map { $0.displayCategoryID })
-        let top = store.categorySpend.prefix(3).map { $0.title }
-        return PersonaShareStats(count: subs.count, categoryCount: cats.count, topCategories: Array(top))
+        // 订阅条数最多的分类(不是按金额,而是按数量)。
+        let groups = Dictionary(grouping: subs, by: { $0.displayCategoryID })
+        let top = groups.max { $0.value.count < $1.value.count }
+        return PersonaShareStats(
+            count: subs.count,
+            categoryCount: cats.count,
+            topCategoryTitle: top?.value.first?.displayCategoryTitle,
+            topCategoryCount: top?.value.count ?? 0
+        )
     }
 
     var body: some View {
@@ -149,7 +156,10 @@ private struct GeneratingOverlay: View {
 struct PersonaShareStats {
     let count: Int
     let categoryCount: Int
-    let topCategories: [String]
+    /// 订阅条数最多的分类名(可能没有)。
+    let topCategoryTitle: String?
+    /// 该分类下的订阅条数。
+    let topCategoryCount: Int
 }
 
 /// 一整张"包装海报"式人格卡:头部品牌行 + 大标题 + 中央放大的形象(两侧陈列订阅
@@ -258,7 +268,6 @@ private struct PersonaPosterCard: View {
                 iconColumn(leftSubs, sideOffset: 0)
             }
             figure
-                .frame(maxWidth: .infinity)
             if !rightSubs.isEmpty {
                 iconColumn(rightSubs, sideOffset: leftSubs.count)
             }
@@ -279,20 +288,23 @@ private struct PersonaPosterCard: View {
         }
     }
 
-    // 中央形象:放大的主题色光晕 + 透明抠图浮动
+    // 中央形象:放大的主题色光晕 + 透明抠图浮动。
+    // 注意:用 `maxWidth: .infinity` + 固定高度的「填充式」光晕,**不要**用固定
+    // 宽度的大 Circle —— 固定 290 宽会把整张卡的最小宽度撑过屏幕,导致溢出。
     private var figure: some View {
         ZStack {
-            Circle()
-                .fill(RadialGradient(
-                    colors: [type.tint.opacity(0.42), type.tint.opacity(0.12), .clear],
-                    center: .center, startRadius: 0, endRadius: 150))
-                .frame(width: 290, height: 290)
-                .blur(radius: 4)
+            RadialGradient(
+                colors: [type.tint.opacity(0.42), type.tint.opacity(0.12), .clear],
+                center: .center, startRadius: 0, endRadius: 150)
+                .frame(height: 260)
+                .blur(radius: 6)
             artwork
-                .frame(height: 248)
+                .frame(maxWidth: .infinity, maxHeight: 248)
                 .offset(y: float ? -9 : 9)
                 .shadow(color: .black.opacity(0.22), radius: 16, x: 0, y: 12)
         }
+        .frame(maxWidth: .infinity)
+        .frame(height: 260)
         .scaleEffect(play ? 1 : 0.8)
         .opacity(play ? 1 : 0)
         .animation(.spring(response: 0.6, dampingFraction: 0.7).delay(0.1), value: play)
@@ -309,36 +321,51 @@ private struct PersonaPosterCard: View {
         }
     }
 
-    // 底部:常驻分类(分析结果)+ 生成署名 / 数据胶囊
+    // 底部:左侧聚合数字 + 署名,右侧"订阅最多的分类"作为头号结果。
     private var footer: some View {
         HStack(alignment: .bottom) {
-            VStack(alignment: .leading, spacing: 6) {
-                if !stats.topCategories.isEmpty {
-                    Text("常驻分类")
-                        .font(.system(size: 9, weight: .bold))
-                        .tracking(1)
-                        .foregroundStyle(AppTheme.tertiary)
-                    HStack(spacing: 5) {
-                        ForEach(stats.topCategories.prefix(2), id: \.self) { cat in
-                            Text(cat)
-                                .font(.caption2.weight(.semibold))
-                                .foregroundStyle(type.tint)
-                                .lineLimit(1)
-                                .padding(.horizontal, 8).padding(.vertical, 4)
-                                .background(type.tint.opacity(0.12), in: Capsule())
-                        }
-                    }
+            VStack(alignment: .leading, spacing: 8) {
+                HStack(spacing: 6) {
+                    statChip(value: "\(stats.count)", label: "订阅")
+                    statChip(value: "\(stats.categoryCount)", label: "分类")
                 }
                 Text("由 EON 生成 · 仅供娱乐")
                     .font(.system(size: 9, weight: .semibold))
                     .foregroundStyle(AppTheme.tertiary)
             }
-            Spacer()
-            HStack(spacing: 6) {
-                statChip(value: "\(stats.count)", label: "订阅")
-                statChip(value: "\(stats.categoryCount)", label: "分类")
+            Spacer(minLength: AppTheme.Space.s)
+            if let title = stats.topCategoryTitle, stats.topCategoryCount > 0 {
+                topCategoryBadge(title: title, count: stats.topCategoryCount)
             }
         }
+    }
+
+    /// 头号结果:订阅最多的分类(主题色徽章,带条数)。
+    private func topCategoryBadge(title: String, count: Int) -> some View {
+        VStack(alignment: .trailing, spacing: 3) {
+            Text(verbatim: "TOP CATEGORY")
+                .font(.system(size: 9, weight: .bold))
+                .tracking(1.5)
+                .foregroundStyle(.white.opacity(0.8))
+            HStack(spacing: 6) {
+                Text(title)
+                    .font(.system(size: 15, weight: .heavy, design: .rounded))
+                    .foregroundStyle(.white)
+                    .lineLimit(1)
+                Text(verbatim: "\(count)")
+                    .font(.system(size: 12, weight: .bold, design: .rounded).monospacedDigit())
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 6).padding(.vertical, 2)
+                    .background(.white.opacity(0.22), in: Capsule())
+            }
+        }
+        .padding(.horizontal, 12).padding(.vertical, 9)
+        .background(
+            LinearGradient(colors: [type.tint, type.tint.opacity(0.78)],
+                           startPoint: .topLeading, endPoint: .bottomTrailing),
+            in: RoundedRectangle(cornerRadius: 14, style: .continuous)
+        )
+        .shadow(color: type.tint.opacity(0.35), radius: 8, x: 0, y: 4)
     }
 
     private func statChip(value: String, label: LocalizedStringKey) -> some View {
@@ -357,13 +384,24 @@ private struct PersonaPosterCard: View {
             .stroke(type.tint.opacity(0.25), lineWidth: 0.5))
     }
 
-    // 卡面:surface 底 + 浅网格 + 顶部主题色微染
+    // 卡面:surface 底 + 柔和主题色光团(mesh 质感)+ 科技点阵纹理 + 顶部微染。
+    // 光团会被外层 clipShape 裁进圆角卡片内,营造现代科技感的层次。
     private var cardBackground: some View {
         ZStack {
             AppTheme.surface
-            GridPattern(spacing: 22, color: AppTheme.ink.opacity(0.045))
+            Circle()
+                .fill(type.tint.opacity(0.16))
+                .frame(width: 260, height: 260)
+                .blur(radius: 70)
+                .offset(x: -110, y: -90)
+            Circle()
+                .fill(type.tint.opacity(0.12))
+                .frame(width: 220, height: 220)
+                .blur(radius: 70)
+                .offset(x: 130, y: 150)
+            TechTexture(color: AppTheme.ink.opacity(0.06))
             RadialGradient(
-                colors: [type.tint.opacity(0.12), .clear],
+                colors: [type.tint.opacity(0.10), .clear],
                 center: UnitPoint(x: 0.5, y: 0.0), startRadius: 0, endRadius: 300)
         }
     }
@@ -432,19 +470,33 @@ private struct IconBlister: View {
 
 // MARK: - 装饰元素
 
-/// 卡面浅网格(graph-paper 质感)。
-private struct GridPattern: View {
-    var spacing: CGFloat = 22
+/// 科技感点阵纹理:细线网格 + 交点小圆点,像 HUD / 蓝图底纹。
+private struct TechTexture: View {
+    var spacing: CGFloat = 20
     var color: Color
 
     var body: some View {
         Canvas { ctx, size in
-            var path = Path()
+            // 细线网格
+            var lines = Path()
             var x: CGFloat = 0
-            while x <= size.width { path.move(to: CGPoint(x: x, y: 0)); path.addLine(to: CGPoint(x: x, y: size.height)); x += spacing }
+            while x <= size.width { lines.move(to: CGPoint(x: x, y: 0)); lines.addLine(to: CGPoint(x: x, y: size.height)); x += spacing }
             var y: CGFloat = 0
-            while y <= size.height { path.move(to: CGPoint(x: 0, y: y)); path.addLine(to: CGPoint(x: size.width, y: y)); y += spacing }
-            ctx.stroke(path, with: .color(color), lineWidth: 0.5)
+            while y <= size.height { lines.move(to: CGPoint(x: 0, y: y)); lines.addLine(to: CGPoint(x: size.width, y: y)); y += spacing }
+            ctx.stroke(lines, with: .color(color.opacity(0.5)), lineWidth: 0.5)
+
+            // 交点小圆点(更强的色),做出"点阵"科技感
+            var dots = Path()
+            var gy: CGFloat = 0
+            while gy <= size.height {
+                var gx: CGFloat = 0
+                while gx <= size.width {
+                    dots.addEllipse(in: CGRect(x: gx - 0.9, y: gy - 0.9, width: 1.8, height: 1.8))
+                    gx += spacing
+                }
+                gy += spacing
+            }
+            ctx.fill(dots, with: .color(color))
         }
     }
 }
