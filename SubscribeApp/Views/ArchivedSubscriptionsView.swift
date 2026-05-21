@@ -47,7 +47,6 @@ struct ArchivedSubscriptionsView: View {
         .listStyle(.insetGrouped)
         .navigationTitle("归档订阅")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbarVisibility(.hidden, for: .tabBar)
         .tint(AppTheme.accent)
         .sheet(item: $editing) { sub in
             SubscriptionEditorView(subscription: sub)

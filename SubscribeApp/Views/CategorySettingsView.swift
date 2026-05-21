@@ -117,7 +117,6 @@ struct CategorySettingsView: View {
         .scrollContentBackground(.visible)
         .navigationTitle("分类")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbarVisibility(.hidden, for: .tabBar)
 
         // 重命名内置分类
         .alert("重命名", isPresented: Binding(

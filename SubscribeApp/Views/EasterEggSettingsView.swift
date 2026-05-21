@@ -82,7 +82,6 @@ struct EasterEggSettingsView: View {
         }
         .navigationTitle("彩蛋")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbarVisibility(.hidden, for: .tabBar)
     }
 
     /// 单行的 Liquid Glass 背景。圆角对齐 insetGrouped 的视觉。

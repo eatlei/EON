@@ -101,7 +101,6 @@ struct DataSyncSettingsView: View {
         .scrollContentBackground(.visible)
         .navigationTitle("iCloud 与数据")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbarVisibility(.hidden, for: .tabBar)
         .task {
             // Generate the export files once when this view appears so ShareLink has stable URLs.
             markdownFileURL = LLMExporter.writeMarkdownTempFile(store: store)

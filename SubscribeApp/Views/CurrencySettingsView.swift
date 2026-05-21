@@ -72,7 +72,6 @@ struct CurrencySettingsView: View {
         .scrollContentBackground(.visible)
         .navigationTitle("货币")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbarVisibility(.hidden, for: .tabBar)
         .task { await store.refreshRatesIfStale() }
         .toast($refreshedToastShown, text: "汇率已更新")
     }

@@ -99,7 +99,6 @@ struct NotificationSettingsView: View {
         .scrollContentBackground(.visible)
         .navigationTitle("通知")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbarVisibility(.hidden, for: .tabBar)
         .task { await loadStatus() }
         .alert("通知被关闭了", isPresented: $showDeniedAlert) {
             Button("前往 iOS 设置") {

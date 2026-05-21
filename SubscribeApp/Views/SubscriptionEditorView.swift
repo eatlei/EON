@@ -69,6 +69,20 @@ struct SubscriptionEditorView: View {
         )
     }
 
+    /// 当前选中状态的一句话解释。重点说清"已暂停"的归属问题。
+    private var statusHint: String {
+        switch draft.status {
+        case .active:
+            return String(localized: "到期自动续费,正常计入支出统计和扣费提醒。")
+        case .manual:
+            return String(localized: "到期需要你手动续费,我们仍会照常提醒并计入统计。")
+        case .trial:
+            return String(localized: "试用阶段。会带「试用」标记,仍会照常提醒你试用何时到期。")
+        case .paused:
+            return String(localized: "已暂停:订阅仍保留在列表里(显示为灰色),但不计入支出总额、不出现在「即将扣费」、也不再发提醒。想彻底移出列表请改用归档。")
+        }
+    }
+
     private var paymentOptions: [String] {
         var opts = store.paymentMethods
         let cur = draft.paymentMethod.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -148,6 +162,14 @@ struct SubscriptionEditorView: View {
                                     }
                                 }
                             }
+                            // 状态说明 —— 尤其把"已暂停"讲清楚:它仍在订阅列表里
+                            // (只是灰一点),但不进总额 / 即将扣费 / 提醒。
+                            Text(statusHint)
+                                .font(.caption)
+                                .foregroundStyle(.white.opacity(0.75))
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .fixedSize(horizontal: false, vertical: true)
+                                .padding(.top, 2)
                         }
 
                         MaterialPanel(title: "价格与周期") {
@@ -254,7 +276,7 @@ struct SubscriptionEditorView: View {
                                         .foregroundStyle(.white)
                                 }
                                 .tint(AppTheme.accent)
-                                Text("适合\"公司报销\"、\"家人共享\"、\"给客户买的\"等情况:订阅照常运行、日历照常显示,但不算进你的个人支出总额、分类饼图、累计支付里。")
+                                Text("关闭后:这笔订阅不再算进支出总额、分类饼图、累计支付等金额统计;但它仍会照常出现在订阅列表、日历和扣费提醒里。适合公司报销、家人共享、替客户购买等\"花的不是自己钱\"的订阅。")
                                     .font(.caption)
                                     .foregroundStyle(.white.opacity(0.75))
                                     .fixedSize(horizontal: false, vertical: true)

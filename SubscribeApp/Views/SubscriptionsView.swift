@@ -339,6 +339,14 @@ private struct Row: View {
                             .background(AppTheme.accent.opacity(0.14), in: Capsule())
                             .foregroundStyle(AppTheme.accent)
                     }
+                    // 暂停态:灰色"已暂停"徽章 + 整卡 0.5 透明度(见 body 末尾)。
+                    // 暂停的订阅仍留在列表里,但不进总额 / 即将扣费 / 提醒。
+                    if subscription.status == .paused {
+                        Text("已暂停").font(.caption2.weight(.bold))
+                            .padding(.horizontal, 6).padding(.vertical, 2)
+                            .background(AppTheme.tertiary.opacity(0.18), in: Capsule())
+                            .foregroundStyle(AppTheme.secondary)
+                    }
                     // "不计入"徽章从这一行移走了 —— 跟订阅名抢同一行会挤,
                     // 改放到整张卡片的左上角(见 body 末尾的 .overlay)。
                 }
@@ -493,6 +501,13 @@ private struct GridCard: View {
                         .padding(.horizontal, 6).padding(.vertical, 2)
                         .background(AppTheme.accent.opacity(0.14), in: Capsule())
                         .foregroundStyle(AppTheme.accent)
+                }
+                if subscription.status == .paused {
+                    Text("已暂停")
+                        .font(.caption2.weight(.bold))
+                        .padding(.horizontal, 6).padding(.vertical, 2)
+                        .background(AppTheme.tertiary.opacity(0.18), in: Capsule())
+                        .foregroundStyle(AppTheme.secondary)
                 }
             }
 

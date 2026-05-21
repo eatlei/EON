@@ -19,10 +19,14 @@ struct RandomSpotlightSheet: View {
         _spotlight = State(initialValue: initial)
     }
 
+    /// 滚动到 >= 今天的"真·下次扣费日"。直接用 spotlight.nextBillingDate 的话,
+    /// 老订阅(锚点早就过去)会恒为负数 → 永远显示"已逾期",这正是之前的 bug。
+    private var upcomingBillingDate: Date { spotlight.upcomingBillingDate() }
+
     private var daysToBill: Int {
         let cal = Calendar.current
         let today = cal.startOfDay(for: .now)
-        let target = cal.startOfDay(for: spotlight.nextBillingDate)
+        let target = cal.startOfDay(for: upcomingBillingDate)
         return cal.dateComponents([.day], from: today, to: target).day ?? 0
     }
 
@@ -37,8 +41,7 @@ struct RandomSpotlightSheet: View {
     }
 
     private var nextBillingText: String {
-        if daysToBill < 0 { return String(localized: "已逾期") }
-        if daysToBill == 0 { return String(localized: "今天") }
+        if daysToBill <= 0 { return String(localized: "今天") }
         if daysToBill == 1 { return String(localized: "明天") }
         return String(localized: "还有 \(daysToBill) 天")
     }
@@ -118,7 +121,7 @@ struct RandomSpotlightSheet: View {
     private var statsCard: some View {
         VStack(spacing: 0) {
             statRow(label: "下次扣费", value: nextBillingText,
-                    detail: spotlight.nextBillingDate.formatted(.dateTime.year().month().day()))
+                    detail: upcomingBillingDate.formatted(.dateTime.year().month().day()))
             Hairline()
             statRow(label: "累计已支付", value: lifetimeText, detail: nil)
             Hairline()

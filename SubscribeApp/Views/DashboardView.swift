@@ -1,6 +1,10 @@
 import Charts
 import SwiftUI
 
+/// 总览页可下钻的两个二级页。用值驱动的 NavigationStack(path:),好在能用
+/// path.isEmpty 在 stack 根上一次性控制底部 tab 显隐,返回时不再闪一下。
+enum DashboardRoute: Hashable { case categories, lifetime }
+
 struct DashboardView: View {
     @EnvironmentObject private var store: SubscriptionStore
     @State private var period: SpendPeriod = .month
@@ -8,9 +12,10 @@ struct DashboardView: View {
     /// 当天首次打开 Dashboard 时,放一阵小订阅图标飘下来 —— 每天最多一次,
     /// 由 DailyWelcomeTracker 通过 UserDefaults 记录最后日期。
     @State private var showDailyWelcome = false
+    @State private var path: [DashboardRoute] = []
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $path) {
             Group {
                 if store.activeSubscriptions.isEmpty {
                     AppScreen { EmptyDashboard(onAdd: { showAdd = true }) }
@@ -108,6 +113,14 @@ struct DashboardView: View {
                 }
             }
             .toolbar(.hidden, for: .navigationBar)
+            .navigationDestination(for: DashboardRoute.self) { route in
+                switch route {
+                case .categories: CategoryDetailView()
+                case .lifetime:   LifetimeDetailView()
+                }
+            }
+            // 根级控制 tab bar:进二级页隐藏,回根显示,跟 pop 同步不闪。
+            .toolbar(path.isEmpty ? .visible : .hidden, for: .tabBar)
             .sheet(isPresented: $showAdd) {
                 SubscriptionEditorView(subscription: nil)
                     .environmentObject(store)
@@ -332,9 +345,7 @@ private struct CategoryPanel: View {
         // 整个面板包成 NavigationLink → 跳到 CategoryDetailView。手动画了一个
         // 标题行(原本是 Panel(title:) 自带的标题区),为了在右侧能塞一个
         // chevron 提示用户"这里可以点进去"。
-        NavigationLink {
-            CategoryDetailView()
-        } label: {
+        NavigationLink(value: DashboardRoute.categories) {
             VStack(alignment: .leading, spacing: AppTheme.Space.m) {
                 HStack {
                     Text("支出分类")
@@ -402,9 +413,7 @@ private struct LifetimePanel: View {
         if total > 0 && !top.isEmpty {
             // 包成 NavigationLink → LifetimeDetailView。手动画标题行以便右侧
             // 放 chevron 提示可点(跟 CategoryPanel 同一套思路)。
-            NavigationLink {
-                LifetimeDetailView()
-            } label: {
+            NavigationLink(value: DashboardRoute.lifetime) {
                 VStack(alignment: .leading, spacing: AppTheme.Space.m) {
                     HStack {
                         Text("累计支付")

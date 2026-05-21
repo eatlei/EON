@@ -387,6 +387,24 @@ extension Subscription {
     /// 旧数据没有就拿 nextBillingDate 当起点 —— 至少不会算成 "未来扣费"。
     var effectiveStartDate: Date { startDate ?? nextBillingDate }
 
+    /// 真正"下一次会扣费的日子"。nextBillingDate 是创建时定的锚点,随着时间流逝
+    /// 它会变成过去式;这里从锚点按周期一路向前推到 >= 今天 00:00 的第一个日子,
+    /// 也就是用户直觉里"下次扣费"。展示类场景(摇一摇 / 详情弹窗)都该用这个,
+    /// 而不是裸的 nextBillingDate —— 否则老订阅永远显示"已逾期"。
+    func upcomingBillingDate(asOf now: Date = .now) -> Date {
+        let cal = Calendar.current
+        let today = cal.startOfDay(for: now)
+        var date = nextBillingDate
+        var guardCount = 0
+        while date < today {
+            let next = billingCycle.advance(date, by: 1, calendar: cal, customDays: customCycleDays)
+            guard next > date, guardCount < 10_000 else { break }
+            date = next
+            guardCount += 1
+        }
+        return date
+    }
+
     /// 从 startDate 一直推算到 now,统计期间会发生几次扣费。
     /// startDate 当天算 1 次;后续每跨一个 cycle 加 1。还没开始扣费就返回 0。
     func billingCountElapsed(asOf now: Date = .now) -> Int {
