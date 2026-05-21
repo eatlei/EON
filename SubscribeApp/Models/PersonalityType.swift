@@ -19,6 +19,7 @@ enum PersonalityType: String, CaseIterable, Identifiable {
     case beginner        // 活跃订阅 < 3 条
     case balanced        // 5 个及以上分类各自占 ≥ 10%
     case dailyAdder      // 近 7 天里至少 5 天都加了新订阅
+    case curator         // 主导分类是用户"自定义分类"(≥ 30%)—— 自建分类体系的人
 
     var id: String { rawValue }
 
@@ -41,6 +42,7 @@ enum PersonalityType: String, CaseIterable, Identifiable {
         case .beginner:      "leaf.fill"
         case .balanced:      "circle.grid.3x3.fill"
         case .dailyAdder:    "calendar.badge.plus"
+        case .curator:       "folder.fill.badge.gearshape"
         }
     }
 
@@ -58,6 +60,7 @@ enum PersonalityType: String, CaseIterable, Identifiable {
         case .beginner:      .mint
         case .balanced:      .teal
         case .dailyAdder:    .yellow
+        case .curator:       .brown
         }
     }
 
@@ -75,6 +78,7 @@ enum PersonalityType: String, CaseIterable, Identifiable {
         case .beginner:      String(localized: "数字极简者")
         case .balanced:      String(localized: "平衡大师")
         case .dailyAdder:    String(localized: "探索狂热者")
+        case .curator:       String(localized: "分类策展人")
         }
     }
 
@@ -92,6 +96,7 @@ enum PersonalityType: String, CaseIterable, Identifiable {
         case .beginner:      String(localized: "刚刚启程,留白也是一种美 🌱")
         case .balanced:      String(localized: "各司其职,生活有序而完整 ⚖️")
         case .dailyAdder:    String(localized: "今天又订阅了什么新东西? ✨")
+        case .curator:       String(localized: "连分类都要亲手定义,讲究 🗂️")
         }
     }
 
@@ -120,6 +125,8 @@ enum PersonalityType: String, CaseIterable, Identifiable {
             return String(localized: "你的订阅在 5 个以上分类里均匀分布,工作、生活、学习、娱乐都没有偏废 —— 这才是高级的数字生活。")
         case .dailyAdder:
             return String(localized: "你最近平均每天都在添加新订阅,可能在探索新工具,也可能在尝试新生活方式。EON 不评判,只默默记下你的轨迹。")
+        case .curator:
+            return String(localized: "内置的分类装不下你 —— 你给订阅建了一套自己的分类体系,把每一笔都亲手归位。这种对秩序的掌控感,EON 很欣赏。")
         }
     }
 }
@@ -170,6 +177,10 @@ extension SubscriptionStore {
 
         // 4) 主导分类 —— 头部分类占 ≥ 30%,落到对应人格;否则是兴趣广泛的折中型。
         guard let top = spends.first, top.share >= 0.30 else { return .eclectic }
+        // 主导的是用户自建的"自定义分类"(displayCategoryID 形如 "custom-<UUID>"),
+        // 内置 enum 的 switch 匹配不到 → 之前会错误地落到 .eclectic。这里单独识别成
+        // "分类策展人",承认用户自建分类体系这件事。
+        if top.id.hasPrefix("custom-") { return .curator }
         switch top.id {
         case SubscriptionCategory.ai.rawValue:            return .ai
         case SubscriptionCategory.productivity.rawValue:  return .productivity

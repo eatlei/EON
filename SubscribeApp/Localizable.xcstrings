@@ -1,9 +1,7 @@
 {
   "sourceLanguage": "zh-Hans",
   "strings": {
-    "": {
-      "shouldTranslate": false
-    },
+    "": {},
     " ": {
       "shouldTranslate": false
     },
@@ -253,9 +251,7 @@
       },
       "shouldTranslate": false
     },
-    "%lld": {
-      "shouldTranslate": false
-    },
+    "%lld": {},
     "%lld / %lld": {
       "localizations": {
         "zh-Hans": {
@@ -264,8 +260,7 @@
             "value": "%1$lld / %2$lld"
           }
         }
-      },
-      "shouldTranslate": false
+      }
     },
     "%lld 个订阅 · 月均": {
       "localizations": {
@@ -592,9 +587,7 @@
         }
       }
     },
-    "%lld%%": {
-      "shouldTranslate": false
-    },
+    "%lld%%": {},
     "(不打赏也可以继续白嫖,我们做朋友 🤝)": {
       "extractionState": "stale",
       "localizations": {
@@ -642,9 +635,7 @@
         }
       }
     },
-    "+%lld": {
-      "shouldTranslate": false
-    },
+    "+%lld": {},
     "/%lld天": {
       "localizations": {
         "de": {
@@ -1403,33 +1394,19 @@
     "EON": {
       "shouldTranslate": false
     },
-    "EON Subscriptions": {
-      "shouldTranslate": false
-    },
+    "EON Subscriptions": {},
     "EON · %@ 即将续费": {
       "localizations": {
-        "zh-Hant": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "EON · %@ 即將續費"
+            "value": "EON · %@ verlängert sich bald"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "EON · %@ renews soon"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "EON · %@ もうすぐ更新"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "EON · %@ 곧 갱신"
           }
         },
         "es": {
@@ -1444,38 +1421,38 @@
             "value": "EON · %@ se renouvelle bientôt"
           }
         },
-        "de": {
+        "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "EON · %@ verlängert sich bald"
+            "value": "EON · %@ もうすぐ更新"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EON · %@ 곧 갱신"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EON · %@ 即將續費"
           }
         }
       }
     },
     "EON · %@ 试用即将到期": {
       "localizations": {
-        "zh-Hant": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "EON · %@ 試用即將到期"
+            "value": "EON · Testphase von %@ endet bald"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "EON · %@ trial ending soon"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "EON · %@ 試用がもうすぐ終了"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "EON · %@ 체험 곧 종료"
           }
         },
         "es": {
@@ -1490,10 +1467,22 @@
             "value": "EON · l’essai de %@ se termine bientôt"
           }
         },
-        "de": {
+        "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "EON · Testphase von %@ endet bald"
+            "value": "EON · %@ 試用がもうすぐ終了"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EON · %@ 체험 곧 종료"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EON · %@ 試用即將到期"
           }
         }
       }
@@ -1592,28 +1581,16 @@
     },
     "EON 帮你看住了钱包。要是它真帮上了忙,请开发者喝杯咖啡续个命?": {
       "localizations": {
-        "zh-Hant": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "EON 幫你看住了錢包。要是它真幫上了忙,請開發者喝杯咖啡續個命?"
+            "value": "EON behält deine Geldbörse im Blick. Wenn es wirklich geholfen hat, wie wär's mit einem Kaffee für den Entwickler?"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "EON keeps an eye on your wallet. If it's genuinely helped, how about a coffee to keep the developer going?"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "EON があなたの財布を見張ります。本当に役立ったなら、開発者にコーヒーを一杯おごって延命させてくれませんか?"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "EON이 당신의 지갑을 지켜봅니다. 정말 도움이 됐다면, 개발자에게 커피 한 잔으로 기운을 북돋아 줄래요?"
           }
         },
         "es": {
@@ -1628,10 +1605,22 @@
             "value": "EON veille sur ton portefeuille. S'il t'a vraiment aidé, un café pour soutenir le développeur ?"
           }
         },
-        "de": {
+        "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "EON behält deine Geldbörse im Blick. Wenn es wirklich geholfen hat, wie wär's mit einem Kaffee für den Entwickler?"
+            "value": "EON があなたの財布を見張ります。本当に役立ったなら、開発者にコーヒーを一杯おごって延命させてくれませんか?"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EON이 당신의 지갑을 지켜봅니다. 정말 도움이 됐다면, 개발자에게 커피 한 잔으로 기운을 북돋아 줄래요?"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EON 幫你看住了錢包。要是它真幫上了忙,請開發者喝杯咖啡續個命?"
           }
         }
       }
@@ -2101,28 +2090,16 @@
     },
     "一包速溶冲下去,提神继续敲代码": {
       "localizations": {
-        "zh-Hant": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "一包即溶沖下去,提神繼續敲程式碼"
+            "value": "Ein Tütchen Instant – wach genug zum Weitercoden"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "A packet of instant — enough caffeine to keep coding"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "インスタント一杯で目を覚ましてコーディング続行"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "인스턴트 한 봉지로 정신 차리고 코딩 계속"
           }
         },
         "es": {
@@ -2137,10 +2114,22 @@
             "value": "Un sachet de soluble pour continuer à coder"
           }
         },
-        "de": {
+        "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ein Tütchen Instant – wach genug zum Weitercoden"
+            "value": "インスタント一杯で目を覚ましてコーディング続行"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "인스턴트 한 봉지로 정신 차리고 코딩 계속"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "一包即溶沖下去,提神繼續敲程式碼"
           }
         }
       }
@@ -3029,28 +3018,16 @@
     },
     "也加到提醒事项?": {
       "localizations": {
-        "zh-Hant": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "也加到提醒事項?"
+            "value": "Auch zu Erinnerungen hinzufügen?"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Add to Reminders too?"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "リマインダーにも追加?"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "미리 알림에도 추가할까요?"
           }
         },
         "es": {
@@ -3065,10 +3042,22 @@
             "value": "Ajouter aussi à Rappels ?"
           }
         },
-        "de": {
+        "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Auch zu Erinnerungen hinzufügen?"
+            "value": "リマインダーにも追加?"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "미리 알림에도 추가할까요?"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "也加到提醒事項?"
           }
         }
       }
@@ -4461,28 +4450,16 @@
     },
     "你都在用订阅管理 App 了,就别再给自己加一个叫 EON 的订阅啦 😉 打赏就一下,绝不续费。": {
       "localizations": {
-        "zh-Hant": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "你都在用訂閱管理 App 了,就別再給自己加一個叫 EON 的訂閱啦 😉 打賞就一下,絕不續費。"
+            "value": "Du nutzt schon einen Abo-Manager – füg dir nicht noch eins namens EON hinzu 😉 Trinkgeld ist einmalig, nie wiederkehrend."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "You already use a subscription manager — don't go adding one called EON 😉 Tips are one-time, never recurring."
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "もう subscription 管理アプリを使ってるんだから、EON という名のサブスクをわざわざ増やさないで 😉 投げ銭は一度きり、更新は一切なし。"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "이미 구독 관리 앱을 쓰고 있잖아요 — EON이라는 구독을 또 추가하지 마세요 😉 후원은 한 번뿐, 절대 정기 결제 아님."
           }
         },
         "es": {
@@ -4497,10 +4474,22 @@
             "value": "Tu utilises déjà un gestionnaire d'abonnements — n'en ajoute pas un appelé EON 😉 Le pourboire est unique, jamais récurrent."
           }
         },
-        "de": {
+        "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Du nutzt schon einen Abo-Manager – füg dir nicht noch eins namens EON hinzu 😉 Trinkgeld ist einmalig, nie wiederkehrend."
+            "value": "もう subscription 管理アプリを使ってるんだから、EON という名のサブスクをわざわざ増やさないで 😉 投げ銭は一度きり、更新は一切なし。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이미 구독 관리 앱을 쓰고 있잖아요 — EON이라는 구독을 또 추가하지 마세요 😉 후원은 한 번뿐, 절대 정기 결제 아님."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "你都在用訂閱管理 App 了,就別再給自己加一個叫 EON 的訂閱啦 😉 打賞就一下,絕不續費。"
           }
         }
       }
@@ -5568,6 +5557,52 @@
         }
       }
     },
+    "内置的分类装不下你 —— 你给订阅建了一套自己的分类体系,把每一笔都亲手归位。这种对秩序的掌控感,EON 很欣赏。": {
+      "localizations": {
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "內建的分類裝不下你 —— 你給訂閱建了一套自己的分類體系,把每一筆都親手歸位。這種對秩序的掌控感,EON 很欣賞。"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The built-in categories couldn't contain you — you built your own taxonomy and filed every subscription by hand. EON admires that sense of order."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "既定のカテゴリでは足りず、あなたは独自の分類体系を作り、一つひとつ手で整理しています。その秩序へのこだわり、EON は尊敬します。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "기본 분류로는 부족했죠 — 당신은 자신만의 분류 체계를 만들어 하나하나 손수 정리합니다. 그 질서 감각, EON이 존경합니다."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Las categorías integradas se te quedaron cortas: creaste tu propia taxonomía y archivaste cada suscripción a mano. EON admira ese orden."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Les catégories intégrées ne te suffisaient pas — tu as créé ta propre taxonomie et rangé chaque abonnement à la main. EON admire ce sens de l'ordre."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die vorgefertigten Kategorien reichten dir nicht – du hast eine eigene Systematik gebaut und jedes Abo von Hand einsortiert. EON bewundert diesen Ordnungssinn."
+          }
+        }
+      }
+    },
     "再不砍就要破产了…": {
       "extractionState": "stale",
       "localizations": {
@@ -5756,28 +5791,16 @@
     },
     "冰美式续命,Bug 一个个退散": {
       "localizations": {
-        "zh-Hant": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "冰美式續命,Bug 一個個退散"
+            "value": "Ein Iced Americano belebt mich; Bugs verschwinden nacheinander"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "An iced americano revives me; bugs scatter one by one"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "アイスアメリカーノで延命、バグが一つずつ退散"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "아이스 아메리카노로 기운 충전, 버그가 하나씩 사라짐"
           }
         },
         "es": {
@@ -5792,10 +5815,22 @@
             "value": "Un americano glacé me ranime ; les bugs s'envolent un à un"
           }
         },
-        "de": {
+        "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ein Iced Americano belebt mich; Bugs verschwinden nacheinander"
+            "value": "アイスアメリカーノで延命、バグが一つずつ退散"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "아이스 아메리카노로 기운 충전, 버그가 하나씩 사라짐"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "冰美式續命,Bug 一個個退散"
           }
         }
       }
@@ -5849,28 +5884,16 @@
     },
     "冷萃慢慢滴,功能慢慢磨": {
       "localizations": {
-        "zh-Hant": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "冷萃慢慢滴,功能慢慢磨"
+            "value": "Cold Brew tropft langsam, Features werden in Ruhe poliert"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Cold brew drips slow, features get polished slow"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "コールドブリューをじっくり、機能もじっくり磨く"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "콜드브루는 천천히, 기능도 천천히 다듬어요"
           }
         },
         "es": {
@@ -5885,10 +5908,22 @@
             "value": "Le cold brew coule lentement, les fonctions se peaufinent lentement"
           }
         },
-        "de": {
+        "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Cold Brew tropft langsam, Features werden in Ruhe poliert"
+            "value": "コールドブリューをじっくり、機能もじっくり磨く"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "콜드브루는 천천히, 기능도 천천히 다듬어요"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "冷萃慢慢滴,功能慢慢磨"
           }
         }
       }
@@ -6119,6 +6154,52 @@
           "stringUnit": {
             "state": "translated",
             "value": "分類名稱"
+          }
+        }
+      }
+    },
+    "分类策展人": {
+      "localizations": {
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "分類策展人"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Category Curator"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "カテゴリの主"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "카테고리 큐레이터"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Curador de categorías"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Curateur de catégories"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kategorie-Kurator"
           }
         }
       }
@@ -6402,28 +6483,16 @@
     },
     "到期前和当天都会提醒你。": {
       "localizations": {
-        "zh-Hant": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "到期前和當天都會提醒你。"
+            "value": "Du wirst vorher und am Tag selbst erinnert."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "You'll be reminded before and on the day."
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "期日前と当日に通知します。"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "만료 전과 당일에 알려 드려요."
           }
         },
         "es": {
@@ -6438,10 +6507,22 @@
             "value": "Vous serez prévenu avant et le jour même."
           }
         },
-        "de": {
+        "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Du wirst vorher und am Tag selbst erinnert."
+            "value": "期日前と当日に通知します。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "만료 전과 당일에 알려 드려요."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "到期前和當天都會提醒你。"
           }
         }
       }
@@ -7186,28 +7267,16 @@
     },
     "可以在 iOS 设置 → EON 里允许访问「提醒事项」后再试。": {
       "localizations": {
-        "zh-Hant": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "可以在 iOS 設定 → EON 裡允許存取「提醒事項」後再試。"
+            "value": "Erlaube den Zugriff auf Erinnerungen unter Einstellungen → EON und versuche es erneut."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Allow Reminders access in iOS Settings → EON, then try again."
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "iOS 設定 → EON でリマインダーへのアクセスを許可してから再試行してください。"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "iOS 설정 → EON에서 미리 알림 접근을 허용한 뒤 다시 시도하세요."
           }
         },
         "es": {
@@ -7222,10 +7291,22 @@
             "value": "Autorisez l'accès à Rappels dans Réglages → EON, puis réessayez."
           }
         },
-        "de": {
+        "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Erlaube den Zugriff auf Erinnerungen unter Einstellungen → EON und versuche es erneut."
+            "value": "iOS 設定 → EON でリマインダーへのアクセスを許可してから再試行してください。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iOS 설정 → EON에서 미리 알림 접근을 허용한 뒤 다시 시도하세요."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "可以在 iOS 設定 → EON 裡允許存取「提醒事項」後再試。"
           }
         }
       }
@@ -7757,28 +7838,16 @@
     },
     "咕噜咕噜,下肚了": {
       "localizations": {
-        "zh-Hant": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "咕嚕咕嚕,下肚了"
+            "value": "Schluck – runter damit"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Gulp — down it goes"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ごくごく、飲み干した"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "꿀꺽, 다 마셨어요"
           }
         },
         "es": {
@@ -7793,10 +7862,22 @@
             "value": "Glouglou, c'est avalé"
           }
         },
-        "de": {
+        "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Schluck – runter damit"
+            "value": "ごくごく、飲み干した"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "꿀꺽, 다 마셨어요"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "咕嚕咕嚕,下肚了"
           }
         }
       }
@@ -9099,28 +9180,16 @@
     },
     "完全自愿 · 不解锁任何功能 · 一次性,不是订阅": {
       "localizations": {
-        "zh-Hant": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "完全自願 · 不解鎖任何功能 · 一次性,不是訂閱"
+            "value": "Völlig freiwillig · schaltet nichts frei · einmalig, kein Abo"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Entirely optional · unlocks nothing · one-time, not a subscription"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "完全に任意 · 機能解放なし · 一度きり、サブスクではありません"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "완전 자율 · 어떤 기능도 잠금 해제 안 함 · 일회성, 구독 아님"
           }
         },
         "es": {
@@ -9135,10 +9204,22 @@
             "value": "Entièrement facultatif · ne débloque rien · paiement unique, pas un abonnement"
           }
         },
-        "de": {
+        "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Völlig freiwillig · schaltet nichts frei · einmalig, kein Abo"
+            "value": "完全に任意 · 機能解放なし · 一度きり、サブスクではありません"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "완전 자율 · 어떤 기능도 잠금 해제 안 함 · 일회성, 구독 아님"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "完全自願 · 不解鎖任何功能 · 一次性,不是訂閱"
           }
         }
       }
@@ -9471,28 +9552,16 @@
     },
     "已加到提醒事项 ✅": {
       "localizations": {
-        "zh-Hant": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "已加到提醒事項 ✅"
+            "value": "Zu Erinnerungen hinzugefügt ✅"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Added to Reminders ✅"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "リマインダーに追加 ✅"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "미리 알림에 추가됨 ✅"
           }
         },
         "es": {
@@ -9507,10 +9576,22 @@
             "value": "Ajouté à Rappels ✅"
           }
         },
-        "de": {
+        "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zu Erinnerungen hinzugefügt ✅"
+            "value": "リマインダーに追加 ✅"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "미리 알림에 추가됨 ✅"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "已加到提醒事項 ✅"
           }
         }
       }
@@ -10628,28 +10709,16 @@
     },
     "开启后,你在任何一台设备上的修改都会通过 iCloud 自动同步到登录同一 Apple 账户的其他设备。": {
       "localizations": {
-        "zh-Hant": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "開啟後,你在任何一台裝置上的修改都會透過 iCloud 自動同步到登入同一 Apple 帳戶的其他裝置。"
+            "value": "Aktiviert werden Änderungen auf jedem Gerät automatisch per iCloud mit deinen anderen Geräten im selben Apple-Account synchronisiert."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Once on, changes on any device sync automatically via iCloud to your other devices signed in to the same Apple Account."
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "オンにすると、どの端末での変更も iCloud 経由で、同じ Apple アカウントでサインインした他の端末に自動同期されます。"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "켜면 어떤 기기에서의 변경이든 같은 Apple 계정으로 로그인한 다른 기기로 iCloud를 통해 자동 동기화됩니다."
           }
         },
         "es": {
@@ -10664,10 +10733,22 @@
             "value": "Une fois activé, les modifications sur n'importe quel appareil se synchronisent via iCloud vers vos autres appareils connectés au même compte Apple."
           }
         },
-        "de": {
+        "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Aktiviert werden Änderungen auf jedem Gerät automatisch per iCloud mit deinen anderen Geräten im selben Apple-Account synchronisiert."
+            "value": "オンにすると、どの端末での変更も iCloud 経由で、同じ Apple アカウントでサインインした他の端末に自動同期されます。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "켜면 어떤 기기에서의 변경이든 같은 Apple 계정으로 로그인한 다른 기기로 iCloud를 통해 자동 동기화됩니다."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "開啟後,你在任何一台裝置上的修改都會透過 iCloud 自動同步到登入同一 Apple 帳戶的其他裝置。"
           }
         }
       }
@@ -11365,6 +11446,52 @@
         }
       }
     },
+    "循环 %lld 次": {
+      "localizations": {
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "循環 %lld 次"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld cycles"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld 回更新"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld회 갱신"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld ciclos"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld cycles"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld Zyklen"
+          }
+        }
+      }
+    },
     "德国": {
       "localizations": {
         "de": {
@@ -11831,28 +11958,16 @@
     },
     "打开提醒事项": {
       "localizations": {
-        "zh-Hant": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "打開提醒事項"
+            "value": "Erinnerungen öffnen"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Open Reminders"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "リマインダーを開く"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "미리 알림 열기"
           }
         },
         "es": {
@@ -11867,10 +11982,22 @@
             "value": "Ouvrir Rappels"
           }
         },
-        "de": {
+        "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Erinnerungen öffnen"
+            "value": "リマインダーを開く"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "미리 알림 열기"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "打開提醒事項"
           }
         }
       }
@@ -12018,28 +12145,16 @@
     },
     "打赏货架暂时没加载出来,可能是网络的锅。稍后再试?": {
       "localizations": {
-        "zh-Hant": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "打賞貨架暫時沒載入出來,可能是網路的鍋。稍後再試?"
+            "value": "Die Trinkgeld-Optionen wurden nicht geladen – wohl das Netzwerk. Später erneut?"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "The tip options didn't load — probably the network. Try again later?"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "投げ銭の項目が読み込めませんでした。ネットワークのせいかも。後でもう一度?"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "후원 항목이 로드되지 않았어요 — 네트워크 문제일 수 있어요. 나중에 다시?"
           }
         },
         "es": {
@@ -12054,10 +12169,22 @@
             "value": "Les options de pourboire ne se chargent pas — sûrement le réseau. Réessayer plus tard ?"
           }
         },
-        "de": {
+        "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Die Trinkgeld-Optionen wurden nicht geladen – wohl das Netzwerk. Später erneut?"
+            "value": "投げ銭の項目が読み込めませんでした。ネットワークのせいかも。後でもう一度?"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "후원 항목이 로드되지 않았어요 — 네트워크 문제일 수 있어요. 나중에 다시?"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "打賞貨架暫時沒載入出來,可能是網路的鍋。稍後再試?"
           }
         }
       }
@@ -14886,28 +15013,16 @@
     },
     "暂不": {
       "localizations": {
-        "zh-Hant": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "暫不"
+            "value": "Nicht jetzt"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Not now"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "今はしない"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "나중에"
           }
         },
         "es": {
@@ -14922,10 +15037,22 @@
             "value": "Pas maintenant"
           }
         },
-        "de": {
+        "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nicht jetzt"
+            "value": "今はしない"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "나중에"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "暫不"
           }
         }
       }
@@ -17201,28 +17328,16 @@
     },
     "没有提醒事项权限": {
       "localizations": {
-        "zh-Hant": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "沒有提醒事項權限"
+            "value": "Kein Zugriff auf Erinnerungen"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "No Reminders access"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "リマインダーの権限がありません"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "미리 알림 권한 없음"
           }
         },
         "es": {
@@ -17237,10 +17352,22 @@
             "value": "Pas d'accès à Rappels"
           }
         },
-        "de": {
+        "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kein Zugriff auf Erinnerungen"
+            "value": "リマインダーの権限がありません"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "미리 알림 권한 없음"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "沒有提醒事項權限"
           }
         }
       }
@@ -17709,28 +17836,16 @@
     },
     "添加到提醒事项": {
       "localizations": {
-        "zh-Hant": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "加到提醒事項"
+            "value": "Zu Erinnerungen hinzufügen"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Add to Reminders"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "リマインダーに追加"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "미리 알림에 추가"
           }
         },
         "es": {
@@ -17745,10 +17860,22 @@
             "value": "Ajouter à Rappels"
           }
         },
-        "de": {
+        "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Zu Erinnerungen hinzufügen"
+            "value": "リマインダーに追加"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "미리 알림에 추가"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "加到提醒事項"
           }
         }
       }
@@ -18451,28 +18578,16 @@
     },
     "点按、打赏、摇一摇、彩蛋小球碰撞等操作会有轻微震动。关闭后 EON 不再主动触发任何震动。": {
       "localizations": {
-        "zh-Hant": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "點按、打賞、搖一搖、彩蛋小球碰撞等操作會有輕微震動。關閉後 EON 不再主動觸發任何震動。"
+            "value": "Tippen, Trinkgeld, Schütteln und Easter-Egg-Ballkollisionen vibrieren leicht. Aus löst EON keinerlei Haptik aus."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Taps, tips, shakes, and easter-egg ball collisions give a light vibration. Turn off and EON won't trigger any haptics."
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "タップ・投げ銭・シェイク・イースターエッグのボール衝突などで軽く振動します。オフにすると EON は一切振動しません。"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "탭, 후원, 흔들기, 이스터에그 공 충돌 등에서 가벼운 진동이 납니다. 끄면 EON은 어떤 진동도 발생시키지 않습니다."
           }
         },
         "es": {
@@ -18487,10 +18602,22 @@
             "value": "Les appuis, pourboires, secousses et collisions des boules de l'easter egg vibrent légèrement. Désactivé, EON ne déclenche aucune vibration."
           }
         },
-        "de": {
+        "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tippen, Trinkgeld, Schütteln und Easter-Egg-Ballkollisionen vibrieren leicht. Aus löst EON keinerlei Haptik aus."
+            "value": "タップ・投げ銭・シェイク・イースターエッグのボール衝突などで軽く振動します。オフにすると EON は一切振動しません。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "탭, 후원, 흔들기, 이스터에그 공 충돌 등에서 가벼운 진동이 납니다. 끄면 EON은 어떤 진동도 발생시키지 않습니다."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "點按、打賞、搖一搖、彩蛋小球碰撞等操作會有輕微震動。關閉後 EON 不再主動觸發任何震動。"
           }
         }
       }
@@ -18960,28 +19087,16 @@
     },
     "瑰夏手冲级别的款待,开发者能记一整年": {
       "localizations": {
-        "zh-Hant": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "瑰夏手沖級別的款待,開發者能記一整年"
+            "value": "Eine Geisha-Pour-over-Geste – der Entwickler erinnert sich das ganze Jahr"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "A Geisha pour-over level treat — the developer will remember it all year"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "ゲイシャ手淹れ級のおもてなし、開発者は一年覚えてます"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "게이샤 핸드드립급 대접 — 개발자가 일 년 내내 기억해요"
           }
         },
         "es": {
@@ -18996,38 +19111,38 @@
             "value": "Un cadeau digne d'un pour-over Geisha — le développeur s'en souviendra toute l'année"
           }
         },
-        "de": {
+        "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Eine Geisha-Pour-over-Geste – der Entwickler erinnert sich das ganze Jahr"
+            "value": "ゲイシャ手淹れ級のおもてなし、開発者は一年覚えてます"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "게이샤 핸드드립급 대접 — 개발자가 일 년 내내 기억해요"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "瑰夏手沖級別的款待,開發者能記一整年"
           }
         }
       }
     },
     "由 EON 添加。到期请决定是否继续订阅。": {
       "localizations": {
-        "zh-Hant": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "由 EON 新增。到期請決定是否繼續訂閱。"
+            "value": "Von EON hinzugefügt. Entscheide bei Fälligkeit, ob du das Abo behältst."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Added by EON. Decide whether to keep the subscription when it's due."
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "EON が追加。期日に継続するか判断してください。"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "EON이 추가함. 만료 시 구독 유지 여부를 결정하세요."
           }
         },
         "es": {
@@ -19042,10 +19157,22 @@
             "value": "Ajouté par EON. Décidez de garder l'abonnement à l'échéance."
           }
         },
-        "de": {
+        "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Von EON hinzugefügt. Entscheide bei Fälligkeit, ob du das Abo behältst."
+            "value": "EON が追加。期日に継続するか判断してください。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "EON이 추가함. 만료 시 구독 유지 여부를 결정하세요."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "由 EON 新增。到期請決定是否繼續訂閱。"
           }
         }
       }
@@ -19144,28 +19271,16 @@
     },
     "看看你的订阅人格": {
       "localizations": {
-        "zh-Hant": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "看看你的訂閱人格"
+            "value": "Dein Abo-Charakter ansehen"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "See your subscription persona"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "あなたのサブスク人格を見る"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "당신의 구독 페르소나 보기"
           }
         },
         "es": {
@@ -19180,10 +19295,22 @@
             "value": "Découvrez votre profil d'abonné"
           }
         },
-        "de": {
+        "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dein Abo-Charakter ansehen"
+            "value": "あなたのサブスク人格を見る"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "당신의 구독 페르소나 보기"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "看看你的訂閱人格"
           }
         }
       }
@@ -20810,28 +20937,16 @@
     },
     "苹果「提醒事项」支持到期前 + 当天的多重提醒,比 App 内通知更不容易错过。需要你授权一次,内容只保存在你的设备上。": {
       "localizations": {
-        "zh-Hant": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "蘋果「提醒事項」支援到期前 + 當天的多重提醒,比 App 內通知更不容易錯過。需要你授權一次,內容只儲存在你的裝置上。"
+            "value": "Apple Erinnerungen unterstützt mehrere Hinweise (Tage vorher + am Tag) – so verpasst du es seltener als mit In-App-Mitteilungen. Einmalige Erlaubnis nötig; alles bleibt auf deinem Gerät."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Apple Reminders supports multiple alerts (days before + day-of), so you're less likely to miss it than with in-app notifications. Needs a one-time permission; everything stays on your device."
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Apple の「リマインダー」は期日前 + 当日の複数通知に対応し、アプリ内通知より見逃しにくいです。一度だけ許可が必要で、内容は端末内にのみ保存されます。"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Apple 미리 알림은 만료 전 + 당일 다중 알림을 지원해 앱 내 알림보다 놓치기 어렵습니다. 한 번 권한이 필요하며 내용은 기기에만 저장됩니다."
           }
         },
         "es": {
@@ -20846,10 +20961,22 @@
             "value": "Rappels d'Apple gère plusieurs alertes (jours avant + le jour même), donc vous risquez moins de l'oublier qu'avec les notifications de l'app. Une autorisation unique ; tout reste sur votre appareil."
           }
         },
-        "de": {
+        "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Apple Erinnerungen unterstützt mehrere Hinweise (Tage vorher + am Tag) – so verpasst du es seltener als mit In-App-Mitteilungen. Einmalige Erlaubnis nötig; alles bleibt auf deinem Gerät."
+            "value": "Apple の「リマインダー」は期日前 + 当日の複数通知に対応し、アプリ内通知より見逃しにくいです。一度だけ許可が必要で、内容は端末内にのみ保存されます。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Apple 미리 알림은 만료 전 + 당일 다중 알림을 지원해 앱 내 알림보다 놓치기 어렵습니다. 한 번 권한이 필요하며 내용은 기기에만 저장됩니다."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "蘋果「提醒事項」支援到期前 + 當天的多重提醒,比 App 內通知更不容易錯過。需要你授權一次,內容只儲存在你的裝置上。"
           }
         }
       }
@@ -21087,28 +21214,16 @@
     },
     "触觉反馈": {
       "localizations": {
-        "zh-Hant": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "觸覺回饋"
+            "value": "Haptisches Feedback"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Haptic feedback"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "触覚フィードバック"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "햅틱 피드백"
           }
         },
         "es": {
@@ -21123,10 +21238,22 @@
             "value": "Retour haptique"
           }
         },
-        "de": {
+        "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Haptisches Feedback"
+            "value": "触覚フィードバック"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "햅틱 피드백"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "觸覺回饋"
           }
         }
       }
@@ -22150,28 +22277,16 @@
     },
     "请喝个冰美式": {
       "localizations": {
-        "zh-Hant": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "請喝杯冰美式"
+            "value": "Einen Iced Americano spendieren"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Buy an iced americano"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "アイスアメリカーノを一杯"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "아이스 아메리카노 한 잔"
           }
         },
         "es": {
@@ -22186,38 +22301,38 @@
             "value": "Offrir un americano glacé"
           }
         },
-        "de": {
+        "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Einen Iced Americano spendieren"
+            "value": "アイスアメリカーノを一杯"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "아이스 아메리카노 한 잔"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "請喝杯冰美式"
           }
         }
       }
     },
     "请喝个冷萃咖啡": {
       "localizations": {
-        "zh-Hant": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "請喝杯冷萃咖啡"
+            "value": "Einen Cold Brew spendieren"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Buy a cold brew"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "コールドブリューを一杯"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "콜드브루 한 잔"
           }
         },
         "es": {
@@ -22232,38 +22347,38 @@
             "value": "Offrir un cold brew"
           }
         },
-        "de": {
+        "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Einen Cold Brew spendieren"
+            "value": "コールドブリューを一杯"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "콜드브루 한 잔"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "請喝杯冷萃咖啡"
           }
         }
       }
     },
     "请喝个速溶咖啡": {
       "localizations": {
-        "zh-Hant": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "請喝杯即溶咖啡"
+            "value": "Einen Instantkaffee spendieren"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Buy an instant coffee"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "インスタントコーヒーを一杯"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "인스턴트 커피 한 잔"
           }
         },
         "es": {
@@ -22278,38 +22393,38 @@
             "value": "Offrir un café soluble"
           }
         },
-        "de": {
+        "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Einen Instantkaffee spendieren"
+            "value": "インスタントコーヒーを一杯"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "인스턴트 커피 한 잔"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "請喝杯即溶咖啡"
           }
         }
       }
     },
     "请喝个顶级瑰夏手冲咖啡 👍": {
       "localizations": {
-        "zh-Hant": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "請喝杯頂級瑰夏手沖咖啡 👍"
+            "value": "Einen Spitzen-Geisha-Pour-over spendieren 👍"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Buy a top-tier Geisha pour-over 👍"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "最高級ゲイシャの手淹れを一杯 👍"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "최고급 게이샤 핸드드립 한 잔 👍"
           }
         },
         "es": {
@@ -22324,10 +22439,22 @@
             "value": "Offrir un pour-over Geisha haut de gamme 👍"
           }
         },
-        "de": {
+        "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Einen Spitzen-Geisha-Pour-over spendieren 👍"
+            "value": "最高級ゲイシャの手淹れを一杯 👍"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "최고급 게이샤 핸드드립 한 잔 👍"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "請喝杯頂級瑰夏手沖咖啡 👍"
           }
         }
       }
@@ -22427,28 +22554,16 @@
     },
     "请我喝杯咖啡 ☕": {
       "localizations": {
-        "zh-Hant": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "請我喝杯咖啡 ☕"
+            "value": "Spendier mir einen Kaffee ☕"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Buy me a coffee ☕"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "コーヒーをおごる ☕"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "커피 한 잔 사주기 ☕"
           }
         },
         "es": {
@@ -22463,10 +22578,22 @@
             "value": "Offrez-moi un café ☕"
           }
         },
-        "de": {
+        "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Spendier mir einen Kaffee ☕"
+            "value": "コーヒーをおごる ☕"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "커피 한 잔 사주기 ☕"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "請我喝杯咖啡 ☕"
           }
         }
       }
@@ -23351,28 +23478,16 @@
     },
     "这杯咖啡一下去,今晚八成又睡不着了 —— 那正好,爬起来给 EON 写点新东西。真心谢谢你 🙏": {
       "localizations": {
-        "zh-Hant": {
+        "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "這杯咖啡一下去,今晚八成又睡不著了 —— 那正好,爬起來給 EON 寫點新東西。真心謝謝你 🙏"
+            "value": "Wenn der Kaffee wirkt, schlafe ich heute wohl nicht —— perfekt, dann baue ich etwas Neues für EON. Wirklich, danke 🙏"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Once this coffee kicks in I probably won't sleep tonight — perfect, I'll get up and build something new for EON. Truly, thank you 🙏"
-          }
-        },
-        "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "このコーヒーが効いたら今夜はたぶん眠れない —— ちょうどいい、起きて EON に新しいものを作ります。本当にありがとう 🙏"
-          }
-        },
-        "ko": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "이 커피가 들어가면 오늘 밤엔 아마 못 잘 거예요 —— 잘됐죠, 일어나서 EON에 새 기능을 만들게요. 정말 고마워요 🙏"
           }
         },
         "es": {
@@ -23387,10 +23502,22 @@
             "value": "Avec ce café, je ne dormirai sans doute pas ce soir —— tant mieux, je me lève et je code du neuf pour EON. Merci du fond du cœur 🙏"
           }
         },
-        "de": {
+        "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Wenn der Kaffee wirkt, schlafe ich heute wohl nicht —— perfekt, dann baue ich etwas Neues für EON. Wirklich, danke 🙏"
+            "value": "このコーヒーが効いたら今夜はたぶん眠れない —— ちょうどいい、起きて EON に新しいものを作ります。本当にありがとう 🙏"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "이 커피가 들어가면 오늘 밤엔 아마 못 잘 거예요 —— 잘됐죠, 일어나서 EON에 새 기능을 만들게요. 정말 고마워요 🙏"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "這杯咖啡一下去,今晚八成又睡不著了 —— 那正好,爬起來給 EON 寫點新東西。真心謝謝你 🙏"
           }
         }
       }
@@ -23437,6 +23564,52 @@
           "stringUnit": {
             "state": "translated",
             "value": "進入本頁"
+          }
+        }
+      }
+    },
+    "连分类都要亲手定义,讲究 🗂️": {
+      "localizations": {
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "連分類都要親手定義,講究 🗂️"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "You even define your own categories — meticulous 🗂️"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "カテゴリまで自分で定義する、こだわり派 🗂️"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "분류까지 직접 정의하는 꼼꼼함 🗂️"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hasta defines tus propias categorías — meticuloso 🗂️"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vous définissez même vos catégories — méticuleux 🗂️"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du definierst sogar eigene Kategorien – akribisch 🗂️"
           }
         }
       }

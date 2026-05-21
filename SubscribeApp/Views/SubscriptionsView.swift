@@ -92,7 +92,12 @@ struct SubscriptionsView: View {
                         MasonryGrid(columns: 2, spacing: AppTheme.Space.m) {
                             ForEach(Array(rows.enumerated()), id: \.element.id) { i, sub in
                                 Button { detailing = sub } label: {
-                                    GridCard(subscription: sub, viewPeriod: viewPeriod)
+                                    GridCard(
+                                        subscription: sub,
+                                        viewPeriod: viewPeriod,
+                                        onArchive: { store.archive(ids: [sub.id]) },
+                                        onDelete: { store.delete(ids: [sub.id]) }
+                                    )
                                 }
                                 .buttonStyle(.plain)
                                 .reveal(i + 1)
@@ -331,12 +336,19 @@ private struct Row: View {
         return "\(plan) · \(subscription.displayCategoryTitle)"
     }
 
+    /// 订阅时间(真·下次扣费日,滚动到今天之后,避免显示成"过去"的锚点)。
+    private var dateText: String {
+        subscription.upcomingBillingDate().formatted(.dateTime.year().month().day())
+    }
+
     var body: some View {
         HStack(spacing: AppTheme.Space.m) {
             CategoryGlyph(subscription: subscription, size: 44)
                 .shadow(color: colored ? .black.opacity(isDark ? 0.25 : 0.10) : .clear,
                         radius: 6, x: 0, y: 3)
+            // 左侧 3 排:名称 / 套餐·类型·是否计入 / 订阅时间。
             VStack(alignment: .leading, spacing: 3) {
+                // 第 1 排:名称 + 状态徽章
                 HStack(spacing: 6) {
                     Text(subscription.name).font(.subheadline.weight(.semibold))
                         .foregroundStyle(AppTheme.ink)
@@ -347,25 +359,19 @@ private struct Row: View {
                             .background(AppTheme.accent.opacity(0.14), in: Capsule())
                             .foregroundStyle(AppTheme.accent)
                     }
-                    // 暂停态:灰色"已暂停"徽章 + 整卡 0.5 透明度(见 body 末尾)。
-                    // 暂停的订阅仍留在列表里,但不进总额 / 即将扣费 / 提醒。
                     if subscription.status == .paused {
                         Text("已暂停").font(.caption2.weight(.bold))
                             .padding(.horizontal, 6).padding(.vertical, 2)
                             .background(AppTheme.tertiary.opacity(0.18), in: Capsule())
                             .foregroundStyle(AppTheme.secondary)
                     }
-                    // "不计入"徽章从这一行移走了 —— 跟订阅名抢同一行会挤,
-                    // 改放到整张卡片的左上角(见 body 末尾的 .overlay)。
                 }
+                // 第 2 排:套餐 · 类型 · 不计入徽章
                 HStack(spacing: 4) {
                     Text(subtitle)
                         .font(.caption)
                         .foregroundStyle(AppTheme.secondary)
                         .lineLimit(1)
-                    // 不计入徽章紧跟在副标题后面,做成"角标"形态:小号字 + 灰胶囊。
-                    // 之前放卡片左上角的 overlay 会盖到图标边角,改成 inline 跟分类
-                    // 信息排成一行,视觉上更整齐。
                     if !subscription.includeInStatistics {
                         Text("不计入")
                             .font(.system(size: 9, weight: .bold))
@@ -374,27 +380,27 @@ private struct Row: View {
                             .foregroundStyle(AppTheme.secondary)
                     }
                 }
+                // 第 3 排:订阅时间(下次扣费日)
+                HStack(spacing: 3) {
+                    Image(systemName: "calendar")
+                        .font(.system(size: 9, weight: .semibold))
+                        .foregroundStyle(AppTheme.tertiary)
+                    Text(dateText)
+                        .font(.caption2)
+                        .foregroundStyle(AppTheme.tertiary)
+                }
             }
             Spacer(minLength: AppTheme.Space.s)
+            // 右侧 2 排:价格 / 循环 N 次
             VStack(alignment: .trailing, spacing: 4) {
-                // 不再展示 /月 /季 /年 后缀 —— 整页顶部的视图切换已经表明了口径,
-                // 在每张卡片上再写一次是冗余。
                 Text(store.converter.format(displayedAmount, currency: store.baseCurrency))
                     .font(.system(size: 22, weight: .heavy, design: .rounded))
                     .foregroundStyle(AppTheme.ink)
                     .lineLimit(1)
                     .minimumScaleFactor(0.65)
-                // "已扣 N 次"小徽章 —— 默默告诉用户这笔订阅累计已经付过几次费,
-                // 跟下方的下次扣费日叠在一起,垂直空间也不太挤。
-                let billed = subscription.billingCountElapsed()
-                if billed > 0 {
-                    Text(String(localized: "已扣 \(billed) 次"))
-                        .font(.caption2.weight(.medium))
-                        .foregroundStyle(AppTheme.secondary)
-                }
-                Text(subscription.nextBillingDate.formatted(.dateTime.month().day()))
-                    .font(.caption2)
-                    .foregroundStyle(AppTheme.tertiary)
+                Text(String(localized: "循环 \(subscription.billingCountElapsed()) 次"))
+                    .font(.caption2.weight(.medium))
+                    .foregroundStyle(AppTheme.secondary)
             }
             Menu {
                 Button { onArchive() } label: {
@@ -477,9 +483,18 @@ private struct GridCard: View {
     @Environment(\.colorScheme) private var colorScheme
     let subscription: Subscription
     let viewPeriod: ViewPeriod
+    let onArchive: () -> Void
+    let onDelete: () -> Void
 
     private var colored: Bool { store.coloredSubscriptionCards }
     private var isDark: Bool { colorScheme == .dark }
+
+    /// 套餐 · 类型;套餐为空时只显类型。卡片模式也要露出套餐信息。
+    private var subtitle: String {
+        let plan = subscription.plan.trimmingCharacters(in: .whitespaces)
+        if plan.isEmpty { return subscription.displayCategoryTitle }
+        return "\(plan) · \(subscription.displayCategoryTitle)"
+    }
 
     private var cardColor: Color {
         switch subscription.icon {
@@ -498,8 +513,9 @@ private struct GridCard: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            HStack {
-                CategoryGlyph(subscription: subscription, size: 40)
+            HStack(alignment: .top) {
+                // 卡片模式图标加大:40 → 52,更醒目。
+                CategoryGlyph(subscription: subscription, size: 52)
                     .shadow(color: colored ? .black.opacity(isDark ? 0.25 : 0.10) : .clear,
                             radius: 5, x: 0, y: 2)
                 Spacer()
@@ -517,6 +533,22 @@ private struct GridCard: View {
                         .background(AppTheme.tertiary.opacity(0.18), in: Capsule())
                         .foregroundStyle(AppTheme.secondary)
                 }
+                // 卡片模式补回 ⋯ 菜单:归档 / 删除,跟列表模式一致。
+                Menu {
+                    Button { onArchive() } label: {
+                        Label("归档", systemImage: "archivebox")
+                    }
+                    Divider()
+                    Button(role: .destructive, action: onDelete) {
+                        Label("删除", systemImage: "trash")
+                    }
+                } label: {
+                    Image(systemName: "ellipsis")
+                        .font(.subheadline.weight(.bold))
+                        .foregroundStyle(AppTheme.tertiary)
+                        .frame(width: 24, height: 24)
+                        .contentShape(Rectangle())
+                }
             }
 
             VStack(alignment: .leading, spacing: 2) {
@@ -527,7 +559,7 @@ private struct GridCard: View {
                     .lineLimit(2)
                     .fixedSize(horizontal: false, vertical: true)
                 HStack(spacing: 4) {
-                    Text(subscription.displayCategoryTitle)
+                    Text(subtitle)
                         .font(.caption2)
                         .foregroundStyle(AppTheme.secondary)
                         .lineLimit(1)
