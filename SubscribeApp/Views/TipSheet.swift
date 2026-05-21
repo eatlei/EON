@@ -343,7 +343,7 @@ private enum TipMeta {
         ["☕", "🥤", "🧊", "🏆"][safe: idx] ?? "💝"
     }
     static func title(_ idx: Int) -> LocalizedStringKey {
-        ["请喝个速溶咖啡", "请喝个冰美式", "请喝个冷萃咖啡", "请喝个顶级瑰夏手冲咖啡 👍"][safe: idx] ?? "随心意"
+        ["速溶咖啡", "冰美式", "冷萃咖啡", "顶级瑰夏手冲咖啡 👍"][safe: idx] ?? "随心意"
     }
     static func flavor(_ idx: Int) -> LocalizedStringKey {
         [
