@@ -42,6 +42,7 @@
 		B7351B13740709B8DFE512C8 /* PersonalityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6FA51330054DE91B765C4C8 /* PersonalityView.swift */; };
 		C27ABAC774BB186CFA0496F6 /* LLMExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D75247CB3B2D0B30F64A187A /* LLMExporter.swift */; };
 		C82EC5D3AA16B65ABBFE635D /* NotificationScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C474BE951C367D83194A7B /* NotificationScheduler.swift */; };
+		CDC6F0408C0E9A364D17600A /* SubscriptionDetailSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CCFDEF22DB5A42364871F22 /* SubscriptionDetailSheet.swift */; };
 		D4B7D72CFE9D15A3BCA812F1 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ECE824190F78DD3AD0B9A41 /* SettingsView.swift */; };
 		D61908DF7B850466890A7CB3 /* RandomSpotlightSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = A27A1E1F038AAF41ECAE8CC9 /* RandomSpotlightSheet.swift */; };
 		D9D48496ECFA76951850FFA3 /* ArchivedSubscriptionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD5797346C09EA8D743A297C /* ArchivedSubscriptionsView.swift */; };
@@ -61,6 +62,7 @@
 		1307B8977CD8A78BC957BB94 /* PersonalityType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalityType.swift; sourceTree = "<group>"; };
 		278E1A85DA8D02D3694C43DD /* SubscriptionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionStore.swift; sourceTree = "<group>"; };
 		3BFDBF0EB309BC18707263B5 /* DashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardView.swift; sourceTree = "<group>"; };
+		3CCFDEF22DB5A42364871F22 /* SubscriptionDetailSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionDetailSheet.swift; sourceTree = "<group>"; };
 		5499976ECD845C44C8FBD8CB /* Subscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Subscription.swift; sourceTree = "<group>"; };
 		55C474BE951C367D83194A7B /* NotificationScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationScheduler.swift; sourceTree = "<group>"; };
 		57A000AE363FDB1ADBCB23F5 /* SubscriptionEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionEditorView.swift; sourceTree = "<group>"; };
@@ -153,6 +155,7 @@
 				5ECE824190F78DD3AD0B9A41 /* SettingsView.swift */,
 				DB3757917818B820ACD482C2 /* ShakeDetector.swift */,
 				F83900B936E3D2CE2D308A08 /* SpinningIcon.swift */,
+				3CCFDEF22DB5A42364871F22 /* SubscriptionDetailSheet.swift */,
 				57A000AE363FDB1ADBCB23F5 /* SubscriptionEditorView.swift */,
 				EF2B1A4EE8C71CFEC125E8C6 /* SubscriptionsView.swift */,
 				ABA05720A891C34355A2A203 /* TipSheet.swift */,
@@ -316,6 +319,7 @@
 				9B59004C5BFFD6EC95BAC4A8 /* SpinningIcon.swift in Sources */,
 				E9CF9A04AB2F2BAB155135E3 /* SubscribeApp.swift in Sources */,
 				5939321A4C7E3D1ABC5C23C2 /* Subscription.swift in Sources */,
+				CDC6F0408C0E9A364D17600A /* SubscriptionDetailSheet.swift in Sources */,
 				7EC121F3AC0DE9CB43EF36E1 /* SubscriptionEditorView.swift in Sources */,
 				1140D25072B7C49C22068519 /* SubscriptionStore.swift in Sources */,
 				669A6F80B5B67437D8692262 /* SubscriptionsView.swift in Sources */,

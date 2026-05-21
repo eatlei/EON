@@ -262,6 +262,7 @@ private struct HeroTotal: View {
 
 private struct UpcomingPanel: View {
     @EnvironmentObject private var store: SubscriptionStore
+    @State private var detailing: Subscription?
 
     private var charges: [RenewalCharge] { store.upcomingCharges(limit: 3) }
 
@@ -276,10 +277,19 @@ private struct UpcomingPanel: View {
                 VStack(spacing: 0) {
                     ForEach(Array(charges.enumerated()), id: \.element.id) { i, c in
                         if i > 0 { Hairline() }
-                        row(c)
+                        Button { detailing = c.subscription } label: {
+                            row(c).contentShape(Rectangle())
+                        }
+                        .buttonStyle(.plain)
                     }
                 }
             }
+        }
+        .sheet(item: $detailing) { sub in
+            SubscriptionDetailSheet(subscriptionID: sub.id)
+                .environmentObject(store)
+                .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.visible)
         }
     }
 
@@ -1028,6 +1038,7 @@ private struct StatCard: View {
 /// 每行 = 一个试用订阅,大号"X 天"剩余、订阅名、首次正式扣费的金额和日期。
 private struct TrialPanel: View {
     @EnvironmentObject private var store: SubscriptionStore
+    @State private var detailing: Subscription?
 
     private var trials: [Subscription] { store.trialSubscriptions }
 
@@ -1044,9 +1055,18 @@ private struct TrialPanel: View {
                 VStack(spacing: 0) {
                     ForEach(Array(trials.enumerated()), id: \.element.id) { i, sub in
                         if i > 0 { Hairline() }
-                        row(sub)
+                        Button { detailing = sub } label: {
+                            row(sub).contentShape(Rectangle())
+                        }
+                        .buttonStyle(.plain)
                     }
                 }
+            }
+            .sheet(item: $detailing) { sub in
+                SubscriptionDetailSheet(subscriptionID: sub.id)
+                    .environmentObject(store)
+                    .presentationDetents([.medium, .large])
+                    .presentationDragIndicator(.visible)
             }
         }
     }

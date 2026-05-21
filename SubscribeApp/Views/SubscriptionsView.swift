@@ -2,7 +2,8 @@ import SwiftUI
 
 struct SubscriptionsView: View {
     @EnvironmentObject private var store: SubscriptionStore
-    @State private var editing: Subscription?
+    /// 点一条订阅先弹"详情"半屏卡片(SubscriptionDetailSheet),里面再进编辑器。
+    @State private var detailing: Subscription?
     @State private var search = ""
     @State private var sort: SortOption = .addedNewest
     /// 视图换算口径:把所有订阅的金额换算到这个周期下展示(月/季/年)。
@@ -73,7 +74,7 @@ struct SubscriptionsView: View {
                     } else if viewMode == .list {
                         LazyVStack(spacing: AppTheme.Space.m) {
                             ForEach(Array(rows.enumerated()), id: \.element.id) { i, sub in
-                                Button { editing = sub } label: {
+                                Button { detailing = sub } label: {
                                     Row(
                                         subscription: sub,
                                         viewPeriod: viewPeriod,
@@ -90,7 +91,7 @@ struct SubscriptionsView: View {
                         // 实现:遇到下一张卡片就放进当前更短的那一列,真的"流"起来。
                         MasonryGrid(columns: 2, spacing: AppTheme.Space.m) {
                             ForEach(Array(rows.enumerated()), id: \.element.id) { i, sub in
-                                Button { editing = sub } label: {
+                                Button { detailing = sub } label: {
                                     GridCard(subscription: sub, viewPeriod: viewPeriod)
                                 }
                                 .buttonStyle(.plain)
@@ -113,7 +114,12 @@ struct SubscriptionsView: View {
                     .padding(.bottom, AppTheme.Space.s)
             }
             .toolbar(.hidden, for: .navigationBar)
-            .sheet(item: $editing) { SubscriptionEditorView(subscription: $0) }
+            .sheet(item: $detailing) { sub in
+                SubscriptionDetailSheet(subscriptionID: sub.id)
+                    .environmentObject(store)
+                    .presentationDetents([.medium, .large])
+                    .presentationDragIndicator(.visible)
+            }
         }
     }
 

@@ -103,14 +103,22 @@ struct CategoryDetailView: View {
     }
 
     /// 底部那一排订阅图标。最多展示 8 个,超过用 "+N" 简略指示还有几个没显示。
+    /// 故意不排得整整齐齐 —— 每个图标按 id 派生一组稳定的"乱序"参数(上下偏移 +
+    /// 轻微旋转 + 微缩放),做出"随手撒在桌上"的松散感,比一字排开更有生活气。
+    /// 用 id 哈希派生保证同一进程内滚动时不抖动。
     @ViewBuilder
     private func iconRow(subs: [Subscription]) -> some View {
         let visible = Array(subs.prefix(8))
         let overflow = max(0, subs.count - 8)
-        HStack(spacing: 6) {
+        HStack(spacing: 2) {
             ForEach(visible) { sub in
+                let j = Self.jitter(for: sub)
                 CategoryGlyph(subscription: sub, size: 36)
-                    .shadow(color: .black.opacity(0.12), radius: 3, x: 0, y: 2)
+                    .shadow(color: .black.opacity(0.14), radius: 3, x: 0, y: 2)
+                    .scaleEffect(j.scale)
+                    .rotationEffect(.degrees(j.angle))
+                    .offset(y: j.dy)
+                    .zIndex(j.z)
             }
             if overflow > 0 {
                 Text("+\(overflow)")
@@ -121,6 +129,19 @@ struct CategoryDetailView: View {
                     .glassBorder(cornerRadius: 10)
             }
         }
+        // 给整排留一点上下余量,免得旋转 + 偏移后的图标被卡片裁掉边角。
+        .padding(.vertical, 8)
+    }
+
+    /// 由订阅 id 派生的稳定"乱序"参数。同一 id 在一次运行内永远得到同一组值,
+    /// 所以图标不会在滚动 / 重绘时乱跳。
+    private static func jitter(for sub: Subscription) -> (dy: CGFloat, angle: Double, scale: CGFloat, z: Double) {
+        let h = abs(sub.id.uuidString.hashValue)
+        let dy = CGFloat(h % 11) - 5            // -5...5 pt 上下错位
+        let angle = Double((h / 11) % 19) - 9   // -9...9 度倾斜
+        let scale = 0.9 + CGFloat((h / 211) % 5) * 0.05  // 0.90...1.10 微缩放
+        let z = Double((h / 23) % 7)            // 随机叠放层级,重叠时谁压谁不固定
+        return (dy, angle, scale, z)
     }
 }
 
