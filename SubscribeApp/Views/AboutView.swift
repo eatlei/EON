@@ -6,6 +6,7 @@ enum AppLinks {
     // TODO: replace with the published URLs once available.
     static let privacyPolicy = URL(string: "https://eatlei.github.io/eon-site/privacy.html")!
     static let termsOfUse    = URL(string: "https://eatlei.github.io/eon-site/terms.html")!
+    static let changelog     = URL(string: "https://eatlei.github.io/eon-site/changelog.html")!
     static let appStoreID    = "0000000000" // TODO: set after first App Store release
     static var appStoreReviewURL: URL { URL(string: "itms-apps://itunes.apple.com/app/id\(appStoreID)?action=write-review")! }
     static var appStoreShareURL: URL { URL(string: "https://apps.apple.com/app/id\(appStoreID)")! }
@@ -85,25 +86,16 @@ struct AboutView: View {
                         Text("使用条款").foregroundStyle(AppTheme.ink)
                     }
                 }
-                NavigationLink {
-                    AcknowledgmentsView()
-                } label: {
-                    HStack(spacing: 12) {
-                        SettingsIcon(name: "heart.text.square")
-                        Text("致谢")
-                    }
-                }
             } header: {
                 Text("法律")
             }
 
             Section {
-                NavigationLink {
-                    VersionHistoryView()
-                } label: {
+                // 版本历史改为跳转到线上更新日志(由作者在站点维护)。
+                Link(destination: AppLinks.changelog) {
                     HStack(spacing: 12) {
                         SettingsIcon(name: "clock.arrow.circlepath")
-                        Text("版本历史")
+                        Text("版本历史").foregroundStyle(AppTheme.ink)
                     }
                 }
             } header: {
@@ -197,7 +189,9 @@ struct AboutView: View {
         let b = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "1"
         let ios = UIDevice.current.systemVersion
         let model = deviceModelIdentifier()
-        let intro = String(localized: "请在此描述你的问题或建议：")
+        // 带标题的填空模板 —— 用户打开邮件就能照着分段填,不用对着空白发愁。
+        let scaffold = String(localized: "【问题描述】\n\n\n【复现步骤】\n\n\n【期望结果】\n\n")
+        let note = String(localized: "——— 以下为诊断信息,请勿删除 ———")
         // 诊断信息块:版本 / 系统 / 机型 / 语言 / 时间。时间用 ISO8601 含时区,
         // 方便定位"什么时候、哪个版本、什么环境"出的问题。这些都是设备本地信息,
         // 只有用户点了发送、确认邮件内容后才会带出去。
@@ -206,10 +200,8 @@ struct AboutView: View {
         df.formatOptions = [.withInternetDateTime]
         let now = df.string(from: Date())
         let body = """
-        \(intro)
-
-
-        ——
+        \(scaffold)
+        \(note)
         App: EON v\(v) (\(b))
         iOS: \(ios)
         Device: \(model)
@@ -232,12 +224,11 @@ struct AboutView: View {
     private func featureRequestMailURL() -> URL {
         let v = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
         let b = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "1"
-        let intro = String(localized: "想要 EON 增加什么功能？在这里告诉我：")
+        let scaffold = String(localized: "【想要的功能】\n\n\n【它能帮你解决什么】\n\n")
+        let note = String(localized: "——— 以下为诊断信息,请勿删除 ———")
         let body = """
-        \(intro)
-
-
-        ——
+        \(scaffold)
+        \(note)
         App: EON v\(v) (\(b))
         """
         let subject = String(localized: "EON 功能建议")
@@ -249,21 +240,6 @@ struct AboutView: View {
             URLQueryItem(name: "body", value: body)
         ]
         return c.url ?? URL(string: "mailto:leonguooct@gmail.com")!
-    }
-}
-
-struct AcknowledgmentsView: View {
-    var body: some View {
-        List {
-            Section {
-                Text("暂无第三方依赖。")
-                    .foregroundStyle(.secondary)
-            }
-        }
-        .listStyle(.insetGrouped)
-        .scrollContentBackground(.visible)
-        .navigationTitle("致谢")
-        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
