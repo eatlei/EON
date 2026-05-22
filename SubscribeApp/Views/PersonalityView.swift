@@ -126,18 +126,21 @@ struct PersonalityView: View {
         }
     }
 
-    /// 请求相册权限后,用 PHPhotoLibrary 异步写入卡片图。
+    /// 请求相册权限后,写入卡片图。
+    /// 用回调版 performChanges 包成 async continuation,避免 async 版本与 MainActor 潜在死锁。
     @MainActor
     private func saveToPhotos() async {
         guard let img = cardImage else { return }
         let status = await PHPhotoLibrary.requestAuthorization(for: .addOnly)
         guard status == .authorized || status == .limited else { return }
-        do {
-            try await PHPhotoLibrary.shared().performChanges {
+        await withCheckedContinuation { (cont: CheckedContinuation<Void, Never>) in
+            PHPhotoLibrary.shared().performChanges({
                 PHAssetChangeRequest.creationRequestForAsset(from: img)
-            }
-            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) { savedToPhotos = true }
-        } catch { }
+            }, completionHandler: { _, _ in
+                cont.resume()
+            })
+        }
+        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) { savedToPhotos = true }
     }
 
     private func circleButton(system: String) -> some View {

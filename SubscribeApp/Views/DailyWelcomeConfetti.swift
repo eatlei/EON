@@ -47,11 +47,13 @@ private struct GlassBallView: View {
             )
 
             // 底部暗角:右下方渐深,赋予球体厚度感。
+            // 颜色顺序必须是 [dark, clear]:dark 在渐变中心(右下),clear 在外围;
+            // endRadius 之外 clamp 到 clear,避免整个 top-left 区域都被压暗。
             RadialGradient(
-                colors: [.clear, .black.opacity(0.22)],
-                center: UnitPoint(x: 0.72, y: 0.80),
-                startRadius: size * 0.18,
-                endRadius: size * 0.50
+                colors: [.black.opacity(0.26), .clear],
+                center: UnitPoint(x: 0.72, y: 0.78),
+                startRadius: 0,
+                endRadius: size * 0.52
             )
         }
         .frame(width: size, height: size)
