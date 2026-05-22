@@ -13,6 +13,8 @@ struct DashboardView: View {
     /// 由 DailyWelcomeTracker 通过 UserDefaults 记录最后日期。
     @State private var showDailyWelcome = false
     @State private var path: [DashboardRoute] = []
+    /// 人格入口可见性 —— 上滑超过阈值后淡出,回滚到顶部时恢复。
+    @State private var showPersonalityButton = true
 
     var body: some View {
         NavigationStack(path: $path) {
@@ -26,6 +28,17 @@ struct DashboardView: View {
                     ScrollViewReader { proxy in
                         ScrollView {
                             VStack(spacing: AppTheme.Space.xl) {
+                                // 隐形的滚动位置追踪器:挂在 VStack 最顶部,0 高度,
+                                // 读取自身在 dashScroll 坐标空间的 minY —— 随页面内容
+                                // 同步移动,不影响布局,用于控制人格入口按钮可见性。
+                                GeometryReader { geo in
+                                    Color.clear.preference(
+                                        key: DashScrollOffsetKey.self,
+                                        value: geo.frame(in: .named("dashScroll")).minY
+                                    )
+                                }
+                                .frame(height: 0)
+
                                 HeroTotal(period: period).reveal(0)
                                 // 试用面板紧跟在总额下面,只有当用户标了试用
                                 // 订阅时才出现 —— 提醒首次正式扣费倒计时,
@@ -66,6 +79,19 @@ struct DashboardView: View {
                         }
                         .scrollDismissesKeyboard(.interactively)
                         .background(AppTheme.canvas.ignoresSafeArea())
+                        // 命名坐标空间:GeometryReader 在 VStack 顶部读取自身 minY
+                        // 来计算滚动量。下滑超过 80pt 后收起人格按钮,回滚则恢复。
+                        .coordinateSpace(name: "dashScroll")
+                        .onPreferenceChange(DashScrollOffsetKey.self) { y in
+                            // y > 0: 在顶部(或弹性超出顶部);y 变负 = 向下滚动。
+                            // 阈值 -80:留足缓冲,避免轻微触摸就触发。
+                            let show = y > -80
+                            if show != showPersonalityButton {
+                                withAnimation(.easeInOut(duration: 0.22)) {
+                                    showPersonalityButton = show
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -73,7 +99,7 @@ struct DashboardView: View {
                 if !store.activeSubscriptions.isEmpty {
                     // 吸顶 Header:不加任何底板,只保留按钮悬浮。胶囊本身已
                     // 有 .glassEffect 玻璃质感,内容滚到下面会自然透出。
-                    DashboardHeader(period: $period)
+                    DashboardHeader(period: $period, showPersonality: showPersonalityButton)
                         .padding(.horizontal, AppTheme.Space.xl)
                         .padding(.top, AppTheme.Space.s)
                         .padding(.bottom, AppTheme.Space.s)
@@ -131,9 +157,18 @@ struct DashboardView: View {
     }
 }
 
+/// 滚动偏移 PreferenceKey:DashboardView 里 VStack 顶部的 0-height GeometryReader
+/// 把自身 minY(在 dashScroll 坐标空间)往上报,用于判断用户是否已经滚动离开顶部。
+private struct DashScrollOffsetKey: PreferenceKey {
+    nonisolated(unsafe) static var defaultValue: CGFloat = 0
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) { value = nextValue() }
+}
+
 private struct DashboardHeader: View {
     @EnvironmentObject private var store: SubscriptionStore
     @Binding var period: SpendPeriod
+    /// 由父层根据滚动位置控制;false 时人格按钮淡出 + 缩小。
+    var showPersonality: Bool = true
 
     /// SegmentedPill 在切换时是用 withAnimation 包的赋值;但 period 这个全局
     /// state 一变,Hero/Stats/Lifetime 等所有跟 period 相关的子视图都会重算,
@@ -161,9 +196,10 @@ private struct DashboardHeader: View {
             .frame(maxWidth: 200)  // 三档,留点空间不要顶到右边
 
             Spacer()
-            // 订阅人格入口:回到右上角,但做成轻量文字按钮(非常驻胶囊)。
-            // 只有"从没打开过 / 人格变化了"时才高亮 + 脉动提示。
+            // 订阅人格入口:上滑时淡出 + 缩小收起(不吸顶常驻),回滚顶部时恢复。
             PersonalityEntry()
+                .opacity(showPersonality ? 1 : 0)
+                .scaleEffect(showPersonality ? 1 : 0.75, anchor: .trailing)
         }
     }
 }

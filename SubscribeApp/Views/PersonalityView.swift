@@ -44,24 +44,36 @@ struct PersonalityView: View {
                 .ignoresSafeArea()
                 .onTapGesture { dismiss() }
 
-            // 卡片整体居中:用 minHeight = 屏高 + 居中对齐;内容过高时可滚动。
+            // 卡片整体居中:topBar + 卡片一起作为 VStack,在屏高内垂直居中。
+            // 这样分享 / 关闭按钮紧贴卡片顶部,而不是悬浮在屏幕最顶端。
             GeometryReader { geo in
                 ScrollView(showsIndicators: false) {
-                    PersonaPosterCard(type: type, subs: iconSubs, stats: shareStats, play: play)
-                        .padding(.horizontal, AppTheme.Space.l)
-                        .readableWidth(540)
-                        .frame(maxWidth: .infinity)
-                        .frame(minHeight: geo.size.height, alignment: .center)
+                    VStack(spacing: AppTheme.Space.s) {
+                        topBar
+                        PersonaPosterCard(type: type, subs: iconSubs, stats: shareStats, play: play)
+                            .padding(.horizontal, AppTheme.Space.l)
+                            .readableWidth(540)
+                            .frame(maxWidth: .infinity)
+                    }
+                    .frame(minHeight: geo.size.height, alignment: .center)
                 }
             }
             .opacity(play ? 1 : 0)
             .scaleEffect(play ? 1 : 0.94)
 
-            // 顶部按钮浮在最上层(分享 / 关闭)。
+            // Loading 阶段的关闭按钮:卡片还没显示时保留一个 X 供用户随时退出。
+            // 卡片出现(play = true)后淡出,由 topBar 里的 X 接管。
             VStack {
-                topBar
+                HStack {
+                    Spacer()
+                    Button { dismiss() } label: { circleButton(system: "xmark") }
+                }
+                .padding(.horizontal, AppTheme.Space.l)
+                .padding(.top, AppTheme.Space.s)
                 Spacer()
             }
+            .opacity(play ? 0 : 1)
+            .animation(.easeOut(duration: 0.3), value: play)
 
             if isGenerating {
                 GeneratingOverlay(tint: type.tint)
@@ -72,7 +84,8 @@ struct PersonalityView: View {
         .task { await generateAndReveal() }
     }
 
-    // 顶部一行:分享 + 关闭(圆形玻璃按钮,浮在蒙层上)。
+    // 顶部一行:分享 + 关闭(圆形玻璃按钮,紧贴卡片上方)。
+    // 该 view 随卡片一起在 play=true 时出现,所以不需要自己的 opacity 控制。
     private var topBar: some View {
         HStack {
             if let img = cardImage {
@@ -83,13 +96,14 @@ struct PersonalityView: View {
                 ) {
                     circleButton(system: "square.and.arrow.up")
                 }
-                .opacity(play ? 1 : 0)
+            } else {
+                // 占位,保持布局稳定(cardImage 在 play=true 前已经渲染好,极少为 nil)
+                circleButton(system: "square.and.arrow.up").hidden()
             }
             Spacer()
             Button { dismiss() } label: { circleButton(system: "xmark") }
         }
         .padding(.horizontal, AppTheme.Space.l)
-        .padding(.top, AppTheme.Space.s)
     }
 
     private func circleButton(system: String) -> some View {
@@ -335,17 +349,16 @@ private struct PersonaPosterCard: View {
         }
     }
 
-    // 底部:一行展示 订阅 / 分类 / 最多订阅,下面居中署名。
+    // 底部:三个等宽等高的弱化数据胶囊(订阅 / 分类 / 最多订阅),下面居中署名。
+    // 三个格子用 maxWidth: .infinity 均分 HStack 宽度,高度由 minHeight 锁齐。
     private var footer: some View {
         VStack(spacing: AppTheme.Space.m) {
             HStack(spacing: AppTheme.Space.s) {
-                Spacer(minLength: 0)
-                statChip(value: "\(stats.count)", label: "订阅")
-                statChip(value: "\(stats.categoryCount)", label: "分类")
+                infoChip(value: "\(stats.count)", label: "订阅")
+                infoChip(value: "\(stats.categoryCount)", label: "分类")
                 if let title = stats.topCategoryTitle, stats.topCategoryCount > 0 {
-                    topCategoryChip(title: title, count: stats.topCategoryCount)
+                    infoChip(value: title, label: "最多订阅")
                 }
-                Spacer(minLength: 0)
             }
             Text("由 EON 生成 · 仅供娱乐")
                 .font(.system(size: 10, weight: .semibold))
@@ -354,48 +367,28 @@ private struct PersonaPosterCard: View {
         }
     }
 
-    /// 头号结果:订阅最多的分类(主题色胶囊,跟数据胶囊同高,排在同一行)。
-    private func topCategoryChip(title: String, count: Int) -> some View {
-        VStack(spacing: 0) {
-            HStack(spacing: 4) {
-                Text(title)
-                    .font(.system(size: 13, weight: .heavy, design: .rounded))
-                    .foregroundStyle(.white)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.7)
-                Text(verbatim: "\(count)")
-                    .font(.system(size: 11, weight: .bold, design: .rounded).monospacedDigit())
-                    .foregroundStyle(.white.opacity(0.95))
-            }
-            Text("最多订阅")
-                .font(.system(size: 9, weight: .semibold))
-                .foregroundStyle(.white.opacity(0.85))
-        }
-        .frame(minWidth: 64)
-        .padding(.horizontal, 10)
-        .padding(.vertical, 7)
-        .background(
-            LinearGradient(colors: [type.tint, type.tint.opacity(0.8)],
-                           startPoint: .topLeading, endPoint: .bottomTrailing),
-            in: RoundedRectangle(cornerRadius: 10, style: .continuous)
-        )
-        .shadow(color: type.tint.opacity(0.3), radius: 6, x: 0, y: 3)
-    }
-
-    private func statChip(value: String, label: LocalizedStringKey) -> some View {
-        VStack(spacing: 0) {
+    /// 统一的数据胶囊:三个格子外形、颜色完全一致,视觉弱化不抢主体。
+    /// maxWidth: .infinity 配合父层 HStack 让三格平分宽度;minHeight 锁齐高度。
+    private func infoChip(value: String, label: LocalizedStringKey) -> some View {
+        VStack(spacing: 2) {
             Text(value)
-                .font(.system(size: 18, weight: .heavy, design: .rounded).monospacedDigit())
-                .foregroundStyle(AppTheme.ink)
+                .font(.system(size: 13, weight: .bold, design: .rounded).monospacedDigit())
+                .foregroundStyle(AppTheme.ink.opacity(0.65))
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
             Text(label)
-                .font(.system(size: 9, weight: .semibold))
+                .font(.system(size: 9, weight: .medium))
                 .foregroundStyle(AppTheme.secondary)
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
         }
-        .frame(minWidth: 52)
-        .padding(.vertical, 7)
-        .background(type.tint.opacity(0.10), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 10, style: .continuous)
-            .stroke(type.tint.opacity(0.25), lineWidth: 0.5))
+        .frame(maxWidth: .infinity, minHeight: 48)
+        .background(AppTheme.ink.opacity(0.05),
+                    in: RoundedRectangle(cornerRadius: 10, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                .stroke(AppTheme.ink.opacity(0.08), lineWidth: 0.5)
+        )
     }
 
     // 卡面:surface 底 + 柔和主题色光团(mesh 质感)+ 科技点阵纹理 + 顶部微染。

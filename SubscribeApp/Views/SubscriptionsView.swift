@@ -5,7 +5,7 @@ struct SubscriptionsView: View {
     /// 点一条订阅先弹"详情"半屏卡片(SubscriptionDetailSheet),里面再进编辑器。
     @State private var detailing: Subscription?
     @State private var search = ""
-    @State private var sort: SortOption = .addedNewest
+    @State private var sort: SortOption = .nextRenewal
     /// 视图换算口径:把所有订阅的金额换算到这个周期下展示(月/季/年)。
     /// 例:年付订阅 ¥120 在"按月"下显示 ¥10/月,在"按季"下显示 ¥30/季。
     @State private var viewPeriod: ViewPeriod = .monthly
@@ -26,14 +26,15 @@ struct SubscriptionsView: View {
                 || sub.category.rawValue.localizedCaseInsensitiveContains(search)
         }
         switch sort {
+        case .nextRenewal:
+            // 最近要扣费的排最上 —— 让用户第一眼看到"快到了"的订阅。
+            return f.sorted { $0.upcomingBillingDate() < $1.upcomingBillingDate() }
+        case .subscriptionAge:
+            // 订阅最久的排最上(effectiveStartDate 最小 = 最早开始)。
+            return f.sorted { $0.effectiveStartDate < $1.effectiveStartDate }
         case .addedNewest:
             // 最新加的排最上;老数据没 startDate 的退到 nextBillingDate 当替身。
             return f.sorted { $0.effectiveStartDate > $1.effectiveStartDate }
-        case .duration:
-            return f.sorted {
-                $0.billingCycle.days(customDays: $0.customCycleDays)
-                > $1.billingCycle.days(customDays: $1.customCycleDays)
-            }
         case .costHighLow:
             return f.sorted {
                 $0.monthlyCost(in: store.baseCurrency, converter: store.converter)
@@ -221,11 +222,12 @@ struct SubscriptionsView: View {
 }
 
 private enum SortOption: String, CaseIterable, Identifiable {
-    /// 按添加时间(startDate)倒序 —— 最新加的在最上。之前叫 renewalDate
-    /// 是按 nextBillingDate 排,语义偏 "下次扣费",改名 + 改字段后更直观。
+    /// 按最近续费时间升序 —— 最快到期的排最上,一眼看到"快要续费"的那几个(默认)。
+    case nextRenewal
+    /// 按订阅时长降序 —— effectiveStartDate 最早的排最上,体现"用得最久的"。
+    case subscriptionAge
+    /// 按添加时间(startDate)倒序 —— 最新加的在最上。
     case addedNewest
-    /// 按周期长度从长到短(周付 < 月付 < 季付 < 年付,这里反向显示 → 最长在前)
-    case duration
     /// 按月费高到低
     case costHighLow
     /// 按月费低到高
@@ -240,26 +242,28 @@ private enum SortOption: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .addedNewest: String(localized: "按添加时间")
-        case .duration:    String(localized: "按周期长度")
+        case .nextRenewal:    String(localized: "按续费时间")
+        case .subscriptionAge: String(localized: "按订阅时长")
+        case .addedNewest:    String(localized: "按添加时间")
         // 原来叫 "按费用 · 高 → 低" / "按费用 · 低 → 高",在 Menu 的窄行里容易换行;
         // 缩成 "费用从高到低" / "费用从低到高" 6 个字,无中点 / 箭头特殊字符,
         // 任何字号 / 语言都能稳稳单行展示。
-        case .costHighLow: String(localized: "费用从高到低")
-        case .costLowHigh: String(localized: "费用从低到高")
-        case .name:        String(localized: "按名称")
-        case .random:      String(localized: "随机")
+        case .costHighLow:    String(localized: "费用从高到低")
+        case .costLowHigh:    String(localized: "费用从低到高")
+        case .name:           String(localized: "按名称")
+        case .random:         String(localized: "随机")
         }
     }
 
     var icon: String {
         switch self {
-        case .addedNewest: "calendar.badge.plus"
-        case .duration:    "timer"
-        case .costHighLow: "arrow.down.to.line"
-        case .costLowHigh: "arrow.up.to.line"
-        case .name:        "textformat"
-        case .random:      "shuffle"
+        case .nextRenewal:    "calendar.badge.clock"
+        case .subscriptionAge: "hourglass.bottomhalf.filled"
+        case .addedNewest:    "calendar.badge.plus"
+        case .costHighLow:    "arrow.down.to.line"
+        case .costLowHigh:    "arrow.up.to.line"
+        case .name:           "textformat"
+        case .random:         "shuffle"
         }
     }
 }
