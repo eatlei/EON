@@ -1,5 +1,6 @@
 import SwiftUI
 import UIKit
+import Photos
 
 /// 「订阅人格」全屏蒙层弹窗:在变暗的 App 之上浮起一整张包装海报式卡片。
 /// 中央是放大的人格形象,两侧像"装备"一样陈列用户订阅的 App 图标,配上标题 /
@@ -17,6 +18,7 @@ struct PersonalityView: View {
     @State private var play = false
     @State private var revealTick = 0
     @State private var cardImage: UIImage?
+    @State private var savedToPhotos = false
 
     /// 卡上要陈列的订阅图标:取活跃订阅前 6 个(两侧各最多 3 个)。
     private var iconSubs: [Subscription] { Array(store.activeSubscriptions.prefix(6)) }
@@ -44,22 +46,26 @@ struct PersonalityView: View {
                 .ignoresSafeArea()
                 .onTapGesture { dismiss() }
 
-            // 卡片整体居中:shareBar + 卡片一起作为 VStack,在屏高内垂直居中。
-            // 这样分享按钮紧贴卡片顶部左侧展示,视觉上属于卡片。
+            // 卡片居中:单独在 ScrollView 内垂直居中,操作按钮移至底部浮层。
             GeometryReader { geo in
                 ScrollView(showsIndicators: false) {
-                    VStack(spacing: AppTheme.Space.s) {
-                        shareBar
-                        PersonaPosterCard(type: type, subs: iconSubs, stats: shareStats, play: play)
-                            .padding(.horizontal, AppTheme.Space.l)
-                            .readableWidth(540)
-                            .frame(maxWidth: .infinity)
-                    }
-                    .frame(minHeight: geo.size.height, alignment: .center)
+                    PersonaPosterCard(type: type, subs: iconSubs, stats: shareStats, play: play)
+                        .padding(.horizontal, AppTheme.Space.l)
+                        .readableWidth(540)
+                        .frame(maxWidth: .infinity)
+                        .frame(minHeight: geo.size.height, alignment: .center)
                 }
             }
             .opacity(play ? 1 : 0)
             .scaleEffect(play ? 1 : 0.94)
+
+            // 底部操作栏:存相册 + 分享,随卡片一同浮现。
+            VStack {
+                Spacer()
+                bottomBar
+                    .padding(.bottom, 48)
+            }
+            .opacity(play ? 1 : 0)
 
             // 关闭按钮固定在屏幕右上角,整个生命周期位置不变。
             // loading / 卡片显示 / 卡片可交互 三个阶段都在同一个位置,没有任何跳动。
@@ -82,24 +88,56 @@ struct PersonalityView: View {
         .task { await generateAndReveal() }
     }
 
-    // 卡片顶部的分享按钮行 —— 随卡片一起 play=true 时淡入。
-    // 关闭按钮不在这里,它在 ZStack 的固定层里(位置从不移动)。
-    private var shareBar: some View {
-        HStack {
+    // 底部操作栏:存相册 + 分享两个圆形按钮,随卡片一起 play=true 时淡入。
+    private var bottomBar: some View {
+        HStack(spacing: 36) {
+            // 存相册
+            Button { Task { await saveToPhotos() } } label: {
+                VStack(spacing: 5) {
+                    circleButton(system: savedToPhotos ? "checkmark" : "square.and.arrow.down")
+                    Text(savedToPhotos ? "已保存" : "存相册")
+                        .font(.caption2.weight(.semibold))
+                        .foregroundStyle(.white.opacity(0.75))
+                }
+            }
+            .disabled(cardImage == nil)
+
+            // 分享
             if let img = cardImage {
                 ShareLink(
                     item: Image(uiImage: img),
                     preview: SharePreview(Text(verbatim: "EON · \(type.name)"),
                                           image: Image(uiImage: img))
                 ) {
-                    circleButton(system: "square.and.arrow.up")
+                    VStack(spacing: 5) {
+                        circleButton(system: "square.and.arrow.up")
+                        Text("分享")
+                            .font(.caption2.weight(.semibold))
+                            .foregroundStyle(.white.opacity(0.75))
+                    }
                 }
             } else {
-                circleButton(system: "square.and.arrow.up").hidden()
+                VStack(spacing: 5) {
+                    circleButton(system: "square.and.arrow.up")
+                    Text("分享").font(.caption2.weight(.semibold))
+                }
+                .hidden()
             }
-            Spacer()
         }
-        .padding(.horizontal, AppTheme.Space.l)
+    }
+
+    /// 请求相册权限后,用 PHPhotoLibrary 异步写入卡片图。
+    @MainActor
+    private func saveToPhotos() async {
+        guard let img = cardImage else { return }
+        let status = await PHPhotoLibrary.requestAuthorization(for: .addOnly)
+        guard status == .authorized || status == .limited else { return }
+        do {
+            try await PHPhotoLibrary.shared().performChanges {
+                PHAssetChangeRequest.creationRequestForAsset(from: img)
+            }
+            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) { savedToPhotos = true }
+        } catch { }
     }
 
     private func circleButton(system: String) -> some View {

@@ -22,56 +22,41 @@ private struct ConfettiParticle: Identifiable {
     let scale: CGFloat
 }
 
-/// 玻璃球质感的订阅图标:圆形裁切 + 高光 + 折射阴影,仿 Liquid Glass 效果。
+/// 玻璃球质感的订阅图标:外层 clipShape(Circle()) 统一裁出正圆,
+/// 再叠两层 RadialGradient 模拟高光 + 暗角,无描边。
 private struct GlassBallView: View {
     let subscription: Subscription
     let size: CGFloat
 
     var body: some View {
         ZStack {
-            // 图标本体:圆形裁切,比球体略小留出玻璃边距。
-            CategoryGlyph(subscription: subscription, size: size * 0.86)
-                .clipShape(Circle())
+            // 图标本体:满尺寸填满球面,由外层 clipShape 裁为正圆。
+            // CategoryGlyph 内部是圆角矩形,四角会被外层 Circle 裁掉。
+            CategoryGlyph(subscription: subscription, size: size)
 
-            // 顶部高光:模拟球面折射的主镜面反射区域(左上方亮斑)。
+            // 顶部镜面高光:左上方亮斑,模拟球面折射。
             RadialGradient(
                 colors: [
-                    .white.opacity(0.78),
-                    .white.opacity(0.30),
+                    .white.opacity(0.80),
+                    .white.opacity(0.25),
                     .clear
                 ],
-                center: UnitPoint(x: 0.3, y: 0.22),
+                center: UnitPoint(x: 0.28, y: 0.20),
                 startRadius: 0,
-                endRadius: size * 0.36
+                endRadius: size * 0.40
             )
-            .clipShape(Circle())
 
-            // 底部折射暗角:给球体加深度感。
+            // 底部暗角:右下方渐深,赋予球体厚度感。
             RadialGradient(
                 colors: [.clear, .black.opacity(0.22)],
-                center: UnitPoint(x: 0.68, y: 0.78),
+                center: UnitPoint(x: 0.72, y: 0.80),
                 startRadius: size * 0.18,
-                endRadius: size * 0.52
+                endRadius: size * 0.50
             )
-            .clipShape(Circle())
-
-            // 玻璃边缘:顶亮底暗的渐变描边模拟球面边缘折射。
-            Circle()
-                .stroke(
-                    LinearGradient(
-                        colors: [
-                            .white.opacity(0.85),
-                            .white.opacity(0.25),
-                            .white.opacity(0.05)
-                        ],
-                        startPoint: UnitPoint(x: 0.2, y: 0.0),
-                        endPoint: UnitPoint(x: 0.9, y: 1.0)
-                    ),
-                    lineWidth: 1.2
-                )
         }
         .frame(width: size, height: size)
-        .shadow(color: .black.opacity(0.28), radius: 10, x: 0, y: 6)
+        .clipShape(Circle())   // 外层统一裁切 —— 图标四角 + 渐变一起变正圆,无描边。
+        .shadow(color: .black.opacity(0.30), radius: 8, x: 0, y: 5)
     }
 }
 
