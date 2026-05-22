@@ -44,16 +44,23 @@ struct PersonalityView: View {
                 .ignoresSafeArea()
                 .onTapGesture { dismiss() }
 
-            VStack(spacing: 0) {
-                topBar
+            // 卡片整体居中:用 minHeight = 屏高 + 居中对齐;内容过高时可滚动。
+            GeometryReader { geo in
                 ScrollView(showsIndicators: false) {
                     PersonaPosterCard(type: type, subs: iconSubs, stats: shareStats, play: play)
                         .padding(.horizontal, AppTheme.Space.l)
-                        .padding(.vertical, AppTheme.Space.s)
                         .readableWidth(540)
+                        .frame(maxWidth: .infinity)
+                        .frame(minHeight: geo.size.height, alignment: .center)
                 }
-                .opacity(play ? 1 : 0)
-                .scaleEffect(play ? 1 : 0.94)
+            }
+            .opacity(play ? 1 : 0)
+            .scaleEffect(play ? 1 : 0.94)
+
+            // 顶部按钮浮在最上层(分享 / 关闭)。
+            VStack {
+                topBar
+                Spacer()
             }
 
             if isGenerating {
@@ -162,9 +169,9 @@ struct PersonaShareStats {
     let topCategoryCount: Int
 }
 
-/// 一整张"包装海报"式人格卡:头部品牌行 + 大标题 + 中央放大的形象(两侧陈列订阅
-/// 图标)+ 底部常驻分类与数据。屏幕上可拖拽轻微 3D 倾斜、形象上下浮动、高光循环
-/// 扫过;用 ImageRenderer 出图分享时传 `forSharing` 关掉交互、用固定宽度。
+/// 一整张"包装海报"式人格卡:头部品牌行 + 大标题 + 中央放大的形象(两侧散落陈列
+/// 订阅图标)+ 底部一行数据 + 居中署名。屏幕上可拖拽轻微 3D 倾斜、形象上下浮动;
+/// 用 ImageRenderer 出图分享时传 `forSharing` 关掉交互、用固定宽度。
 private struct PersonaPosterCard: View {
     let type: PersonalityType
     let subs: [Subscription]
@@ -173,10 +180,14 @@ private struct PersonaPosterCard: View {
     var forSharing: Bool = false
 
     @State private var float = false
-    @State private var shine = false
     @GestureState private var drag: CGSize = .zero
 
     private let corner: CGFloat = 30
+
+    // 两侧图标的"随机"摆放(用固定序列,保证稳定 & 出图一致),让陈列不那么死板。
+    private let jitterX: [CGFloat] = [-7, 11, -4, 9, -9, 5]
+    private let jitterY: [CGFloat] = [5, -7, 9, -4, 7, -6]
+    private let jitterRot: [Double] = [-9, 7, -5, 10, -7, 6]
 
     /// 两侧分配:左列拿前一半,右列拿后一半。
     private var leftSubs: [Subscription] { Array(subs.prefix((subs.count + 1) / 2)) }
@@ -199,7 +210,6 @@ private struct PersonaPosterCard: View {
         .frame(maxWidth: forSharing ? 360 : .infinity)
         .background(cardBackground)
         .overlay(cornerTicks)
-        .overlay(shineOverlay)
         .clipShape(RoundedRectangle(cornerRadius: corner, style: .continuous))
         .overlay(
             RoundedRectangle(cornerRadius: corner, style: .continuous)
@@ -218,7 +228,6 @@ private struct PersonaPosterCard: View {
         .onAppear {
             guard !forSharing else { return }
             withAnimation(.easeInOut(duration: 2.6).repeatForever(autoreverses: true)) { float = true }
-            withAnimation(.linear(duration: 3.6).repeatForever(autoreverses: false).delay(0.8)) { shine = true }
         }
     }
 
@@ -261,9 +270,9 @@ private struct PersonaPosterCard: View {
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 
-    // 中央舞台:左列图标 + 放大的形象 + 右列图标
+    // 中央舞台:左列散落图标 + 放大的形象 + 右列散落图标
     private var stage: some View {
-        HStack(alignment: .center, spacing: AppTheme.Space.s) {
+        HStack(alignment: .center, spacing: 2) {
             if !leftSubs.isEmpty {
                 iconColumn(leftSubs, sideOffset: 0)
             }
@@ -273,38 +282,43 @@ private struct PersonaPosterCard: View {
             }
         }
         .frame(maxWidth: .infinity)
-        .frame(minHeight: 270)
+        .frame(minHeight: 300)
     }
 
+    // 两侧图标:无外框、带轻投影,按固定"随机"序列做旋转 / 偏移,显得不那么整齐。
     private func iconColumn(_ items: [Subscription], sideOffset: Int) -> some View {
-        VStack(spacing: AppTheme.Space.s) {
+        VStack(spacing: AppTheme.Space.m) {
             ForEach(Array(items.enumerated()), id: \.element.id) { i, sub in
-                IconBlister(subscription: sub, tint: type.tint)
-                    .scaleEffect(play ? 1 : 0.5)
+                let g = (sideOffset + i) % jitterX.count
+                PersonaIcon(subscription: sub)
+                    .rotationEffect(.degrees(jitterRot[g]))
+                    .offset(x: jitterX[g], y: jitterY[g])
+                    .scaleEffect(play ? 1 : 0.4)
                     .opacity(play ? 1 : 0)
-                    .animation(.spring(response: 0.5, dampingFraction: 0.7)
-                        .delay(0.25 + Double(sideOffset + i) * 0.08), value: play)
+                    .animation(.spring(response: 0.55, dampingFraction: 0.65)
+                        .delay(0.25 + Double(sideOffset + i) * 0.09), value: play)
             }
         }
+        .frame(width: 58)
     }
 
     // 中央形象:放大的主题色光晕 + 透明抠图浮动。
     // 注意:用 `maxWidth: .infinity` + 固定高度的「填充式」光晕,**不要**用固定
-    // 宽度的大 Circle —— 固定 290 宽会把整张卡的最小宽度撑过屏幕,导致溢出。
+    // 宽度的大 Circle —— 固定宽会把整张卡的最小宽度撑过屏幕,导致溢出。
     private var figure: some View {
         ZStack {
             RadialGradient(
                 colors: [type.tint.opacity(0.42), type.tint.opacity(0.12), .clear],
-                center: .center, startRadius: 0, endRadius: 150)
-                .frame(height: 260)
+                center: .center, startRadius: 0, endRadius: 170)
+                .frame(height: 300)
                 .blur(radius: 6)
             artwork
-                .frame(maxWidth: .infinity, maxHeight: 248)
+                .frame(maxWidth: .infinity, maxHeight: 288)
                 .offset(y: float ? -9 : 9)
                 .shadow(color: .black.opacity(0.22), radius: 16, x: 0, y: 12)
         }
         .frame(maxWidth: .infinity)
-        .frame(height: 260)
+        .frame(height: 300)
         .scaleEffect(play ? 1 : 0.8)
         .opacity(play ? 1 : 0)
         .animation(.spring(response: 0.6, dampingFraction: 0.7).delay(0.1), value: play)
@@ -321,51 +335,51 @@ private struct PersonaPosterCard: View {
         }
     }
 
-    // 底部:左侧聚合数字 + 署名,右侧"订阅最多的分类"作为头号结果。
+    // 底部:一行展示 订阅 / 分类 / 最多订阅,下面居中署名。
     private var footer: some View {
-        HStack(alignment: .bottom) {
-            VStack(alignment: .leading, spacing: 8) {
-                HStack(spacing: 6) {
-                    statChip(value: "\(stats.count)", label: "订阅")
-                    statChip(value: "\(stats.categoryCount)", label: "分类")
+        VStack(spacing: AppTheme.Space.m) {
+            HStack(spacing: AppTheme.Space.s) {
+                Spacer(minLength: 0)
+                statChip(value: "\(stats.count)", label: "订阅")
+                statChip(value: "\(stats.categoryCount)", label: "分类")
+                if let title = stats.topCategoryTitle, stats.topCategoryCount > 0 {
+                    topCategoryChip(title: title, count: stats.topCategoryCount)
                 }
-                Text("由 EON 生成 · 仅供娱乐")
-                    .font(.system(size: 9, weight: .semibold))
-                    .foregroundStyle(AppTheme.tertiary)
+                Spacer(minLength: 0)
             }
-            Spacer(minLength: AppTheme.Space.s)
-            if let title = stats.topCategoryTitle, stats.topCategoryCount > 0 {
-                topCategoryBadge(title: title, count: stats.topCategoryCount)
-            }
+            Text("由 EON 生成 · 仅供娱乐")
+                .font(.system(size: 10, weight: .semibold))
+                .foregroundStyle(AppTheme.tertiary)
+                .frame(maxWidth: .infinity, alignment: .center)
         }
     }
 
-    /// 头号结果:订阅最多的分类(主题色徽章,带条数)。
-    private func topCategoryBadge(title: String, count: Int) -> some View {
-        VStack(alignment: .trailing, spacing: 3) {
-            Text(verbatim: "TOP CATEGORY")
-                .font(.system(size: 9, weight: .bold))
-                .tracking(1.5)
-                .foregroundStyle(.white.opacity(0.8))
-            HStack(spacing: 6) {
+    /// 头号结果:订阅最多的分类(主题色胶囊,跟数据胶囊同高,排在同一行)。
+    private func topCategoryChip(title: String, count: Int) -> some View {
+        VStack(spacing: 0) {
+            HStack(spacing: 4) {
                 Text(title)
-                    .font(.system(size: 15, weight: .heavy, design: .rounded))
+                    .font(.system(size: 13, weight: .heavy, design: .rounded))
                     .foregroundStyle(.white)
                     .lineLimit(1)
+                    .minimumScaleFactor(0.7)
                 Text(verbatim: "\(count)")
-                    .font(.system(size: 12, weight: .bold, design: .rounded).monospacedDigit())
-                    .foregroundStyle(.white)
-                    .padding(.horizontal, 6).padding(.vertical, 2)
-                    .background(.white.opacity(0.22), in: Capsule())
+                    .font(.system(size: 11, weight: .bold, design: .rounded).monospacedDigit())
+                    .foregroundStyle(.white.opacity(0.95))
             }
+            Text("最多订阅")
+                .font(.system(size: 9, weight: .semibold))
+                .foregroundStyle(.white.opacity(0.85))
         }
-        .padding(.horizontal, 12).padding(.vertical, 9)
+        .frame(minWidth: 64)
+        .padding(.horizontal, 10)
+        .padding(.vertical, 7)
         .background(
-            LinearGradient(colors: [type.tint, type.tint.opacity(0.78)],
+            LinearGradient(colors: [type.tint, type.tint.opacity(0.8)],
                            startPoint: .topLeading, endPoint: .bottomTrailing),
-            in: RoundedRectangle(cornerRadius: 14, style: .continuous)
+            in: RoundedRectangle(cornerRadius: 10, style: .continuous)
         )
-        .shadow(color: type.tint.opacity(0.35), radius: 8, x: 0, y: 4)
+        .shadow(color: type.tint.opacity(0.3), radius: 6, x: 0, y: 3)
     }
 
     private func statChip(value: String, label: LocalizedStringKey) -> some View {
@@ -422,20 +436,6 @@ private struct PersonaPosterCard: View {
         .allowsHitTesting(false)
     }
 
-    private var shineOverlay: some View {
-        GeometryReader { geo in
-            let w = geo.size.width
-            LinearGradient(colors: [.clear, .white.opacity(0.22), .clear],
-                           startPoint: .top, endPoint: .bottom)
-                .frame(width: w * 0.4)
-                .rotationEffect(.degrees(22))
-                .offset(x: shine ? w * 1.3 : -w * 1.3)
-                .blendMode(.plusLighter)
-        }
-        .clipShape(RoundedRectangle(cornerRadius: corner, style: .continuous))
-        .allowsHitTesting(false)
-    }
-
     @ViewBuilder
     private var brandIcon: some View {
         if let ui = UIImage(named: "EONBrandIcon") {
@@ -451,20 +451,15 @@ private struct PersonaPosterCard: View {
     }
 }
 
-// MARK: - 订阅图标"装备格"
+// MARK: - 订阅图标
 
-/// 单个订阅图标的"泡壳格":白底圆角 + 细描边 + App 图标,像潮玩包装里的配件。
-private struct IconBlister: View {
+/// 两侧陈列的订阅图标:无外框,直接是 App 图标本身,加一层轻投影做出"漂浮"感。
+private struct PersonaIcon: View {
     let subscription: Subscription
-    let tint: Color
 
     var body: some View {
-        CategoryGlyph(subscription: subscription, size: 40)
-            .padding(9)
-            .background(AppTheme.canvas, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
-            .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .stroke(AppTheme.ink.opacity(0.12), lineWidth: 1))
-            .shadow(color: .black.opacity(0.06), radius: 4, x: 0, y: 2)
+        CategoryGlyph(subscription: subscription, size: 46)
+            .shadow(color: .black.opacity(0.18), radius: 6, x: 0, y: 4)
     }
 }
 

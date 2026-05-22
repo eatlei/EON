@@ -27238,6 +27238,429 @@
           }
         }
       }
+    },
+    "正在生成小票…": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正在生成小票…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Generating receipt…"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "レシートを生成中…"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "영수증 생성 중…"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Generando el recibo…"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Génération du reçu…"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Beleg wird erstellt…"
+          }
+        }
+      }
+    },
+    "正在汇总你的消费记录…": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "正在彙整你的消費記錄…"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tallying up your spending…"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "支出を集計しています…"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "지출 내역을 정리하는 중…"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Recopilando tus gastos…"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Calcul de tes dépenses…"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Deine Ausgaben werden zusammengezählt…"
+          }
+        }
+      }
+    },
+    "——— 以下为诊断信息,请勿删除 ———": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "——— 以下為診斷資訊,請勿刪除 ———"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "——— Diagnostics below, please keep ———"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "——— 以下は診断情報です。削除しないでください ———"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "——— 아래는 진단 정보입니다. 삭제하지 마세요 ———"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "——— Datos de diagnóstico, no los borres ———"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "——— Infos de diagnostic, à conserver ———"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "——— Diagnosedaten, bitte nicht löschen ———"
+          }
+        }
+      }
+    },
+    "【问题描述】\n\n\n【复现步骤】\n\n\n【期望结果】\n\n": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "【問題描述】\n\n\n【重現步驟】\n\n\n【期望結果】\n\n"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "[What happened]\n\n\n[Steps to reproduce]\n\n\n[What you expected]\n\n"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "【問題の内容】\n\n\n【再現手順】\n\n\n【期待する結果】\n\n"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "[문제 설명]\n\n\n[재현 방법]\n\n\n[기대한 결과]\n\n"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "[Qué ocurrió]\n\n\n[Pasos para reproducir]\n\n\n[Qué esperabas]\n\n"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "[Description du problème]\n\n\n[Étapes pour reproduire]\n\n\n[Résultat attendu]\n\n"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "[Beschreibung]\n\n\n[Schritte zum Reproduzieren]\n\n\n[Erwartetes Ergebnis]\n\n"
+          }
+        }
+      }
+    },
+    "【想要的功能】\n\n\n【它能帮你解决什么】\n\n": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "【想要的功能】\n\n\n【它能幫你解決什麼】\n\n"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "[Desired feature]\n\n\n[What problem it solves]\n\n"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "【ほしい機能】\n\n\n【どんな課題を解決できるか】\n\n"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "[원하는 기능]\n\n\n[해결되는 문제]\n\n"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "[Función deseada]\n\n\n[Qué problema resuelve]\n\n"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "[Fonctionnalité souhaitée]\n\n\n[Problème résolu]\n\n"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "[Gewünschte Funktion]\n\n\n[Welches Problem es löst]\n\n"
+          }
+        }
+      }
+    },
+    "最多订阅": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最多訂閱"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Most subscribed"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最多サブスク"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "최다 구독"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Más suscrito"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Le plus abonné"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meiste Abos"
+          }
+        }
+      }
+    },
+    "人格图标": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "人格圖示"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Persona icon"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "パーソナリティアイコン"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "성향 아이콘"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Icono de personalidad"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Icône de personnalité"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Persona-Symbol"
+          }
+        }
+      }
+    },
+    "占位": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "佔位"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Placeholder"
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "プレースホルダー"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "자리 표시자"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Provisional"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Provisoire"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Platzhalter"
+          }
+        }
+      }
+    },
+    "「人格图标」目前是占位图标,后续会替换成跟你人格匹配的专属图标。切换时系统会弹一下确认。": {
+      "extractionState": "manual",
+      "localizations": {
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「人格圖示」目前是佔位圖示,之後會換成與你人格相符的專屬圖示。切換時系統會彈出確認。"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The Persona icon is a placeholder for now; it will be replaced with one matched to your persona. iOS will ask you to confirm when switching."
+          }
+        },
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "「パーソナリティアイコン」は現在プレースホルダーです。今後あなたの人格に合わせた専用アイコンに置き換えます。切り替え時はシステムが確認を表示します。"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "‘성향 아이콘’은 현재 자리 표시자입니다. 추후 당신의 성향에 맞는 전용 아이콘으로 교체됩니다. 전환 시 시스템이 확인을 요청합니다."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "El icono de personalidad es provisional por ahora; se reemplazará por uno que coincida con tu personalidad. iOS te pedirá confirmación al cambiar."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "L’icône de personnalité est provisoire pour l’instant ; elle sera remplacée par une icône adaptée à ta personnalité. iOS te demandera de confirmer lors du changement."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Das Persona-Symbol ist vorerst ein Platzhalter und wird später durch ein passendes Symbol ersetzt. iOS fragt beim Wechsel nach einer Bestätigung."
+          }
+        }
+      }
     }
   },
   "version": "1.0"
