@@ -44,12 +44,12 @@ struct PersonalityView: View {
                 .ignoresSafeArea()
                 .onTapGesture { dismiss() }
 
-            // 卡片整体居中:topBar + 卡片一起作为 VStack,在屏高内垂直居中。
-            // 这样分享 / 关闭按钮紧贴卡片顶部,而不是悬浮在屏幕最顶端。
+            // 卡片整体居中:shareBar + 卡片一起作为 VStack,在屏高内垂直居中。
+            // 这样分享按钮紧贴卡片顶部左侧展示,视觉上属于卡片。
             GeometryReader { geo in
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: AppTheme.Space.s) {
-                        topBar
+                        shareBar
                         PersonaPosterCard(type: type, subs: iconSubs, stats: shareStats, play: play)
                             .padding(.horizontal, AppTheme.Space.l)
                             .readableWidth(540)
@@ -61,8 +61,8 @@ struct PersonalityView: View {
             .opacity(play ? 1 : 0)
             .scaleEffect(play ? 1 : 0.94)
 
-            // Loading 阶段的关闭按钮:卡片还没显示时保留一个 X 供用户随时退出。
-            // 卡片出现(play = true)后淡出,由 topBar 里的 X 接管。
+            // 关闭按钮固定在屏幕右上角,整个生命周期位置不变。
+            // loading / 卡片显示 / 卡片可交互 三个阶段都在同一个位置,没有任何跳动。
             VStack {
                 HStack {
                     Spacer()
@@ -72,8 +72,6 @@ struct PersonalityView: View {
                 .padding(.top, AppTheme.Space.s)
                 Spacer()
             }
-            .opacity(play ? 0 : 1)
-            .animation(.easeOut(duration: 0.3), value: play)
 
             if isGenerating {
                 GeneratingOverlay(tint: type.tint)
@@ -84,9 +82,9 @@ struct PersonalityView: View {
         .task { await generateAndReveal() }
     }
 
-    // 顶部一行:分享 + 关闭(圆形玻璃按钮,紧贴卡片上方)。
-    // 该 view 随卡片一起在 play=true 时出现,所以不需要自己的 opacity 控制。
-    private var topBar: some View {
+    // 卡片顶部的分享按钮行 —— 随卡片一起 play=true 时淡入。
+    // 关闭按钮不在这里,它在 ZStack 的固定层里(位置从不移动)。
+    private var shareBar: some View {
         HStack {
             if let img = cardImage {
                 ShareLink(
@@ -97,11 +95,9 @@ struct PersonalityView: View {
                     circleButton(system: "square.and.arrow.up")
                 }
             } else {
-                // 占位,保持布局稳定(cardImage 在 play=true 前已经渲染好,极少为 nil)
                 circleButton(system: "square.and.arrow.up").hidden()
             }
             Spacer()
-            Button { dismiss() } label: { circleButton(system: "xmark") }
         }
         .padding(.horizontal, AppTheme.Space.l)
     }

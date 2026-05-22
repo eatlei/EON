@@ -22,12 +22,66 @@ private struct ConfettiParticle: Identifiable {
     let scale: CGFloat
 }
 
+/// 玻璃球质感的订阅图标:圆形裁切 + 高光 + 折射阴影,仿 Liquid Glass 效果。
+private struct GlassBallView: View {
+    let subscription: Subscription
+    let size: CGFloat
+
+    var body: some View {
+        ZStack {
+            // 图标本体:圆形裁切,比球体略小留出玻璃边距。
+            CategoryGlyph(subscription: subscription, size: size * 0.86)
+                .clipShape(Circle())
+
+            // 顶部高光:模拟球面折射的主镜面反射区域(左上方亮斑)。
+            RadialGradient(
+                colors: [
+                    .white.opacity(0.78),
+                    .white.opacity(0.30),
+                    .clear
+                ],
+                center: UnitPoint(x: 0.3, y: 0.22),
+                startRadius: 0,
+                endRadius: size * 0.36
+            )
+            .clipShape(Circle())
+
+            // 底部折射暗角:给球体加深度感。
+            RadialGradient(
+                colors: [.clear, .black.opacity(0.22)],
+                center: UnitPoint(x: 0.68, y: 0.78),
+                startRadius: size * 0.18,
+                endRadius: size * 0.52
+            )
+            .clipShape(Circle())
+
+            // 玻璃边缘:顶亮底暗的渐变描边模拟球面边缘折射。
+            Circle()
+                .stroke(
+                    LinearGradient(
+                        colors: [
+                            .white.opacity(0.85),
+                            .white.opacity(0.25),
+                            .white.opacity(0.05)
+                        ],
+                        startPoint: UnitPoint(x: 0.2, y: 0.0),
+                        endPoint: UnitPoint(x: 0.9, y: 1.0)
+                    ),
+                    lineWidth: 1.2
+                )
+        }
+        .frame(width: size, height: size)
+        .shadow(color: .black.opacity(0.28), radius: 10, x: 0, y: 6)
+    }
+}
+
 private struct ConfettiParticleView: View {
     let particle: ConfettiParticle
     let containerSize: CGSize
     @State private var progress: CGFloat = 0
 
     private let duration: TimeInterval = 2.0
+    private let ballSize: CGFloat = 42
 
     var body: some View {
         let startX = particle.startXRatio * containerSize.width
@@ -45,9 +99,10 @@ private struct ConfettiParticleView: View {
             return 1
         }()
 
-        return CategoryGlyph(subscription: particle.subscription, size: 38)
+        return GlassBallView(subscription: particle.subscription, size: ballSize)
             .scaleEffect(particle.scale)
-            .rotationEffect(.degrees(particle.spin * Double(progress)))
+            // 玻璃球滚动感:旋转量比原先小一些,不要转得太快
+            .rotationEffect(.degrees(particle.spin * 0.4 * Double(progress)))
             .opacity(opacity)
             .position(x: x, y: y)
             .onAppear {

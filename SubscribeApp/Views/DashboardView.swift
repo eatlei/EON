@@ -28,17 +28,6 @@ struct DashboardView: View {
                     ScrollViewReader { proxy in
                         ScrollView {
                             VStack(spacing: AppTheme.Space.xl) {
-                                // 隐形的滚动位置追踪器:挂在 VStack 最顶部,0 高度,
-                                // 读取自身在 dashScroll 坐标空间的 minY —— 随页面内容
-                                // 同步移动,不影响布局,用于控制人格入口按钮可见性。
-                                GeometryReader { geo in
-                                    Color.clear.preference(
-                                        key: DashScrollOffsetKey.self,
-                                        value: geo.frame(in: .named("dashScroll")).minY
-                                    )
-                                }
-                                .frame(height: 0)
-
                                 HeroTotal(period: period).reveal(0)
                                 // 试用面板紧跟在总额下面,只有当用户标了试用
                                 // 订阅时才出现 —— 提醒首次正式扣费倒计时,
@@ -79,17 +68,13 @@ struct DashboardView: View {
                         }
                         .scrollDismissesKeyboard(.interactively)
                         .background(AppTheme.canvas.ignoresSafeArea())
-                        // 命名坐标空间:GeometryReader 在 VStack 顶部读取自身 minY
-                        // 来计算滚动量。下滑超过 80pt 后收起人格按钮,回滚则恢复。
-                        .coordinateSpace(name: "dashScroll")
-                        .onPreferenceChange(DashScrollOffsetKey.self) { y in
-                            // y > 0: 在顶部(或弹性超出顶部);y 变负 = 向下滚动。
-                            // 阈值 -80:留足缓冲,避免轻微触摸就触发。
-                            let show = y > -80
+                        // iOS 17+ 专用 API:contentOffset.y 是准确的滚动量,
+                        // 在主线程同步触发,比 preference key 更可靠。
+                        // 向下滚动超过 80pt 后收起人格按钮,回滚到顶时恢复。
+                        .onScrollGeometryChange(for: CGFloat.self) { $0.contentOffset.y } action: { _, y in
+                            let show = y < 80
                             if show != showPersonalityButton {
-                                withAnimation(.easeInOut(duration: 0.22)) {
-                                    showPersonalityButton = show
-                                }
+                                withAnimation(.easeInOut(duration: 0.22)) { showPersonalityButton = show }
                             }
                         }
                     }
@@ -157,12 +142,6 @@ struct DashboardView: View {
     }
 }
 
-/// 滚动偏移 PreferenceKey:DashboardView 里 VStack 顶部的 0-height GeometryReader
-/// 把自身 minY(在 dashScroll 坐标空间)往上报,用于判断用户是否已经滚动离开顶部。
-private struct DashScrollOffsetKey: PreferenceKey {
-    nonisolated(unsafe) static var defaultValue: CGFloat = 0
-    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) { value = nextValue() }
-}
 
 private struct DashboardHeader: View {
     @EnvironmentObject private var store: SubscriptionStore
