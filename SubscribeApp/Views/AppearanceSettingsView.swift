@@ -16,6 +16,20 @@ struct AppearanceSettingsView: View {
         UIApplication.shared.setAlternateIconName(name) { _ in }
     }
 
+    private func selectIcon(persona: Bool) {
+        guard usePersonaIcon != persona else { return }
+        usePersonaIcon = persona
+        applyAppIcon(persona: persona)
+    }
+
+    /// 运行时取主图标预览(AppIcon 不能直接 UIImage(named:),试几个常见名)。
+    private var appIconImage: UIImage? {
+        for name in ["AppIcon", "AppIcon60x60", "AppIcon-60x60", "AppIcon@2x"] {
+            if let img = UIImage(named: name) { return img }
+        }
+        return nil
+    }
+
     var body: some View {
         List {
             Section {
@@ -69,25 +83,36 @@ struct AppearanceSettingsView: View {
                 Text("显示")
             }
 
-            // App 图标切换:通用 / 订阅人格(目前为占位图标)。
+            // App 图标切换:点开后在下方分两类展开 —— 通用 / 人格图标(占位)。
             Section {
-                Picker(selection: $usePersonaIcon) {
-                    Text("通用").tag(false)
-                    Text("订阅人格").tag(true)
+                DisclosureGroup {
+                    VStack(alignment: .leading, spacing: AppTheme.Space.l) {
+                        iconCategory(title: "通用") {
+                            iconTile(selected: !usePersonaIcon, label: "通用") {
+                                generalThumb
+                            } action: { selectIcon(persona: false) }
+                        }
+                        iconCategory(title: "人格图标") {
+                            iconTile(selected: usePersonaIcon, label: "占位") {
+                                personaThumb
+                            } action: { selectIcon(persona: true) }
+                        }
+                    }
+                    .padding(.vertical, AppTheme.Space.s)
                 } label: {
                     HStack(spacing: 12) {
                         SettingsIcon(name: "app.badge")
                         Text("App 图标")
+                        Spacer()
+                        Text(usePersonaIcon ? "人格图标" : "通用")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
                     }
-                }
-                .pickerStyle(.menu)
-                .onChange(of: usePersonaIcon) { _, persona in
-                    applyAppIcon(persona: persona)
                 }
             } header: {
                 Text("图标")
             } footer: {
-                Text("「订阅人格」目前是占位图标,后续会替换成跟你人格匹配的专属图标。切换时系统会弹一下确认。")
+                Text("「人格图标」目前是占位图标,后续会替换成跟你人格匹配的专属图标。切换时系统会弹一下确认。")
             }
 
             Section {
@@ -107,6 +132,72 @@ struct AppearanceSettingsView: View {
         .scrollContentBackground(.visible)
         .navigationTitle("外观")
         .navigationBarTitleDisplayMode(.inline)
+    }
+
+    // MARK: - 图标选择器小部件
+
+    /// 一个分类:小标题 + 一排可选图标。
+    private func iconCategory<Content: View>(title: LocalizedStringKey, @ViewBuilder content: () -> Content) -> some View {
+        VStack(alignment: .leading, spacing: AppTheme.Space.s) {
+            Text(title)
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(AppTheme.secondary)
+            HStack(spacing: AppTheme.Space.m) {
+                content()
+            }
+        }
+    }
+
+    /// 单个图标方块:缩略图 + 选中态(主题色描边 + 角标对号)+ 名称。
+    private func iconTile<Thumb: View>(selected: Bool, label: LocalizedStringKey, @ViewBuilder thumb: () -> Thumb, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            VStack(spacing: 6) {
+                thumb()
+                    .frame(width: 60, height: 60)
+                    .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 14, style: .continuous)
+                            .stroke(selected ? AppTheme.accent : AppTheme.hairline,
+                                    lineWidth: selected ? 2.5 : 1)
+                    )
+                    .overlay(alignment: .bottomTrailing) {
+                        if selected {
+                            Image(systemName: "checkmark.circle.fill")
+                                .font(.system(size: 18))
+                                .foregroundStyle(.white, AppTheme.accent)
+                                .padding(3)
+                        }
+                    }
+                Text(label)
+                    .font(.caption2)
+                    .foregroundStyle(selected ? AppTheme.ink : AppTheme.secondary)
+            }
+        }
+        .buttonStyle(.plain)
+    }
+
+    @ViewBuilder
+    private var generalThumb: some View {
+        if let ui = appIconImage {
+            Image(uiImage: ui).resizable().scaledToFill()
+        } else {
+            ZStack {
+                AppTheme.accent
+                Text(verbatim: "EON")
+                    .font(.system(size: 15, weight: .heavy, design: .rounded))
+                    .foregroundStyle(.white)
+            }
+        }
+    }
+
+    private var personaThumb: some View {
+        ZStack {
+            LinearGradient(colors: [AppTheme.accent, AppTheme.accent.opacity(0.6)],
+                           startPoint: .topLeading, endPoint: .bottomTrailing)
+            Image(systemName: "sparkles")
+                .font(.system(size: 24, weight: .bold))
+                .foregroundStyle(.white)
+        }
     }
 }
 
