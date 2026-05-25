@@ -1,37 +1,70 @@
 import SwiftUI
 import UIKit
 
+// MARK: - 图标选择数据模型
+
+/// App 图标选项。rawValue 对应 UIApplication.setAlternateIconName 传入的名称
+/// (nil = 主图标);section 决定在列表里的归属。
+enum AppIconOption: Equatable {
+    // 通用 ——— 跟随系统 / 永久亮色 / 永久暗色
+    case auto           // nil → 使用自带亮/暗双图的 AppIcon,系统自动切换
+    case alwaysLight    // AppIcon-AlwaysLight
+    case alwaysDark     // AppIcon-AlwaysDark
+
+    // 人格图标
+    case persona(PersonalityType)
+
+    /// 传给 setAlternateIconName 的名字
+    var iconName: String? {
+        switch self {
+        case .auto:             return nil
+        case .alwaysLight:      return "AppIcon-AlwaysLight"
+        case .alwaysDark:       return "AppIcon-AlwaysDark"
+        case .persona(let t):
+            // curator 没有专属图,退回旧的占位图
+            return t == .curator ? "AppIcon-Persona" : "AppIcon-Persona-\(t.rawValue)"
+        }
+    }
+
+    /// UI 展示名称
+    var label: String {
+        switch self {
+        case .auto:             return "自动"
+        case .alwaysLight:      return "浅色"
+        case .alwaysDark:       return "深色"
+        case .persona(let t):   return t.name
+        }
+    }
+
+    /// 从系统当前备用图标名还原枚举
+    static func current() -> AppIconOption {
+        let name = UIApplication.shared.alternateIconName
+        switch name {
+        case nil:                       return .auto
+        case "AppIcon-AlwaysLight":     return .alwaysLight
+        case "AppIcon-AlwaysDark":      return .alwaysDark
+        default:
+            // 解析 "AppIcon-Persona-xxx"
+            if let rawValue = name?.replacingOccurrences(of: "AppIcon-Persona-", with: ""),
+               rawValue != name,   // 确保有替换发生
+               let type = PersonalityType(rawValue: rawValue) {
+                return .persona(type)
+            }
+            if name == "AppIcon-Persona" { return .persona(.curator) }
+            return .auto
+        }
+    }
+}
+
+// MARK: - 主视图
+
 struct AppearanceSettingsView: View {
     @EnvironmentObject private var store: SubscriptionStore
-    /// App 图标选择:false = 通用(默认),true = 订阅人格(当前为占位图标)。
-    /// 初值读系统当前的备用图标名,保证页面跟实际图标一致。
-    @State private var usePersonaIcon: Bool = (UIApplication.shared.alternateIconName != nil)
-
-    /// 切换 App 图标。nil = 恢复默认图标;否则切到备用图标 AppIcon-Persona。
-    private func applyAppIcon(persona: Bool) {
-        let name: String? = persona ? "AppIcon-Persona" : nil
-        guard UIApplication.shared.supportsAlternateIcons,
-              UIApplication.shared.alternateIconName != name else { return }
-        Haptics.tap()
-        UIApplication.shared.setAlternateIconName(name) { _ in }
-    }
-
-    private func selectIcon(persona: Bool) {
-        guard usePersonaIcon != persona else { return }
-        usePersonaIcon = persona
-        applyAppIcon(persona: persona)
-    }
-
-    /// 运行时取主图标预览(AppIcon 不能直接 UIImage(named:),试几个常见名)。
-    private var appIconImage: UIImage? {
-        for name in ["AppIcon", "AppIcon60x60", "AppIcon-60x60", "AppIcon@2x"] {
-            if let img = UIImage(named: name) { return img }
-        }
-        return nil
-    }
+    @State private var selectedIcon: AppIconOption = .current()
 
     var body: some View {
         List {
+            // ── 显示 ─────────────────────────────────────────────────────
             Section {
                 Picker(selection: $store.appearance) {
                     ForEach(AppAppearance.allCases) { Text($0.title).tag($0) }
@@ -44,7 +77,10 @@ struct AppearanceSettingsView: View {
                 .pickerStyle(.menu)
 
                 DisclosureGroup {
-                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 44), spacing: AppTheme.Space.m)], spacing: AppTheme.Space.m) {
+                    LazyVGrid(
+                        columns: [GridItem(.adaptive(minimum: 44), spacing: AppTheme.Space.m)],
+                        spacing: AppTheme.Space.m
+                    ) {
                         ForEach(AccentTheme.allCases) { theme in
                             Button {
                                 store.accentTheme = theme
@@ -60,7 +96,8 @@ struct AppearanceSettingsView: View {
                                     )
                                     .overlay(
                                         Circle()
-                                            .stroke(Color.primary.opacity(store.accentTheme == theme ? 0.85 : 0), lineWidth: 2)
+                                            .stroke(Color.primary.opacity(store.accentTheme == theme ? 0.85 : 0),
+                                                    lineWidth: 2)
                                             .padding(-3)
                                     )
                                     .accessibilityLabel(Text(theme.title))
@@ -83,19 +120,22 @@ struct AppearanceSettingsView: View {
                 Text("显示")
             }
 
-            // App 图标切换:点开后在下方分两类展开 —— 通用 / 人格图标(占位)。
+            // ── App 图标 ──────────────────────────────────────────────────
             Section {
                 DisclosureGroup {
-                    VStack(alignment: .leading, spacing: AppTheme.Space.l) {
+                    VStack(alignment: .leading, spacing: AppTheme.Space.xl) {
+                        // 通用:跟随系统 / 永久亮色 / 永久暗色
                         iconCategory(title: "通用") {
-                            iconTile(selected: !usePersonaIcon, label: "通用") {
-                                generalThumb
-                            } action: { selectIcon(persona: false) }
+                            ForEach([AppIconOption.auto, .alwaysLight, .alwaysDark], id: \.label) { opt in
+                                iconTile(option: opt)
+                            }
                         }
+
+                        // 人格图标:11 种(curator 暂无专属图,不列出)
                         iconCategory(title: "人格图标") {
-                            iconTile(selected: usePersonaIcon, label: "占位") {
-                                personaThumb
-                            } action: { selectIcon(persona: true) }
+                            ForEach(PersonalityType.allCases.filter { $0 != .curator }) { type in
+                                iconTile(option: .persona(type))
+                            }
                         }
                     }
                     .padding(.vertical, AppTheme.Space.s)
@@ -104,7 +144,7 @@ struct AppearanceSettingsView: View {
                         SettingsIcon(name: "app.badge")
                         Text("App 图标")
                         Spacer()
-                        Text(usePersonaIcon ? "人格图标" : "通用")
+                        Text(selectedIcon.label)
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                     }
@@ -112,9 +152,10 @@ struct AppearanceSettingsView: View {
             } header: {
                 Text("图标")
             } footer: {
-                Text("「人格图标」目前是占位图标,后续会替换成跟你人格匹配的专属图标。切换时系统会弹一下确认。")
+                Text("「通用」图标支持跟随系统在亮/暗色间自动切换,也可固定为浅色或深色。「人格图标」会展示你的订阅人格专属风格。切换时系统会弹一下确认提示。")
             }
 
+            // ── 卡片 ──────────────────────────────────────────────────────
             Section {
                 Toggle(isOn: $store.coloredSubscriptionCards) {
                     HStack(spacing: 12) {
@@ -134,25 +175,30 @@ struct AppearanceSettingsView: View {
         .navigationBarTitleDisplayMode(.inline)
     }
 
-    // MARK: - 图标选择器小部件
+    // MARK: - 子组件
 
-    /// 一个分类:小标题 + 一排可选图标。
-    private func iconCategory<Content: View>(title: LocalizedStringKey, @ViewBuilder content: () -> Content) -> some View {
+    /// 分类行:标题 + 横向可滚动的图标列表
+    private func iconCategory<Content: View>(title: String, @ViewBuilder content: () -> Content) -> some View {
         VStack(alignment: .leading, spacing: AppTheme.Space.s) {
             Text(title)
                 .font(.caption.weight(.semibold))
                 .foregroundStyle(AppTheme.secondary)
-            HStack(spacing: AppTheme.Space.m) {
-                content()
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: AppTheme.Space.m) {
+                    content()
+                }
             }
         }
     }
 
-    /// 单个图标方块:缩略图 + 选中态(主题色描边 + 角标对号)+ 名称。
-    private func iconTile<Thumb: View>(selected: Bool, label: LocalizedStringKey, @ViewBuilder thumb: () -> Thumb, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
+    /// 单个图标方块
+    private func iconTile(option: AppIconOption) -> some View {
+        let selected = selectedIcon == option
+        return Button {
+            applyIcon(option)
+        } label: {
             VStack(spacing: 6) {
-                thumb()
+                iconThumb(option)
                     .frame(width: 60, height: 60)
                     .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
                     .overlay(
@@ -168,36 +214,96 @@ struct AppearanceSettingsView: View {
                                 .padding(3)
                         }
                     }
-                Text(label)
+                Text(option.label)
                     .font(.caption2)
                     .foregroundStyle(selected ? AppTheme.ink : AppTheme.secondary)
+                    .lineLimit(1)
             }
         }
         .buttonStyle(.plain)
     }
 
+    /// 图标缩略图:优先读 Asset,找不到用渐变兜底
     @ViewBuilder
-    private var generalThumb: some View {
-        if let ui = appIconImage {
-            Image(uiImage: ui).resizable().scaledToFill()
-        } else {
-            ZStack {
-                AppTheme.accent
-                Text(verbatim: "EON")
-                    .font(.system(size: 15, weight: .heavy, design: .rounded))
-                    .foregroundStyle(.white)
+    private func iconThumb(_ option: AppIconOption) -> some View {
+        switch option {
+        case .auto:
+            // 主 AppIcon 在运行时不能直接用名字读,试几个常见变体
+            if let ui = loadAppIconImage() {
+                Image(uiImage: ui).resizable().scaledToFill()
+            } else {
+                iconFallback(symbol: "sparkles", colors: [.blue, .purple])
+            }
+
+        case .alwaysLight:
+            // 读 Assets 里的静态图
+            if let ui = UIImage(named: "EON-AppIcon-Light") {
+                Image(uiImage: ui).resizable().scaledToFill()
+            } else {
+                iconFallback(symbol: "sun.max.fill", colors: [Color(hex: 0xF5C06A), Color(hex: 0xF0A030)])
+            }
+
+        case .alwaysDark:
+            if let ui = UIImage(named: "EON-AppIcon-Dark") {
+                Image(uiImage: ui).resizable().scaledToFill()
+            } else {
+                iconFallback(symbol: "moon.fill", colors: [Color(hex: 0x1C1C2E), Color(hex: 0x2C2C4A)])
+            }
+
+        case .persona(let type):
+            let assetName = type == .curator ? "AppIcon-Persona" : "AppIcon-Persona-\(type.rawValue)"
+            if let ui = UIImage(named: assetName) {
+                Image(uiImage: ui).resizable().scaledToFill()
+            } else {
+                iconFallback(symbol: type.fallbackSymbol, colors: [type.tint, type.tint.opacity(0.6)])
             }
         }
     }
 
-    private var personaThumb: some View {
+    private func iconFallback(symbol: String, colors: [Color]) -> some View {
         ZStack {
-            LinearGradient(colors: [AppTheme.accent, AppTheme.accent.opacity(0.6)],
-                           startPoint: .topLeading, endPoint: .bottomTrailing)
-            Image(systemName: "sparkles")
-                .font(.system(size: 24, weight: .bold))
+            LinearGradient(colors: colors, startPoint: .topLeading, endPoint: .bottomTrailing)
+            Image(systemName: symbol)
+                .font(.system(size: 22, weight: .bold))
                 .foregroundStyle(.white)
         }
+    }
+
+    private func loadAppIconImage() -> UIImage? {
+        for name in ["AppIcon", "AppIcon60x60", "AppIcon-60x60", "AppIcon@2x"] {
+            if let img = UIImage(named: name) { return img }
+        }
+        return nil
+    }
+
+    // MARK: - 切换逻辑
+
+    private func applyIcon(_ option: AppIconOption) {
+        guard selectedIcon != option else { return }
+        guard UIApplication.shared.supportsAlternateIcons else { return }
+        let name = option.iconName
+        guard UIApplication.shared.alternateIconName != name else {
+            selectedIcon = option
+            return
+        }
+        Haptics.tap()
+        UIApplication.shared.setAlternateIconName(name) { error in
+            if error == nil {
+                DispatchQueue.main.async { selectedIcon = option }
+            }
+        }
+    }
+}
+
+// MARK: - Color hex helper (局部使用)
+
+private extension Color {
+    init(hex: UInt32) {
+        self.init(
+            red:   Double((hex >> 16) & 0xFF) / 255,
+            green: Double((hex >> 8)  & 0xFF) / 255,
+            blue:  Double( hex        & 0xFF) / 255
+        )
     }
 }
 
