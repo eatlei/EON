@@ -199,19 +199,23 @@ struct AppearanceSettingsView: View {
         } label: {
             VStack(spacing: 6) {
                 iconThumb(option)
-                    .frame(width: 60, height: 60)
+                    .frame(width: 64, height: 64)
                     .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+                    // strokeBorder 完全在形状内部绘制,不会溢出到外部被裁切
                     .overlay(
                         RoundedRectangle(cornerRadius: 14, style: .continuous)
-                            .stroke(selected ? AppTheme.accent : AppTheme.hairline,
-                                    lineWidth: selected ? 2.5 : 1)
+                            .strokeBorder(
+                                selected ? AppTheme.accent : AppTheme.hairline,
+                                lineWidth: selected ? 3 : 1
+                            )
                     )
+                    // 角标放在图标外层 ZStack 里,避免被 clipShape 截断
                     .overlay(alignment: .bottomTrailing) {
                         if selected {
                             Image(systemName: "checkmark.circle.fill")
-                                .font(.system(size: 18))
+                                .font(.system(size: 20))
                                 .foregroundStyle(.white, AppTheme.accent)
-                                .padding(3)
+                                .offset(x: 6, y: 6)   // 稍微突出到角落,视觉更自然
                         }
                     }
                 Text(option.label)
@@ -221,59 +225,50 @@ struct AppearanceSettingsView: View {
             }
         }
         .buttonStyle(.plain)
+        .padding(.bottom, 4)   // 给角标预留空间,不会撑开相邻间距
     }
 
-    /// 图标缩略图:优先读 Asset,找不到用渐变兜底
+    /// 图标缩略图:从 Preview-*.imageset 读取(专为此用途生成的 180px 缩略图)。
+    /// .appiconset 无法在运行时通过 UIImage(named:) 加载,需要单独的 imageset。
     @ViewBuilder
     private func iconThumb(_ option: AppIconOption) -> some View {
-        switch option {
-        case .auto:
-            // 主 AppIcon 在运行时不能直接用名字读,试几个常见变体
-            if let ui = loadAppIconImage() {
-                Image(uiImage: ui).resizable().scaledToFill()
-            } else {
-                iconFallback(symbol: "sparkles", colors: [.blue, .purple])
+        let previewName: String = {
+            switch option {
+            case .auto:         return "Preview-AlwaysLight"   // 自动选项用亮色版做预览
+            case .alwaysLight:  return "Preview-AlwaysLight"
+            case .alwaysDark:   return "Preview-AlwaysDark"
+            case .persona(let t): return "Preview-Persona-\(t.rawValue)"
             }
+        }()
 
-        case .alwaysLight:
-            // 读 Assets 里的静态图
-            if let ui = UIImage(named: "EON-AppIcon-Light") {
-                Image(uiImage: ui).resizable().scaledToFill()
-            } else {
-                iconFallback(symbol: "sun.max.fill", colors: [Color(hex: 0xF5C06A), Color(hex: 0xF0A030)])
-            }
-
-        case .alwaysDark:
-            if let ui = UIImage(named: "EON-AppIcon-Dark") {
-                Image(uiImage: ui).resizable().scaledToFill()
-            } else {
-                iconFallback(symbol: "moon.fill", colors: [Color(hex: 0x1C1C2E), Color(hex: 0x2C2C4A)])
-            }
-
-        case .persona(let type):
-            let assetName = type == .curator ? "AppIcon-Persona" : "AppIcon-Persona-\(type.rawValue)"
-            if let ui = UIImage(named: assetName) {
-                Image(uiImage: ui).resizable().scaledToFill()
-            } else {
-                iconFallback(symbol: type.fallbackSymbol, colors: [type.tint, type.tint.opacity(0.6)])
-            }
+        if let ui = UIImage(named: previewName) {
+            Image(uiImage: ui).resizable().scaledToFill()
+        } else {
+            iconFallback(option: option)
         }
     }
 
-    private func iconFallback(symbol: String, colors: [Color]) -> some View {
+    @ViewBuilder
+    private func iconFallback(option: AppIconOption) -> some View {
+        switch option {
+        case .auto:
+            iconGradient(symbol: "sparkles", colors: [.blue, .indigo])
+        case .alwaysLight:
+            iconGradient(symbol: "sun.max.fill", colors: [Color(hex: 0xF5C06A), Color(hex: 0xF0A030)])
+        case .alwaysDark:
+            iconGradient(symbol: "moon.fill", colors: [Color(hex: 0x1C1C2E), Color(hex: 0x2C2C4A)])
+        case .persona(let t):
+            iconGradient(symbol: t.fallbackSymbol, colors: [t.tint, t.tint.opacity(0.6)])
+        }
+    }
+
+    private func iconGradient(symbol: String, colors: [Color]) -> some View {
         ZStack {
             LinearGradient(colors: colors, startPoint: .topLeading, endPoint: .bottomTrailing)
             Image(systemName: symbol)
                 .font(.system(size: 22, weight: .bold))
                 .foregroundStyle(.white)
         }
-    }
-
-    private func loadAppIconImage() -> UIImage? {
-        for name in ["AppIcon", "AppIcon60x60", "AppIcon-60x60", "AppIcon@2x"] {
-            if let img = UIImage(named: name) { return img }
-        }
-        return nil
     }
 
     // MARK: - 切换逻辑
