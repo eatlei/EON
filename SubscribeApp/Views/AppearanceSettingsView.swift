@@ -26,13 +26,37 @@ enum AppIconOption: Equatable {
         }
     }
 
-    /// UI 展示名称
+    /// UI 展示名称(完整)
     var label: String {
         switch self {
         case .auto:             return "自动"
         case .alwaysLight:      return "浅色"
         case .alwaysDark:       return "深色"
         case .persona(let t):   return t.name
+        }
+    }
+
+    /// 图标格里显示的短名称 —— 最多 4 汉字,保持排列整齐
+    var tileLabel: String {
+        switch self {
+        case .auto:             return "自动"
+        case .alwaysLight:      return "浅色"
+        case .alwaysDark:       return "深色"
+        case .persona(let t):
+            switch t {
+            case .ai:            return "AI 先驱"
+            case .productivity:  return "效率猎人"
+            case .entertainment: return "观察家"
+            case .cloud:         return "云端游民"
+            case .developer:     return "代码匠人"
+            case .learning:      return "学习者"
+            case .finance:       return "理财师"
+            case .eclectic:      return "收藏家"
+            case .beginner:      return "极简者"
+            case .balanced:      return "平衡大师"
+            case .dailyAdder:    return "探索者"
+            case .curator:       return "策展人"
+            }
         }
     }
 
@@ -123,16 +147,22 @@ struct AppearanceSettingsView: View {
             // ── App 图标 ──────────────────────────────────────────────────
             Section {
                 DisclosureGroup {
-                    VStack(alignment: .leading, spacing: AppTheme.Space.xl) {
-                        // 通用:跟随系统 / 永久亮色 / 永久暗色
-                        iconCategory(title: "通用") {
-                            ForEach([AppIconOption.auto, .alwaysLight, .alwaysDark], id: \.label) { opt in
+                    // 通用 / 人格图标共用同一套列宽,视觉对齐
+                    let columns = Array(repeating: GridItem(.flexible(), spacing: 10), count: 4)
+                    VStack(alignment: .leading, spacing: AppTheme.Space.l) {
+                        // 通用:3 项,用同宽列的 HStack,右侧 Spacer 撑满行宽
+                        sectionLabel("通用")
+                        HStack(spacing: 10) {
+                            ForEach([AppIconOption.auto, .alwaysLight, .alwaysDark], id: \.tileLabel) { opt in
                                 iconTile(option: opt)
                             }
+                            // 占满剩余一列,让 3 列与下方 4 列等宽对齐
+                            Color.clear.frame(maxWidth: .infinity)
                         }
 
-                        // 人格图标:11 种(curator 暂无专属图,不列出)
-                        iconCategory(title: "人格图标") {
+                        // 人格图标:11 种,4 列多行排布
+                        sectionLabel("人格图标")
+                        LazyVGrid(columns: columns, spacing: 14) {
                             ForEach(PersonalityType.allCases.filter { $0 != .curator }) { type in
                                 iconTile(option: .persona(type))
                             }
@@ -177,31 +207,23 @@ struct AppearanceSettingsView: View {
 
     // MARK: - 子组件
 
-    /// 分类行:标题 + 横向可滚动的图标列表
-    private func iconCategory<Content: View>(title: String, @ViewBuilder content: () -> Content) -> some View {
-        VStack(alignment: .leading, spacing: AppTheme.Space.s) {
-            Text(title)
-                .font(.caption.weight(.semibold))
-                .foregroundStyle(AppTheme.secondary)
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: AppTheme.Space.m) {
-                    content()
-                }
-            }
-        }
+    /// 分类小标题
+    private func sectionLabel(_ title: String) -> some View {
+        Text(title)
+            .font(.caption.weight(.semibold))
+            .foregroundStyle(AppTheme.secondary)
     }
 
-    /// 单个图标方块
+    /// 单个图标方块 —— frame(maxWidth:.infinity) 让它撑满 Grid / HStack 列宽
     private func iconTile(option: AppIconOption) -> some View {
         let selected = selectedIcon == option
         return Button {
             applyIcon(option)
         } label: {
-            VStack(spacing: 6) {
+            VStack(spacing: 5) {
                 iconThumb(option)
-                    .frame(width: 64, height: 64)
+                    .aspectRatio(1, contentMode: .fit)   // 保持 1:1,随列宽自适应
                     .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
-                    // strokeBorder 完全在形状内部绘制,不会溢出到外部被裁切
                     .overlay(
                         RoundedRectangle(cornerRadius: 14, style: .continuous)
                             .strokeBorder(
@@ -209,23 +231,23 @@ struct AppearanceSettingsView: View {
                                 lineWidth: selected ? 3 : 1
                             )
                     )
-                    // 角标放在图标外层 ZStack 里,避免被 clipShape 截断
                     .overlay(alignment: .bottomTrailing) {
                         if selected {
                             Image(systemName: "checkmark.circle.fill")
-                                .font(.system(size: 20))
+                                .font(.system(size: 18))
                                 .foregroundStyle(.white, AppTheme.accent)
-                                .offset(x: 6, y: 6)   // 稍微突出到角落,视觉更自然
+                                .offset(x: 5, y: 5)
                         }
                     }
-                Text(option.label)
-                    .font(.caption2)
+                Text(option.tileLabel)
+                    .font(.system(size: 10, weight: .medium))
                     .foregroundStyle(selected ? AppTheme.ink : AppTheme.secondary)
                     .lineLimit(1)
+                    .minimumScaleFactor(0.8)
             }
+            .frame(maxWidth: .infinity)   // 撑满列宽,各列图标尺寸完全一致
         }
         .buttonStyle(.plain)
-        .padding(.bottom, 4)   // 给角标预留空间,不会撑开相邻间距
     }
 
     /// 图标缩略图:从 Preview-*.imageset 读取(专为此用途生成的 180px 缩略图)。
