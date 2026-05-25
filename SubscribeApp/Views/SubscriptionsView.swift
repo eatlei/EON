@@ -638,7 +638,7 @@ private struct GridCard: View {
     }
 }
 
-private extension Subscription {
+extension Subscription {
     /// 列表 / 卡片共用的"下次扣费日"展示:今年内只显示月/日,跨年才带上年份。
     func billingDateDisplay() -> String {
         let date = upcomingBillingDate()

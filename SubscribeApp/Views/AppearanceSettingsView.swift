@@ -239,11 +239,10 @@ struct AppearanceSettingsView: View {
                                 .offset(x: 5, y: 5)
                         }
                     }
-                Text(option.tileLabel)
+                Text(option.tileLabel.components(separatedBy: " ").first ?? option.tileLabel)
                     .font(.system(size: 10, weight: .medium))
                     .foregroundStyle(selected ? AppTheme.ink : AppTheme.secondary)
                     .lineLimit(1)
-                    .minimumScaleFactor(0.8)
             }
             .frame(maxWidth: .infinity)   // 撑满列宽,各列图标尺寸完全一致
         }
@@ -252,21 +251,67 @@ struct AppearanceSettingsView: View {
 
     /// 图标缩略图:从 Preview-*.imageset 读取(专为此用途生成的 180px 缩略图)。
     /// .appiconset 无法在运行时通过 UIImage(named:) 加载,需要单独的 imageset。
+    /// .auto 选项渲染对角线分割预览:左上角亮色、右下角暗色,直观传达"跟随系统"。
     @ViewBuilder
     private func iconThumb(_ option: AppIconOption) -> some View {
-        let previewName: String = {
-            switch option {
-            case .auto:         return "Preview-AlwaysLight"   // 自动选项用亮色版做预览
-            case .alwaysLight:  return "Preview-AlwaysLight"
-            case .alwaysDark:   return "Preview-AlwaysDark"
-            case .persona(let t): return "Preview-Persona-\(t.rawValue)"
+        switch option {
+        case .auto:
+            // 对角线分割:左上三角 = 亮色,右下三角 = 暗色
+            let lightUI = UIImage(named: "Preview-AlwaysLight")
+            let darkUI  = UIImage(named: "Preview-AlwaysDark")
+            if lightUI != nil || darkUI != nil {
+                GeometryReader { geo in
+                    ZStack {
+                        // 底层:暗色铺满
+                        if let d = darkUI {
+                            Image(uiImage: d).resizable().scaledToFill()
+                        } else {
+                            iconFallback(option: .alwaysDark)
+                        }
+                        // 上层:亮色裁成左上三角形
+                        Group {
+                            if let l = lightUI {
+                                Image(uiImage: l).resizable().scaledToFill()
+                            } else {
+                                iconFallback(option: .alwaysLight)
+                            }
+                        }
+                        .mask {
+                            Path { p in
+                                p.move(to: .zero)
+                                p.addLine(to: CGPoint(x: geo.size.width, y: 0))
+                                p.addLine(to: CGPoint(x: 0, y: geo.size.height))
+                                p.closeSubpath()
+                            }
+                            .fill()
+                        }
+                        // 分割线:一条细白斜线
+                        Path { p in
+                            p.move(to: CGPoint(x: geo.size.width, y: 0))
+                            p.addLine(to: CGPoint(x: 0, y: geo.size.height))
+                        }
+                        .stroke(.white.opacity(0.9), lineWidth: 1.5)
+                    }
+                    .frame(width: geo.size.width, height: geo.size.height)
+                }
+            } else {
+                iconFallback(option: .auto)
             }
-        }()
 
-        if let ui = UIImage(named: previewName) {
-            Image(uiImage: ui).resizable().scaledToFill()
-        } else {
-            iconFallback(option: option)
+        default:
+            let previewName: String = {
+                switch option {
+                case .alwaysLight:    return "Preview-AlwaysLight"
+                case .alwaysDark:     return "Preview-AlwaysDark"
+                case .persona(let t): return "Preview-Persona-\(t.rawValue)"
+                case .auto:           return "Preview-AlwaysLight"  // unreachable
+                }
+            }()
+            if let ui = UIImage(named: previewName) {
+                Image(uiImage: ui).resizable().scaledToFill()
+            } else {
+                iconFallback(option: option)
+            }
         }
     }
 
