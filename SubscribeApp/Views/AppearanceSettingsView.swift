@@ -29,9 +29,9 @@ enum AppIconOption: Equatable {
     /// UI 展示名称(完整)
     var label: String {
         switch self {
-        case .auto:             return "自动"
-        case .alwaysLight:      return "浅色"
-        case .alwaysDark:       return "深色"
+        case .auto:             return String(localized: "自动")
+        case .alwaysLight:      return String(localized: "浅色")
+        case .alwaysDark:       return String(localized: "深色")
         case .persona(let t):   return t.name
         }
     }
@@ -39,23 +39,23 @@ enum AppIconOption: Equatable {
     /// 图标格里显示的短名称 —— 最多 4 汉字,保持排列整齐
     var tileLabel: String {
         switch self {
-        case .auto:             return "自动"
-        case .alwaysLight:      return "浅色"
-        case .alwaysDark:       return "深色"
+        case .auto:             return String(localized: "自动")
+        case .alwaysLight:      return String(localized: "浅色")
+        case .alwaysDark:       return String(localized: "深色")
         case .persona(let t):
             switch t {
-            case .ai:            return "AI 先驱"
-            case .productivity:  return "效率猎人"
-            case .entertainment: return "观察家"
-            case .cloud:         return "云端游民"
-            case .developer:     return "代码匠人"
-            case .learning:      return "学习者"
-            case .finance:       return "理财师"
-            case .eclectic:      return "收藏家"
-            case .beginner:      return "极简者"
-            case .balanced:      return "平衡大师"
-            case .dailyAdder:    return "探索者"
-            case .curator:       return "策展人"
+            case .ai:            return String(localized: "AI 先驱")
+            case .productivity:  return String(localized: "效率猎人")
+            case .entertainment: return String(localized: "观察家")
+            case .cloud:         return String(localized: "云端游民")
+            case .developer:     return String(localized: "代码匠人")
+            case .learning:      return String(localized: "学习者")
+            case .finance:       return String(localized: "理财师")
+            case .eclectic:      return String(localized: "收藏家")
+            case .beginner:      return String(localized: "极简者")
+            case .balanced:      return String(localized: "平衡大师")
+            case .dailyAdder:    return String(localized: "探索者")
+            case .curator:       return String(localized: "策展人")
             }
         }
     }
